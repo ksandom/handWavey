@@ -4,17 +4,23 @@ The task here is to make the sample work easily and in a reproduce-able way. If 
 
 ## Do it
 
-Get the prerequisites
+### Get the prerequisites
 ```
-./prerequisits.comvenience
+./prerequisits.comvenience pathToExtractedLeapMotionSDK
 ```
 
-Build it
+eg
+```
+./prerequisits.comvenience /tmp/LeapDeveloperKit_2.3.1+31549_linux/LeapSDK
+```
+
+
+### Build it
 ```
 ./compile.convenience
 ```
 
-Run it
+### Run it
 ```
 ./run.convenience
 ```
