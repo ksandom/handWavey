@@ -1,0 +1,5 @@
+#!/bin/bash
+# What made it compile
+
+javac MouseMover.java
+exit $?

@@ -2,6 +2,13 @@
 
 A more intuitive/usable desktop control using leapmotion/ultramotion.
 
+## Requirements
+
+TODOs
+
+* Hardware
+* OpenJDK versions?
+
 ## Install
 
 1. [Install the LeapMotion SDK](https://github.com/ksandom/installUltraMotion) and keep track of where you extracted it.
