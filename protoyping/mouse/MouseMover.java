@@ -97,6 +97,14 @@ class MouseX {
         y = screenBounds.y;
         h = y + screenBounds.height;
       }
+      
+      if (w == 0) {
+        w = screenBounds.width;
+      }
+      
+      if (h == 0) {
+        h = screenBounds.height;
+      }
     }
     
     return new Dimension(w, h);
