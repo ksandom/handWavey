@@ -8,6 +8,9 @@ import java.awt.GraphicsConfiguration;
 import java.awt.Rectangle;
 import java.awt.DisplayMode;
 import java.awt.Window;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.Insets;
 import java.util.concurrent.TimeUnit;
 
 class MouseX {
@@ -72,15 +75,48 @@ class MouseX {
     }
   }
   
+  public Dimension getDesktopResolution() {
+    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    GraphicsDevice[] gs = ge.getScreenDevices();
+    
+    int x = 0;
+    int y = 0;
+    int w = 0;
+    int h = 0;
+    
+    for (GraphicsDevice device: gs) {
+      GraphicsConfiguration[] configuration = device.getConfigurations();
+      Rectangle screenBounds = configuration[0].getBounds();
+      
+      if (screenBounds.x > x) {
+        x = screenBounds.x;
+        w = x + screenBounds.width;
+      }
+      
+      if (screenBounds.y > y) {
+        y = screenBounds.y;
+        h = y + screenBounds.height;
+      }
+    }
+    
+    return new Dimension(w, h);
+  }
+  
   public void info() {
     System.out.println("Info.");
     GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    
+    Dimension desktopResolution = getDesktopResolution();
+    System.out.println("Desktop resolution: " + desktopResolution.width + " " + desktopResolution.height);
     
     Point centerPoint =  ge.getCenterPoint();
     System.out.println("Center: " + centerPoint.toString());
     
     Rectangle rectangle = ge.getMaximumWindowBounds();
     System.out.println("Rectangle: " + rectangle.toString());
+    
+    Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+    System.out.println("Desktop size: " + String.valueOf(size.getWidth()) + " " + String.valueOf(size.getHeight()));
     
     System.out.println("");
     
@@ -95,6 +131,12 @@ class MouseX {
       
       DisplayMode dm = gs[i].getDisplayMode();
       System.out.println("  Mode via DisplayMode: " + String.valueOf(dm.getWidth()) + " " + String.valueOf(dm.getHeight()));
+      
+      GraphicsConfiguration[] gc = gs[i].getConfigurations();
+      //for (int j=0; j < gc.length; j++) {
+        Rectangle gcBounds = gc[0].getBounds();
+        System.out.println("  Rectangle(0): " + gcBounds.toString());
+      
       
       System.out.println("");
     }
@@ -147,9 +189,9 @@ class MouseMover {
     
     mouseX.info();
 //     mouseX.upperLeftish();
-    mouseX.shootingStar();
-    mouseX.fallingStar();
-    mouseX.center();
+//     mouseX.shootingStar();
+//     mouseX.fallingStar();
+//     mouseX.center();
 //     mouseX.basicSet();
   }
 }
