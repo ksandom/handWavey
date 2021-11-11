@@ -1,0 +1,4 @@
+#!/bin/bash
+# A convenient way to build a run in one go.
+
+./compile.convenience && ./run.convenience
