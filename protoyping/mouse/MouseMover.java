@@ -9,6 +9,8 @@ import java.awt.Rectangle;
 import java.awt.DisplayMode;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 class MouseX {
   private GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -89,12 +91,77 @@ class MouseX {
     }
   }
   
-  /* ********************************************************************* */
+  public void click(int button) {
+    try {
+      this.robot.mousePress(button);
+      this.robot.mouseRelease(button);
+    } catch (IllegalArgumentException e) {
+      e.printStackTrace();
+    }
+  }
   
   public void sleep(int microseconds) {
     try {
       Thread.sleep(microseconds);
     } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+  }
+  
+  /* ********************************************************************* */
+  
+  public void rightClickAndCancel() {
+    System.out.println("rightClickAndCancel.");
+    
+    this.robot.mouseMove(650, 1500);
+    click(InputEvent.BUTTON3_MASK);
+    sleep(1000);
+    this.robot.mouseMove(600, 1500);
+    click(InputEvent.BUTTON1_MASK);
+  }
+  
+  public void scroll() {
+    System.out.println("scroll.");
+    
+    int interval = 600;
+    
+    this.robot.mouseMove(800, 2000);
+    
+    this.robot.mouseWheel(1);
+    sleep(interval);
+    this.robot.mouseWheel(1);
+    sleep(interval);
+    this.robot.mouseWheel(1);
+    sleep(interval);
+    this.robot.mouseWheel(1);
+    sleep(interval);
+    this.robot.mouseWheel(-1);
+    sleep(interval);
+    this.robot.mouseWheel(-300);
+  }
+  
+  public void ctrlZoom() {
+    System.out.println("ctrlZoom.");
+    
+    int interval = 600;
+    
+    this.robot.mouseMove(800, 1800);
+    
+    try {
+      this.robot.keyPress(KeyEvent.VK_CONTROL);
+    } catch (IllegalArgumentException e) {
+      e.printStackTrace();
+    }
+    
+    this.robot.mouseWheel(1);
+    sleep(interval);
+    this.robot.mouseWheel(1);
+    sleep(interval);
+    this.robot.mouseWheel(-2);
+    
+    try {
+      this.robot.keyRelease(KeyEvent.VK_CONTROL);
+    } catch (IllegalArgumentException e) {
       e.printStackTrace();
     }
   }
@@ -144,6 +211,9 @@ class MouseMover {
     MouseX mouseX = new MouseX();
     
     mouseX.info();
+//     mouseX.rightClickAndCancel();
+//     mouseX.scroll();
+    mouseX.ctrlZoom();
 //     mouseX.shootingStar();
 //     mouseX.fallingStar();
 //     mouseX.upperLeftish();
