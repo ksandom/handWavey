@@ -2,4 +2,4 @@
 # What made it compile
 
 javac -classpath LeapJava.jar Sample.java
-
+exit $?
