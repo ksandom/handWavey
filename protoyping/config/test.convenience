@@ -1,0 +1,4 @@
+#!/bin/bash
+# Run unit tests.
+
+java -cp /usr/share/java/junit5/junit-platform-console-standalone.jar "$@"
