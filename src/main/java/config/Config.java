@@ -13,11 +13,12 @@ TODOs
 */
 
 
-class Config {
+class Config extends Dirt {
     protected String fileName = "";
     protected Boolean fileExists = false;
     
     public Config(String fileName) {
+        super(false);
         this.fileName = getFullPath(fileName);
         this.fileExists = new File(this.fileName).exists();
         

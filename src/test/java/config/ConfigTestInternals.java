@@ -47,6 +47,11 @@ public class ConfigTestInternals {
     public void testFullPathValue() {
         assertEquals(this.ct.getFullPath(this.fileName), this.ct.getBestPath() + this.fileName);
     }
+    
+    @Test
+    public void testDirty() {
+        assertEquals(this.ct.isDirty(), false);
+        this.ct.makeDirty();
+        assertEquals(this.ct.isDirty(), true);
+    }
 }
-
-
