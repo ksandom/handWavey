@@ -11,4 +11,4 @@ TODOs
 
 ## Install
 
-1. [Install the LeapMotion SDK](https://github.com/ksandom/installUltraMotion) and keep track of where you extracted it.
+1. [Install the UltraMotion/LeapMotion SDK](https://github.com/ksandom/installUltraMotion) and keep track of where you extracted it.

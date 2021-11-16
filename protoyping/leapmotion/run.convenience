@@ -2,4 +2,3 @@
 # What made it work
 
 java -classpath ".:LeapJava.jar" -Djava.library.path=. Sample
-
