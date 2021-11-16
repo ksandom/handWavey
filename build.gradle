@@ -8,6 +8,9 @@
 apply plugin: 'java'
 
 repositories {
+    flatDir {
+        dirs 'lib'
+    }
     mavenCentral()
 }
 
@@ -15,7 +18,8 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-//     implementation "joda-time:joda-time:2.2"
+    implementation files('lib/LeapJava.jar')
+    runtimeOnly files('lib/LeapJava.jar')
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
 }
 
@@ -30,4 +34,8 @@ mainClassName = 'handWavey.HandWavey'
 
 test {
     useJUnitPlatform()
+}
+
+run {
+    systemProperty "java.library.path", "lib:/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"
 }

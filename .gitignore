@@ -3,6 +3,7 @@ LeapJava.jar
 libLeap.so
 libLeapJava.so
 Sample.java
+.sdkPath
 
 # Ignore Gradle project-specific cache directory
 .gradle
