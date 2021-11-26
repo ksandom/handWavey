@@ -2,12 +2,12 @@ package config;
 
 import config.Dirt;
 
-class Item extends Dirt{ // An individual piece of configuratoin. A.K.A a setting.
+public class Item extends Dirt{ // An individual piece of configuratoin. A.K.A a setting.
     private String description;
     private String defaultValue;
     private String value;
     
-    public Item(String description, String defaultValue) {
+    public Item(String defaultValue, String description) {
         super(false);
         this.description = description;
         this.defaultValue = defaultValue;

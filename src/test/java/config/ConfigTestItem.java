@@ -19,7 +19,7 @@ public class ConfigTestItem {
         this.value = "something else";
         this.description = "A description of a stored item.";
         
-        this.item = new Item(this.description, this.defaultValue);
+        this.item = new Item(this.defaultValue, this.description);
     }
     
     @AfterEach

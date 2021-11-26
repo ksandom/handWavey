@@ -16,9 +16,9 @@ public class ConfigTestGroup {
     void setUp() {
         this.config = new Config("handWaveyConfigTest.yml");
         this.group = new Group();
-        this.group.newItem("colour", "Chosen colour.", "black");
-        this.group.newItem("speed", "Perceived speed.", "ludicrous");
-        this.group.newItem("shape", "Designed shape", "square");
+        this.group.newItem("colour", "black", "Chosen colour.");
+        this.group.newItem("speed", "ludicrous", "Perceived speed.");
+        this.group.newItem("shape", "square", "Designed shape");
     }
     
     @AfterEach
@@ -30,12 +30,12 @@ public class ConfigTestGroup {
     public void testSetup() {
         assertEquals(this.group.isDirty(), false);
         
-        this.group.newItem("colour2", "Another colour for some reason.", "blue");
-        this.group.newItem("inverseSpeed", "Travel, but inside-out.", "0.02");
+        this.group.newItem("colour2", "blue", "Another colour for some reason.");
+        this.group.newItem("inverseSpeed", "0.02", "Travel, but inside-out.");
         this.group.finishedStartup();
         assertEquals(this.group.isDirty(), false);
         
-        this.group.newItem("size", "Like, how big is it?", "huuuuuge");
+        this.group.newItem("size", "huuuuuge", "Like, how big is it?");
         assertEquals(this.group.isDirty(), true);
     }
     
@@ -61,7 +61,7 @@ public class ConfigTestGroup {
 
     @Test
     public void testNewItem() {
-        this.group.newItem("thing1", "Description of thing1", "aValue");
+        this.group.newItem("thing1", "aValue", "Description of thing1");
         Item thing1 = this.group.getItem("thing1");
         assertTrue(thing1 instanceof Item);
         assertEquals(thing1.get(), "aValue");

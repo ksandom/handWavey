@@ -4,7 +4,7 @@ import config.Dirt;
 import config.Item;
 import java.util.HashMap;
 
-class Group extends Dirt { // A collection of related configuration Items.
+public class Group extends Dirt { // A collection of related configuration Items.
     private HashMap<String, Item> items = new HashMap<String, Item>();
     private HashMap<String, config.Group> groups = new HashMap<String, config.Group>();
 
@@ -12,10 +12,10 @@ class Group extends Dirt { // A collection of related configuration Items.
         super(true);
     }
     
-    public Item newItem(String key, String description, String defaultValue) {
+    public Item newItem(String key, String defaultValue, String description) {
         // TODO Check if the item already exists and raise an exception if it does.
 
-        this.items.put(key, new Item(description, defaultValue));
+        this.items.put(key, new Item(defaultValue, description));
         makeDirty();
         return getItem(key);
     }

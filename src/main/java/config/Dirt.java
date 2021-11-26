@@ -2,7 +2,7 @@ package config;
 
 import config.Config;
 
-class Dirt { // Manages whether configuration has changed since a known state.
+public class Dirt { // Manages whether configuration has changed since a known state.
     private Boolean dirty = false;
     private Config config = null;
     private Boolean startup = true;
