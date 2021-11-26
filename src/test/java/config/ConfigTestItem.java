@@ -49,6 +49,8 @@ public class ConfigTestItem {
         assertEquals(this.item.isDirty(), false);
         
         this.item.setConfigManager(config);
+        this.item.finishedStartup();
+        config.finishedStartup();
         this.item.set(this.value);
         
         assertEquals(this.item.isDirty(), true);

@@ -22,15 +22,23 @@ class Dirt { // Manages whether configuration has changed since a known state.
     }
     
     protected void makeClean() {
-        this.dirty = true;
+        this.dirty = false;
     }
     
     public Boolean isDirty() {
         return this.dirty;
     }
+
+    public Boolean isStartingUp() {
+        return this.startup;
+    }
     
     public void setConfigManager(Config config) {
         this.config = config;
+    }
+
+    public Config getConfigManager() {
+        return this.config;
     }
     
     public void finishedStartup() {

@@ -8,8 +8,8 @@ import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DirtTester extends Dirt {
-    public DirtTester() {
-        super(false);
+    public DirtTester(Boolean state) {
+        super(state);
     }
     
     public void makeDirty() {
@@ -23,7 +23,7 @@ public class TestDirt {
     
     @BeforeEach
     void setUp() {
-        this.dirt = new DirtTester();
+        this.dirt = new DirtTester(true);
         this.config = new Config("handWaveyConfigTest.yml");
     }
     
@@ -32,27 +32,45 @@ public class TestDirt {
         this.dirt = null;
         this.config = null;
     }
-    
+
     @Test
     public void testWithoutAssociation() {
         assertEquals(this.dirt.isDirty(), false);
         assertEquals(this.config.isDirty(), false);
-        
+
+        this.dirt.finishedStartup();
         this.dirt.makeDirty();
-        
+
         assertEquals(this.dirt.isDirty(), true);
         assertEquals(this.config.isDirty(), false);
     }
-    
+
+    @Test
+    public void testSEtupCorrectly() {
+        assertNotNull(this.dirt);
+        assertNotNull(this.config);
+    }
+
     @Test
     public void testWithAssociation() {
         assertEquals(this.dirt.isDirty(), false);
         assertEquals(this.config.isDirty(), false);
-        
+        assertEquals(this.dirt.isStartingUp(), true);
+
+        this.dirt.finishedStartup();
+        this.config.finishedStartup();
+
+        assertEquals(this.dirt.isStartingUp(), false);
+        assertNull(this.dirt.getConfigManager());
+
         this.dirt.setConfigManager(this.config);
+
+        assertNotNull(this.dirt.getConfigManager());
+
         this.dirt.makeDirty();
         
         assertEquals(this.dirt.isDirty(), true);
+        assertEquals(this.dirt.getConfigManager().isDirty(), true);
         assertEquals(this.config.isDirty(), true);
     }
 }

@@ -51,6 +51,7 @@ public class ConfigTestInternals {
     @Test
     public void testDirty() {
         assertEquals(this.ct.isDirty(), false);
+        this.ct.finishedStartup();
         this.ct.makeDirty();
         assertEquals(this.ct.isDirty(), true);
     }
