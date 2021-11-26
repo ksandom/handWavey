@@ -56,4 +56,15 @@ public class ConfigTestItem {
         assertEquals(this.item.isDirty(), true);
         assertEquals(config.isDirty(), true);
     }
+
+    @Test
+    public void testOldValue() {
+        this.item.set("thing1");
+        assertEquals(this.item.get(), "thing1");
+        assertEquals(this.item.getOldValue(), "something");
+
+        this.item.set("thing2");
+        assertEquals(this.item.get(), "thing2");
+        assertEquals(this.item.getOldValue(), "thing1");
+    }
 }
