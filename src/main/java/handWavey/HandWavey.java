@@ -5,7 +5,9 @@ import config.*;
 
 public class HandWavey {
     public static void main(String[] args) {
-        UltraMotionManager uwm = new UltraMotionManager();
-        uwm.keepAlive();
+        HandWaveyManager hwm = new HandWaveyManager();
+        UltraMotionManager umm = new UltraMotionManager(hwm, hwm.getConfig());
+
+        umm.keepAlive();
     }
 }
