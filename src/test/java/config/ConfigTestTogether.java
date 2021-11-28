@@ -21,6 +21,14 @@ public class ConfigTestTogether {
 
     @Test
     public void testBasicItems() {
+        // TODO Finish this.
 //         this.config
+    }
+
+    @Test
+    public void testSingleton() {
+        // TODO Finish this.
+        Config.setSingletonFilename("handWaveyConfigTest2.yml");
+        Config.singleton().;
     }
 }

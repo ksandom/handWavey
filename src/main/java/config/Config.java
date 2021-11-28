@@ -16,6 +16,8 @@ TODOs
 public class Config extends config.Group {
     protected String fileName = "";
     protected Boolean fileExists = false;
+    private static String singletonFileName = "";
+    private static Config singletonConfig = null;
     
     public Config(String fileName) {
         this.makeClean();
@@ -25,6 +27,18 @@ public class Config extends config.Group {
         String fileState = (this.fileExists)?"exists":"new";
         
         System.out.println("Load config from: " + this.fileName + " (" + fileState + ")");
+    }
+
+    public static void setSingletonFilename(String fileName) {
+        Config.singletonFileName = fileName;
+    }
+
+    public static Config singleton() {
+        if (Config.singletonConfig == null) {
+            Config.singletonConfig = new Config(Config.singletonFileName);
+        }
+
+        return Config.singletonConfig;
     }
     
     protected String getBestPath() {
