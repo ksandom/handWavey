@@ -2,6 +2,8 @@ package ultraMotion;
 
 import java.io.IOException;
 import com.leapmotion.leap.*;
+// import com.leapmotion.leap.Finger.*;
+// import com.leapmotion.leap.Bone.Type.*;
 import handWavey.HandSummary;
 import handWavey.UltraMotionManager;
 import debug.Debug;
@@ -107,7 +109,7 @@ public class UltraMotionInput extends Listener {
                             );
 
                         // TODO figure out if the hand is open or closed. this probably needs to be compared to the palm position to make sense.
-                        Vector middleDistalBone = hand.finger(TYPE_MIDDLE).bone(TYPE_DISTAL).direction();
+//                         Vector middleDistalBone = hand.finger(TYPE_MIDDLE).bone(TYPE_DISTAL).direction();
 
                     } else {
                         this.handSummaries[handNumber].markInvalid();
