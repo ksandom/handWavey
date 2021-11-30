@@ -12,9 +12,9 @@ public class Debug {
     public void setLevel(int level) {
         if ((level > 0) || (this.level > 0)) {
             if (this.level == -1) {
-                System.out.println("Debug   (" + this.context + ")  level set to " + String.valueOf(level) + ".");
+                System.out.println("Debug   (" + this.context + ")  debug level set to " + String.valueOf(level) + ".");
             } else {
-                System.out.println("Debug   (" + this.context + ")  level change from " + String.valueOf(this.level) + " to " + String.valueOf(level) + ".");
+                System.out.println("Debug   (" + this.context + ")  debug level change from " + String.valueOf(this.level) + " to " + String.valueOf(level) + ".");
             }
         }
         this.level = level;
