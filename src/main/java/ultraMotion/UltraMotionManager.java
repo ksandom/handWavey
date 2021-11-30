@@ -24,6 +24,10 @@ public class UltraMotionManager {
         this.ultraMotionInput.setUltraMotionManager(this);
     }
     
+    public HandWaveyManager getHandWaveyManager() {
+        return this.handWaveyManager;
+    }
+    
     public void keepAlive() {
         this.active = true;
         

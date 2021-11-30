@@ -29,6 +29,25 @@ public class HandSummary {
         this.id = id;
     }
 
+    public String toString() {
+        return "Hand XYZ: " +
+            String.valueOf(this.handX) + ", " +
+            String.valueOf(this.handY) + ", " +
+            String.valueOf(this.handZ) + ".  " +
+            "Hand Roll Pitch Yaw: " +
+            String.valueOf(this.handRoll) + ", " +
+            String.valueOf(this.handPitch) + ", " +
+            String.valueOf(this.handYaw) + ".  " +
+            "Arm Roll Pitch Yaw: " +
+            String.valueOf(this.armRoll) + ", " +
+            String.valueOf(this.armPitch) + ", " +
+            String.valueOf(this.armYaw) + ".  " +
+            "handOpen: " +
+            String.valueOf(this.handOpen) + ". " +
+            "valid: " +
+            String.valueOf(this.valid) + ". ";
+    }
+
     public int getID() {
         return this.id;
     }

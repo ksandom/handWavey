@@ -125,7 +125,7 @@ public class UltraMotionInput extends Listener {
                     Float middleDistalBonePitch = hand.fingers().get(this.fingerToUse).bone(this.boneToUse).direction().pitch();
                     Float relativeFingerPitch = mangleAngle(middleDistalBonePitch) + handDirection.pitch();
                     Float fingerDifference = Math.abs(relativeFingerPitch);
-                    Boolean handOpen = (fingerDifference > openThreshold);
+                    Boolean handOpen = (fingerDifference < openThreshold);
                     
                     this.handSummaries[handNumber].setHandOpen(handOpen);
 
@@ -138,6 +138,9 @@ public class UltraMotionInput extends Listener {
                 break;
             }
         }
+        
+        this.ultraMotionManager.getHandWaveyManager().sendHandSummaries(this.handSummaries);
+        
         this.lastHandCount = handCount;
     }
     
