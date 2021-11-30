@@ -7,28 +7,18 @@ import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ConfigTestTogether {
-    private Config config;
-
-    @BeforeEach
-    void setUp() {
-        this.config = new Config("handWaveyConfigTest.yml");
-    }
-
-    @AfterEach
-    void destroy() {
-        this.config = null;
-    }
-
-    @Test
-    public void testBasicItems() {
-        // TODO Finish this.
-//         this.config
-    }
-
     @Test
     public void testSingleton() {
-        // TODO Finish this.
         Config.setSingletonFilename("handWaveyConfigTest2.yml");
-        Config.singleton().;
+        
+        // This way is faster when dealing with multiple transactions.
+        Group things = Config.singleton().newGroup("things");
+        Item thing1 = things.newItem("thing1", "aValue", "A description of that value.");
+        assertEquals(thing1.get(), "aValue");
+        
+        // This way can be done with less code, and may be acceptable when doing rarely executed tasks.
+        Config.singleton().getGroup("things").getItem("thing1").set("aNewValue");
+        assertEquals(Config.singleton().getGroup("things").getItem("thing1").get(), "aNewValue");
+        assertEquals(Config.singleton().getGroup("things").getItem("thing1").getOldValue(), "aValue");
     }
 }
