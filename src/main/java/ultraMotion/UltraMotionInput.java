@@ -1,9 +1,8 @@
 package ultraMotion;
 
-import java.io.IOException;
+import config.Config;
+import config.*;
 import com.leapmotion.leap.*;
-// import com.leapmotion.leap.Finger.*;
-// import com.leapmotion.leap.Bone.Type.*;
 import handWavey.HandSummary;
 import handWavey.UltraMotionManager;
 import debug.Debug;
@@ -11,13 +10,25 @@ import java.util.Arrays;
 
 public class UltraMotionInput extends Listener {
     private UltraMotionManager ultraMotionManager = null;
-    private Debug debug = new Debug(2, "UltraMotionInput");
+    private Debug debug;
     private HandSummary[] handSummaries = {null, null, null, null, null, null, null, null, null, null};
     private int lastHandCount = 0;
     private int maxHands = 2;
+    private float openThreshold = 0;
+    private float pi = (float)3.1415926536;
+    
+    private int fingerToUse = 2;
+    private Bone.Type boneToUse = null;
 
     public UltraMotionInput () {
-        this.maxHands = maxHands;
+        this.boneToUse = Bone.Type.values()[Bone.Type.values().length-1];
+        
+        Group ultraMotionConfig = Config.singleton().getGroup("ultraMotion");
+        this.openThreshold = Float.parseFloat(ultraMotionConfig.getItem("openThreshold").get());
+        this.maxHands = Integer.parseInt(ultraMotionConfig.getItem("maxHands").get());
+        
+        int debugLevel = Integer.parseInt(ultraMotionConfig.getItem("debugLevel").get());
+        this.debug = new Debug(debugLevel, "UltraMotionInput");
     }
 
     public void setMaxHands(int maxHands) {
@@ -29,11 +40,15 @@ public class UltraMotionInput extends Listener {
         this.maxHands = maxHands;
         emptyHands();
     }
+    
+    public void setOpenThreshold(float openThreshold) {
+        this.openThreshold = openThreshold;
+    }
 
     private void emptyHands() {
         // This just simplifies the code later down since we only need to check for one absense.
-        for (int i=0; i<this.maxHands; i++) {
-            this.handSummaries[i]=null;
+        for (int i = 0; i<this.maxHands; i++) {
+            this.handSummaries[i] = null;
         }
     }
     
@@ -79,61 +94,74 @@ public class UltraMotionInput extends Listener {
         //Get hands
         for(Hand hand : frame.hands()) {
             if (handNumber < this.maxHands) {
-                if (this.lastHandCount > handCount) {
-                    // If we aren't tracking this hand yet. Let's do so.
-                    if (this.handSummaries[handNumber] == null) {
-                        this.handSummaries[handNumber] = new HandSummary(hand.id());
-                    }
-
-                    if (this.handSummaries[handNumber].getID() == hand.id()) {
-                        Vector handPosition = hand.palmPosition();
-                        this.handSummaries[handNumber].setHandPosition(
-                            handPosition.getX(),
-                            handPosition.getY(),
-                            handPosition.getZ()
-                            );
-
-                        Vector handNormal = hand.palmNormal();
-                        Vector handDirection = hand.direction();
-                        this.handSummaries[handNumber].setHandAngles(
-                            handNormal.roll(),
-                            handDirection.pitch(),
-                            handDirection.yaw()
-                            );
-
-                        Vector armDirection = hand.arm().direction();
-                        this.handSummaries[handNumber].setArmAngles(
-                            armDirection.roll(),
-                            armDirection.pitch(),
-                            armDirection.yaw()
-                            );
-
-                        // TODO figure out if the hand is open or closed. this probably needs to be compared to the palm position to make sense.
-//                         Vector middleDistalBone = hand.finger(TYPE_MIDDLE).bone(TYPE_DISTAL).direction();
-
-                    } else {
-                        this.handSummaries[handNumber].markInvalid();
-                    }
+                // If we aren't tracking this hand yet. Let's do so.
+                if (this.handSummaries[handNumber] == null) {
+                    this.handSummaries[handNumber] = new HandSummary(hand.id());
                 }
 
-                String handType = hand.isLeft() ? "Left hand" : "Right hand";
-                this.debug.out(2, "  " + handType + ", id: " + hand.id()
-                                 + ", palm position: " + hand.palmPosition() + " "
-                                 + hand.palmPosition().getClass().getName());
+                if (this.handSummaries[handNumber].getID() == hand.id()) {
+                    Vector handPosition = hand.palmPosition();
+                    this.handSummaries[handNumber].setHandPosition(
+                        handPosition.getX(),
+                        handPosition.getY(),
+                        handPosition.getZ()
+                        );
 
-                // Get the hand's normal vector and direction
-                Vector normal = hand.palmNormal();
-                Vector direction = hand.direction();
+                    Vector handNormal = hand.palmNormal();
+                    Vector handDirection = hand.direction();
+                    this.handSummaries[handNumber].setHandAngles(
+                        handNormal.roll(),
+                        handDirection.pitch(),
+                        handDirection.yaw()
+                        );
 
-                // Calculate the hand's pitch, roll, and yaw angles
-    //             this.debug.out(2, "  pitch: " + Math.toDegrees(direction.pitch()) + " degrees, "
-    //                              + "roll: " + Math.toDegrees(normal.roll()) + " degrees, "
-    //                              + "yaw: " + Math.toDegrees(direction.yaw()) + " degrees");
-                handNumber++;
+                    Vector armDirection = hand.arm().direction();
+                    this.handSummaries[handNumber].setArmAngles(
+                        armDirection.roll(),
+                        armDirection.pitch(),
+                        armDirection.yaw()
+                        );
+
+                    Float middleDistalBonePitch = hand.fingers().get(this.fingerToUse).bone(this.boneToUse).direction().pitch();
+                    Float relativeFingerPitch = mangleAngle(middleDistalBonePitch) + handDirection.pitch();
+                    Float fingerDifference = Math.abs(relativeFingerPitch);
+                    Boolean handOpen = (fingerDifference > openThreshold);
+                    
+                    this.handSummaries[handNumber].setHandOpen(handOpen);
+
+                } else {
+                    this.handSummaries[handNumber].markInvalid();
+                    this.debug.out(0, "Discarding hand " + String.valueOf(this.handSummaries[handNumber].getID()) + " != " + String.valueOf(hand.id()));
+                }
             } else {
-                // TODO break the loop?
+                // If we have more hands than we are configured to handle, let's just stop processing the extra hands.
+                break;
             }
         }
         this.lastHandCount = handCount;
+    }
+    
+    private float mangleAngle(float angle) {
+        // Moves the center by 180 degrees. I didn't get rotation working reliably.
+        // TODO Revisit whether getting rotation working reliably would be a better solution. There must be no jump when rotating past the boundary where an individual angle loops.
+        
+        int sign = (angle < 0)?-1:1;
+        float invertedValue = this.pi - Math.abs(angle);
+        
+        return invertedValue * (float)sign;
+    }
+    
+    private float fixCenter(float value) {
+        return combineAngles(value, this.pi);
+    }
+    
+    private float combineAngles(float value, float rotateAmount) {
+        // TODO There must be a better way to do this, but it will do for now.
+        
+        float combined = value + rotateAmount + this.pi;
+        combined = combined % (this.pi * 2);
+        combined = combined - this.pi;
+        
+        return combined;
     }
 }

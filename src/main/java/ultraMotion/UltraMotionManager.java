@@ -1,8 +1,9 @@
 package handWavey;
 
+import config.Config;
+import config.*;
 import ultraMotion.*;
 import com.leapmotion.leap.*;
-import config.*;
 import handWavey.HandWaveyManager;
 
 public class UltraMotionManager {
@@ -13,17 +14,14 @@ public class UltraMotionManager {
     
     private Boolean active = false;
     
-    public UltraMotionManager (HandWaveyManager hwm, config.Config config) {
+    public UltraMotionManager (HandWaveyManager hwm) {
         this.handWaveyManager = hwm;
-        this.config = config;
+        this.config = Config.singleton();
 
         this.controller.addListener(ultraMotionInput);
         this.active = true;
         
         this.ultraMotionInput.setUltraMotionManager(this);
-
-        int maxHands=Integer.parseInt(this.config.getGroup("ultraMotion").getItem("maxHands").get());
-        this.ultraMotionInput.setMaxHands(maxHands);
     }
     
     public void keepAlive() {

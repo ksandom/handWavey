@@ -18,11 +18,14 @@ public class HandSummary {
     private double armPitch;
     private double armYaw;
 
-    private Boolean handClosed;
+    private Boolean handOpen;
 
     private Boolean valid = true;
+    
+    private Config config;
 
     public HandSummary(int id){
+        this.config = Config.singleton();
         this.id = id;
     }
 
@@ -84,12 +87,12 @@ public class HandSummary {
         return this.armYaw;
     }
 
-    public void setHandClosed(Boolean state) {
-        this.handClosed = state;
+    public void setHandOpen(Boolean state) {
+        this.handOpen = state;
     }
 
-    public Boolean handIsClosed() {
-        return this.handClosed;
+    public Boolean handIsOpen() {
+        return this.handOpen;
     }
 
     public Boolean isValid() {

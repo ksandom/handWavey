@@ -19,7 +19,7 @@ class TestHandSummary {
         this.handSummary.setHandPosition(10, 200, 20);
         this.handSummary.setHandAngles(0.1, 0, -0.1);
         this.handSummary.setArmAngles(0.2, 0, -0.2);
-        this.handSummary.setHandClosed(false);
+        this.handSummary.setHandOpen(false);
     }
 
     @AfterEach
@@ -42,7 +42,7 @@ class TestHandSummary {
         assertEquals(this.handSummary.getArmPitch(), 0);
         assertEquals(this.handSummary.getArmYaw(), -0.2);
 
-        assertEquals(this.handSummary.handIsClosed(), false);
+        assertEquals(this.handSummary.handIsOpen(), false);
    }
 
     @Test
