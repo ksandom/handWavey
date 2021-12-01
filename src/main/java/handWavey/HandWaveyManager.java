@@ -70,11 +70,11 @@ public class HandWaveyManager {
         Group physicalBoundaries = handSummaryManager.newGroup("physicalBoundaries");
         physicalBoundaries.newItem(
             "x",
-            "120",
+            "100",
             "+ and - this value horizontally from the center of the visible cone above the device.");
         physicalBoundaries.newItem(
             "yMin",
-            "150",
+            "200",
             "Minimum value of height above the device.");
         physicalBoundaries.newItem(
             "yMax",
