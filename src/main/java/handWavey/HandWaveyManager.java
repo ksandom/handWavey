@@ -17,6 +17,18 @@ public class HandWaveyManager {
     private int yOffset = 0;
     private double xMultiplier = 1;
     private double yMultiplier = 1;
+    private double zMultiplier = -1;
+    
+    private double zAbsoluteBegin = 0;
+    private double zRelativeBegin = 0;
+    private double zActionBegin = 0;
+    
+    private double lastAbsoluteX = 0;
+    private double lastAbsoluteY = 0;
+    
+    private double relativeSensitivity = 0.1;
+    
+    private HandsState handsState;
     
     public HandWaveyManager() {
         Config.setSingletonFilename("handWavey.yml");
@@ -46,7 +58,7 @@ public class HandWaveyManager {
         Group handSummaryManager = config.newGroup("handSummaryManager");
         handSummaryManager.newItem(
             "debugLevel",
-            "2",
+            "1",
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5  is probably more detail than you'll ever want.");
         handSummaryManager.newItem(
             "rangeMethod",
@@ -64,7 +76,7 @@ public class HandWaveyManager {
             "Set this to -1 when you need to invert Y (up and down). You'll typicall only need to do this if your device is upside down. On newer LeapSDK versions, this may become obsolete.");
         axisOrientation.newItem(
             "zMultiplier",
-            "1",
+            "-1",
             "Set this to -1 when you need to invert Z (how far away from you your hand goes). UltraMotion takes care of this for you. So I can't currently think of a use-case for it, but am including it for completness.");
         
         Group physicalBoundaries = handSummaryManager.newGroup("physicalBoundaries");
@@ -86,25 +98,26 @@ public class HandWaveyManager {
             "+ and - this value in depth from the center of the visible cone above the device.");
         
         Group zoneThresholds = handSummaryManager.newGroup("zoneThresholds");
-        physicalBoundaries.newItem(
+        zoneThresholds.newItem(
             "absolute",
-            "50",
-            "Less than ___ denotes the beginning of the absolute zone.");
-        physicalBoundaries.newItem(
+            "-150",
+            "Greater than ___ denotes the beginning of the absolute zone.");
+        zoneThresholds.newItem(
             "relative",
-            "-50",
-            "Less than ___ denotes the beginning of the relative zone.");
-        physicalBoundaries.newItem(
+            "50",
+            "Greater than ___ denotes the beginning of the relative zone.");
+        zoneThresholds.newItem(
             "action",
-            "-100",
-            "Less than ___ denotes the beginning of the action zone.");
+            "100",
+            "Greater than ___ denotes the beginning of the action zone.");
 
         handSummaryManager.newItem(
             "relativeSensitivity",
-            "0.1",
+            "0.2",
             "How sensitive is the relative zone compared to the absolute zone? Decimal between 0 and 1.");
         
         this.output = new GenericOutput();
+        this.handsState = new HandsState();
         
         reloadConfig();
     }
@@ -124,6 +137,7 @@ public class HandWaveyManager {
         int configuredXMultiplier = Integer.parseInt(axisOrientation.getItem("xMultiplier").get());
         int configuredYMultiplier = Integer.parseInt(axisOrientation.getItem("yMultiplier").get());
         int configuredZMultiplier = Integer.parseInt(axisOrientation.getItem("zMultiplier").get());
+        this.zMultiplier = configuredZMultiplier;
         
         
         // Get the total desktop resolution.
@@ -148,14 +162,25 @@ public class HandWaveyManager {
         this.yOffset = pYMin * -1;
         
         if (desktopAspectRatio > physicalAspectRatio) { // desktop is wider
-            this.debug.out(1, "Desktop is wider than the cone. Optimising for that.");
+            this.debug.out(1, "Desktop is wider than the cone. Optimising the usable cone for that.");
             this.xMultiplier = configuredXMultiplier * (this.desktopWidth/pXDiff);
             this.yMultiplier = configuredYMultiplier * (this.desktopWidth/pXDiff) ;
         } else { // desktop is narrower
-            this.debug.out(1, "The cone is wider than the desktop. Optimising for that.");
+            this.debug.out(1, "The cone is wider than the desktop. Optimising the usable cone for that.");
             this.yMultiplier = configuredYMultiplier * (this.desktopHeight/pYDiff);
             this.xMultiplier = configuredXMultiplier * (this.desktopHeight/pYDiff);
         }
+        
+        
+        // Configure Z axis thresholds.
+        Group zoneThresholds = handSummaryManager.getGroup("zoneThresholds");
+        this.zAbsoluteBegin = Double.parseDouble(zoneThresholds.getItem("absolute").get());
+        this.zRelativeBegin = Double.parseDouble(zoneThresholds.getItem("relative").get());
+        this.zActionBegin = Double.parseDouble(zoneThresholds.getItem("action").get());
+        
+        
+        // Get relative sensitivity.
+        this.relativeSensitivity = Double.parseDouble(handSummaryManager.getItem("relativeSensitivity").get());
     }
     
     private void moveMouse(int x, int y) {
@@ -168,9 +193,30 @@ public class HandWaveyManager {
         this.output.setPosition(x, y);
     }
     
+    private int coordToDesktopIntX(double xCoord) {
+        return (int) Math.round((xCoord + this.xOffset) * this.xMultiplier);
+    }
+    
+    private int coordToDesktopIntY(double yCoord) {
+        return this.desktopHeight - (int) Math.round((yCoord + this.yOffset) * this.yMultiplier);
+    }
+    
     private void moveMouseAbsoluteFromCoordinates(double xCoord, double yCoord) {
-        int calculatedX = (int) Math.round((xCoord + this.xOffset) * this.xMultiplier);
-        int calculatedY = this.desktopHeight - (int) Math.round((yCoord + this.yOffset) * this.yMultiplier);
+        int calculatedX = coordToDesktopIntX(xCoord);
+        int calculatedY = coordToDesktopIntY(yCoord);
+        
+        this.lastAbsoluteX = xCoord;
+        this.lastAbsoluteY = yCoord;
+        
+        moveMouse(calculatedX, calculatedY);
+    }
+    
+    private void moveMouseRelativeFromCoordinates(double xCoord, double yCoord) {
+        double xDiff = xCoord - this.lastAbsoluteX;
+        double yDiff = yCoord - this.lastAbsoluteY;
+        
+        int calculatedX = (int) Math.round(coordToDesktopIntX(this.lastAbsoluteX + (xDiff * this.relativeSensitivity)));
+        int calculatedY = (int) Math.round(coordToDesktopIntY(this.lastAbsoluteY + (yDiff * this.relativeSensitivity)));
         
         this.debug.out(2, String.valueOf(xCoord) + " " +
             String.valueOf(yCoord) + " " +
@@ -187,7 +233,26 @@ public class HandWaveyManager {
     public void sendHandSummaries(HandSummary[] handSummaries) {
         this.handSummaries = handSummaries;
         
-        moveMouseAbsoluteFromCoordinates(this.handSummaries[0].getHandX(), this.handSummaries[0].getHandY());
-        //this.debug.out(2, this.handSummaries[0].toString());
+        Double handZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
+        String zone = this.handsState.getZone(handZ);
+        this.handsState.setHandClosed(!this.handSummaries[0].handIsOpen());
+        
+        if (zone == "absolute") {
+            moveMouseAbsoluteFromCoordinates(this.handSummaries[0].getHandX(), this.handSummaries[0].getHandY());
+            //this.debug.out(2, this.handSummaries[0].toString());
+        } else if (zone == "relative") {
+            moveMouseRelativeFromCoordinates(this.handSummaries[0].getHandX(), this.handSummaries[0].getHandY());
+        } else if (zone == "action") {
+        } else {
+            this.debug.out(3, "A hand was detected, but it outside of any zones. z=" + String.valueOf(handZ));
+        }
+        
+        if (this.handsState.shouldMouseDown() == true) {
+            output.mouseDown(output.getMouseButtonID("left"));
+        }
+        
+        if (this.handsState.shouldMouseUp() == true) {
+            output.mouseUp(output.getMouseButtonID("left"));
+        }
     }
 }
