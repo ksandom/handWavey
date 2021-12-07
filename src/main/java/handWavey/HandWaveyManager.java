@@ -237,6 +237,12 @@ public class HandWaveyManager {
         String zone = this.handsState.getZone(handZ);
         this.handsState.setHandClosed(!this.handSummaries[0].handIsOpen());
         
+        // This should happen before any potential de-stabilisation has happened.
+        if (this.handsState.shouldMouseUp() == true) {
+            output.mouseUp(output.getMouseButtonID("left"));
+        }
+
+        // Move the mouse cursor.
         if (zone == "absolute") {
             moveMouseAbsoluteFromCoordinates(this.handSummaries[0].getHandX(), this.handSummaries[0].getHandY());
             //this.debug.out(2, this.handSummaries[0].toString());
@@ -247,12 +253,9 @@ public class HandWaveyManager {
             this.debug.out(3, "A hand was detected, but it outside of any zones. z=" + String.valueOf(handZ));
         }
         
+        // This should happen after any potential stabilisation has happened.
         if (this.handsState.shouldMouseDown() == true) {
             output.mouseDown(output.getMouseButtonID("left"));
-        }
-        
-        if (this.handsState.shouldMouseUp() == true) {
-            output.mouseUp(output.getMouseButtonID("left"));
         }
     }
 }
