@@ -88,7 +88,7 @@ public class HandWaveyManager {
         Group physicalBoundaries = handSummaryManager.newGroup("physicalBoundaries");
         physicalBoundaries.newItem(
             "x",
-            "100",
+            "200",
             "+ and - this value horizontally from the center of the visible cone above the device.");
         physicalBoundaries.newItem(
             "yMin",
@@ -114,7 +114,7 @@ public class HandWaveyManager {
             "Z greater than this value denotes the beginning of the absolute zone.");
         absolute.newItem(
             "movingMeanBegin",
-            "1",
+            "4",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         absolute.newItem(
             "movingMeanEnd",
@@ -128,7 +128,7 @@ public class HandWaveyManager {
             "Z greater than this value denotes the beginning of the relative zone.");
         relative.newItem(
             "movingMeanBegin",
-            "10",
+            "20",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         relative.newItem(
             "movingMeanEnd",
@@ -201,12 +201,12 @@ public class HandWaveyManager {
         
         if (desktopAspectRatio > physicalAspectRatio) { // desktop is wider
             this.debug.out(1, "Desktop is wider than the cone. Optimising the usable cone for that.");
-            this.xMultiplier = configuredXMultiplier * (this.desktopWidth/pXDiff);
-            this.yMultiplier = configuredYMultiplier * (this.desktopWidth/pXDiff) ;
-        } else { // desktop is narrower
-            this.debug.out(1, "The cone is wider than the desktop. Optimising the usable cone for that.");
             this.yMultiplier = configuredYMultiplier * (this.desktopHeight/pYDiff);
             this.xMultiplier = configuredXMultiplier * (this.desktopHeight/pYDiff);
+        } else { // desktop is narrower
+            this.debug.out(1, "The cone is wider than the desktop. Optimising the usable cone for that.");
+            this.xMultiplier = configuredXMultiplier * (this.desktopWidth/pXDiff);
+            this.yMultiplier = configuredYMultiplier * (this.desktopWidth/pXDiff);
         }
         
         
@@ -262,16 +262,6 @@ public class HandWaveyManager {
         this.lastAbsoluteX = xCoord;
         this.lastAbsoluteY = yCoord;
         
-        moveMouse(calculatedX, calculatedY);
-    }
-    
-    private void moveMouseRelativeFromCoordinates(double xCoord, double yCoord) {
-        double xDiff = xCoord - this.lastAbsoluteX;
-        double yDiff = yCoord - this.lastAbsoluteY;
-        
-        int calculatedX = (int) Math.round(coordToDesktopIntX(this.lastAbsoluteX + (xDiff * this.relativeSensitivity)));
-        int calculatedY = (int) Math.round(coordToDesktopIntY(this.lastAbsoluteY + (yDiff * this.relativeSensitivity)));
-        
         this.debug.out(2, String.valueOf(xCoord) + " " +
             String.valueOf(yCoord) + " " +
             String.valueOf(calculatedX) + " " +
@@ -284,18 +274,22 @@ public class HandWaveyManager {
         moveMouse(calculatedX, calculatedY);
     }
     
-    /* TODO
+    private void moveMouseRelativeFromCoordinates(double xCoord, double yCoord) {
+        double xDiff = xCoord - this.lastAbsoluteX;
+        double yDiff = yCoord - this.lastAbsoluteY;
+        
+        int calculatedX = (int) Math.round(coordToDesktopIntX(this.lastAbsoluteX + (xDiff * this.relativeSensitivity)));
+        int calculatedY = (int) Math.round(coordToDesktopIntY(this.lastAbsoluteY + (yDiff * this.relativeSensitivity)));
+        
+        moveMouse(calculatedX, calculatedY);
+    }
     
-    * Config and object variables.
-      * Zones
-        * MovingMean
-          * From
-          * To
-    * Derive zone depth as percentage.
-    * Bring in MovingMean.
-      * Resize by each zone depth.
-    
-    */
+    private void updateMovingMeans(String zone, double handZ) {
+        this.movingMeanX.set(this.handSummaries[0].getHandX());
+        this.movingMeanY.set(this.handSummaries[0].getHandY());
+        this.movingMeanX.resize(this.zones.get(zone).getMovingMeanWidth(handZ));
+        this.movingMeanY.resize(this.zones.get(zone).getMovingMeanWidth(handZ));
+    }
     
     public void sendHandSummaries(HandSummary[] handSummaries) {
         this.handSummaries = handSummaries;
@@ -310,14 +304,11 @@ public class HandWaveyManager {
         }
 
         // Move the mouse cursor.
-        this.movingMeanX.set(this.handSummaries[0].getHandX());
-        this.movingMeanY.set(this.handSummaries[0].getHandY());
-        this.movingMeanX.resize(this.zones.get(zone).getMovingMeanWidth(handZ));
-        this.movingMeanY.resize(this.zones.get(zone).getMovingMeanWidth(handZ));
-        
         if (zone == "absolute") {
+            updateMovingMeans(zone, handZ);
             moveMouseAbsoluteFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
         } else if (zone == "relative") {
+            updateMovingMeans(zone, handZ);
             moveMouseRelativeFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
         } else if (zone == "action") {
         } else {
