@@ -22,10 +22,10 @@ public class HandsState {
         Group handSummaryManager = config.getGroup("handSummaryManager");
 
         // Configure Z axis thresholds.
-        Group zoneThresholds = handSummaryManager.getGroup("zoneThresholds");
-        this.zAbsoluteBegin = Double.parseDouble(zoneThresholds.getItem("absolute").get());
-        this.zRelativeBegin = Double.parseDouble(zoneThresholds.getItem("relative").get());
-        this.zActionBegin = Double.parseDouble(zoneThresholds.getItem("action").get());
+        Group zones = handSummaryManager.getGroup("zones");
+        this.zAbsoluteBegin = Double.parseDouble(zones.getGroup("absolute").getItem("threshold").get());
+        this.zRelativeBegin = Double.parseDouble(zones.getGroup("relative").getItem("threshold").get());
+        this.zActionBegin = Double.parseDouble(zones.getGroup("action").getItem("threshold").get());
         
         // TODO Give this class its own debug level?
         int debugLevel = Integer.parseInt(handSummaryManager.getItem("debugLevel").get());

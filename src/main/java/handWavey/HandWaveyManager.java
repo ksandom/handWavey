@@ -1,15 +1,21 @@
 package handWavey;
 
-// import handWavey.*;
+import handWavey.Zone;
 import config.*;
+import dataCleaner.MovingMean;
 import debug.Debug;
 import java.awt.Dimension;
 import mouseAndKeyboardOutput.*;
+import java.util.HashMap;
 
 public class HandWaveyManager {
     private HandSummary[] handSummaries;
+    private HashMap<String, Zone> zones = new HashMap<String, Zone>();
+    private MovingMean movingMeanX = new MovingMean(1, 0);
+    private MovingMean movingMeanY = new MovingMean(1, 0);
     private Debug debug;
     private GenericOutput output;
+    
     private int desktopWidth = 0;
     private int desktopHeight = 0;
     
@@ -77,7 +83,7 @@ public class HandWaveyManager {
         axisOrientation.newItem(
             "zMultiplier",
             "-1",
-            "Set this to -1 when you need to invert Z (how far away from you your hand goes). UltraMotion takes care of this for you. So I can't currently think of a use-case for it, but am including it for completness.");
+            "Set this to -1 when you need to invert Z (how far away from you your hand goes). UltraMotion takes care of this for you. So I can't currently think of a use-case for it, but am including it for completeness.");
         
         Group physicalBoundaries = handSummaryManager.newGroup("physicalBoundaries");
         physicalBoundaries.newItem(
@@ -96,21 +102,53 @@ public class HandWaveyManager {
             "z",
             "120",
             "+ and - this value in depth from the center of the visible cone above the device.");
-        
-        Group zoneThresholds = handSummaryManager.newGroup("zoneThresholds");
-        zoneThresholds.newItem(
-            "absolute",
-            "-150",
-            "Greater than ___ denotes the beginning of the absolute zone.");
-        zoneThresholds.newItem(
-            "relative",
-            "50",
-            "Greater than ___ denotes the beginning of the relative zone.");
-        zoneThresholds.newItem(
-            "action",
-            "100",
-            "Greater than ___ denotes the beginning of the action zone.");
 
+        Group zones = handSummaryManager.newGroup("zones");
+        Group zoneNone = zones.newGroup("zoneNone");
+        // None currently doesn't require any config. Its group is here solely for completeness.
+        
+        Group absolute = zones.newGroup("absolute");
+        absolute.newItem(
+            "threshold",
+            "-150",
+            "Z greater than this value denotes the beginning of the absolute zone.");
+        absolute.newItem(
+            "movingMeanBegin",
+            "1",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        absolute.newItem(
+            "movingMeanEnd",
+            "20",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        
+        Group relative = zones.newGroup("relative");
+        relative.newItem(
+            "threshold",
+            "50",
+            "Z greater than this value denotes the beginning of the relative zone.");
+        relative.newItem(
+            "movingMeanBegin",
+            "10",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        relative.newItem(
+            "movingMeanEnd",
+            "40",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        
+        Group action = zones.newGroup("action");
+        action.newItem(
+            "threshold",
+            "100",
+            "Z greater than this value denotes the beginning of the action zone.");
+        action.newItem(
+            "movingMeanBegin",
+            "20",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        action.newItem(
+            "movingMeanEnd",
+            "20",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        
         handSummaryManager.newItem(
             "relativeSensitivity",
             "0.2",
@@ -173,10 +211,26 @@ public class HandWaveyManager {
         
         
         // Configure Z axis thresholds.
-        Group zoneThresholds = handSummaryManager.getGroup("zoneThresholds");
-        this.zAbsoluteBegin = Double.parseDouble(zoneThresholds.getItem("absolute").get());
-        this.zRelativeBegin = Double.parseDouble(zoneThresholds.getItem("relative").get());
-        this.zActionBegin = Double.parseDouble(zoneThresholds.getItem("action").get());
+        Group zones = handSummaryManager.getGroup("zones");
+        this.zAbsoluteBegin = Double.parseDouble(zones.getGroup("absolute").getItem("threshold").get());
+        this.zRelativeBegin = Double.parseDouble(zones.getGroup("relative").getItem("threshold").get());
+        this.zActionBegin = Double.parseDouble(zones.getGroup("action").getItem("threshold").get());
+        
+        
+        // Configure zones.
+        this.zones.put("none", new Zone(-999, this.zAbsoluteBegin, 1, 1));
+        this.zones.put("absolute", new Zone(
+            this.zAbsoluteBegin, this.zRelativeBegin,
+            Integer.parseInt(zones.getGroup("absolute").getItem("movingMeanBegin").get()),
+            Integer.parseInt(zones.getGroup("absolute").getItem("movingMeanEnd").get())));
+        this.zones.put("relative", new Zone(
+            this.zRelativeBegin, this.zActionBegin,
+            Integer.parseInt(zones.getGroup("relative").getItem("movingMeanBegin").get()),
+            Integer.parseInt(zones.getGroup("relative").getItem("movingMeanEnd").get())));
+        this.zones.put("action", new Zone(
+            this.zActionBegin, this.zActionBegin+50,
+            Integer.parseInt(zones.getGroup("action").getItem("movingMeanBegin").get()),
+            Integer.parseInt(zones.getGroup("action").getItem("movingMeanEnd").get())));
         
         
         // Get relative sensitivity.
@@ -230,6 +284,19 @@ public class HandWaveyManager {
         moveMouse(calculatedX, calculatedY);
     }
     
+    /* TODO
+    
+    * Config and object variables.
+      * Zones
+        * MovingMean
+          * From
+          * To
+    * Derive zone depth as percentage.
+    * Bring in MovingMean.
+      * Resize by each zone depth.
+    
+    */
+    
     public void sendHandSummaries(HandSummary[] handSummaries) {
         this.handSummaries = handSummaries;
         
@@ -243,11 +310,15 @@ public class HandWaveyManager {
         }
 
         // Move the mouse cursor.
+        this.movingMeanX.set(this.handSummaries[0].getHandX());
+        this.movingMeanY.set(this.handSummaries[0].getHandY());
+        this.movingMeanX.resize(this.zones.get(zone).getMovingMeanWidth(handZ));
+        this.movingMeanY.resize(this.zones.get(zone).getMovingMeanWidth(handZ));
+        
         if (zone == "absolute") {
-            moveMouseAbsoluteFromCoordinates(this.handSummaries[0].getHandX(), this.handSummaries[0].getHandY());
-            //this.debug.out(2, this.handSummaries[0].toString());
+            moveMouseAbsoluteFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
         } else if (zone == "relative") {
-            moveMouseRelativeFromCoordinates(this.handSummaries[0].getHandX(), this.handSummaries[0].getHandY());
+            moveMouseRelativeFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
         } else if (zone == "action") {
         } else {
             this.debug.out(3, "A hand was detected, but it outside of any zones. z=" + String.valueOf(handZ));

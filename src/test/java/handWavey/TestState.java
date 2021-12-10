@@ -63,19 +63,51 @@ class TestState {
             "120",
             "+ and - this value in depth from the center of the visible cone above the device.");
         
-        Group zoneThresholds = handSummaryManager.newGroup("zoneThresholds");
-        zoneThresholds.newItem(
-            "absolute",
+        Group zones = handSummaryManager.newGroup("zones");
+        Group zoneNone = zones.newGroup("zoneNone");
+        // None currently doesn't require any config. Its group is here solely for completeness.
+        
+        Group absolute = zones.newGroup("absolute");
+        absolute.newItem(
+            "threshold",
             "-150",
-            "Greater than ___ denotes the beginning of the absolute zone.");
-        zoneThresholds.newItem(
-            "relative",
+            "Z greater than this value denotes the beginning of the absolute zone.");
+        absolute.newItem(
+            "movingMeanBegin",
+            "1",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 20 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        absolute.newItem(
+            "movingMeanEnd",
+            "8",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 20 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        
+        Group relative = zones.newGroup("relative");
+        relative.newItem(
+            "threshold",
             "50",
-            "Greater than ___ denotes the beginning of the relative zone.");
-        zoneThresholds.newItem(
-            "action",
+            "Z greater than this value denotes the beginning of the relative zone.");
+        relative.newItem(
+            "movingMeanBegin",
+            "8",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 20 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        relative.newItem(
+            "movingMeanEnd",
+            "20",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 20 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        
+        Group action = zones.newGroup("action");
+        action.newItem(
+            "threshold",
             "100",
-            "Greater than ___ denotes the beginning of the action zone.");
+            "Z greater than this value denotes the beginning of the action zone.");
+        action.newItem(
+            "movingMeanBegin",
+            "20",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 20 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        action.newItem(
+            "movingMeanEnd",
+            "20",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 20 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
 
         handSummaryManager.newItem(
             "relativeSensitivity",
