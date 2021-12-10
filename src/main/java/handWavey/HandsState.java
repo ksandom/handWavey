@@ -11,11 +11,14 @@ public class HandsState {
     private double zActionBegin = 0;
     
     private String zone = "none";
+    private String oldZone = "none";
     
     private Boolean zoneMouseDown = false;
     private Boolean gestureMouseDown = false;
     private Boolean resultMouseDownDown = false;
     private Boolean resultMouseDownUp = false;
+    
+    private Boolean isNew = false;
     
     public HandsState() {
         Config config = Config.singleton();
@@ -48,6 +51,9 @@ public class HandsState {
         String newZone = deriveZone(handZ);
         
         if (newZone != this.zone) {
+            this.isNew = true;
+            this.oldZone = this.zone;
+            
             switch(newZone) {
                 case "none":
                     this.zoneMouseDown = false;
@@ -65,9 +71,19 @@ public class HandsState {
             
             this.zone = newZone;
             this.debug.out(1, "Entered zone " + newZone);
+        } else {
+            this.isNew = false;
         }
         
         return newZone;
+    }
+    
+    public Boolean zoneIsNew() {
+        return this.isNew;
+    }
+    
+    public String getOldZone() {
+        return this.oldZone;
     }
     
     private Boolean combinedMouseDown() {

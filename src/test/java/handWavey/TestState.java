@@ -139,56 +139,77 @@ class TestState {
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("none", this.handsState.getZone(-150));
+        assertEquals(false, this.handsState.zoneIsNew());
         
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("absolute", this.handsState.getZone(-149));
+        assertEquals(true, this.handsState.zoneIsNew());
+        assertEquals("none", this.handsState.getOldZone());
         
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("absolute", this.handsState.getZone(10));
+        assertEquals(false, this.handsState.zoneIsNew());
+        assertEquals("none", this.handsState.getOldZone());
         
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("absolute", this.handsState.getZone(50));
+        assertEquals(false, this.handsState.zoneIsNew());
+        assertEquals("none", this.handsState.getOldZone());
         
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("relative", this.handsState.getZone(51));
+        assertEquals(true, this.handsState.zoneIsNew());
+        assertEquals("absolute", this.handsState.getOldZone());
         
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("relative", this.handsState.getZone(100));
+        assertEquals(false, this.handsState.zoneIsNew());
+        assertEquals("absolute", this.handsState.getOldZone());
         
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("action", this.handsState.getZone(101));
+        assertEquals(true, this.handsState.zoneIsNew());
+        assertEquals("relative", this.handsState.getOldZone());
         
         assertEquals(true, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("action", this.handsState.getZone(102));
+        assertEquals(false, this.handsState.zoneIsNew());
+        assertEquals("relative", this.handsState.getOldZone());
         
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("action", this.handsState.getZone(103));
+        assertEquals(false, this.handsState.zoneIsNew());
+        assertEquals("relative", this.handsState.getOldZone());
         
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("relative", this.handsState.getZone(99));
+        assertEquals(true, this.handsState.zoneIsNew());
+        assertEquals("action", this.handsState.getOldZone());
         
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(true, this.handsState.shouldMouseUp());
         
         assertEquals("relative", this.handsState.getZone(99));
+        assertEquals(false, this.handsState.zoneIsNew());
+        assertEquals("action", this.handsState.getOldZone());
         
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
