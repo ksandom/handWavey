@@ -7,6 +7,9 @@ import debug.Debug;
 import java.awt.Dimension;
 import mouseAndKeyboardOutput.*;
 import java.util.HashMap;
+import audio.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class HandWaveyManager {
     private HandSummary[] handSummaries;
@@ -15,6 +18,10 @@ public class HandWaveyManager {
     private MovingMean movingMeanY = new MovingMean(1, 0);
     private Debug debug;
     private GenericOutput output;
+    private HandsState handsState;
+        
+    private HashMap<String, String> eventSounds = new HashMap<String, String>();
+    private String audioPath;
     
     private int desktopWidth = 0;
     private int desktopHeight = 0;
@@ -33,8 +40,6 @@ public class HandWaveyManager {
     private double lastAbsoluteY = 0;
     
     private double relativeSensitivity = 0.1;
-    
-    private HandsState handsState;
     
     public HandWaveyManager() {
         Config.setSingletonFilename("handWavey.yml");
@@ -149,6 +154,54 @@ public class HandWaveyManager {
             "20",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         
+        Group audioConfig = config.newGroup("audioConfig");
+        audioConfig.newItem(
+            "pathToAudio",
+            "audio/clips",
+            "Where are all of the audio clips stored.");
+        
+        Group audioEvents = config.newGroup("audioEvents");
+        audioEvents.newItem(
+            "zone-none-absolute",
+            "metalDing01.wav",
+            "Sound to play when the hand moves from the none zone to the absolute zone.");
+        
+        audioEvents.newItem(
+            "zone-absolute-none",
+            "metalDing02.wav",
+            "Sound to play when the hand moves from the absolute zone to the none zone.");
+        
+        audioEvents.newItem(
+            "zone-absolute-relative",
+            "metalDing03.wav",
+            "Sound to play when the hand moves from the absolute zone to the relative zone.");
+        
+        audioEvents.newItem(
+            "zone-relative-absolute",
+            "metalDing04.wav",
+            "Sound to play when the hand moves from the relative zone to the absolute zone.");
+        
+        audioEvents.newItem(
+            "zone-relative-action",
+            "metalDing05.wav",
+            "Sound to play when the hand moves from the relative zone to the action zone.");
+        
+        audioEvents.newItem(
+            "zone-action-relative",
+            "metalDing07.wav",
+            "Sound to play when the hand moves from the action zone to the relative zone.");
+        
+        audioEvents.newItem(
+            "mouse-down",
+            "metalDing07.wav",
+            "Sound to play when the mouse is clicked.");
+        
+        audioEvents.newItem(
+            "mouse-up",
+            "metalDing08.wav",
+            "Sound to play when the mouse button is released.");
+        
+        
         handSummaryManager.newItem(
             "relativeSensitivity",
             "0.2",
@@ -235,6 +288,27 @@ public class HandWaveyManager {
         
         // Get relative sensitivity.
         this.relativeSensitivity = Double.parseDouble(handSummaryManager.getItem("relativeSensitivity").get());
+        
+        
+        // Get Audio path.
+        this.audioPath = Config.singleton().getGroup("audioConfig").getItem("pathToAudio").get() + File.separator;
+        
+        
+        // Get event sounds.
+        loadEventSoundFromConfig("zone-none-absolute");
+        loadEventSoundFromConfig("zone-absolute-none");
+        loadEventSoundFromConfig("zone-absolute-relative");
+        loadEventSoundFromConfig("zone-relative-absolute");
+        loadEventSoundFromConfig("zone-relative-action");
+        loadEventSoundFromConfig("zone-action-relative");
+        loadEventSoundFromConfig("mouse-down");
+        loadEventSoundFromConfig("mouse-up");
+    }
+    
+    private void loadEventSoundFromConfig(String eventID) {
+        Group audioEvents = Config.singleton().getGroup("audioEvents");
+        
+        this.eventSounds.put(eventID, audioEvents.getItem(eventID).get());
     }
     
     private void moveMouse(int x, int y) {
@@ -291,6 +365,17 @@ public class HandWaveyManager {
         this.movingMeanY.resize(this.zones.get(zone).getMovingMeanWidth(handZ));
     }
     
+    private void triggerEvent(String eventID) {
+        String fileName = this.eventSounds.get(eventID);
+        
+        if (fileName != "") {
+            String fullPath = this.audioPath + fileName;
+            this.debug.out(2, "Triggering event " + eventID + " File: " + fullPath);
+            
+            BackgroundSound.play(fullPath);
+        }
+    }
+    
     public void sendHandSummaries(HandSummary[] handSummaries) {
         this.handSummaries = handSummaries;
         
@@ -301,6 +386,7 @@ public class HandWaveyManager {
         // This should happen before any potential de-stabilisation has happened.
         if (this.handsState.shouldMouseUp() == true) {
             output.mouseUp(output.getMouseButtonID("left"));
+            triggerEvent("mouse-up");
         }
 
         // Move the mouse cursor.
@@ -318,6 +404,13 @@ public class HandWaveyManager {
         // This should happen after any potential stabilisation has happened.
         if (this.handsState.shouldMouseDown() == true) {
             output.mouseDown(output.getMouseButtonID("left"));
+            triggerEvent("mouse-down");
+        }
+        
+        // Audio events.
+        if (this.handsState.zoneIsNew()) {
+            String eventID = "zone-" + zone + "-" + this.handsState.getOldZone();
+            triggerEvent(eventID);
         }
     }
 }
