@@ -108,6 +108,11 @@ public class HandWaveyManager {
             "120",
             "+ and - this value in depth from the center of the visible cone above the device.");
 
+        handSummaryManager.newItem(
+            "zoneBuffer",
+            "30",
+            "Once a zone is entered, how far beyond the threshold must the hand retreat before the zone is considered exited?");
+
         Group zones = handSummaryManager.newGroup("zones");
         Group zoneNone = zones.newGroup("zoneNone");
         // None currently doesn't require any config. Its group is here solely for completeness.
@@ -115,7 +120,7 @@ public class HandWaveyManager {
         Group absolute = zones.newGroup("absolute");
         absolute.newItem(
             "threshold",
-            "-150",
+            "-120",
             "Z greater than this value denotes the beginning of the absolute zone.");
         absolute.newItem(
             "movingMeanBegin",
@@ -129,7 +134,7 @@ public class HandWaveyManager {
         Group relative = zones.newGroup("relative");
         relative.newItem(
             "threshold",
-            "50",
+            "0",
             "Z greater than this value denotes the beginning of the relative zone.");
         relative.newItem(
             "movingMeanBegin",
@@ -143,7 +148,7 @@ public class HandWaveyManager {
         Group action = zones.newGroup("action");
         action.newItem(
             "threshold",
-            "100",
+            "80",
             "Z greater than this value denotes the beginning of the action zone.");
         action.newItem(
             "movingMeanBegin",
@@ -204,7 +209,7 @@ public class HandWaveyManager {
         
         handSummaryManager.newItem(
             "relativeSensitivity",
-            "0.2",
+            "0.15",
             "How sensitive is the relative zone compared to the absolute zone? Decimal between 0 and 1.");
         
         this.output = new GenericOutput();
@@ -376,6 +381,26 @@ public class HandWaveyManager {
         }
     }
     
+    /* TODO
+    
+    * Better handle slash in audio path prefixes.
+    * Touchpad mode.
+    * #Overlap zones.
+    * Gestures:
+        * Right click.
+        * Scroll.
+        * Drag window.
+        * Resize Window.
+        * Zoom.
+    * Check whether threads are being cleaned up.
+    * If not threads. Why is it freezing occasionally? (Doesn't seem like GC)
+    
+    * Arm angle.
+    * Curved zones?
+    
+    */
+    
+    // This is where everything gets glued together.
     public void sendHandSummaries(HandSummary[] handSummaries) {
         this.handSummaries = handSummaries;
         
@@ -385,6 +410,7 @@ public class HandWaveyManager {
         
         // This should happen before any potential de-stabilisation has happened.
         if (this.handsState.shouldMouseUp() == true) {
+            this.debug.out(1, "Mouse down at " + coordsToString(this.movingMeanX.get(), this.movingMeanY.get()));
             output.mouseUp(output.getMouseButtonID("left"));
             triggerEvent("mouse-up");
         }
@@ -403,6 +429,7 @@ public class HandWaveyManager {
         
         // This should happen after any potential stabilisation has happened.
         if (this.handsState.shouldMouseDown() == true) {
+            this.debug.out(1, "Mouse down at " + coordsToString(this.movingMeanX.get(), this.movingMeanY.get()));
             output.mouseDown(output.getMouseButtonID("left"));
             triggerEvent("mouse-down");
         }
@@ -412,5 +439,9 @@ public class HandWaveyManager {
             String eventID = "zone-" + zone + "-" + this.handsState.getOldZone();
             triggerEvent(eventID);
         }
+    }
+    
+    private String coordsToString(double x, double y) {
+        return String.valueOf(Math.round(x)) + ", " + String.valueOf(Math.round(y));
     }
 }

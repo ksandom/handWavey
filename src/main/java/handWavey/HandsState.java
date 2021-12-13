@@ -9,6 +9,7 @@ public class HandsState {
     private double zAbsoluteBegin = 0;
     private double zRelativeBegin = 0;
     private double zActionBegin = 0;
+    private double zoneBuffer = 0;
     
     private String zone = "none";
     private String oldZone = "none";
@@ -30,6 +31,9 @@ public class HandsState {
         this.zRelativeBegin = Double.parseDouble(zones.getGroup("relative").getItem("threshold").get());
         this.zActionBegin = Double.parseDouble(zones.getGroup("action").getItem("threshold").get());
         
+        // Configure zone buffer.
+        this.zoneBuffer = Double.parseDouble(handSummaryManager.getItem("zoneBuffer").get());
+        
         // TODO Give this class its own debug level?
         int debugLevel = Integer.parseInt(handSummaryManager.getItem("debugLevel").get());
         this.debug = new Debug(debugLevel, "HandsState");
@@ -47,10 +51,12 @@ public class HandsState {
         }
     }
     
+    
     public String getZone(double handZ) {
         String newZone = deriveZone(handZ);
+        String bufferZone = deriveZone(handZ + this.zoneBuffer);
         
-        if (newZone != this.zone) {
+        if ((bufferZone == newZone) && (newZone != this.zone)) {
             this.isNew = true;
             this.oldZone = this.zone;
             
@@ -70,7 +76,7 @@ public class HandsState {
             }
             
             this.zone = newZone;
-            this.debug.out(1, "Entered zone " + newZone);
+            this.debug.out(1, "Entered zone " + newZone + "  at depth " + String.valueOf(Math.round(handZ)));
         } else {
             this.isNew = false;
         }
