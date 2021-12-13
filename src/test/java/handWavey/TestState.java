@@ -64,48 +64,49 @@ class TestState {
             "+ and - this value in depth from the center of the visible cone above the device.");
         
         handSummaryManager.newItem(
+            "zoneMode",
+            "touchScreen",
+            "(touchscreen, touchPad). What type of device the zones approximate. The names are not an exact comparison, but should at least give an idea of how they work.");
+
+        handSummaryManager.newItem(
             "zoneBuffer",
             "30",
             "Once a zone is entered, how far beyond the threshold must the hand retreat before the zone is considered exited?");
 
-        handSummaryManager.newItem(
-            "zoneMode",
-            "touchscreen",
-            "(touchscreen, touchpad). What type of device the zones approximate. The names are not an exact comparison, but should at least give an idea of how they work.");
-
         Group zones = handSummaryManager.newGroup("zones");
-        Group zoneNone = zones.newGroup("zoneNone");
+        Group touchScreen = zones.newGroup("touchScreen");
+        Group zoneNone = touchScreen.newGroup("zoneNone");
         // None currently doesn't require any config. Its group is here solely for completeness.
         
-        Group absolute = zones.newGroup("absolute");
+        Group absolute = touchScreen.newGroup("absolute");
         absolute.newItem(
             "threshold",
             "-150",
             "Z greater than this value denotes the beginning of the absolute zone.");
         absolute.newItem(
             "movingMeanBegin",
-            "1",
-            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 20 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+            "4",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         absolute.newItem(
             "movingMeanEnd",
-            "8",
-            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 20 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+            "20",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         
-        Group relative = zones.newGroup("relative");
+        Group relative = touchScreen.newGroup("relative");
         relative.newItem(
             "threshold",
             "50",
             "Z greater than this value denotes the beginning of the relative zone.");
         relative.newItem(
             "movingMeanBegin",
-            "8",
-            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 20 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+            "20",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         relative.newItem(
             "movingMeanEnd",
-            "20",
-            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 20 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+            "40",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         
-        Group action = zones.newGroup("action");
+        Group action = touchScreen.newGroup("action");
         action.newItem(
             "threshold",
             "100",
@@ -113,11 +114,44 @@ class TestState {
         action.newItem(
             "movingMeanBegin",
             "20",
-            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 20 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         action.newItem(
             "movingMeanEnd",
             "20",
-            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 20 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        
+
+        Group touchPad = zones.newGroup("touchPad");
+        Group zoneTPNone = touchPad.newGroup("zoneNone");
+        // None currently doesn't require any config. Its group is here solely for completeness.
+        
+        Group active = touchPad.newGroup("active");
+        active.newItem(
+            "threshold",
+            "-120",
+            "Z greater than this value denotes the beginning of the active zone.");
+        active.newItem(
+            "movingMeanBegin",
+            "4",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        active.newItem(
+            "movingMeanEnd",
+            "20",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        
+        Group tpAction = touchPad.newGroup("action");
+        tpAction.newItem(
+            "threshold",
+            "80",
+            "Z greater than this value denotes the beginning of the action zone.");
+        tpAction.newItem(
+            "movingMeanBegin",
+            "20",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        tpAction.newItem(
+            "movingMeanEnd",
+            "20",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
 
         handSummaryManager.newItem(
             "relativeSensitivity",

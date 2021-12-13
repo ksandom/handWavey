@@ -23,6 +23,8 @@ public class HandWaveyManager {
     private HashMap<String, String> eventSounds = new HashMap<String, String>();
     private String audioPath;
     
+    private String zoneMode = "touchScreen";
+    
     private int desktopWidth = 0;
     private int desktopHeight = 0;
     
@@ -32,12 +34,19 @@ public class HandWaveyManager {
     private double yMultiplier = 1;
     private double zMultiplier = -1;
     
+    private double zActiveBegin = 0;
     private double zAbsoluteBegin = 0;
     private double zRelativeBegin = 0;
     private double zActionBegin = 0;
     
     private double lastAbsoluteX = 0;
     private double lastAbsoluteY = 0;
+    
+    private int touchPadX = 0;
+    private int touchPadY = 0;
+    private double touchPadInputMultiplier = 5;
+    private double touchPadOutputMultiplier = 1;
+    private double touchPadAcceleration = 2;
     
     private double relativeSensitivity = 0.1;
     
@@ -109,15 +118,21 @@ public class HandWaveyManager {
             "+ and - this value in depth from the center of the visible cone above the device.");
 
         handSummaryManager.newItem(
+            "zoneMode",
+            "touchPad",
+            "(touchScreen, touchPad). What type of device the zones approximate. The names are not an exact comparison, but should at least give an idea of how they work.");
+
+        handSummaryManager.newItem(
             "zoneBuffer",
             "30",
             "Once a zone is entered, how far beyond the threshold must the hand retreat before the zone is considered exited?");
 
         Group zones = handSummaryManager.newGroup("zones");
-        Group zoneNone = zones.newGroup("zoneNone");
+        Group touchScreen = zones.newGroup("touchScreen");
+        Group zoneNone = touchScreen.newGroup("zoneNone");
         // None currently doesn't require any config. Its group is here solely for completeness.
         
-        Group absolute = zones.newGroup("absolute");
+        Group absolute = touchScreen.newGroup("absolute");
         absolute.newItem(
             "threshold",
             "-120",
@@ -131,7 +146,7 @@ public class HandWaveyManager {
             "20",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         
-        Group relative = zones.newGroup("relative");
+        Group relative = touchScreen.newGroup("relative");
         relative.newItem(
             "threshold",
             "0",
@@ -145,7 +160,7 @@ public class HandWaveyManager {
             "40",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         
-        Group action = zones.newGroup("action");
+        Group action = touchScreen.newGroup("action");
         action.newItem(
             "threshold",
             "80",
@@ -159,6 +174,54 @@ public class HandWaveyManager {
             "20",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         
+
+        Group touchPad = zones.newGroup("touchPad");
+        Group zoneTPNone = touchPad.newGroup("zoneNone");
+        // None currently doesn't require any config. Its group is here solely for completeness.
+        
+        Group active = touchPad.newGroup("active");
+        active.newItem(
+            "threshold",
+            "-100",
+            "Z greater than this value denotes the beginning of the active zone.");
+        active.newItem(
+            "movingMeanBegin",
+            "4",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        active.newItem(
+            "movingMeanEnd",
+            "20",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        
+        Group tpAction = touchPad.newGroup("action");
+        tpAction.newItem(
+            "threshold",
+            "100",
+            "Z greater than this value denotes the beginning of the action zone.");
+        tpAction.newItem(
+            "movingMeanBegin",
+            "20",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        tpAction.newItem(
+            "movingMeanEnd",
+            "20",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        
+        Group touchPadConfig = handSummaryManager.newGroup("touchPad");
+        touchPadConfig.newItem(
+            "inputMultiplier",
+            "3",
+            "Input is pretty small. Make it a bit bigger.");
+        touchPadConfig.newItem(
+            "outputMultiplier",
+            "1",
+            "Input is pretty small. Make it a bit bigger.");
+        touchPadConfig.newItem(
+            "acceleration",
+            "1",
+            "Small change in output moves the pointer very precisely. A larger movement moves the pointer much more drastically.");
+        
+        
         Group audioConfig = config.newGroup("audioConfig");
         audioConfig.newItem(
             "pathToAudio",
@@ -166,6 +229,26 @@ public class HandWaveyManager {
             "Where are all of the audio clips stored.");
         
         Group audioEvents = config.newGroup("audioEvents");
+        audioEvents.newItem(
+            "zone-none-active",
+            "metalDing01.wav",
+            "Sound to play when the hand moves from the none zone to the active zone.");
+        
+        audioEvents.newItem(
+            "zone-active-none",
+            "metalDing02.wav",
+            "Sound to play when the hand moves from the active zone to the none zone.");
+        
+        audioEvents.newItem(
+            "zone-active-action",
+            "metalDing05.wav",
+            "Sound to play when the hand moves from the relative zone to the action zone.");
+        
+        audioEvents.newItem(
+            "zone-action-active",
+            "metalDing07.wav",
+            "Sound to play when the hand moves from the action zone to the relative zone.");
+        
         audioEvents.newItem(
             "zone-none-absolute",
             "metalDing01.wav",
@@ -243,6 +326,10 @@ public class HandWaveyManager {
         this.desktopHeight = desktopResolution.height;
         double desktopAspectRatio = this.desktopWidth/this.desktopHeight;
         
+        // Set initial locaiton for touchPad based zoning.
+        this.touchPadX = (int) Math.round(this.desktopWidth /3);
+        this.touchPadY = (int) Math.round(this.desktopHeight /3);
+        
         
         // Figure out how to best fit the desktop into the physical space.
         // TODO This could be abstracted out into testable code.
@@ -269,27 +356,49 @@ public class HandWaveyManager {
         
         
         // Configure Z axis thresholds.
-        Group zones = handSummaryManager.getGroup("zones");
-        this.zAbsoluteBegin = Double.parseDouble(zones.getGroup("absolute").getItem("threshold").get());
-        this.zRelativeBegin = Double.parseDouble(zones.getGroup("relative").getItem("threshold").get());
-        this.zActionBegin = Double.parseDouble(zones.getGroup("action").getItem("threshold").get());
+        this.zoneMode = handSummaryManager.getItem("zoneMode").get();
+        if (this.zoneMode == "touchScreen") {
+            Group touchScreen = handSummaryManager.getGroup("zones").getGroup("touchScreen");
+            this.zAbsoluteBegin = Double.parseDouble(touchScreen.getGroup("absolute").getItem("threshold").get());
+            this.zRelativeBegin = Double.parseDouble(touchScreen.getGroup("relative").getItem("threshold").get());
+            this.zActionBegin = Double.parseDouble(touchScreen.getGroup("action").getItem("threshold").get());
+            
+            this.zones.put("none", new Zone(-999, this.zAbsoluteBegin, 1, 1));
+            this.zones.put("absolute", new Zone(
+                this.zAbsoluteBegin, this.zRelativeBegin,
+                Integer.parseInt(touchScreen.getGroup("absolute").getItem("movingMeanBegin").get()),
+                Integer.parseInt(touchScreen.getGroup("absolute").getItem("movingMeanEnd").get())));
+            this.zones.put("relative", new Zone(
+                this.zRelativeBegin, this.zActionBegin,
+                Integer.parseInt(touchScreen.getGroup("relative").getItem("movingMeanBegin").get()),
+                Integer.parseInt(touchScreen.getGroup("relative").getItem("movingMeanEnd").get())));
+            this.zones.put("action", new Zone(
+                this.zActionBegin, this.zActionBegin+50,
+                Integer.parseInt(touchScreen.getGroup("action").getItem("movingMeanBegin").get()),
+                Integer.parseInt(touchScreen.getGroup("action").getItem("movingMeanEnd").get())));
+        } else if (this.zoneMode == "touchPad") {
+            Group touchPad = handSummaryManager.getGroup("zones").getGroup("touchPad");
+            this.zActiveBegin = Double.parseDouble(touchPad.getGroup("active").getItem("threshold").get());
+            this.zActionBegin = Double.parseDouble(touchPad.getGroup("action").getItem("threshold").get());
+            
+            this.zones.put("none", new Zone(-999, this.zActiveBegin, 1, 1));
+            this.zones.put("active", new Zone(
+                this.zActiveBegin, this.zActionBegin,
+                Integer.parseInt(touchPad.getGroup("active").getItem("movingMeanBegin").get()),
+                Integer.parseInt(touchPad.getGroup("active").getItem("movingMeanEnd").get())));
+            this.zones.put("action", new Zone(
+                this.zActionBegin, this.zActionBegin+50,
+                Integer.parseInt(touchPad.getGroup("action").getItem("movingMeanBegin").get()),
+                Integer.parseInt(touchPad.getGroup("action").getItem("movingMeanEnd").get())));
+        } else {
+            // TODO This needs to produce some user feedback that the user will see. Once this runs as a service, a debug message won't be sufficient.
+            this.debug.out(0, "Unknown zoneMode " + this.zoneMode + ". This will likely cause badness.");
+        }
         
-        
-        // Configure zones.
-        this.zones.put("none", new Zone(-999, this.zAbsoluteBegin, 1, 1));
-        this.zones.put("absolute", new Zone(
-            this.zAbsoluteBegin, this.zRelativeBegin,
-            Integer.parseInt(zones.getGroup("absolute").getItem("movingMeanBegin").get()),
-            Integer.parseInt(zones.getGroup("absolute").getItem("movingMeanEnd").get())));
-        this.zones.put("relative", new Zone(
-            this.zRelativeBegin, this.zActionBegin,
-            Integer.parseInt(zones.getGroup("relative").getItem("movingMeanBegin").get()),
-            Integer.parseInt(zones.getGroup("relative").getItem("movingMeanEnd").get())));
-        this.zones.put("action", new Zone(
-            this.zActionBegin, this.zActionBegin+50,
-            Integer.parseInt(zones.getGroup("action").getItem("movingMeanBegin").get()),
-            Integer.parseInt(zones.getGroup("action").getItem("movingMeanEnd").get())));
-        
+        this.debug.out(1, "Moving mean configured for zones:");
+        for (String key: this.zones.keySet()) {
+            this.debug.out(1, "  " + key + ":  " + this.zones.get(key).toString());
+        }
         
         // Get relative sensitivity.
         this.relativeSensitivity = Double.parseDouble(handSummaryManager.getItem("relativeSensitivity").get());
@@ -300,6 +409,11 @@ public class HandWaveyManager {
         
         
         // Get event sounds.
+        loadEventSoundFromConfig("zone-none-active");
+        loadEventSoundFromConfig("zone-active-none");
+        loadEventSoundFromConfig("zone-active-action");
+        loadEventSoundFromConfig("zone-action-active");
+        
         loadEventSoundFromConfig("zone-none-absolute");
         loadEventSoundFromConfig("zone-absolute-none");
         loadEventSoundFromConfig("zone-absolute-relative");
@@ -308,11 +422,18 @@ public class HandWaveyManager {
         loadEventSoundFromConfig("zone-action-relative");
         loadEventSoundFromConfig("mouse-down");
         loadEventSoundFromConfig("mouse-up");
+        
+        
+        // Load touchpad mode config.
+        Group touchPadConfig = handSummaryManager.getGroup("touchPad");
+        this.touchPadInputMultiplier = Double.parseDouble(touchPadConfig.getItem("inputMultiplier").get());
+        this.touchPadOutputMultiplier = Double.parseDouble(touchPadConfig.getItem("outputMultiplier").get());
+        this.touchPadAcceleration = Double.parseDouble(touchPadConfig.getItem("acceleration").get());
     }
     
     private void loadEventSoundFromConfig(String eventID) {
         Group audioEvents = Config.singleton().getGroup("audioEvents");
-        
+        this.debug.out(3, "Load eventID " + eventID);
         this.eventSounds.put(eventID, audioEvents.getItem(eventID).get());
     }
     
@@ -334,21 +455,45 @@ public class HandWaveyManager {
         return this.desktopHeight - (int) Math.round((yCoord + this.yOffset) * this.yMultiplier);
     }
     
+    private void moveMouseTouchPadFromCoordinates(double xCoord, double yCoord) {
+        double xCoordDiff = xCoord - this.lastAbsoluteX;
+        double yCoordDiff = yCoord - this.lastAbsoluteY;
+        
+        /*
+        this.touchPadInputMultiplier = touchPadConfig.getItem("inputMultiplier").get();
+        this.touchPadOutputMultiplier = touchPadConfig.getItem("outputMultiplier").get();
+        this.touchPadAcceleration = touchPadConfig.getItem("acceleration").get();
+        */
+        
+        // TODO Fix acceleration.
+        int diffX = (int) Math.round(
+            Math.pow(
+                (xCoordDiff * this.touchPadInputMultiplier), this.touchPadAcceleration
+            ) * this.touchPadOutputMultiplier
+        );
+        int diffY = (int) Math.round(Math.pow((yCoordDiff * this.touchPadInputMultiplier), this.touchPadAcceleration) * this.touchPadOutputMultiplier);
+        
+        this.touchPadX = this.touchPadX + diffX;
+        this.touchPadY = this.touchPadY - diffY;
+        
+        this.lastAbsoluteX = xCoord;
+        this.lastAbsoluteY = yCoord;
+        
+        moveMouse(this.touchPadX, this.touchPadY);
+    }
+    
+    private void touchPadNone(double xCoord, double yCoord) {
+        // This is needed, because otherwise we end up back where we started every time we lift and re-apply.
+        this.lastAbsoluteX = xCoord;
+        this.lastAbsoluteY = yCoord;
+    }
+    
     private void moveMouseAbsoluteFromCoordinates(double xCoord, double yCoord) {
         int calculatedX = coordToDesktopIntX(xCoord);
         int calculatedY = coordToDesktopIntY(yCoord);
         
         this.lastAbsoluteX = xCoord;
         this.lastAbsoluteY = yCoord;
-        
-        this.debug.out(2, String.valueOf(xCoord) + " " +
-            String.valueOf(yCoord) + " " +
-            String.valueOf(calculatedX) + " " +
-            String.valueOf(calculatedY) + " m:" +
-            String.valueOf(this.xMultiplier) + " " +
-            String.valueOf(this.yMultiplier) + " o:" +
-            String.valueOf(this.xOffset) + " " +
-            String.valueOf(this.yOffset));
         
         moveMouse(calculatedX, calculatedY);
     }
@@ -366,6 +511,7 @@ public class HandWaveyManager {
     private void updateMovingMeans(String zone, double handZ) {
         this.movingMeanX.set(this.handSummaries[0].getHandX());
         this.movingMeanY.set(this.handSummaries[0].getHandY());
+        //debug this.debug.out(1, String.valueOf(this.zones.get(zone).getMovingMeanWidth(handZ)));
         this.movingMeanX.resize(this.zones.get(zone).getMovingMeanWidth(handZ));
         this.movingMeanY.resize(this.zones.get(zone).getMovingMeanWidth(handZ));
     }
@@ -416,7 +562,15 @@ public class HandWaveyManager {
         }
 
         // Move the mouse cursor.
-        if (zone == "absolute") {
+        if (zone == "none") {
+            if (this.zoneMode == "touchPad") {
+                updateMovingMeans(zone, handZ);
+                touchPadNone(this.movingMeanX.get(), this.movingMeanY.get());
+            }
+        } else if (zone == "active") {
+            updateMovingMeans(zone, handZ);
+            moveMouseTouchPadFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
+        } else if (zone == "absolute") {
             updateMovingMeans(zone, handZ);
             moveMouseAbsoluteFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
         } else if (zone == "relative") {

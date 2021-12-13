@@ -34,4 +34,9 @@ public class Zone {
         
         return movingMeanWidth;
     }
+    
+    public String toString() {
+        return "(" + String.valueOf(this.zBegin) + ", " + String.valueOf(this.zEnd) + ", " + String.valueOf(this.zSpan) + ") " +
+            "(" + String.valueOf(this.movingMeanBegin) + ", " + String.valueOf(this.movingMeanEnd) + ", " + String.valueOf(this.movingMeanSpan) + ") ";
+    }
 }

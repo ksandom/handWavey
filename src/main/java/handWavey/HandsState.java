@@ -6,10 +6,13 @@ import debug.Debug;
 public class HandsState {
     private Debug debug;
     
+    private double zActiveBegin = 0;
     private double zAbsoluteBegin = 0;
     private double zRelativeBegin = 0;
     private double zActionBegin = 0;
     private double zoneBuffer = 0;
+    
+    private String zoneMode = "touchScreen";
     
     private String zone = "none";
     private String oldZone = "none";
@@ -24,31 +27,55 @@ public class HandsState {
     public HandsState() {
         Config config = Config.singleton();
         Group handSummaryManager = config.getGroup("handSummaryManager");
-
-        // Configure Z axis thresholds.
-        Group zones = handSummaryManager.getGroup("zones");
-        this.zAbsoluteBegin = Double.parseDouble(zones.getGroup("absolute").getItem("threshold").get());
-        this.zRelativeBegin = Double.parseDouble(zones.getGroup("relative").getItem("threshold").get());
-        this.zActionBegin = Double.parseDouble(zones.getGroup("action").getItem("threshold").get());
-        
-        // Configure zone buffer.
-        this.zoneBuffer = Double.parseDouble(handSummaryManager.getItem("zoneBuffer").get());
         
         // TODO Give this class its own debug level?
         int debugLevel = Integer.parseInt(handSummaryManager.getItem("debugLevel").get());
         this.debug = new Debug(debugLevel, "HandsState");
+
+        // Configure zone behavior.
+        this.zoneMode = handSummaryManager.getItem("zoneMode").get();
+        this.zoneBuffer = Double.parseDouble(handSummaryManager.getItem("zoneBuffer").get());
+        
+        // Configure Z axis thresholds.
+        if (this.zoneMode == "touchScreen") {
+            Group touchScreen = handSummaryManager.getGroup("zones").getGroup("touchScreen");
+            this.zAbsoluteBegin = Double.parseDouble(touchScreen.getGroup("absolute").getItem("threshold").get());
+            this.zRelativeBegin = Double.parseDouble(touchScreen.getGroup("relative").getItem("threshold").get());
+            this.zActionBegin = Double.parseDouble(touchScreen.getGroup("action").getItem("threshold").get());
+        } else if (this.zoneMode == "touchPad") {
+            Group touchPad = handSummaryManager.getGroup("zones").getGroup("touchPad");
+            this.zActiveBegin = Double.parseDouble(touchPad.getGroup("active").getItem("threshold").get());
+            this.zActionBegin = Double.parseDouble(touchPad.getGroup("action").getItem("threshold").get());
+        } else {
+            // TODO This needs to produce some user feedback that the user will see. Once this runs as a service, a debug message won't be sufficient.
+            this.debug.out(0, "Unknown zoneMode " + this.zoneMode + ". This will likely cause badness.");
+        }
     }
     
     private String deriveZone(double handZ) {
-        if (handZ > this.zActionBegin) {
-            return "action";
-        } else if (handZ > this.zRelativeBegin) {
-            return "relative";
-        } else if (handZ > this.zAbsoluteBegin) {
-            return "absolute";
-        } else {
-            return "none";
+        String zone = "Unknown";
+        
+        if (this.zoneMode == "touchScreen") {
+            if (handZ > this.zActionBegin) {
+                zone = "action";
+            } else if (handZ > this.zRelativeBegin) {
+                zone = "relative";
+            } else if (handZ > this.zAbsoluteBegin) {
+                zone = "absolute";
+            } else {
+                zone = "none";
+            }
+        } else if (this.zoneMode == "touchPad") {
+            if (handZ > this.zActionBegin) {
+                zone = "action";
+            } else if (handZ > this.zActiveBegin) {
+                zone = "active";
+            } else {
+                zone = "none";
+            }
         }
+        
+        return zone;
     }
     
     
@@ -62,6 +89,9 @@ public class HandsState {
             
             switch(newZone) {
                 case "none":
+                    this.zoneMouseDown = false;
+                    break;
+                case "active":
                     this.zoneMouseDown = false;
                     break;
                 case "absolute":
@@ -81,7 +111,7 @@ public class HandsState {
             this.isNew = false;
         }
         
-        return newZone;
+        return this.zone;
     }
     
     public Boolean zoneIsNew() {
