@@ -234,7 +234,7 @@ public class HandWaveyManager {
         Group audioConfig = config.newGroup("audioConfig");
         audioConfig.newItem(
             "pathToAudio",
-            "audio/clips",
+            "audio" + File.separator + "clips",
             "Where are all of the audio clips stored.");
         
         Group audioEvents = config.newGroup("audioEvents");
@@ -426,7 +426,7 @@ public class HandWaveyManager {
         
         
         // Get Audio path.
-        this.audioPath = Config.singleton().getGroup("audioConfig").getItem("pathToAudio").get() + File.separator;
+        this.audioPath = Config.singleton().getGroup("audioConfig").getItem("pathToAudio").get() + File.separator;;
         
         
         // Get event sounds.
@@ -480,9 +480,11 @@ public class HandWaveyManager {
     }
     
     private void loadEventSoundFromConfig(String eventID) {
-        Group audioEvents = Config.singleton().getGroup("audioEvents");
         this.debug.out(3, "Load eventID " + eventID);
-        this.eventSounds.put(eventID, audioEvents.getItem(eventID).get());
+        Group audioEvents = Config.singleton().getGroup("audioEvents");
+        String filePath = audioEvents.getItem(eventID).get();
+        
+        this.eventSounds.put(eventID, filePath);
     }
     
     private void moveMouse(int x, int y) {
@@ -594,7 +596,7 @@ public class HandWaveyManager {
     
     /* TODO
     
-    * Better handle slash in audio path prefixes.
+    * #Better handle slash in audio path prefixes.
     * #Touchpad mode.
     * #Overlap zones.
     * Gestures:
@@ -603,6 +605,7 @@ public class HandWaveyManager {
         * Drag window.
         * Resize Window.
         * Zoom.
+    * Synth audio feedback for when close to zone boundaries.
     * Check whether threads are being cleaned up.
     * If not threads. Why is it freezing occasionally? (Doesn't seem like GC)
     
