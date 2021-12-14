@@ -41,6 +41,8 @@ public class HandWaveyManager {
     
     private double lastAbsoluteX = 0;
     private double lastAbsoluteY = 0;
+    private double diffRemainderX = 0;
+    private double diffRemainderY = 0;
     
     private int touchPadX = 0;
     private int touchPadY = 0;
@@ -190,7 +192,7 @@ public class HandWaveyManager {
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         active.newItem(
             "movingMeanEnd",
-            "20",
+            "4",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         
         Group tpAction = touchPad.newGroup("action");
@@ -210,15 +212,15 @@ public class HandWaveyManager {
         Group touchPadConfig = handSummaryManager.newGroup("touchPad");
         touchPadConfig.newItem(
             "inputMultiplier",
-            "3",
+            "1",
             "Input is pretty small. Make it a bit bigger.");
         touchPadConfig.newItem(
             "outputMultiplier",
-            "1",
+            "2",
             "Input is pretty small. Make it a bit bigger.");
         touchPadConfig.newItem(
             "acceleration",
-            "1",
+            "1.8",
             "Small change in output moves the pointer very precisely. A larger movement moves the pointer much more drastically.");
         
         
@@ -456,26 +458,40 @@ public class HandWaveyManager {
     }
     
     private void moveMouseTouchPadFromCoordinates(double xCoord, double yCoord) {
-        double xCoordDiff = xCoord - this.lastAbsoluteX;
-        double yCoordDiff = yCoord - this.lastAbsoluteY;
+        // Calculate how far the hand has moved since the last iteration.
+        double xCoordDiff = xCoord - this.lastAbsoluteX + this.diffRemainderX;
+        double yCoordDiff = yCoord - this.lastAbsoluteY + this.diffRemainderX;
         
-        /*
-        this.touchPadInputMultiplier = touchPadConfig.getItem("inputMultiplier").get();
-        this.touchPadOutputMultiplier = touchPadConfig.getItem("outputMultiplier").get();
-        this.touchPadAcceleration = touchPadConfig.getItem("acceleration").get();
-        */
+        // Calculate our acceleration.
+        double accelerationThreshold = 1;
+        double angularDiff = Math.pow((Math.pow(xCoordDiff, 2) + Math.pow(yCoordDiff, 2)), 0.5);
         
-        // TODO Fix acceleration.
-        int diffX = (int) Math.round(
-            Math.pow(
-                (xCoordDiff * this.touchPadInputMultiplier), this.touchPadAcceleration
-            ) * this.touchPadOutputMultiplier
-        );
-        int diffY = (int) Math.round(Math.pow((yCoordDiff * this.touchPadInputMultiplier), this.touchPadAcceleration) * this.touchPadOutputMultiplier);
+        double accelerationMultiplier = accelerationThreshold;
+        if (angularDiff > accelerationThreshold) {
+            accelerationMultiplier = angularDiff * this.touchPadAcceleration;
+        }
         
+        // Bring everything together to calcuate how far we should move the cursor.
+        double xInput = xCoordDiff * this.touchPadInputMultiplier;
+        int diffX = (int) Math.round(xInput * accelerationMultiplier * this.touchPadOutputMultiplier);
+        double yInput = yCoordDiff * this.touchPadInputMultiplier;
+        int diffY = (int) Math.round(yInput * accelerationMultiplier * this.touchPadOutputMultiplier);
+        
+        // Apply the changes.
         this.touchPadX = this.touchPadX + diffX;
         this.touchPadY = this.touchPadY - diffY;
         
+        // Carry over anything that happened, but didn't result in a movement. This means that we can make use of the finer movements without having to move the acceleration and multipliers to extremes.
+        this.diffRemainderX = (diffX == 0)?xCoordDiff:0;
+        this.diffRemainderY = (diffX == 0)?yCoordDiff:0;
+        
+        // Not catching OOB here makes the mouse feel sticky on the edges.
+        if (this.touchPadX < 0) this.touchPadX = 0;
+        if (this.touchPadY < 0) this.touchPadY = 0;
+        if (this.touchPadX > this.desktopWidth) this.touchPadX = this.desktopWidth;
+        if (this.touchPadY > this.desktopHeight) this.touchPadY = this.desktopHeight;
+        
+        // Track where we are now so that differences make sense on the next round.
         this.lastAbsoluteX = xCoord;
         this.lastAbsoluteY = yCoord;
         
@@ -530,7 +546,7 @@ public class HandWaveyManager {
     /* TODO
     
     * Better handle slash in audio path prefixes.
-    * Touchpad mode.
+    * #Touchpad mode.
     * #Overlap zones.
     * Gestures:
         * Right click.
