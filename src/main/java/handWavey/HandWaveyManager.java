@@ -452,6 +452,31 @@ public class HandWaveyManager {
         this.touchPadInputMultiplier = Double.parseDouble(touchPadConfig.getItem("inputMultiplier").get());
         this.touchPadOutputMultiplier = Double.parseDouble(touchPadConfig.getItem("outputMultiplier").get());
         this.touchPadAcceleration = Double.parseDouble(touchPadConfig.getItem("acceleration").get());
+        
+        // Config checks.
+        checkZones();
+    }
+    
+    private void checkZones() {
+        // Compare every zone to every other zone to make sure that there are no unusable zones.
+        
+        Group handSummaryManager = Config.singleton().getGroup("handSummaryManager");
+        double zoneBuffer = Double.parseDouble(handSummaryManager.getItem("zoneBuffer").get());
+        
+        for (String outerKey: this.zones.keySet()) {
+            Zone outerZone = this.zones.get(outerKey);
+            for (String innerKey: this.zones.keySet()) {
+                if (outerKey != innerKey) {
+                    Zone innerZone = this.zones.get(innerKey);
+                    
+                    double diff = Math.abs(innerZone.getBegin() - outerZone.getBegin());
+                    
+                    if (diff <= zoneBuffer) {
+                        this.debug.out(0, "Warning: There does not appear to be enough usable space between zones " + outerKey + " and " + innerKey + ". Either reduce the zoneBuffer, or increase the distance between these two zones.");
+                    }
+                }
+            }
+        }
     }
     
     private void loadEventSoundFromConfig(String eventID) {
