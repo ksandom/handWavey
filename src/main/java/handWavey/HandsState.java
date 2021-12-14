@@ -6,6 +6,7 @@ import debug.Debug;
 public class HandsState {
     private Debug debug;
     
+    private double zNoMoveBegin = 0;
     private double zActiveBegin = 0;
     private double zAbsoluteBegin = 0;
     private double zRelativeBegin = 0;
@@ -44,6 +45,7 @@ public class HandsState {
             this.zActionBegin = Double.parseDouble(touchScreen.getGroup("action").getItem("threshold").get());
         } else if (this.zoneMode == "touchPad") {
             Group touchPad = handSummaryManager.getGroup("zones").getGroup("touchPad");
+            this.zNoMoveBegin = Double.parseDouble(touchPad.getGroup("noMove").getItem("threshold").get());
             this.zActiveBegin = Double.parseDouble(touchPad.getGroup("active").getItem("threshold").get());
             this.zActionBegin = Double.parseDouble(touchPad.getGroup("action").getItem("threshold").get());
         } else {
@@ -70,6 +72,8 @@ public class HandsState {
                 zone = "action";
             } else if (handZ > this.zActiveBegin) {
                 zone = "active";
+            } else if (handZ > this.zNoMoveBegin) {
+                zone = "noMove";
             } else {
                 zone = "none";
             }
@@ -89,6 +93,9 @@ public class HandsState {
             
             switch(newZone) {
                 case "none":
+                    this.zoneMouseDown = false;
+                    break;
+                case "noMove":
                     this.zoneMouseDown = false;
                     break;
                 case "active":

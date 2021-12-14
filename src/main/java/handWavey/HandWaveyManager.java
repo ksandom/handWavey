@@ -34,6 +34,7 @@ public class HandWaveyManager {
     private double yMultiplier = 1;
     private double zMultiplier = -1;
     
+    private double zNoMoveBegin = 0;
     private double zActiveBegin = 0;
     private double zAbsoluteBegin = 0;
     private double zRelativeBegin = 0;
@@ -181,6 +182,12 @@ public class HandWaveyManager {
         Group zoneTPNone = touchPad.newGroup("zoneNone");
         // None currently doesn't require any config. Its group is here solely for completeness.
         
+        Group noMove = touchPad.newGroup("noMove");
+        noMove.newItem(
+            "threshold",
+            "-190",
+            "Z greater than this value denotes the beginning of the noMove zone.");
+        
         Group active = touchPad.newGroup("active");
         active.newItem(
             "threshold",
@@ -232,14 +239,24 @@ public class HandWaveyManager {
         
         Group audioEvents = config.newGroup("audioEvents");
         audioEvents.newItem(
-            "zone-none-active",
+            "zone-none-noMove",
             "metalDing01.wav",
-            "Sound to play when the hand moves from the none zone to the active zone.");
+            "Sound to play when the hand moves from the none zone to the noMove zone.");
         
         audioEvents.newItem(
-            "zone-active-none",
+            "zone-noMove-none",
             "metalDing02.wav",
-            "Sound to play when the hand moves from the active zone to the none zone.");
+            "Sound to play when the hand moves from the noMove zone to the none zone.");
+        
+        audioEvents.newItem(
+            "zone-noMove-active",
+            "metalDing01.wav",
+            "Sound to play when the hand moves from the noMove zone to the active zone.");
+        
+        audioEvents.newItem(
+            "zone-active-noMove",
+            "metalDing02.wav",
+            "Sound to play when the hand moves from the active zone to the noMove zone.");
         
         audioEvents.newItem(
             "zone-active-action",
@@ -380,10 +397,12 @@ public class HandWaveyManager {
                 Integer.parseInt(touchScreen.getGroup("action").getItem("movingMeanEnd").get())));
         } else if (this.zoneMode == "touchPad") {
             Group touchPad = handSummaryManager.getGroup("zones").getGroup("touchPad");
+            this.zNoMoveBegin = Double.parseDouble(touchPad.getGroup("noMove").getItem("threshold").get());
             this.zActiveBegin = Double.parseDouble(touchPad.getGroup("active").getItem("threshold").get());
             this.zActionBegin = Double.parseDouble(touchPad.getGroup("action").getItem("threshold").get());
             
-            this.zones.put("none", new Zone(-999, this.zActiveBegin, 1, 1));
+            this.zones.put("none", new Zone(-999, this.zNoMoveBegin, 1, 1));
+            this.zones.put("noMove", new Zone(this.zNoMoveBegin, this.zActiveBegin, 1, 1));
             this.zones.put("active", new Zone(
                 this.zActiveBegin, this.zActionBegin,
                 Integer.parseInt(touchPad.getGroup("active").getItem("movingMeanBegin").get()),
@@ -411,8 +430,10 @@ public class HandWaveyManager {
         
         
         // Get event sounds.
-        loadEventSoundFromConfig("zone-none-active");
-        loadEventSoundFromConfig("zone-active-none");
+        loadEventSoundFromConfig("zone-none-noMove");
+        loadEventSoundFromConfig("zone-noMove-none");
+        loadEventSoundFromConfig("zone-noMove-active");
+        loadEventSoundFromConfig("zone-active-noMove");
         loadEventSoundFromConfig("zone-active-action");
         loadEventSoundFromConfig("zone-action-active");
         
@@ -527,7 +548,6 @@ public class HandWaveyManager {
     private void updateMovingMeans(String zone, double handZ) {
         this.movingMeanX.set(this.handSummaries[0].getHandX());
         this.movingMeanY.set(this.handSummaries[0].getHandY());
-        //debug this.debug.out(1, String.valueOf(this.zones.get(zone).getMovingMeanWidth(handZ)));
         this.movingMeanX.resize(this.zones.get(zone).getMovingMeanWidth(handZ));
         this.movingMeanY.resize(this.zones.get(zone).getMovingMeanWidth(handZ));
     }
@@ -537,10 +557,14 @@ public class HandWaveyManager {
         
         if (fileName != "") {
             String fullPath = this.audioPath + fileName;
-            this.debug.out(2, "Triggering event " + eventID + " File: " + fullPath);
+            this.debug.out(1, "Triggering event " + eventID + " File: " + fullPath);
             
             BackgroundSound.play(fullPath);
         }
+    }
+    
+    private String coordsToString(double x, double y) {
+        return String.valueOf(Math.round(x)) + ", " + String.valueOf(Math.round(y));
     }
     
     /* TODO
@@ -569,6 +593,7 @@ public class HandWaveyManager {
         Double handZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
         String zone = this.handsState.getZone(handZ);
         this.handsState.setHandClosed(!this.handSummaries[0].handIsOpen());
+        //System.out.println(handZ);
         
         // This should happen before any potential de-stabilisation has happened.
         if (this.handsState.shouldMouseUp() == true) {
@@ -578,7 +603,7 @@ public class HandWaveyManager {
         }
 
         // Move the mouse cursor.
-        if (zone == "none") {
+        if ((zone == "none") || (zone == "noMove")) {
             if (this.zoneMode == "touchPad") {
                 updateMovingMeans(zone, handZ);
                 touchPadNone(this.movingMeanX.get(), this.movingMeanY.get());
@@ -609,9 +634,5 @@ public class HandWaveyManager {
             String eventID = "zone-" + zone + "-" + this.handsState.getOldZone();
             triggerEvent(eventID);
         }
-    }
-    
-    private String coordsToString(double x, double y) {
-        return String.valueOf(Math.round(x)) + ", " + String.valueOf(Math.round(y));
     }
 }
