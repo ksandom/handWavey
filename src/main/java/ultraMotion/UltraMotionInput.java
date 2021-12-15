@@ -121,6 +121,8 @@ public class UltraMotionInput extends Listener {
                         armDirection.pitch(),
                         armDirection.yaw()
                         );
+                    
+                    this.handSummaries[handNumber].setHandOpen(hand.isLeft());
 
                     Float middleDistalBonePitch = hand.fingers().get(this.fingerToUse).bone(this.boneToUse).direction().pitch();
                     Float relativeFingerPitch = mangleAngle(middleDistalBonePitch) + handDirection.pitch();
@@ -128,7 +130,6 @@ public class UltraMotionInput extends Listener {
                     Boolean handOpen = (fingerDifference < openThreshold);
                     
                     this.handSummaries[handNumber].setHandOpen(handOpen);
-
                 } else {
                     this.handSummaries[handNumber].markInvalid();
                     this.debug.out(0, "Discarding hand " + String.valueOf(this.handSummaries[handNumber].getID()) + " != " + String.valueOf(hand.id()));

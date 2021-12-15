@@ -19,6 +19,7 @@ public class HandSummary {
     private double armYaw;
 
     private Boolean handOpen;
+    private Boolean isLeft;
 
     private Boolean valid = true;
     
@@ -75,6 +76,10 @@ public class HandSummary {
         this.handPitch = pitch;
         this.handYaw = yaw;
     }
+    
+    public void setHandIsLeft(Boolean isLeft) {
+        this.isLeft = isLeft;
+    }
 
     public double getHandRoll() {
         return this.handRoll;
@@ -112,6 +117,10 @@ public class HandSummary {
 
     public Boolean handIsOpen() {
         return this.handOpen;
+    }
+    
+    public Boolean handIsLeft() {
+        return this.isLeft;
     }
 
     public Boolean isValid() {

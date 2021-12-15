@@ -20,6 +20,7 @@ class TestHandSummary {
         this.handSummary.setHandAngles(0.1, 0, -0.1);
         this.handSummary.setArmAngles(0.2, 0, -0.2);
         this.handSummary.setHandOpen(false);
+        this.handSummary.setHandIsLeft(false);
     }
 
     @AfterEach
@@ -55,4 +56,14 @@ class TestHandSummary {
         assertEquals(this.handSummary.isValid(), true);
         this.handSummary.markInvalid();
         assertEquals(this.handSummary.isValid(), false);
-    }}
+    }
+
+    @Test
+    public void testLeft() {
+        assertEquals(this.handSummary.handIsLeft(), false);
+        this.handSummary.setHandIsLeft(true);
+        assertEquals(this.handSummary.handIsLeft(), true);
+        this.handSummary.setHandIsLeft(false);
+        assertEquals(this.handSummary.handIsLeft(), false);
+    }
+}
