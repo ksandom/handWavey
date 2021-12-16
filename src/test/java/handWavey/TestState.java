@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestState {
     HandsState handsState;
+    private float pi = (float)3.1415926536;
 
     @BeforeEach
     void setUp() {
@@ -158,6 +159,26 @@ class TestState {
             "0.1",
             "How sensitive is the relative zone compared to the absolute zone? Decimal between 0 and 1.");
         
+        Group gestureConfig = config.newGroup("gestureConfig");
+        Group primaryHand = gestureConfig.newGroup("primaryHand");
+        primaryHand.newItem(
+            "rotationSegments",
+            "4",
+            "When you rotate your hand; it enters different segments. Increasing the number of segments increases the number of things you can do with your hand. Decreasing the number of segments makes it easier to be precise. Remember that some segments are hard for a human hand to reach, so you need to keep that in mind when choosing this number. It is expected that some segments will be unused for this reason. Don't hurt yourself.");
+        primaryHand.newItem(
+            "rotationOffset",
+            "0",
+            "In radians. Adjust where the segments are slightly to cater to your hand's natural bias.");
+        Group secondaryHand = gestureConfig.newGroup("secondaryHand");
+        secondaryHand.newItem(
+            "rotationSegments",
+            "4",
+            "When you rotate your hand; it enters different segments. Increasing the number of segments increases the number of things you can do with your hand. Decreasing the number of segments makes it easier to be precise. Remember that some segments are hard for a human hand to reach, so you need to keep that in mind when choosing this number. It is expected that some segments will be unused for this reason. Don't hurt yourself.");
+        secondaryHand.newItem(
+            "rotationOffset",
+            "0",
+            "In radians. Adjust where the segments are slightly to cater to your hand's natural bias.");
+            
         this.handsState = new HandsState();
     }
 
@@ -396,5 +417,24 @@ class TestState {
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
     }
+    
+    @Test
+    public void testHandSegments() {
+        Boolean primary = true;
+        Boolean secondary = false;
+        Boolean left = true;
+        Boolean right = false;
+        
+        assertEquals(0, this.handsState.getHandSegment(0, primary, right));
+        assertEquals(1, this.handsState.getHandSegment(pi*-0.5, primary, right));
+        assertEquals(2, this.handsState.getHandSegment(pi, primary, right));
+        assertEquals(3, this.handsState.getHandSegment(pi*-1.5, primary, right));
+        assertEquals(3, this.handsState.getHandSegment(pi*0.5, primary, right));
+        
+        assertEquals(0, this.handsState.getHandSegment(0, primary, left));
+        assertEquals(3, this.handsState.getHandSegment(pi*-.5, primary, left));
+        assertEquals(2, this.handsState.getHandSegment(pi, primary, left));
+        assertEquals(2, this.handsState.getHandSegment(pi*-1, primary, left));
+        assertEquals(1, this.handsState.getHandSegment(pi*.5, primary, left));
+    }
 }
-

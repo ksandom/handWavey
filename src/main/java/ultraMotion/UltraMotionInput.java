@@ -122,7 +122,7 @@ public class UltraMotionInput extends Listener {
                         armDirection.yaw()
                         );
                     
-                    this.handSummaries[handNumber].setHandOpen(hand.isLeft());
+                    this.handSummaries[handNumber].setHandIsLeft(hand.isLeft());
 
                     Float middleDistalBonePitch = hand.fingers().get(this.fingerToUse).bone(this.boneToUse).direction().pitch();
                     Float relativeFingerPitch = mangleAngle(middleDistalBonePitch) + handDirection.pitch();

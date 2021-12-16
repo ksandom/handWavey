@@ -9,7 +9,6 @@ import mouseAndKeyboardOutput.*;
 import java.util.HashMap;
 import audio.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 
 public class HandWaveyManager {
     private HandSummary[] handSummaries;
@@ -50,6 +49,10 @@ public class HandWaveyManager {
     private double touchPadInputMultiplier = 5;
     private double touchPadOutputMultiplier = 1;
     private double touchPadAcceleration = 2;
+    
+    private double scrollInputMultiplier = 5;
+    private double scrollOutputMultiplier = 1;
+    private double scrollAcceleration = 2;
     
     private double relativeSensitivity = 0.1;
     
@@ -177,6 +180,16 @@ public class HandWaveyManager {
             "20",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         
+        Group scroll = touchScreen.newGroup("scroll");
+        action.newItem(
+            "movingMeanBegin",
+            "1",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        action.newItem(
+            "movingMeanEnd",
+            "1",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        
 
         Group touchPad = zones.newGroup("touchPad");
         Group zoneTPNone = touchPad.newGroup("zoneNone");
@@ -216,6 +229,18 @@ public class HandWaveyManager {
             "20",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         
+        
+        Group tpScroll = touchPad.newGroup("scroll");
+        tpScroll.newItem(
+            "movingMeanBegin",
+            "1",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        tpScroll.newItem(
+            "movingMeanEnd",
+            "1",
+            "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
+        
+        
         Group touchPadConfig = handSummaryManager.newGroup("touchPad");
         touchPadConfig.newItem(
             "inputMultiplier",
@@ -226,6 +251,21 @@ public class HandWaveyManager {
             "2",
             "Input is pretty small. Make it a bit bigger.");
         touchPadConfig.newItem(
+            "acceleration",
+            "1.8",
+            "Small change in output moves the pointer very precisely. A larger movement moves the pointer much more drastically.");
+        
+        
+        Group scrollConfig = handSummaryManager.newGroup("scroll");
+        scrollConfig.newItem(
+            "inputMultiplier",
+            "1",
+            "Input is pretty small. Make it a bit bigger.");
+        scrollConfig.newItem(
+            "outputMultiplier",
+            "0.03",
+            "Input is pretty small. Make it a bit bigger.");
+        scrollConfig.newItem(
             "acceleration",
             "1.8",
             "Small change in output moves the pointer very precisely. A larger movement moves the pointer much more drastically.");
@@ -313,6 +353,26 @@ public class HandWaveyManager {
             "relativeSensitivity",
             "0.15",
             "How sensitive is the relative zone compared to the absolute zone? Decimal between 0 and 1.");
+        
+        Group gestureConfig = config.newGroup("gestureConfig");
+        Group primaryHand = gestureConfig.newGroup("primaryHand");
+        primaryHand.newItem(
+            "rotationSegments",
+            "4",
+            "When you rotate your hand; it enters different segments. Increasing the number of segments increases the number of things you can do with your hand. Decreasing the number of segments makes it easier to be precise. Remember that some segments are hard for a human hand to reach, so you need to keep that in mind when choosing this number. It is expected that some segments will be unused for this reason. Don't hurt yourself.");
+        primaryHand.newItem(
+            "rotationOffset",
+            "0",
+            "In radians. Adjust where the segments are slightly to cater to your hand's natural bias.");
+        Group secondaryHand = gestureConfig.newGroup("secondaryHand");
+        secondaryHand.newItem(
+            "rotationSegments",
+            "4",
+            "When you rotate your hand; it enters different segments. Increasing the number of segments increases the number of things you can do with your hand. Decreasing the number of segments makes it easier to be precise. Remember that some segments are hard for a human hand to reach, so you need to keep that in mind when choosing this number. It is expected that some segments will be unused for this reason. Don't hurt yourself.");
+        secondaryHand.newItem(
+            "rotationOffset",
+            "0",
+            "In radians. Adjust where the segments are slightly to cater to your hand's natural bias.");
         
         this.output = new GenericOutput();
         this.handsState = new HandsState();
@@ -411,6 +471,10 @@ public class HandWaveyManager {
                 this.zActionBegin, this.zActionBegin+50,
                 Integer.parseInt(touchPad.getGroup("action").getItem("movingMeanBegin").get()),
                 Integer.parseInt(touchPad.getGroup("action").getItem("movingMeanEnd").get())));
+            this.zones.put("scroll", new Zone(
+                9900, 9999,
+                Integer.parseInt(touchPad.getGroup("active").getItem("movingMeanBegin").get()),
+                Integer.parseInt(touchPad.getGroup("active").getItem("movingMeanEnd").get())));
         } else {
             // TODO This needs to produce some user feedback that the user will see. Once this runs as a service, a debug message won't be sufficient.
             this.debug.out(0, "Unknown zoneMode " + this.zoneMode + ". This will likely cause badness.");
@@ -452,6 +516,13 @@ public class HandWaveyManager {
         this.touchPadInputMultiplier = Double.parseDouble(touchPadConfig.getItem("inputMultiplier").get());
         this.touchPadOutputMultiplier = Double.parseDouble(touchPadConfig.getItem("outputMultiplier").get());
         this.touchPadAcceleration = Double.parseDouble(touchPadConfig.getItem("acceleration").get());
+        
+        
+        // Load scroll config.
+        Group scrollConfig = handSummaryManager.getGroup("scroll");
+        this.scrollInputMultiplier = Double.parseDouble(scrollConfig.getItem("inputMultiplier").get());
+        this.scrollOutputMultiplier = Double.parseDouble(scrollConfig.getItem("outputMultiplier").get());
+        this.scrollAcceleration = Double.parseDouble(scrollConfig.getItem("acceleration").get());
         
         // Config checks.
         checkZones();
@@ -546,6 +617,41 @@ public class HandWaveyManager {
         moveMouse(this.touchPadX, this.touchPadY);
     }
     
+    private void scrollFromCoordinates(double xCoord, double yCoord) {
+        // Calculate how far the hand has moved since the last iteration.
+        double xCoordDiff = xCoord - this.lastAbsoluteX + this.diffRemainderX;
+        double yCoordDiff = yCoord - this.lastAbsoluteY + this.diffRemainderX;
+        
+        // Calculate our acceleration.
+        double accelerationThreshold = 1;
+        double angularDiff = Math.pow((Math.pow(xCoordDiff, 2) + Math.pow(yCoordDiff, 2)), 0.5);
+        
+        double accelerationMultiplier = accelerationThreshold;
+        if (angularDiff > accelerationThreshold) {
+            accelerationMultiplier = angularDiff * this.scrollAcceleration;
+        }
+        
+        // Bring everything together to calcuate how far we should move the cursor.
+        double xInput = xCoordDiff * this.scrollInputMultiplier;
+        int diffX = (int) Math.round(xInput * accelerationMultiplier * this.scrollOutputMultiplier);
+        double yInput = yCoordDiff * this.scrollInputMultiplier;
+        int diffY = (int) Math.round(yInput * accelerationMultiplier * this.scrollOutputMultiplier);
+        
+        // Apply the changes.
+        this.output.scroll(diffY);
+        
+        // Carry over anything that happened, but didn't result in a movement. This means that we can make use of the finer movements without having to move the acceleration and multipliers to extremes.
+        // TODO Use different variables from touchPad so that they don't interfere with each other.
+        this.diffRemainderX = (diffX == 0)?xCoordDiff:0;
+        this.diffRemainderY = (diffX == 0)?yCoordDiff:0;
+        
+        // Track where we are now so that differences make sense on the next round.
+        this.lastAbsoluteX = xCoord;
+        this.lastAbsoluteY = yCoord;
+        
+        moveMouse(this.touchPadX, this.touchPadY);
+    }
+    
     private void touchPadNone(double xCoord, double yCoord) {
         // This is needed, because otherwise we end up back where we started every time we lift and re-apply.
         this.lastAbsoluteX = xCoord;
@@ -590,6 +696,10 @@ public class HandWaveyManager {
         }
     }
     
+    private Boolean secondaryHandIsActive() {
+        return ((this.handSummaries.length > 1) && (this.handSummaries[1] != null) && (this.handSummaries[1].isValid()));
+    }
+    
     private String coordsToString(double x, double y) {
         return String.valueOf(Math.round(x)) + ", " + String.valueOf(Math.round(y));
     }
@@ -608,6 +718,9 @@ public class HandWaveyManager {
     * Synth audio feedback for when close to zone boundaries.
     * Check whether threads are being cleaned up.
     * If not threads. Why is it freezing occasionally? (Doesn't seem like GC)
+    * Recover from replaced hands.
+    * On mouse down, use the position from a moment in time ago.
+    * VNC for initial compatibility with wayland?
     
     * Arm angle.
     * Curved zones?
@@ -621,7 +734,13 @@ public class HandWaveyManager {
         Double handZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
         String zone = this.handsState.getZone(handZ);
         this.handsState.setHandClosed(!this.handSummaries[0].handIsOpen());
-        //System.out.println(handZ);
+        
+        this.handsState.derivePrimaryHandSegment(this.handSummaries[0].getHandRoll(), this.handSummaries[0].handIsLeft());
+        if (secondaryHandIsActive()) {
+            this.handsState.deriveSecondaryHandSegment(this.handSummaries[1].getHandRoll(), this.handSummaries[1].handIsLeft());
+        } else {
+            this.handsState.noSecondaryHand();
+        }
         
         // This should happen before any potential de-stabilisation has happened.
         if (this.handsState.shouldMouseUp() == true) {
@@ -646,6 +765,9 @@ public class HandWaveyManager {
             updateMovingMeans(zone, handZ);
             moveMouseRelativeFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
         } else if (zone == "action") {
+        } else if (zone == "scroll") {
+            updateMovingMeans(zone, handZ);
+            scrollFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
         } else {
             this.debug.out(3, "A hand was detected, but it outside of any zones. z=" + String.valueOf(handZ));
         }
