@@ -38,6 +38,13 @@ public class UltraMotionManager {
         cleanup();
     }
     
+    public void keepAliveUntilBreak() {
+        while (true) {
+            sleep(500);
+            // TODO I don't think that the cleanup() is being called at the moment. I'm not sure what the consequences of that are, but as a general rule, we should run cleanup when exiting. It would be great to determine if it's happening, and fix it if it needs to be fixed.
+        }
+    }
+    
     public void exit() {
         this.active = false;
     }
@@ -51,6 +58,8 @@ public class UltraMotionManager {
             Thread.sleep(microseconds);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            System.out.println("Cleanup");
+            cleanup();
         }
     }
 }

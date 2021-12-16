@@ -8,6 +8,6 @@ public class HandWavey {
         HandWaveyManager hwm = new HandWaveyManager(); // This must be loaded first so that the config gets initialised before other thigns try to read it.
         UltraMotionManager umm = new UltraMotionManager(hwm);
 
-        umm.keepAlive();
+        umm.keepAliveUntilBreak();
     }
 }
