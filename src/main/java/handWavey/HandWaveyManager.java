@@ -97,7 +97,7 @@ public class HandWaveyManager {
             "When the hand is at min max height, how far from the center of the cone can the hand be horizontally before it it considered to be too unreliable.");
         coneOfSilence.newItem(
             "maxCAtMinHeight",
-            "130",
+            "160",
             "When the hand is at the min height, how far from the center of the cone can the hand be horizontally before it it considered to be too unreliable.");
 
         Group handSummaryManager = config.newGroup("handSummaryManager");
@@ -819,8 +819,8 @@ public class HandWaveyManager {
     * #Touchpad mode.
     * #Overlap zones.
     * Gestures:
-        * Right click.
-        * Scroll.
+        * #Right click.
+        * #Scroll.
         * Drag window.
         * Resize Window.
         * Zoom.
