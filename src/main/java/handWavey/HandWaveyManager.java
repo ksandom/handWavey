@@ -824,10 +824,11 @@ public class HandWaveyManager {
         * Drag window.
         * Resize Window.
         * Zoom.
+    * Config based mapping to actions.
     * Synth audio feedback for when close to zone boundaries.
     * Check whether threads are being cleaned up.
-    * If not threads. Why is it freezing occasionally? (Doesn't seem like GC)
-    * Recover from replaced hands.
+    * If not threads. Why the sound stopping occasionally? (Doesn't seem like GC)
+    * #Recover from replaced hands.
     * On mouse down, use the position from a moment in time ago.
     * VNC for initial compatibility with wayland?
     
