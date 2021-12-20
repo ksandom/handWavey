@@ -41,8 +41,10 @@ public class HandWaveyManager {
     
     private double lastAbsoluteX = 0;
     private double lastAbsoluteY = 0;
-    private double diffRemainderX = 0;
     private double diffRemainderY = 0;
+    private double diffRemainderX = 0;
+    private double diffScrollRemainderY = 0;
+    private double diffScrollRemainderX = 0;
     
     private int touchPadX = 0;
     private int touchPadY = 0;
@@ -244,7 +246,7 @@ public class HandWaveyManager {
         Group touchPadConfig = handSummaryManager.newGroup("touchPad");
         touchPadConfig.newItem(
             "inputMultiplier",
-            "1",
+            "1.1",
             "Input is pretty small. Make it a bit bigger.");
         touchPadConfig.newItem(
             "outputMultiplier",
@@ -263,7 +265,7 @@ public class HandWaveyManager {
             "Input is pretty small. Make it a bit bigger.");
         scrollConfig.newItem(
             "outputMultiplier",
-            "0.03",
+            "0.003",
             "Input is pretty small. Make it a bit bigger.");
         scrollConfig.newItem(
             "acceleration",
@@ -602,7 +604,7 @@ public class HandWaveyManager {
         
         // Carry over anything that happened, but didn't result in a movement. This means that we can make use of the finer movements without having to move the acceleration and multipliers to extremes.
         this.diffRemainderX = (diffX == 0)?xCoordDiff:0;
-        this.diffRemainderY = (diffX == 0)?yCoordDiff:0;
+        this.diffRemainderY = (diffY == 0)?yCoordDiff:0;
         
         // Not catching OOB here makes the mouse feel sticky on the edges.
         if (this.touchPadX < 0) this.touchPadX = 0;
@@ -618,9 +620,13 @@ public class HandWaveyManager {
     }
     
     private void scrollFromCoordinates(double xCoord, double yCoord) {
+        // Reset touchPad motion since anything from before the scroll will be meaningless.
+        this.diffRemainderX = 0;
+        this.diffRemainderY = 0;
+        
         // Calculate how far the hand has moved since the last iteration.
-        double xCoordDiff = xCoord - this.lastAbsoluteX + this.diffRemainderX;
-        double yCoordDiff = yCoord - this.lastAbsoluteY + this.diffRemainderX;
+        double xCoordDiff = xCoord - this.lastAbsoluteX + this.diffScrollRemainderX;
+        double yCoordDiff = yCoord - this.lastAbsoluteY + this.diffScrollRemainderY;
         
         // Calculate our acceleration.
         double accelerationThreshold = 1;
@@ -633,23 +639,29 @@ public class HandWaveyManager {
         
         // Bring everything together to calcuate how far we should move the cursor.
         double xInput = xCoordDiff * this.scrollInputMultiplier;
-        int diffX = (int) Math.round(xInput * accelerationMultiplier * this.scrollOutputMultiplier);
         double yInput = yCoordDiff * this.scrollInputMultiplier;
-        int diffY = (int) Math.round(yInput * accelerationMultiplier * this.scrollOutputMultiplier);
+        
+        int diffX = 0;
+        int diffY = 0;
+        
+        if (this.scrollAcceleration > 1) {
+            diffX = (int) Math.round(xInput * accelerationMultiplier * this.scrollOutputMultiplier);
+            diffY = (int) Math.round(yInput * accelerationMultiplier * this.scrollOutputMultiplier);
+        } else {
+            diffX = (int) Math.round(xInput * this.scrollOutputMultiplier);
+            diffY = (int) Math.round(yInput * this.scrollOutputMultiplier);
+        }
         
         // Apply the changes.
         this.output.scroll(diffY);
         
         // Carry over anything that happened, but didn't result in a movement. This means that we can make use of the finer movements without having to move the acceleration and multipliers to extremes.
-        // TODO Use different variables from touchPad so that they don't interfere with each other.
-        this.diffRemainderX = (diffX == 0)?xCoordDiff:0;
-        this.diffRemainderY = (diffX == 0)?yCoordDiff:0;
+        this.diffScrollRemainderX = (diffX == 0)?xCoordDiff:0;
+        this.diffScrollRemainderY = (diffY == 0)?yCoordDiff:0;
         
         // Track where we are now so that differences make sense on the next round.
         this.lastAbsoluteX = xCoord;
         this.lastAbsoluteY = yCoord;
-        
-        moveMouse(this.touchPadX, this.touchPadY);
     }
     
     private void touchPadNone(double xCoord, double yCoord) {
