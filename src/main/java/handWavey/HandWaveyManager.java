@@ -358,6 +358,61 @@ public class HandWaveyManager {
             "Sound to play when the hand moves from the action zone to the relative zone.");
         
         audioEvents.newItem(
+            "zone-scroll-active",
+            "metalDing05.wav",
+            "Sound to play when the hand changes from scrolling to the active zone.");
+        
+        audioEvents.newItem(
+            "zone-scroll-action",
+            "metalDing05.wav",
+            "Sound to play when the hand changes from scrolling to the action zone.");
+        
+        audioEvents.newItem(
+            "zone-scroll-relative",
+            "metalDing05.wav",
+            "Sound to play when the hand changes from scrolling to the relative zone.");
+        
+        audioEvents.newItem(
+            "zone-scroll-absolute",
+            "metalDing05.wav",
+            "Sound to play when the hand changes from scrolling to the absolute zone.");
+        
+        audioEvents.newItem(
+            "zone-scroll-none",
+            "metalDing05.wav",
+            "Sound to play when the hand changes from scrolling to the none zone.");
+        
+        audioEvents.newItem(
+            "zone-active-scroll",
+            "metalDing05.wav",
+            "Sound to play when the hand changes from the active zone to scrolling.");
+        
+        audioEvents.newItem(
+            "zone-action-scroll",
+            "metalDing05.wav",
+            "Sound to play when the hand changes from the action zone to scrolling.");
+        
+        audioEvents.newItem(
+            "zone-relative-scroll",
+            "metalDing05.wav",
+            "Sound to play when the hand changes from the relative zone to scrolling.");
+        
+        audioEvents.newItem(
+            "zone-absolute-scroll",
+            "metalDing05.wav",
+            "Sound to play when the hand changes from the absolute zone to scrolling.");
+        
+        audioEvents.newItem(
+            "zone-none-scroll",
+            "metalDing05.wav",
+            "Sound to play when the hand changes from the none zone to scrolling.");
+        
+        audioEvents.newItem(
+            "zone-action-relative",
+            "metalDing07.wav",
+            "Sound to play when the hand moves from the action zone to the relative zone.");
+        
+        audioEvents.newItem(
             "mouse-down",
             "metalDing07.wav",
             "Sound to play when the mouse is clicked.");
@@ -536,6 +591,17 @@ public class HandWaveyManager {
         loadEventSoundFromConfig("zone-relative-absolute");
         loadEventSoundFromConfig("zone-relative-action");
         loadEventSoundFromConfig("zone-action-relative");
+        
+        loadEventSoundFromConfig("zone-active-scroll");
+        loadEventSoundFromConfig("zone-action-scroll");
+        loadEventSoundFromConfig("zone-relative-scroll");
+        loadEventSoundFromConfig("zone-absolute-scroll");
+        loadEventSoundFromConfig("zone-none-scroll");
+        loadEventSoundFromConfig("zone-scroll-active");
+        loadEventSoundFromConfig("zone-scroll-action");
+        loadEventSoundFromConfig("zone-scroll-relative");
+        loadEventSoundFromConfig("zone-scroll-absolute");
+        loadEventSoundFromConfig("zone-scroll-none");
         
         loadEventSoundFromConfig("mouse-down");
         loadEventSoundFromConfig("mouse-up");
