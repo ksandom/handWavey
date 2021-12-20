@@ -123,9 +123,7 @@ public class HandsState {
     private String deriveZone(double handZ) {
         String zone = "Unknown";
         
-        if (this.primarySegment == 2) {
-            zone = "scroll";
-        } else if (this.zoneMode == "touchScreen") {
+        if (this.zoneMode == "touchScreen") {
             if (handZ > this.zActionBegin) {
                 zone = "action";
             } else if (handZ > this.zRelativeBegin) {
@@ -144,6 +142,12 @@ public class HandsState {
                 zone = "noMove";
             } else {
                 zone = "none";
+            }
+        }
+        
+        if (this.primarySegment == 2) {
+            if (zone != "none" && zone != "noMove" && zone != "action") {
+                zone = "scroll";
             }
         }
         
