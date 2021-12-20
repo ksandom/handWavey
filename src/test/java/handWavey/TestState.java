@@ -425,16 +425,59 @@ class TestState {
         Boolean left = true;
         Boolean right = false;
         
-        assertEquals(0, this.handsState.getHandSegment(0, primary, right));
-        assertEquals(1, this.handsState.getHandSegment(pi*-0.5, primary, right));
-        assertEquals(2, this.handsState.getHandSegment(pi, primary, right));
-        assertEquals(3, this.handsState.getHandSegment(pi*-1.5, primary, right));
-        assertEquals(3, this.handsState.getHandSegment(pi*0.5, primary, right));
+        double handTop = 0;
+        double handRight = pi*-0.5;
+        double handBottom = pi;
+        double handLeft = pi*0.5;
         
-        assertEquals(0, this.handsState.getHandSegment(0, primary, left));
-        assertEquals(3, this.handsState.getHandSegment(pi*-.5, primary, left));
-        assertEquals(2, this.handsState.getHandSegment(pi, primary, left));
-        assertEquals(2, this.handsState.getHandSegment(pi*-1, primary, left));
-        assertEquals(1, this.handsState.getHandSegment(pi*.5, primary, left));
+        assertEquals(0, this.handsState.getHandSegment(handTop, primary, right));
+        assertEquals(1, this.handsState.getHandSegment(handRight, primary, right));
+        assertEquals(2, this.handsState.getHandSegment(handBottom, primary, right));
+        assertEquals(3, this.handsState.getHandSegment(pi*-1.5, primary, right)); // Alternative value;
+        assertEquals(3, this.handsState.getHandSegment(handLeft, primary, right));
+        
+        assertEquals(0, this.handsState.getHandSegment(handTop, primary, left));
+        assertEquals(3, this.handsState.getHandSegment(handRight, primary, left));
+        assertEquals(2, this.handsState.getHandSegment(handBottom, primary, left));
+        assertEquals(2, this.handsState.getHandSegment(pi*-1, primary, left)); // Alternative value.
+        assertEquals(1, this.handsState.getHandSegment(handLeft, primary, left));
+    }
+    
+    @Test
+    public void testHandSegmentButtons() {
+        Boolean primary = true;
+        Boolean secondary = false;
+        Boolean left = true;
+        Boolean right = false;
+        
+        double handTop = 0;
+        double handRight = pi*-0.5;
+        double handBottom = pi;
+        double handLeft = pi*0.5;
+        
+        this.handsState.derivePrimaryHandSegment(handTop, left);
+        assertEquals("left", this.handsState.whichMouseButton());
+        
+        this.handsState.derivePrimaryHandSegment(handLeft, left);
+        assertEquals("right", this.handsState.whichMouseButton());
+        
+        this.handsState.derivePrimaryHandSegment(handBottom, left);
+        assertEquals("middle", this.handsState.whichMouseButton());
+        
+        this.handsState.derivePrimaryHandSegment(handRight, left);
+        assertEquals("left", this.handsState.whichMouseButton());
+        
+        
+        this.handsState.derivePrimaryHandSegment(handTop, right);
+        assertEquals("left", this.handsState.whichMouseButton());
+        
+        this.handsState.derivePrimaryHandSegment(handLeft, right);
+        assertEquals("left", this.handsState.whichMouseButton());
+        
+        this.handsState.derivePrimaryHandSegment(handBottom, right);
+        assertEquals("middle", this.handsState.whichMouseButton());
+        
+        this.handsState.derivePrimaryHandSegment(handRight, right);
+        assertEquals("right", this.handsState.whichMouseButton());
     }
 }

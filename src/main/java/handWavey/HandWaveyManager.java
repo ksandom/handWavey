@@ -757,7 +757,7 @@ public class HandWaveyManager {
         // This should happen before any potential de-stabilisation has happened.
         if (this.handsState.shouldMouseUp() == true) {
             this.debug.out(1, "Mouse down at " + coordsToString(this.movingMeanX.get(), this.movingMeanY.get()));
-            output.mouseUp(output.getMouseButtonID("left"));
+            this.output.mouseUp(this.output.getLastMouseButton());
             triggerEvent("mouse-up");
         }
 
@@ -786,8 +786,9 @@ public class HandWaveyManager {
         
         // This should happen after any potential stabilisation has happened.
         if (this.handsState.shouldMouseDown() == true) {
-            this.debug.out(1, "Mouse down at " + coordsToString(this.movingMeanX.get(), this.movingMeanY.get()));
-            output.mouseDown(output.getMouseButtonID("left"));
+            String button = this.handsState.whichMouseButton();
+            this.debug.out(1, "Mouse down (" + button + ") at " + coordsToString(this.movingMeanX.get(), this.movingMeanY.get()));
+            this.output.mouseDown(this.output.getMouseButtonID(button));
             triggerEvent("mouse-down");
         }
         

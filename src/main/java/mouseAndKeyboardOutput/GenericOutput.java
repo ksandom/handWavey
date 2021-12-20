@@ -18,6 +18,7 @@ public class GenericOutput {
     private GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     private GraphicsDevice[] gs = this.ge.getScreenDevices();
     private Robot robot = null;
+    private int button = 0;
     
     public GenericOutput() {
         try {
@@ -105,6 +106,7 @@ public class GenericOutput {
     public void mouseDown(int button) {
         try {
             this.robot.mousePress(button);
+            this.button = button;
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
@@ -118,6 +120,10 @@ public class GenericOutput {
         }
     }
     
+    public int getLastMouseButton() {
+        return this.button;
+    }
+    
     public void scroll(int amount) {
         this.robot.mouseWheel(amount);
     }
@@ -128,6 +134,9 @@ public class GenericOutput {
         switch(buttonName) {
             case "left":
                 result = InputEvent.BUTTON1_MASK;
+                break;
+            case "middle":
+                result = InputEvent.BUTTON2_MASK;
                 break;
             case "right":
                 result = InputEvent.BUTTON3_MASK;

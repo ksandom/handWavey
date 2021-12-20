@@ -225,6 +225,20 @@ public class HandsState {
         }
     }
     
+    public String whichMouseButton() {
+        String result = "";
+        
+        if (this.primarySegment == 1) {
+            result = "right";
+        } else if (this.primarySegment == 2) {
+            result = "middle";
+        } else {
+            result = "left";
+        }
+        
+        return result;
+    }
+    
     public void setHandClosed(Boolean handClosed) {
         this.gestureMouseDown = handClosed;
     }
