@@ -22,6 +22,7 @@ public class HandSummary {
     private Boolean isLeft;
 
     private Boolean valid = true;
+    private Boolean oob = false;
     
     private Config config;
 
@@ -124,10 +125,14 @@ public class HandSummary {
     }
 
     public Boolean isValid() {
-        return this.valid;
+        return (this.valid && (this.oob == false));
     }
 
     public void markInvalid() {
         this.valid = false;
+    }
+    
+    public void setOOB(Boolean value) {
+        this.oob = value;
     }
 }

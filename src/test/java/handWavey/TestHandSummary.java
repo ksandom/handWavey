@@ -54,6 +54,10 @@ class TestHandSummary {
     @Test
     public void testValid() {
         assertEquals(this.handSummary.isValid(), true);
+        this.handSummary.setOOB(true);
+        assertEquals(this.handSummary.isValid(), false);
+        this.handSummary.setOOB(false);
+        assertEquals(this.handSummary.isValid(), true);
         this.handSummary.markInvalid();
         assertEquals(this.handSummary.isValid(), false);
     }

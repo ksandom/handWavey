@@ -71,6 +71,10 @@ public class HandWaveyManager {
 
         Group ultraMotion = config.newGroup("ultraMotion");
         ultraMotion.newItem(
+            "debugLevel",
+            "1",
+            "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5  is probably more detail than you'll ever want.");
+        ultraMotion.newItem(
             "maxHands",
             "2",
             "Maximum number of hands to track. Anything more than this setting will be discarded, and assumptions can be made faster, so it will run faster. The most recent hands above the threshold are the ones to be discarded.");
@@ -78,10 +82,23 @@ public class HandWaveyManager {
             "openThreshold",
             "1.7",
             "Float: When the last bone of the middle finger is less than this angle, the hand is assumed to be open.");
-        ultraMotion.newItem(
-            "debugLevel",
-            "1",
-            "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5  is probably more detail than you'll ever want.");
+        Group coneOfSilence = ultraMotion.newGroup("coneOfSilence");
+        coneOfSilence.newItem(
+            "maxHeight",
+            "500",
+            "Beyond this height, the hand is considered too far away from the sensor to be useable, and is thus discarded.");
+        coneOfSilence.newItem(
+            "minHeight",
+            "150",
+            "Beyond this height, the hand is considered too far away from the sensor to be useable, and is thus discarded.");
+        coneOfSilence.newItem(
+            "maxCAtMaxHeight",
+            "210",
+            "When the hand is at min max height, how far from the center of the cone can the hand be horizontally before it it considered to be too unreliable.");
+        coneOfSilence.newItem(
+            "maxCAtMinHeight",
+            "130",
+            "When the hand is at the min height, how far from the center of the cone can the hand be horizontally before it it considered to be too unreliable.");
 
         Group handSummaryManager = config.newGroup("handSummaryManager");
         handSummaryManager.newItem(
@@ -350,6 +367,16 @@ public class HandWaveyManager {
             "metalDing08.wav",
             "Sound to play when the mouse button is released.");
         
+        audioEvents.newItem(
+            "imposterHand-replace",
+            "",
+            "When we detect that a hand ID is not what we expect, but are able to replace it and continue.");
+        
+        audioEvents.newItem(
+            "imposterHand-discard",
+            "",
+            "When we detect that a hand ID is not what we expect, but not are able to replace it and continue.");
+        
         
         handSummaryManager.newItem(
             "relativeSensitivity",
@@ -509,8 +536,12 @@ public class HandWaveyManager {
         loadEventSoundFromConfig("zone-relative-absolute");
         loadEventSoundFromConfig("zone-relative-action");
         loadEventSoundFromConfig("zone-action-relative");
+        
         loadEventSoundFromConfig("mouse-down");
         loadEventSoundFromConfig("mouse-up");
+        
+        loadEventSoundFromConfig("imposterHand-replace");
+        loadEventSoundFromConfig("imposterHand-discard");
         
         
         // Load touchpad mode config.
@@ -697,7 +728,7 @@ public class HandWaveyManager {
         this.movingMeanY.resize(this.zones.get(zone).getMovingMeanWidth(handZ));
     }
     
-    private void triggerEvent(String eventID) {
+    public void triggerEvent(String eventID) {
         String fileName = this.eventSounds.get(eventID);
         
         if (fileName != "") {
