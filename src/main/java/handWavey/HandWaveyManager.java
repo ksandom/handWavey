@@ -263,7 +263,7 @@ public class HandWaveyManager {
         Group touchPadConfig = handSummaryManager.newGroup("touchPad");
         touchPadConfig.newItem(
             "inputMultiplier",
-            "1.1",
+            "0.9",
             "Input is pretty small. Make it a bit bigger.");
         touchPadConfig.newItem(
             "outputMultiplier",
@@ -271,7 +271,7 @@ public class HandWaveyManager {
             "Input is pretty small. Make it a bit bigger.");
         touchPadConfig.newItem(
             "acceleration",
-            "1.8",
+            "2.3",
             "Small change in output moves the pointer very precisely. A larger movement moves the pointer much more drastically.");
         
         
