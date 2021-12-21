@@ -19,6 +19,7 @@ public class GenericOutput {
     private GraphicsDevice[] gs = this.ge.getScreenDevices();
     private Robot robot = null;
     private int button = 0;
+    private String[] keysIKnow = {"ctrl", "alt", "shift"};
     
     public GenericOutput() {
         try {
@@ -131,6 +132,7 @@ public class GenericOutput {
     public int getMouseButtonID(String buttonName) {
         int result = InputEvent.BUTTON1_MASK;
         
+        // https://docs.oracle.com/javase/7/docs/api/java/awt/event/InputEvent.html
         switch(buttonName) {
             case "left":
                 result = InputEvent.BUTTON1_MASK;
@@ -144,6 +146,45 @@ public class GenericOutput {
         }
         
         return result;
+    }
+    
+    public int getKeyID(String keyName) {
+        int result = 0;
+        
+        // From: https://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyEvent.html
+        switch(keyName) {
+            case "ctrl":
+                result = KeyEvent.VK_CONTROL;
+                break;
+            case "alt":
+                result = KeyEvent.VK_ALT;
+                break;
+            case "shift":
+                result = KeyEvent.VK_SHIFT;
+                break;
+        }
+        
+        return result;
+    }
+    
+    public void keyDown(int key) {
+        try {
+            this.robot.keyPress(key);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void keyUp(int key) {
+        try {
+            this.robot.keyRelease(key);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public String[] getKeysIKnow() {
+        return this.keysIKnow;
     }
     
     public void sleep(int microseconds) {

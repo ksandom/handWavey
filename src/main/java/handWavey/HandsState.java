@@ -2,6 +2,7 @@ package handWavey;
 
 import config.*;
 import debug.Debug;
+import java.util.HashMap;
 
 public class HandsState {
     private Debug debug;
@@ -22,6 +23,8 @@ public class HandsState {
     private Boolean gestureMouseDown = false;
     private Boolean resultMouseDownDown = false;
     private Boolean resultMouseDownUp = false;
+    
+    private HashMap<String, Should> keys = new HashMap<String, Should>();
     
     private float pi = (float)3.1415926536;
     
@@ -79,6 +82,13 @@ public class HandsState {
         this.secondarySegments = Integer.parseInt(secondaryHand.getItem("rotationSegments").get());
         this.secondarySegmentWidth = (this.pi * 2) / this.secondarySegments;
         this.secondaryOffset = Double.parseDouble(secondaryHand.getItem("rotationOffset").get());
+        
+        
+        // Set up key tracking.
+        this.keys.put("alt", new Should(false));
+        this.keys.put("ctrl", new Should(false));
+        this.keys.put("shift", new Should(false));
+        this.keys.put("mouseButton", new Should(false));
     }
     
     public int getHandSegment(double handRoll, Boolean isPrimary, Boolean isLeft) {
@@ -201,28 +211,20 @@ public class HandsState {
         return this.oldZone;
     }
     
+    public void figureOutMouseButtons() {
+        this.keys.get("mouseButton").set(((this.zoneMouseDown || this.gestureMouseDown) && this.zone != "none"));
+    }
+    
     private Boolean combinedMouseDown() {
         return ((this.zoneMouseDown || this.gestureMouseDown) && this.zone != "none");
     }
     
     public Boolean shouldMouseDown() {
-        Boolean combined = combinedMouseDown();
-        if (combined != this.resultMouseDownDown) {
-            this.resultMouseDownDown = combined;
-            return combined;
-        } else {
-            return false;
-        }
+        return this.keys.get("mouseButton").toTrue();
     }
     
     public Boolean shouldMouseUp() {
-        Boolean combined = combinedMouseDown();
-        if (combined != this.resultMouseDownUp) {
-            this.resultMouseDownUp = combined;
-            return !combined;
-        } else {
-            return false;
-        }
+        return this.keys.get("mouseButton").toFalse();
     }
     
     public String whichMouseButton() {
@@ -241,6 +243,44 @@ public class HandsState {
     
     public void setHandClosed(Boolean handClosed) {
         this.gestureMouseDown = handClosed;
+    }
+    
+    public void figureOutKeys() {
+        switch (this.secondarySegment) {
+            case -1:
+                this.keys.get("alt").set(false);
+                this.keys.get("ctrl").set(false);
+                this.keys.get("shift").set(false);
+                break;
+            case 0:
+                this.keys.get("alt").set(false);
+                this.keys.get("ctrl").set(true);
+                this.keys.get("shift").set(false);
+                break;
+            case 1:
+                this.keys.get("alt").set(true);
+                this.keys.get("ctrl").set(false);
+                this.keys.get("shift").set(false);
+                break;
+            case 2:
+                this.keys.get("alt").set(false);
+                this.keys.get("ctrl").set(false);
+                this.keys.get("shift").set(true);
+                break;
+        }
+    }
+    
+    public Boolean shouldKeyDown(String keyName) {
+        return this.keys.get(keyName).toTrue();
+    }
+    
+    public Boolean shouldKeyUp(String keyName) {
+        return this.keys.get(keyName).toFalse();
+    }
+    
+    public void figureOutStuff() {
+        figureOutMouseButtons();
+        figureOutKeys();
     }
 }
 

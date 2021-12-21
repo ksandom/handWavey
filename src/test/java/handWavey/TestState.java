@@ -195,17 +195,20 @@ class TestState {
         * We should get mouse down and up events when entering and exiting the action zone.
         */
         
+        this.handsState.figureOutMouseButtons();
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("none", this.handsState.getZone(-151));
         
+        this.handsState.figureOutMouseButtons();
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("none", this.handsState.getZone(-150));
         assertEquals(false, this.handsState.zoneIsNew());
         
+        this.handsState.figureOutMouseButtons();
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
@@ -213,6 +216,7 @@ class TestState {
         assertEquals(true, this.handsState.zoneIsNew());
         assertEquals("none", this.handsState.getOldZone());
         
+        this.handsState.figureOutMouseButtons();
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
@@ -220,6 +224,7 @@ class TestState {
         assertEquals(false, this.handsState.zoneIsNew());
         assertEquals("none", this.handsState.getOldZone());
         
+        this.handsState.figureOutMouseButtons();
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
@@ -227,6 +232,7 @@ class TestState {
         assertEquals(false, this.handsState.zoneIsNew());
         assertEquals("none", this.handsState.getOldZone());
         
+        this.handsState.figureOutMouseButtons();
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
@@ -234,6 +240,7 @@ class TestState {
         assertEquals(true, this.handsState.zoneIsNew());
         assertEquals("absolute", this.handsState.getOldZone());
         
+        this.handsState.figureOutMouseButtons();
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
@@ -241,6 +248,7 @@ class TestState {
         assertEquals(false, this.handsState.zoneIsNew());
         assertEquals("absolute", this.handsState.getOldZone());
         
+        this.handsState.figureOutMouseButtons();
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
@@ -248,6 +256,7 @@ class TestState {
         assertEquals(true, this.handsState.zoneIsNew());
         assertEquals("relative", this.handsState.getOldZone());
         
+        this.handsState.figureOutMouseButtons();
         assertEquals(true, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
@@ -255,6 +264,7 @@ class TestState {
         assertEquals(false, this.handsState.zoneIsNew());
         assertEquals("relative", this.handsState.getOldZone());
         
+        this.handsState.figureOutMouseButtons();
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
@@ -262,6 +272,7 @@ class TestState {
         assertEquals(false, this.handsState.zoneIsNew());
         assertEquals("relative", this.handsState.getOldZone());
         
+        this.handsState.figureOutMouseButtons();
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
@@ -269,6 +280,7 @@ class TestState {
         assertEquals(false, this.handsState.zoneIsNew());
         assertEquals("relative", this.handsState.getOldZone());
         
+        this.handsState.figureOutMouseButtons();
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
@@ -276,6 +288,7 @@ class TestState {
         assertEquals(true, this.handsState.zoneIsNew());
         assertEquals("action", this.handsState.getOldZone());
         
+        this.handsState.figureOutMouseButtons();
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(true, this.handsState.shouldMouseUp());
         
@@ -283,6 +296,7 @@ class TestState {
         assertEquals(false, this.handsState.zoneIsNew());
         assertEquals("action", this.handsState.getOldZone());
         
+        this.handsState.figureOutMouseButtons();
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
     }
@@ -299,31 +313,37 @@ class TestState {
         
         assertEquals("none", this.handsState.getZone(-151));
         
+        this.handsState.figureOutMouseButtons();
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("absolute", this.handsState.getZone(-149));
         
+        this.handsState.figureOutMouseButtons();
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("action", this.handsState.getZone(101));
         
+        this.handsState.figureOutMouseButtons();
         assertEquals(true, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("action", this.handsState.getZone(99));
         
+        this.handsState.figureOutMouseButtons();
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("relative", this.handsState.getZone(70));
         
+        this.handsState.figureOutMouseButtons();
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(true, this.handsState.shouldMouseUp());
         
         assertEquals("relative", this.handsState.getZone(70));
         
+        this.handsState.figureOutMouseButtons();
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
     }
@@ -338,30 +358,35 @@ class TestState {
         
         assertEquals("none", this.handsState.getZone(-151));
         this.handsState.setHandClosed(false);
+        this.handsState.figureOutMouseButtons();
         
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("absolute", this.handsState.getZone(-149));
         this.handsState.setHandClosed(true);
+        this.handsState.figureOutMouseButtons();
         
         assertEquals(true, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("absolute", this.handsState.getZone(-149));
         this.handsState.setHandClosed(true);
+        this.handsState.figureOutMouseButtons();
         
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("absolute", this.handsState.getZone(-149));
         this.handsState.setHandClosed(false);
+        this.handsState.figureOutMouseButtons();
         
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(true, this.handsState.shouldMouseUp());
         
         assertEquals("absolute", this.handsState.getZone(-149));
         this.handsState.setHandClosed(false);
+        this.handsState.figureOutMouseButtons();
         
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
@@ -377,42 +402,49 @@ class TestState {
         
         assertEquals("none", this.handsState.getZone(-151));
         this.handsState.setHandClosed(false);
+        this.handsState.figureOutMouseButtons();
         
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("absolute", this.handsState.getZone(-149));
         this.handsState.setHandClosed(true);
+        this.handsState.figureOutMouseButtons();
         
         assertEquals(true, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("action", this.handsState.getZone(101));
         this.handsState.setHandClosed(true);
+        this.handsState.figureOutMouseButtons();
         
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("action", this.handsState.getZone(99));
         this.handsState.setHandClosed(true);
+        this.handsState.figureOutMouseButtons();
         
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("relative", this.handsState.getZone(70));
         this.handsState.setHandClosed(true);
+        this.handsState.figureOutMouseButtons();
         
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());
         
         assertEquals("relative", this.handsState.getZone(70));
         this.handsState.setHandClosed(false);
+        this.handsState.figureOutMouseButtons();
         
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(true, this.handsState.shouldMouseUp());
         
         assertEquals("relative", this.handsState.getZone(70));
         this.handsState.setHandClosed(false);
+        this.handsState.figureOutMouseButtons();
         
         assertEquals(false, this.handsState.shouldMouseDown());
         assertEquals(false, this.handsState.shouldMouseUp());

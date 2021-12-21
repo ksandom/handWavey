@@ -825,29 +825,38 @@ public class HandWaveyManager {
         return String.valueOf(Math.round(x)) + ", " + String.valueOf(Math.round(y));
     }
     
+    private void handleKeysDowns() {
+        for (String key : this.output.getKeysIKnow()) {
+            if (this.handsState.shouldKeyDown(key)) {
+                this.debug.out(1, "Key down: " + key);
+                this.output.keyDown(this.output.getKeyID(key));
+            }
+        }
+    }
+    
+    private void handleKeyUps() {
+        for (String key : this.output.getKeysIKnow()) {
+            if (this.handsState.shouldKeyUp(key)) {
+                this.debug.out(1, "Key up:   " + key);
+                this.output.keyUp(this.output.getKeyID(key));
+            }
+        }
+    }
+    
     /* TODO
     
-    * #Better handle slash in audio path prefixes.
-    * #Touchpad mode.
-    * #Overlap zones.
-    * #Recover from replaced hands.
-    * #Fix hand order.
-    * Gestures:
-        * #Right click.
-        * #Scroll.
-        * Drag window.
-        * Resize Window.
-        * Zoom.
-    * On mouse down/up, use the position from a moment in time ago.
-    * On middle down/up, replay scroll position since a moment in time ago. Leave it there.
+    * Fix jumping when out of range.
+    * Position history.
+        * On mouse down/up, use the position from a moment in time ago.
+        * On middle down/up, replay scroll position since a moment in time ago. Leave it there.
     * Config based mapping to actions.
-    * Synth audio feedback for when close to zone boundaries.
-    * Check whether threads are being cleaned up.
-    * If not threads. Why the sound stopping occasionally? (Doesn't seem like GC)
     * VNC for initial compatibility with wayland?
-    
-    * Arm angle.
-    * Curved zones?
+    * Config to/from disk.
+    * Synth audio feedback for when close to zone boundaries.
+    * Occasional freeze:
+        * Usually sound stops. But other stuff still works.
+        * Check whether threads are lingering.
+        * Check GC.
     
     */
     
@@ -866,12 +875,17 @@ public class HandWaveyManager {
             this.handsState.noSecondaryHand();
         }
         
+        // Figure out the current state of of gestures.
+        this.handsState.figureOutStuff();
+        
         // This should happen before any potential de-stabilisation has happened.
         if (this.handsState.shouldMouseUp() == true) {
             this.debug.out(1, "Mouse down at " + coordsToString(this.movingMeanX.get(), this.movingMeanY.get()));
             this.output.mouseUp(this.output.getLastMouseButton());
             triggerEvent("mouse-up");
         }
+        
+        handleKeyUps();
 
         // Move the mouse cursor.
         if ((zone == "none") || (zone == "noMove")) {
@@ -903,6 +917,8 @@ public class HandWaveyManager {
             this.output.mouseDown(this.output.getMouseButtonID(button));
             triggerEvent("mouse-down");
         }
+        
+        handleKeysDowns();
         
         // Audio events.
         if (this.handsState.zoneIsNew()) {
