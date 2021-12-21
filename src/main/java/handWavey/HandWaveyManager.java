@@ -58,6 +58,8 @@ public class HandWaveyManager {
     
     private double relativeSensitivity = 0.1;
     
+    private Boolean shouldDiscardOldPosition = true;
+    
     public HandWaveyManager() {
         Config.setSingletonFilename("handWavey.yml");
         Config config = Config.singleton();
@@ -687,10 +689,21 @@ public class HandWaveyManager {
         return this.desktopHeight - (int) Math.round((yCoord + this.yOffset) * this.yMultiplier);
     }
     
+    public void discardOldPosition() {
+        this.shouldDiscardOldPosition = true;
+    }
+    
     private void moveMouseTouchPadFromCoordinates(double xCoord, double yCoord) {
         // Calculate how far the hand has moved since the last iteration.
-        double xCoordDiff = xCoord - this.lastAbsoluteX + this.diffRemainderX;
-        double yCoordDiff = yCoord - this.lastAbsoluteY + this.diffRemainderX;
+        double xCoordDiff = 0;
+        double yCoordDiff = 0;
+        
+        if (!this.shouldDiscardOldPosition) {
+            xCoordDiff = xCoord - this.lastAbsoluteX + this.diffRemainderX;
+            yCoordDiff = yCoord - this.lastAbsoluteY + this.diffRemainderY;
+        } else {
+            this.shouldDiscardOldPosition = false;
+        }
         
         // Calculate our acceleration.
         double accelerationThreshold = 1;
@@ -734,8 +747,15 @@ public class HandWaveyManager {
         this.diffRemainderY = 0;
         
         // Calculate how far the hand has moved since the last iteration.
-        double xCoordDiff = xCoord - this.lastAbsoluteX + this.diffScrollRemainderX;
-        double yCoordDiff = yCoord - this.lastAbsoluteY + this.diffScrollRemainderY;
+        double xCoordDiff = 0;
+        double yCoordDiff = 0;
+        
+        if (!this.shouldDiscardOldPosition) {
+            xCoordDiff = xCoord - this.lastAbsoluteX + this.diffScrollRemainderX;
+            yCoordDiff = yCoord - this.lastAbsoluteY + this.diffScrollRemainderY;
+        } else {
+            this.shouldDiscardOldPosition = false;
+        }
         
         // Calculate our acceleration.
         double accelerationThreshold = 1;

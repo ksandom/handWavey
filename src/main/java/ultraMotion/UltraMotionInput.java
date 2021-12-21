@@ -225,7 +225,11 @@ public class UltraMotionInput extends Listener {
             handNumber++;
         }
         
-        this.ultraMotionManager.getHandWaveyManager().sendHandSummaries(this.handSummaries);
+        if (this.handSummaries[0].isValid()) {
+            this.ultraMotionManager.getHandWaveyManager().sendHandSummaries(this.handSummaries);
+        } else {
+            this.ultraMotionManager.getHandWaveyManager().discardOldPosition();
+        }
         
         this.lastHandCount = handCount;
     }
