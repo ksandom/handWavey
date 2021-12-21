@@ -831,7 +831,7 @@ public class HandWaveyManager {
     * #Touchpad mode.
     * #Overlap zones.
     * #Recover from replaced hands.
-    * Fix hand order.
+    * #Fix hand order.
     * Gestures:
         * #Right click.
         * #Scroll.

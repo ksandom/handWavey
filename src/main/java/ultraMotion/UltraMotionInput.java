@@ -168,10 +168,20 @@ public class UltraMotionInput extends Listener {
                 if (this.handSummaries[handNumber].getID() != hand.id()) {
                     if (handCount == 1) {
                         // If this is the only hand, we can simply substitute it, and get on with it.
-                        this.debug.out(0, "Hand " + String.valueOf(this.handSummaries[handNumber].getID()) + " != " + String.valueOf(hand.id()) + " in position " + String.valueOf(handNumber) + ". But it was the only hand that we are tracking. So simply replacing it.");
-                        assignNewHand(handNumber, hand.id());
-                        this.ultraMotionManager.getHandWaveyManager().triggerEvent("imposterHand-replace");
+                        imposterReplace(handNumber, hand.id(), "But it was the only hand that we are tracking.");
+                    } else if (!this.handSummaries[handNumber].isValid()) {
+                        // If the original hand was OOB, replacing it is probably the right thing to do. This is likely to create a ripple for later hands, which brings us to the next condition.
+                        imposterReplace(handNumber, hand.id(), "But it was OOB/invalid.");
+                    } else if (handNumber == handCount - 1) {
+                        // If there are no hands after this one, we can safely replace it.
+                        imposterReplace(handNumber, hand.id(), "But it was the last hand that we are tracking.");
                     } else {
+                        // For other cases, just mark it as invalid. This is now likely to interact with the second condition on the next iteration. So this will need to be re-thought out if it becomes a problem.
+                        // If this does become a problem, it will look like:
+                        // * A hand gets replaced with the wrong hand.
+                        // * Hand ordering gets stuffed up when a hand dissapears and reappears.
+                        // TODO Revisit this to make it more durable.
+                        
                         this.handSummaries[handNumber].markInvalid();
                         this.debug.out(0, "Discarding hand " + String.valueOf(this.handSummaries[handNumber].getID()) + " != " + String.valueOf(hand.id()) + " in position " + String.valueOf(handNumber));
                         this.ultraMotionManager.getHandWaveyManager().triggerEvent("imposterHand-discard");
@@ -211,11 +221,19 @@ public class UltraMotionInput extends Listener {
                 // If we have more hands than we are configured to handle, let's just stop processing the extra hands.
                 break;
             }
+            
+            handNumber++;
         }
         
         this.ultraMotionManager.getHandWaveyManager().sendHandSummaries(this.handSummaries);
         
         this.lastHandCount = handCount;
+    }
+    
+    private void imposterReplace(int handPosition, int handID, String why) {
+        this.debug.out(0, "Hand " + String.valueOf(this.handSummaries[handPosition].getID()) + " != " + String.valueOf(handID) + " in position " + String.valueOf(handPosition) + ". " + why + " So simply replacing it.");
+        assignNewHand(handPosition, handID);
+        this.ultraMotionManager.getHandWaveyManager().triggerEvent("imposterHand-replace");
     }
     
     private void assignNewHand(int handPosition, int handID) {
