@@ -93,7 +93,7 @@ public class HandWaveyManager {
             "Beyond this height, the hand is considered too far away from the sensor to be useable, and is thus discarded.");
         coneOfSilence.newItem(
             "maxCAtMaxHeight",
-            "210",
+            "260",
             "When the hand is at min max height, how far from the center of the cone can the hand be horizontally before it it considered to be too unreliable.");
         coneOfSilence.newItem(
             "maxCAtMinHeight",
@@ -383,6 +383,16 @@ public class HandWaveyManager {
             "Sound to play when the hand changes from scrolling to the none zone.");
         
         audioEvents.newItem(
+            "zone-noMove-scroll",
+            "metalDing05.wav",
+            "Sound to play when the hand changes from the noMove zone to scrolling.");
+        
+        audioEvents.newItem(
+            "zone-scroll-noMove",
+            "metalDing05.wav",
+            "Sound to play when the hand changes from scrolling to the noMove zone.");
+        
+        audioEvents.newItem(
             "zone-active-scroll",
             "metalDing05.wav",
             "Sound to play when the hand changes from the active zone to scrolling.");
@@ -597,11 +607,13 @@ public class HandWaveyManager {
         loadEventSoundFromConfig("zone-relative-scroll");
         loadEventSoundFromConfig("zone-absolute-scroll");
         loadEventSoundFromConfig("zone-none-scroll");
+        loadEventSoundFromConfig("zone-noMove-scroll");
         loadEventSoundFromConfig("zone-scroll-active");
         loadEventSoundFromConfig("zone-scroll-action");
         loadEventSoundFromConfig("zone-scroll-relative");
         loadEventSoundFromConfig("zone-scroll-absolute");
         loadEventSoundFromConfig("zone-scroll-none");
+        loadEventSoundFromConfig("zone-scroll-noMove");
         
         loadEventSoundFromConfig("mouse-down");
         loadEventSoundFromConfig("mouse-up");
@@ -818,18 +830,20 @@ public class HandWaveyManager {
     * #Better handle slash in audio path prefixes.
     * #Touchpad mode.
     * #Overlap zones.
+    * #Recover from replaced hands.
+    * Fix hand order.
     * Gestures:
         * #Right click.
         * #Scroll.
         * Drag window.
         * Resize Window.
         * Zoom.
+    * On mouse down/up, use the position from a moment in time ago.
+    * On middle down/up, replay scroll position since a moment in time ago. Leave it there.
     * Config based mapping to actions.
     * Synth audio feedback for when close to zone boundaries.
     * Check whether threads are being cleaned up.
     * If not threads. Why the sound stopping occasionally? (Doesn't seem like GC)
-    * #Recover from replaced hands.
-    * On mouse down, use the position from a moment in time ago.
     * VNC for initial compatibility with wayland?
     
     * Arm angle.
