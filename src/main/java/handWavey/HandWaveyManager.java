@@ -300,129 +300,39 @@ public class HandWaveyManager {
         
         Group audioEvents = config.newGroup("audioEvents");
         audioEvents.newItem(
-            "zone-none-noMove",
+            "zone-none",
             "metalDing01.wav",
-            "Sound to play when the hand moves from the none zone to the noMove zone.");
+            "Sound to play when the hand moves into the none zone.");
         
         audioEvents.newItem(
-            "zone-noMove-none",
+            "zone-noMove",
             "metalDing02.wav",
-            "Sound to play when the hand moves from the noMove zone to the none zone.");
+            "Sound to play when the hand moves into the noMove zone.");
         
         audioEvents.newItem(
-            "zone-noMove-active",
-            "metalDing01.wav",
-            "Sound to play when the hand moves from the noMove zone to the active zone.");
-        
-        audioEvents.newItem(
-            "zone-active-noMove",
-            "metalDing02.wav",
-            "Sound to play when the hand moves from the active zone to the noMove zone.");
-        
-        audioEvents.newItem(
-            "zone-active-action",
-            "metalDing05.wav",
-            "Sound to play when the hand moves from the relative zone to the action zone.");
-        
-        audioEvents.newItem(
-            "zone-action-active",
-            "metalDing07.wav",
-            "Sound to play when the hand moves from the action zone to the relative zone.");
-        
-        audioEvents.newItem(
-            "zone-none-absolute",
-            "metalDing01.wav",
-            "Sound to play when the hand moves from the none zone to the absolute zone.");
-        
-        audioEvents.newItem(
-            "zone-absolute-none",
-            "metalDing02.wav",
-            "Sound to play when the hand moves from the absolute zone to the none zone.");
-        
-        audioEvents.newItem(
-            "zone-absolute-relative",
+            "zone-active",
             "metalDing03.wav",
-            "Sound to play when the hand moves from the absolute zone to the relative zone.");
+            "Sound to play when the hand moves into the active zone.");
         
         audioEvents.newItem(
-            "zone-relative-absolute",
+            "zone-action",
             "metalDing04.wav",
-            "Sound to play when the hand moves from the relative zone to the absolute zone.");
+            "Sound to play when the hand moves into the action zone.");
         
         audioEvents.newItem(
-            "zone-relative-action",
+            "zone-absolute",
+            "metalDing02.wav",
+            "Sound to play when the hand moves into the absolute zone.");
+        
+        audioEvents.newItem(
+            "zone-relative",
+            "metalDing03.wav",
+            "Sound to play when the hand moves into the relative zone.");
+        
+        audioEvents.newItem(
+            "zone-scroll",
             "metalDing05.wav",
-            "Sound to play when the hand moves from the relative zone to the action zone.");
-        
-        audioEvents.newItem(
-            "zone-action-relative",
-            "metalDing07.wav",
-            "Sound to play when the hand moves from the action zone to the relative zone.");
-        
-        audioEvents.newItem(
-            "zone-scroll-active",
-            "metalDing05.wav",
-            "Sound to play when the hand changes from scrolling to the active zone.");
-        
-        audioEvents.newItem(
-            "zone-scroll-action",
-            "metalDing05.wav",
-            "Sound to play when the hand changes from scrolling to the action zone.");
-        
-        audioEvents.newItem(
-            "zone-scroll-relative",
-            "metalDing05.wav",
-            "Sound to play when the hand changes from scrolling to the relative zone.");
-        
-        audioEvents.newItem(
-            "zone-scroll-absolute",
-            "metalDing05.wav",
-            "Sound to play when the hand changes from scrolling to the absolute zone.");
-        
-        audioEvents.newItem(
-            "zone-scroll-none",
-            "metalDing05.wav",
-            "Sound to play when the hand changes from scrolling to the none zone.");
-        
-        audioEvents.newItem(
-            "zone-noMove-scroll",
-            "metalDing05.wav",
-            "Sound to play when the hand changes from the noMove zone to scrolling.");
-        
-        audioEvents.newItem(
-            "zone-scroll-noMove",
-            "metalDing05.wav",
-            "Sound to play when the hand changes from scrolling to the noMove zone.");
-        
-        audioEvents.newItem(
-            "zone-active-scroll",
-            "metalDing05.wav",
-            "Sound to play when the hand changes from the active zone to scrolling.");
-        
-        audioEvents.newItem(
-            "zone-action-scroll",
-            "metalDing05.wav",
-            "Sound to play when the hand changes from the action zone to scrolling.");
-        
-        audioEvents.newItem(
-            "zone-relative-scroll",
-            "metalDing05.wav",
-            "Sound to play when the hand changes from the relative zone to scrolling.");
-        
-        audioEvents.newItem(
-            "zone-absolute-scroll",
-            "metalDing05.wav",
-            "Sound to play when the hand changes from the absolute zone to scrolling.");
-        
-        audioEvents.newItem(
-            "zone-none-scroll",
-            "metalDing05.wav",
-            "Sound to play when the hand changes from the none zone to scrolling.");
-        
-        audioEvents.newItem(
-            "zone-action-relative",
-            "metalDing07.wav",
-            "Sound to play when the hand moves from the action zone to the relative zone.");
+            "Sound to play when the hand switches to the scroll zone.");
         
         audioEvents.newItem(
             "mouse-down",
@@ -590,32 +500,15 @@ public class HandWaveyManager {
         
         
         // Get event sounds.
-        loadEventSoundFromConfig("zone-none-noMove");
-        loadEventSoundFromConfig("zone-noMove-none");
-        loadEventSoundFromConfig("zone-noMove-active");
-        loadEventSoundFromConfig("zone-active-noMove");
-        loadEventSoundFromConfig("zone-active-action");
-        loadEventSoundFromConfig("zone-action-active");
+        loadEventSoundFromConfig("zone-none");
+        loadEventSoundFromConfig("zone-noMove");
+        loadEventSoundFromConfig("zone-active");
+        loadEventSoundFromConfig("zone-action");
         
-        loadEventSoundFromConfig("zone-none-absolute");
-        loadEventSoundFromConfig("zone-absolute-none");
-        loadEventSoundFromConfig("zone-absolute-relative");
-        loadEventSoundFromConfig("zone-relative-absolute");
-        loadEventSoundFromConfig("zone-relative-action");
-        loadEventSoundFromConfig("zone-action-relative");
+        loadEventSoundFromConfig("zone-absolute");
+        loadEventSoundFromConfig("zone-relative");
         
-        loadEventSoundFromConfig("zone-active-scroll");
-        loadEventSoundFromConfig("zone-action-scroll");
-        loadEventSoundFromConfig("zone-relative-scroll");
-        loadEventSoundFromConfig("zone-absolute-scroll");
-        loadEventSoundFromConfig("zone-none-scroll");
-        loadEventSoundFromConfig("zone-noMove-scroll");
-        loadEventSoundFromConfig("zone-scroll-active");
-        loadEventSoundFromConfig("zone-scroll-action");
-        loadEventSoundFromConfig("zone-scroll-relative");
-        loadEventSoundFromConfig("zone-scroll-absolute");
-        loadEventSoundFromConfig("zone-scroll-none");
-        loadEventSoundFromConfig("zone-scroll-noMove");
+        loadEventSoundFromConfig("zone-scroll");
         
         loadEventSoundFromConfig("mouse-down");
         loadEventSoundFromConfig("mouse-up");
@@ -942,7 +835,7 @@ public class HandWaveyManager {
         
         // Audio events.
         if (this.handsState.zoneIsNew()) {
-            String eventID = "zone-" + zone + "-" + this.handsState.getOldZone();
+            String eventID = "zone-" + zone;
             triggerEvent(eventID);
         }
     }
