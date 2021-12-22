@@ -219,13 +219,13 @@ public class HandWaveyManager {
         Group noMove = touchPad.newGroup("noMove");
         noMove.newItem(
             "threshold",
-            "-190",
+            "-150",
             "Z greater than this value denotes the beginning of the noMove zone.");
         
         Group active = touchPad.newGroup("active");
         active.newItem(
             "threshold",
-            "-100",
+            "-50",
             "Z greater than this value denotes the beginning of the active zone.");
         active.newItem(
             "movingMeanBegin",
