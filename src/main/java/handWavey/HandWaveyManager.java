@@ -82,7 +82,7 @@ public class HandWaveyManager {
             "Maximum number of hands to track. Anything more than this setting will be discarded, and assumptions can be made faster, so it will run faster. The most recent hands above the threshold are the ones to be discarded.");
         ultraMotion.newItem(
             "openThreshold",
-            "1.7",
+            "1.8",
             "Float: When the last bone of the middle finger is less than this angle, the hand is assumed to be open.");
         Group coneOfSilence = ultraMotion.newGroup("coneOfSilence");
         coneOfSilence.newItem(
