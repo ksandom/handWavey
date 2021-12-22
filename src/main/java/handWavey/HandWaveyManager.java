@@ -758,13 +758,23 @@ public class HandWaveyManager {
     
     /* TODO
     
-    * Fix jumping when out of range.
     * Position history.
         * On mouse down/up, use the position from a moment in time ago.
         * On middle down/up, replay scroll position since a moment in time ago. Leave it there.
     * Config based mapping to actions.
     * VNC for initial compatibility with wayland?
     * Config to/from disk.
+    * Make audio feedback for hands left/right hand aware.
+    * Abstract out config into a new class.
+    * How to build the final asset?
+    * Documentation/automation:
+        * Installation.
+        * Configuring.
+            * touchPad acceleration.
+            * scroll acceleration.
+            * touchPad vs touchScreen.
+            * gestureConfig.
+            * audioFeedback.
     * Synth audio feedback for when close to zone boundaries.
     * Occasional freeze:
         * Usually sound stops. But other stuff still works.
