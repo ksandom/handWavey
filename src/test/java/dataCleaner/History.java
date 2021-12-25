@@ -72,6 +72,14 @@ class TestHistory {
          assertEquals(this.index[7], this.history.getIndexForTimestamp(this.nowMillis - 700));
          assertEquals(this.index[8], this.history.getIndexForTimestamp(this.nowMillis - 800));
          assertEquals(this.index[9], this.history.getIndexForTimestamp(this.nowMillis - 900));
+
+         // Some in-betweens.
+         assertEquals(this.index[7], this.history.getIndexForTimestamp(this.nowMillis - 660));
+         assertEquals(this.index[7], this.history.getIndexForTimestamp(this.nowMillis - 680));
+         assertEquals(this.index[7], this.history.getIndexForTimestamp(this.nowMillis - 720));
+         assertEquals(this.index[7], this.history.getIndexForTimestamp(this.nowMillis - 740));
+         assertEquals(this.index[8], this.history.getIndexForTimestamp(this.nowMillis - 760));
+         assertEquals(this.index[8], this.history.getIndexForTimestamp(this.nowMillis - 780));
     }
     
     @Test

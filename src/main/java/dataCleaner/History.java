@@ -92,15 +92,25 @@ public class History {
             return start; // There's nothing left to test. Just return what we have.
         }
         
-        long highGuessDiff = this.getTimestampForOffset(guess-1) - timestamp;
-        long lowGuessDiff = timestamp - this.getTimestampForOffset(guess+1);
-        
-        
+        long highGuessValue = this.getTimestampForOffset(guess+1);
+        long lowGuessValue = this.getTimestampForOffset(guess-1);
+
+        long highGuessDiff = lowGuessValue - timestamp;
+        long guessDiff = Math.abs(guessTimestamp - timestamp);
+        long lowGuessDiff = timestamp - highGuessValue;
         
         if (highGuessDiff < lowGuessDiff) {
-            return findOffsetForTimestamp(timestamp, guess, stop, step + 1);
+            if (highGuessDiff > guessDiff) {
+                return guess;
+            } else {
+                return findOffsetForTimestamp(timestamp, guess, stop, step + 1);
+            }
         } else {
-            return findOffsetForTimestamp(timestamp, start, guess, step + 1);
+            if (lowGuessDiff > guessDiff) {
+                return guess;
+            } else {
+                return findOffsetForTimestamp(timestamp, start, guess, step + 1);
+            }
         }
     }
     
