@@ -68,30 +68,27 @@ public class History {
         long startTimestamp = this.getTimestampForOffset(start);
         long stopTimestamp = this.getTimestampForOffset(stop);
         
+        if (timestamp >= stopTimestamp) {
+            return stop; // It's younger than our youngest entry. Use that.
+        }
+        if (timestamp <= startTimestamp) {
+            return start; // It's older than our oldest entry. Use that.
+        }
+        if (start == stop) {
+            return start; // There's nothing left to test. Just return what we have.
+        }
+
         long timeRange = stopTimestamp - startTimestamp;
         long goal = timestamp - startTimestamp;
         int indexRange = start - stop;
         double positionPercent = 0.5 ; //= goal / timeRange;
         
+        // Make a guess.
         int guessPosition = (int)Math.round(indexRange * positionPercent);
         int guess = indexRange - guessPosition + stop;
         long guessTimestamp = this.getTimestampForOffset(guess);
-        
-        System.out.println(String.valueOf(step) + ": ts=" + String.valueOf(timestamp) + ", gts=" + String.valueOf(guessTimestamp) + ", start=" + String.valueOf(start) + ", guess=" + String.valueOf(guess) + ", stop=" + String.valueOf(stop) + ", startTS=" + String.valueOf(startTimestamp) + ", stopTS=" + String.valueOf(stopTimestamp) + ", guessPos=" + String.valueOf(guessPosition) + ", timeRange=" + String.valueOf(timeRange) + ", goal=" + String.valueOf(goal) + ", indexRange=" + String.valueOf(indexRange) + ", positionPercent=" + String.valueOf(positionPercent));
-        
-        if (timestamp >= stopTimestamp) {
-            System.out.println("outside stop=" + String.valueOf(stop));
-            return stop; // It's younger than our youngest entry. Use that.
-        }
-        if (timestamp <= startTimestamp) {
-            System.out.println("outside start=" + String.valueOf(start));
-            return start; // It's older than our oldest entry. Use that.
-        }
-        if (start == stop) {
-            System.out.println("start==stop=" + String.valueOf(stop));
-            return start; // There's nothing left to test. Just return what we have.
-        }
-        
+
+        // Figure out how close we are.
         long highGuessValue = this.getTimestampForOffset(guess+1);
         long lowGuessValue = this.getTimestampForOffset(guess-1);
 
