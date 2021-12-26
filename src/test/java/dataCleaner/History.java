@@ -42,7 +42,7 @@ class TestHistory {
         for (int dataPoint = dataCount; dataPoint>-1; dataPoint--) {
             this.history.set(dataPoint);
         }
-        
+
         // Get a map of the offsets to simplify our testing.
         for (int i=0; i<this.size; i++) {
             this.index[i] = this.history.getIndexForOffset(i);
@@ -83,7 +83,10 @@ class TestHistory {
     }
     
     @Test
-    public void testSetup() {
-         //assertEquals(1, this.movingMean.get());
+    public void testGet() {
+         assertEquals(0, this.history.get(this.nowMillis - 0));
+         assertEquals(1, this.history.get(this.nowMillis - 100));
+         assertEquals(2, this.history.get(this.nowMillis - 200));
+         assertEquals(3, this.history.get(this.nowMillis - 300));
     }
 }

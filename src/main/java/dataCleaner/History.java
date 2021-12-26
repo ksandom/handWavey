@@ -59,8 +59,6 @@ public class History {
     protected int getIndexForTimestamp(long timestamp) {
         int offset = findOffsetForTimestamp(timestamp, this.size - 1, 0, 0);
         int index = getIndexForOffset(offset);
-        System.out.println(offset);
-        System.out.println(index);
         return index;
     }
     
@@ -114,5 +112,10 @@ public class History {
     // This is purely used for unit testing.
     protected void overrideTimestamp(int offset, long newTimestamp) {
         this.timeStamp[getIndexForOffset(offset)] = newTimestamp;
+    }
+
+    public double get(long timestamp) {
+        int index = getIndexForTimestamp(timestamp);
+        return this.data[index];
     }
 }
