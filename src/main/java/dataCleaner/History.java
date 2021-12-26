@@ -81,8 +81,8 @@ public class History {
         long timeRange = stopTimestamp - startTimestamp;
         long goal = timestamp - startTimestamp;
         int indexRange = start - stop;
-        double positionPercent = 0.5 ; //= goal / timeRange;
-        
+        double positionPercent = 0.5 ;
+
         // Make a guess.
         int guessPosition = (int)Math.round(indexRange * positionPercent);
         int guess = indexRange - guessPosition + stop;
