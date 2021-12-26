@@ -89,4 +89,12 @@ class TestHistory {
          assertEquals(2, this.history.get(this.nowMillis - 200));
          assertEquals(3, this.history.get(this.nowMillis - 300));
     }
+
+    @Test
+    public void testGetSumFrom() {
+         assertEquals(0, this.history.getSumFrom(this.nowMillis - 0));
+         assertEquals(1, this.history.getSumFrom(this.nowMillis - 100));
+         assertEquals(3, this.history.getSumFrom(this.nowMillis - 200));
+         assertEquals(6, this.history.getSumFrom(this.nowMillis - 300));
+    }
 }

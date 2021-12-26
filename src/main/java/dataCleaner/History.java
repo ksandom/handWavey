@@ -118,4 +118,16 @@ public class History {
         int index = getIndexForTimestamp(timestamp);
         return this.data[index];
     }
+
+    public double getSumFrom(long timestamp) {
+        int destinationOffset = findOffsetForTimestamp(timestamp, this.size - 1, 0, 0);
+        double total = 0;
+
+        for (int offset = destinationOffset; offset > -1; offset--) {
+            int index=getIndexForOffset(offset);
+            total+=this.data[index];
+        }
+
+        return total;
+    }
 }
