@@ -58,6 +58,8 @@ public class HandWaveyManager {
     private double touchPadAcceleration = 2;
     
     private int rewindCursorTime = 300;
+    private int cursorLockTime = 400;
+    private long cursorLock = 0;
     
     private double scrollInputMultiplier = 5;
     private double scrollOutputMultiplier = 1;
@@ -309,6 +311,10 @@ public class HandWaveyManager {
             "historySize",
             "40",
             "int <4096. How many samples to keep. We only need enough to rewind by what ever amount of time is defined in rewindCursorTime. Eg: If we get 5-30 frames per second, 40 should be plenty to cater to rewind times up to 1000 milliseconds.");
+        clickConfig.newItem(
+            "cursorLockTime",
+            "600",
+            "int milliseconds <4096. How long to stop the cursor from moving after a mouse down event. This is to make it easy to click on something without dragging it. Making this shorter will make drags feel more responsive. Making it longer will make it easier to click when you are having trouble completing a click quickly.");
 
 
         Group scrollConfig = handSummaryManager.newGroup("scroll");
@@ -656,6 +662,41 @@ public class HandWaveyManager {
         this.output.scroll(earlierScroll * -1);
     }
     
+    private long getNow() {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        return now.getTime();
+    }
+    
+    private void setCursorLock() {
+        long now = getNow();
+        this.cursorLock = now + this.cursorLockTime;
+        this.debug.out(1, "Cursor locked at " + String.valueOf(now) + " for " + String.valueOf(this.cursorLockTime) + " milliseconds until " + String.valueOf(this.cursorLock) + ".");
+    }
+    
+    private Boolean cusorIsLocked() {
+        if (this.cursorLock > 0) {
+            return (getNow() < this.cursorLock);
+        } else {
+            return false;
+        }
+    }
+    
+    private void releaseCursorLock() {
+        // Figure out what feedback we are going to give.
+        if (this.cursorLock > 0) {
+            if (cusorIsLocked()) {
+                this.debug.out(1, "Cursor explicitly unlocked.");
+            } else {
+                this.debug.out(1, "Cursor would have been explicitly unlocked, but the cursorLockTime had already expired.");
+            }
+        } else {
+            this.debug.out(1, "Cursor would have been explicitly unlocked. But was already unlocked.");
+        }
+
+        // Do the actual work.
+        this.cursorLock = 0;
+    }
+    
     private int coordToDesktopIntX(double xCoord) {
         return (int) Math.round((xCoord + this.xOffset) * this.xMultiplier);
     }
@@ -885,44 +926,54 @@ public class HandWaveyManager {
         
         // This should happen before any potential de-stabilisation has happened.
         if (this.handsState.shouldMouseUp() == true) {
+            this.debug.out(1, "Mouse down at " + coordsToString(this.movingMeanX.get(), this.movingMeanY.get()));
+            this.output.mouseUp(this.output.getLastMouseButton());
+            
+            releaseCursorLock();
+            
+            triggerEvent("mouse-up");
             if (zone == "scroll") {
                 rewindScroll();
             } else  {
                 rewindCursorPosition();
             }
-            
-            this.debug.out(1, "Mouse down at " + coordsToString(this.movingMeanX.get(), this.movingMeanY.get()));
-            this.output.mouseUp(this.output.getLastMouseButton());
-            triggerEvent("mouse-up");
         }
         
         handleKeyUps();
 
         // Move the mouse cursor.
-        if ((zone == "none") || (zone == "noMove")) {
+        if (!cusorIsLocked()) {
+            if ((zone == "none") || (zone == "noMove")) {
+                if (this.zoneMode == "touchPad") {
+                    updateMovingMeans(zone, handZ);
+                    touchPadNone(this.movingMeanX.get(), this.movingMeanY.get());
+                }
+            } else if (zone == "active") {
+                updateMovingMeans(zone, handZ);
+                moveMouseTouchPadFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
+            } else if (zone == "absolute") {
+                updateMovingMeans(zone, handZ);
+                moveMouseAbsoluteFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
+            } else if (zone == "relative") {
+                updateMovingMeans(zone, handZ);
+                moveMouseRelativeFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
+            } else if (zone == "action") {
+            } else if (zone == "scroll") {
+                if (this.handsState.zoneIsNew()) {
+                    rewindCursorPosition();
+                }
+                
+                updateMovingMeans(zone, handZ);
+                scrollFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
+            } else {
+                this.debug.out(3, "A hand was detected, but it outside of any zones. z=" + String.valueOf(handZ));
+            }
+        } else {
+            // Stop the cursor from jumping around during the beginning of a mouse-down event.
             if (this.zoneMode == "touchPad") {
                 updateMovingMeans(zone, handZ);
                 touchPadNone(this.movingMeanX.get(), this.movingMeanY.get());
             }
-        } else if (zone == "active") {
-            updateMovingMeans(zone, handZ);
-            moveMouseTouchPadFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
-        } else if (zone == "absolute") {
-            updateMovingMeans(zone, handZ);
-            moveMouseAbsoluteFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
-        } else if (zone == "relative") {
-            updateMovingMeans(zone, handZ);
-            moveMouseRelativeFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
-        } else if (zone == "action") {
-        } else if (zone == "scroll") {
-            if (this.handsState.zoneIsNew()) {
-                rewindCursorPosition();
-            }
-            
-            updateMovingMeans(zone, handZ);
-            scrollFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
-        } else {
-            this.debug.out(3, "A hand was detected, but it outside of any zones. z=" + String.valueOf(handZ));
         }
         
         // This should happen after any potential stabilisation has happened.
@@ -932,6 +983,8 @@ public class HandWaveyManager {
             } else  {
                 rewindCursorPosition();
             }
+            
+            setCursorLock();
             
             String button = this.handsState.whichMouseButton();
             this.debug.out(1, "Mouse down (" + button + ") at " + coordsToString(this.movingMeanX.get(), this.movingMeanY.get()));
