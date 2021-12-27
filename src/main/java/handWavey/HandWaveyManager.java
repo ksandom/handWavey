@@ -3,11 +3,13 @@ package handWavey;
 import handWavey.Zone;
 import config.*;
 import dataCleaner.MovingMean;
+import dataCleaner.History;
 import debug.Debug;
-import java.awt.Dimension;
 import mouseAndKeyboardOutput.*;
-import java.util.HashMap;
 import audio.*;
+import java.awt.Dimension;
+import java.sql.Timestamp;
+import java.util.HashMap;
 import java.io.File;
 
 public class HandWaveyManager {
@@ -18,6 +20,8 @@ public class HandWaveyManager {
     private Debug debug;
     private GenericOutput output;
     private HandsState handsState;
+    private History historyX;
+    private History historyY;
         
     private HashMap<String, String> eventSounds = new HashMap<String, String>();
     private String audioPath;
@@ -51,6 +55,8 @@ public class HandWaveyManager {
     private double touchPadInputMultiplier = 5;
     private double touchPadOutputMultiplier = 1;
     private double touchPadAcceleration = 2;
+    
+    private int rewindCursorTime = 300;
     
     private double scrollInputMultiplier = 5;
     private double scrollOutputMultiplier = 1;
@@ -201,16 +207,30 @@ public class HandWaveyManager {
             "20",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         
+        Group click = touchScreen.newGroup("click");
+        click.newItem(
+            "rewindCursorTime",
+            "300",
+            "int milliseconds. When we do a clicking motion, we move in a way that disrupts the cursor. The idea of this setting is to get a position that is just before we started doing the gesture. The default should be pretty close for most people, but if you find that the cursor is still disrupted by the gesture, increase this number. If it rewinds to a time well before you began the gesture, then decrease this number.");
+        click.newItem(
+            "sample1InXFrames",
+            "4",
+            "int. Collect a sample for the history 1 in every __ frames. Typically we receive a frame between 5-30 times per second. Setting this number lower will provide more resolution to get an accurate result. Setting it higher will reduce the CPU used (particularly if the movingMean is set to a high value.)");
+        click.newItem(
+            "historySize",
+            "40",
+            "int <4096. How many samples to keep. We only need enough to rewind by what ever amount of time is defined in rewindCursorTime. Eg: If we get 32 frames per second, and sample1InXFrames collects every 4th frame, that's 8 frames per second. If we set rewindCursorTime to 250 milliseconds, we'd need a history size of about 2 or more. But we don't really lose much by setting it a bit higher (the hunt time for the correct value will take slightly longer), and we will benefit from having the choice. So 40  is probably more than we'd ever need, but also not particularly heavy.");
+
         Group scroll = touchScreen.newGroup("scroll");
-        action.newItem(
+        scroll.newItem(
             "movingMeanBegin",
             "1",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
-        action.newItem(
+        scroll.newItem(
             "movingMeanEnd",
             "1",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
-        
+
 
         Group touchPad = zones.newGroup("touchPad");
         Group zoneTPNone = touchPad.newGroup("zoneNone");
@@ -277,6 +297,17 @@ public class HandWaveyManager {
             "Small change in output moves the pointer very precisely. A larger movement moves the pointer much more drastically.");
         
         
+        Group clickConfig = handSummaryManager.newGroup("click");
+        clickConfig.newItem(
+            "rewindCursorTime",
+            "300",
+            "int milliseconds. When we do a clicking motion, we move in a way that disrupts the cursor. The idea of this setting is to get a position that is just before we started doing the gesture. The default should be pretty close for most people, but if you find that the cursor is still disrupted by the gesture, increase this number. If it rewinds to a time well before you began the gesture, then decrease this number.");
+        clickConfig.newItem(
+            "historySize",
+            "40",
+            "int <4096. How many samples to keep. We only need enough to rewind by what ever amount of time is defined in rewindCursorTime. Eg: If we get 32 frames per second, and sample1InXFrames collects every 4th frame, that's 8 frames per second. If we set rewindCursorTime to 250 milliseconds, we'd need a history size of about 2 or more. But we don't really lose much by setting it a bit higher (the hunt time for the correct value will take slightly longer), and we will benefit from having the choice. So 40  is probably more than we'd ever need, but also not particularly heavy.");
+
+
         Group scrollConfig = handSummaryManager.newGroup("scroll");
         scrollConfig.newItem(
             "inputMultiplier",
@@ -524,11 +555,20 @@ public class HandWaveyManager {
         this.touchPadAcceleration = Double.parseDouble(touchPadConfig.getItem("acceleration").get());
         
         
+        // Load click config.
+        Group click = handSummaryManager.getGroup("click");
+        this.rewindCursorTime = Integer.parseInt(click.getItem("rewindCursorTime").get());
+        int cursorHistorySize = Integer.parseInt(click.getItem("historySize").get());
+        this.historyX = new History(cursorHistorySize, 0);
+        this.historyY = new History(cursorHistorySize, 0);
+        
+        
         // Load scroll config.
         Group scrollConfig = handSummaryManager.getGroup("scroll");
         this.scrollInputMultiplier = Double.parseDouble(scrollConfig.getItem("inputMultiplier").get());
         this.scrollOutputMultiplier = Double.parseDouble(scrollConfig.getItem("outputMultiplier").get());
         this.scrollAcceleration = Double.parseDouble(scrollConfig.getItem("acceleration").get());
+        
         
         // Config checks.
         checkZones();
@@ -571,7 +611,23 @@ public class HandWaveyManager {
         if (y < 0) y = 0;
         if (y > this.desktopHeight) y = this.desktopHeight-1;
         
+        this.historyX.set(x);
+        this.historyY.set(y);
+        
         this.output.setPosition(x, y);
+    }
+    
+    private void rewindCursorPosition() {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        long nowMillis = now.getTime();
+        long rewindTime = nowMillis - this.rewindCursorTime;
+        
+        int earlierX = (int) Math.round(this.historyX.get(rewindTime));
+        int earlierY = (int) Math.round(this.historyY.get(rewindTime));
+        
+        this.debug.out(1, "Rewind cursor position by " + this.rewindCursorTime + " milliseconds to around " + String.valueOf(rewindTime) + ", " + String.valueOf(earlierX) + "," + String.valueOf(earlierY) + " for mouse down/up event.");
+        
+        this.output.setPosition(earlierX, earlierY);
     }
     
     private int coordToDesktopIntX(double xCoord) {
@@ -803,6 +859,7 @@ public class HandWaveyManager {
         
         // This should happen before any potential de-stabilisation has happened.
         if (this.handsState.shouldMouseUp() == true) {
+            rewindCursorPosition();
             this.debug.out(1, "Mouse down at " + coordsToString(this.movingMeanX.get(), this.movingMeanY.get()));
             this.output.mouseUp(this.output.getLastMouseButton());
             triggerEvent("mouse-up");
@@ -835,6 +892,8 @@ public class HandWaveyManager {
         
         // This should happen after any potential stabilisation has happened.
         if (this.handsState.shouldMouseDown() == true) {
+            rewindCursorPosition();
+            
             String button = this.handsState.whichMouseButton();
             this.debug.out(1, "Mouse down (" + button + ") at " + coordsToString(this.movingMeanX.get(), this.movingMeanY.get()));
             this.output.mouseDown(this.output.getMouseButtonID(button));
