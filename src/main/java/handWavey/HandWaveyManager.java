@@ -70,6 +70,8 @@ public class HandWaveyManager {
     
     private double relativeSensitivity = 0.1;
     
+    private int maxChange = 200;
+    
     private Boolean shouldDiscardOldPosition = true;
     
     public HandWaveyManager() {
@@ -90,6 +92,10 @@ public class HandWaveyManager {
         // Set up the debugging.
         int debugLevel = Integer.parseInt(handSummaryManager.getItem("debugLevel").get());
         this.debug = new Debug(debugLevel, "HandWaveyManager");
+        
+        
+        // Set up maxChange.
+        this.maxChange = Integer.parseInt(handSummaryManager.getItem("maxChange").get());
         
         
         // Get configured multipliers.
@@ -369,10 +375,19 @@ public class HandWaveyManager {
             this.shouldDiscardOldPosition = false;
         }
         
-        // Calculate our acceleration.
-        double accelerationThreshold = 1;
+        // Calculate the distance we have moved regardless of direction.
         double angularDiff = Math.pow((Math.pow(xCoordDiff, 2) + Math.pow(yCoordDiff, 2)), 0.5);
         
+        // Apply maxChange.
+        if (angularDiff > this.maxChange) {
+            this.debug.out(1, "maxChange has been hit (" + String.valueOf(angularDiff) + " > " + String.valueOf(maxChange) + "), and this frame has been filtered. If this movement was legitimate, consider increasing the maxChange value in the config.");
+            this.lastAbsoluteX = xCoord;
+            this.lastAbsoluteY = yCoord;
+            return;
+        }
+        
+        // Calculate our acceleration.
+        double accelerationThreshold = 1;
         double accelerationMultiplier = accelerationThreshold;
         if (angularDiff > accelerationThreshold) {
             accelerationMultiplier = angularDiff * this.touchPadAcceleration;
@@ -532,6 +547,12 @@ public class HandWaveyManager {
     
     /* TODO
     
+    * Audio feedback on:
+        * Hand segment change.
+        * Secondary hand in range.
+    * Data cleaning:
+        * How many frames for a mouse event to be acted on?
+    * Acceleration: Add time.
     * Config based mapping to actions.
     * VNC for initial compatibility with wayland?
     * Config to/from disk.
