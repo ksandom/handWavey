@@ -57,6 +57,7 @@ public class HandWaveyManager {
     private double touchPadInputMultiplier = 5;
     private double touchPadOutputMultiplier = 1;
     private double touchPadAcceleration = 2;
+    private double touchPadMaxSpeed = 20;
     
     private int rewindCursorTime = 300;
     private int cursorLockTime = 400;
@@ -65,6 +66,7 @@ public class HandWaveyManager {
     private double scrollInputMultiplier = 5;
     private double scrollOutputMultiplier = 1;
     private double scrollAcceleration = 2;
+    private double scrollMaxSpeed = 20;
     
     private int rewindScrollTime = 300;
     
@@ -224,6 +226,7 @@ public class HandWaveyManager {
         this.touchPadInputMultiplier = Double.parseDouble(touchPadConfig.getItem("inputMultiplier").get());
         this.touchPadOutputMultiplier = Double.parseDouble(touchPadConfig.getItem("outputMultiplier").get());
         this.touchPadAcceleration = Double.parseDouble(touchPadConfig.getItem("acceleration").get());
+        this.touchPadMaxSpeed = Double.parseDouble(touchPadConfig.getItem("maxSpeed").get());
         
         
         // Load click config.
@@ -239,6 +242,7 @@ public class HandWaveyManager {
         this.scrollInputMultiplier = Double.parseDouble(scrollConfig.getItem("inputMultiplier").get());
         this.scrollOutputMultiplier = Double.parseDouble(scrollConfig.getItem("outputMultiplier").get());
         this.scrollAcceleration = Double.parseDouble(scrollConfig.getItem("acceleration").get());
+        this.scrollMaxSpeed = Double.parseDouble(scrollConfig.getItem("maxSpeed").get());
         this.rewindScrollTime = Integer.parseInt(scrollConfig.getItem("rewindScrollTime").get());
         int scrollHistorySize = Integer.parseInt(scrollConfig.getItem("historySize").get());
         this.historyScroll = new History(scrollHistorySize, 0);
@@ -386,18 +390,26 @@ public class HandWaveyManager {
             return;
         }
         
+        // Get time component.
+        long previousFrameAge = this.handsState.getPreviousFrameAge();
+        
         // Calculate our acceleration.
         double accelerationThreshold = 1;
         double accelerationMultiplier = accelerationThreshold;
-        if (angularDiff > accelerationThreshold) {
-            accelerationMultiplier = angularDiff * this.touchPadAcceleration;
+        double angularSpeed = angularDiff * previousFrameAge / 1000 * this.touchPadAcceleration;
+        if (angularSpeed > accelerationThreshold) {
+            if (angularSpeed > this.touchPadMaxSpeed) {
+                this.debug.out(2, "Limited touchPad speed (" + String.valueOf(angularSpeed) + ") to maxSpeed (" + String.valueOf(this.touchPadMaxSpeed) + ")");
+                angularSpeed = this.touchPadMaxSpeed;
+            }
+            accelerationMultiplier = angularSpeed;
         }
         
         // Bring everything together to calcuate how far we should move the cursor.
         double xInput = xCoordDiff * this.touchPadInputMultiplier;
-        int diffX = (int) Math.round(xInput * accelerationMultiplier * this.touchPadOutputMultiplier);
+        int diffX = (int) Math.round((xInput * accelerationMultiplier) * this.touchPadOutputMultiplier);
         double yInput = yCoordDiff * this.touchPadInputMultiplier;
-        int diffY = (int) Math.round(yInput * accelerationMultiplier * this.touchPadOutputMultiplier);
+        int diffY = (int) Math.round((yInput * accelerationMultiplier) * this.touchPadOutputMultiplier);
         
         // Apply the changes.
         this.touchPadX = this.touchPadX + diffX;
@@ -436,13 +448,30 @@ public class HandWaveyManager {
             this.shouldDiscardOldPosition = false;
         }
         
+        // Calculate the distance we have moved regardless of direction.
+        //double angularDiff = Math.pow((Math.pow(xCoordDiff, 2) + Math.pow(yCoordDiff, 2)), 0.5);
+        
+        // Apply maxChange.
+        if (yCoordDiff > this.maxChange) {
+            this.debug.out(1, "maxChange has been hit (" + String.valueOf(yCoordDiff) + " > " + String.valueOf(maxChange) + "), and this frame has been filtered. If this movement was legitimate, consider increasing the maxChange value in the config.");
+            this.lastAbsoluteX = xCoord;
+            this.lastAbsoluteY = yCoord;
+            return;
+        }
+        
+        // Get time component.
+        long previousFrameAge = this.handsState.getPreviousFrameAge();
+        
         // Calculate our acceleration.
         double accelerationThreshold = 1;
-        double angularDiff = Math.pow((Math.pow(xCoordDiff, 2) + Math.pow(yCoordDiff, 2)), 0.5);
-        
         double accelerationMultiplier = accelerationThreshold;
-        if (angularDiff > accelerationThreshold) {
-            accelerationMultiplier = angularDiff * this.scrollAcceleration;
+        double ySpeed = Math.abs(yCoordDiff * previousFrameAge / 1000 * this.scrollAcceleration);
+        if (ySpeed > accelerationThreshold) {
+            if (ySpeed > this.scrollMaxSpeed) {
+                this.debug.out(1, "Limited scroll speed (" + String.valueOf(ySpeed) + ") to maxSpeed (" + String.valueOf(this.scrollMaxSpeed) + ")");
+                ySpeed = this.scrollMaxSpeed;
+            }
+            accelerationMultiplier = ySpeed;
         }
         
         // Bring everything together to calcuate how far we should move the cursor.
@@ -560,7 +589,7 @@ public class HandWaveyManager {
     * Abstract out config into a new class.
     * How to build the final asset?
     * Documentation/automation:
-        * Installation.
+diffY        * Installation.
         * Configuring.
             * touchPad acceleration.
             * scroll acceleration.
@@ -577,6 +606,8 @@ public class HandWaveyManager {
     
     // This is where everything gets glued together.
     public void sendHandSummaries(HandSummary[] handSummaries) {
+        this.handsState.notifyGotFrame();
+        
         this.handSummaries = handSummaries;
         
         Double handZ = this.handSummaries[0].getHandZ() * this.zMultiplier;

@@ -3,6 +3,7 @@ package handWavey;
 import config.*;
 import debug.Debug;
 import java.util.HashMap;
+import java.sql.Timestamp;
 
 public class HandsState {
     private Debug debug;
@@ -37,6 +38,10 @@ public class HandsState {
     
     private int primarySegment = 0;
     private int secondarySegment = 0;
+    
+    private long currentFrameTime = 0;
+    private long previousFrameAge = 0;
+    private long sillyFrameAge = 10 * 1000; // Longer than this many milliseconds is well and truly meaningless, and could lead to interesting bugs.
     
     private Boolean isNew = false;
     
@@ -281,6 +286,22 @@ public class HandsState {
     public void figureOutStuff() {
         figureOutMouseButtons();
         figureOutKeys();
+    }
+    
+    public void notifyGotFrame() {
+        long now = new Timestamp(System.currentTimeMillis()).getTime();
+        
+        this.previousFrameAge = now - this.currentFrameTime;
+        this.currentFrameTime = now;
+        
+        // We really don't need to track anything that long.
+        if (this.previousFrameAge > this.sillyFrameAge) {
+            this.previousFrameAge = this.sillyFrameAge;
+        }
+    }
+    
+    public long getPreviousFrameAge() {
+        return this.previousFrameAge;
     }
 }
 

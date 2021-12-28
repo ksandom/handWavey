@@ -239,7 +239,7 @@ public class HandWaveyConfig {
         Group touchPadConfig = handSummaryManager.newGroup("touchPad");
         touchPadConfig.newItem(
             "inputMultiplier",
-            "0.9",
+            "1",
             "Input is pretty small. Make it a bit bigger.");
         touchPadConfig.newItem(
             "outputMultiplier",
@@ -247,14 +247,18 @@ public class HandWaveyConfig {
             "Input is pretty small. Make it a bit bigger.");
         touchPadConfig.newItem(
             "acceleration",
-            "2.3",
+            "200",
             "Small change in output moves the pointer very precisely. A larger movement moves the pointer much more drastically.");
+        touchPadConfig.newItem(
+            "maxSpeed",
+            "20",
+            "Maximum speed per second.");
         
         
         Group clickConfig = handSummaryManager.newGroup("click");
         clickConfig.newItem(
             "rewindCursorTime",
-            "300",
+            "200",
             "int milliseconds. When we do a clicking motion, we move in a way that disrupts the cursor. The idea of this setting is to get a position that is just before we started doing the gesture. The default should be pretty close for most people, but if you find that the cursor is still disrupted by the gesture, increase this number. If it rewinds to a time well before you began the gesture, then decrease this number.");
         clickConfig.newItem(
             "historySize",
@@ -277,8 +281,12 @@ public class HandWaveyConfig {
             "Input is pretty small. Make it a bit bigger.");
         scrollConfig.newItem(
             "acceleration",
-            "1.8",
+            "180",
             "Small change in output moves the pointer very precisely. A larger movement moves the pointer much more drastically.");
+        scrollConfig.newItem(
+            "maxSpeed",
+            "20",
+            "Maximum speed per second.");
         scrollConfig.newItem(
             "rewindScrollTime",
             "300",
