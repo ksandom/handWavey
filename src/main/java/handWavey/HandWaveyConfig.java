@@ -62,7 +62,6 @@ public class HandWaveyConfig {
             "debugLevel",
             "1",
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5  is probably more detail than you'll ever want.");
-        // TODO Re-think whether this is where it makes most sense to have this. Eg is it better just in touchPad?
         handSummaryManager.newItem(
             "maxChange",
             "30",

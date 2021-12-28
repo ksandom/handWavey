@@ -581,15 +581,13 @@ public class HandWaveyManager {
         * Secondary hand in range.
     * Data cleaning:
         * How many frames for a mouse event to be acted on?
-    * Acceleration: Add time.
     * Config based mapping to actions.
     * VNC for initial compatibility with wayland?
     * Config to/from disk.
     * Make audio feedback for hands left/right hand aware.
-    * Abstract out config into a new class.
     * How to build the final asset?
     * Documentation/automation:
-diffY        * Installation.
+        * Installation.
         * Configuring.
             * touchPad acceleration.
             * scroll acceleration.
@@ -601,7 +599,6 @@ diffY        * Installation.
         * Usually sound stops. But other stuff still works.
         * Check whether threads are lingering.
         * Check GC.
-    
     */
     
     // This is where everything gets glued together.
