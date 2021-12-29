@@ -374,6 +374,10 @@ public class HandWaveyConfig {
             "rotationOffset",
             "0",
             "In radians. Adjust where the segments are slightly to cater to your hand's natural bias.");
+        primaryHand.newItem(
+            "segmentStanddown",
+            "400",
+            "int milliseconds. When the primary hand segment changes (eg for right/middle click), don't move the cursor/scroll for this many milliseconds. If you are having trouble precisely right/middle clicking, increase this number. If you're finding it too laggy, decrease this number.");
         Group secondaryHand = gestureConfig.newGroup("secondaryHand");
         secondaryHand.newItem(
             "rotationSegments",

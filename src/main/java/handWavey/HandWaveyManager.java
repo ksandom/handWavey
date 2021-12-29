@@ -639,7 +639,7 @@ public class HandWaveyManager {
         handleKeyUps();
 
         // Move the mouse cursor.
-        if (!cusorIsLocked()) {
+        if (!cusorIsLocked() && !this.handsState.inSegmentStanddown()) {
             if ((zone == "none") || (zone == "noMove")) {
                 if (this.zoneMode == "touchPad") {
                     updateMovingMeans(zone, handZ);
