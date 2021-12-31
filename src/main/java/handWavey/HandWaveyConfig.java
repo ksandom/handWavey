@@ -6,12 +6,13 @@ import debug.Debug;
 
 public class HandWaveyConfig {
     private Debug debug;
-    private Config config = Config.singleton();
+    private Config config;
     private String fileName = "handWavey";
     
     public HandWaveyConfig(String fileName) {
         this.fileName = fileName;
         Config.setSingletonFilename(this.fileName + ".yml");
+        this.config = Config.singleton();
     }
     
     public void destroy() {
@@ -295,6 +296,8 @@ public class HandWaveyConfig {
             "40",
             "int <4096. How many samples to keep. We only need enough to rewind by what ever amount of time is defined in rewindCursorTime. Eg: If we get 5-30 frames per second, 40 should be plenty to cater to rewind times up to 1000 milliseconds.");
         
+        
+        Group actionEvents = this.config.newGroup("actionEvents"); // Entirely generated in Gesture.
         
         Group audioConfig = this.config.newGroup("audioConfig");
         audioConfig.newItem(
