@@ -19,7 +19,7 @@ public class HandWaveyManager {
     private MovingMean movingMeanX = new MovingMean(1, 0);
     private MovingMean movingMeanY = new MovingMean(1, 0);
     private Debug debug;
-    private GenericOutput output;
+    private Output output;
     private HandsState handsState;
     private History historyX;
     private History historyY;

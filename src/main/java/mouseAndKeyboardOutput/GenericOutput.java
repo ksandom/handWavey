@@ -14,7 +14,7 @@ import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
-public class GenericOutput {
+public class GenericOutput implements Output {
     private GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     private GraphicsDevice[] gs = this.ge.getScreenDevices();
     private Robot robot = null;
@@ -99,9 +99,14 @@ public class GenericOutput {
         this.robot.mouseMove(x, y);
     }
     
-    private void click(int button) {
+    public void click(int button) {
         mouseDown(button);
         mouseUp(button);
+    }
+    
+    public void doubleClick(int button) {
+        click(button);
+        click(button);
     }
     
     public void mouseDown(int button) {
@@ -193,5 +198,16 @@ public class GenericOutput {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+    
+    public int testInt(String testName) {
+        int result = 0;
+        
+        switch (testName) {
+            case "unused":
+                break;
+        }
+        
+        return result;
     }
 }
