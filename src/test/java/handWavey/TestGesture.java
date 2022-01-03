@@ -63,5 +63,9 @@ class TestGesture {
         assertEquals("", actionEvents.getItem("general-zone-pActive-enter").get());
         assertEquals("", actionEvents.getItem("general-segment-p0-enter").get());
         assertEquals("", actionEvents.getItem("general-state-pOpen-enter").get());
+        
+        assertEquals("", actionEvents.getItem("general-zone-pAnyChange").get());
+        assertEquals("", actionEvents.getItem("general-segment-pAnyChange").get());
+        assertEquals("", actionEvents.getItem("general-state-pAnyChange").get());
     }
 }

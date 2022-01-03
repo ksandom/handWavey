@@ -49,14 +49,33 @@ public class Gesture {
     
     public void generateConfig() {
         // Generate all combinations of events available for configuration.
+        generateChangeEventsConfig();
         generateGeneralEventsConfig();
         generateCombinedEventsConfig();
+    }
+    
+    private void generateChangeEventsConfig() {
+        String[] handLetters = new String[] {"p", "s"};
+        String[] eventTypes = {"zone", "segment", "state"};
+        
+        for (String handLetter : handLetters) {
+            String hand = hand(handLetter);
+            
+            for (String eventType : eventTypes) {
+                String name = "general-" + eventType + "-" + handLetter + "AnyChange";
+                String description = "Triggered when the " + hand + " hand changes " + eventType + ".";
+                
+                this.actionEvents.newItem(name, "", description);
+                this.audioEvents.newItem(name, "", description);
+            }
+        }
     }
     
     private void generateGeneralEventsConfig() {
         // General events per hand for simple configurations.
         String[] handLetters = new String[] {"p", "s"};
-        for (String handLetter : handLetters ) {
+        
+        for (String handLetter : handLetters) {
             // Zones.
             for (String zone : this.zones) {
                 String name = "general-zone-" + handLetter + capitalise(zone);
