@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.sql.Timestamp;
 
 /* TODO
-* Make sure secondary hand combined entries get created. Possibly refactor the combined code.
 * HandsState should track which gesture is active, and whether it has changed (therefore whether to trigger an action.)
     * Each of the general changes.
     * Combined
@@ -124,16 +123,13 @@ public class Gesture {
         addConfigItems(name, triggerDescription);
         
         
-        // Secondary hand only, for when we want to use it as a stand-alone, but specific modifier.
-        if (secondaryHandState != Gesture.absent) {
-            // This test on primary details is simply to make sure we don't add this more than once.
-            if (primaryZone == "any" && primarySegment == 0 && primaryHandState == Gesture.any) {
-                String secondaryOnlyName = "combined-" + generateSingleHandGestureName("s", secondaryZone, secondarySegment, secondaryHandState);
-                String secondaryOnlyidentifierExplanation = generateSingleHandGestureDescription("s", secondaryZone, secondarySegment, secondaryHandState);
-                
-                String secondaryOnlytriggerDescription = "When the the hands are in the following state: " + identifierExplanation + ".";
-                addConfigItems(secondaryOnlyName, secondaryOnlytriggerDescription);
-            }
+        // Duplicate the primary only event for the secondary.
+        if (secondaryHandState == Gesture.absent) {
+            String secondaryOnlyName = "combined-" + generateSingleHandGestureName("s", primaryZone, primarySegment, primaryHandState);
+            String secondaryOnlyIdentifierExplanation = generateSingleHandGestureDescription("s", primaryZone, primarySegment, primaryHandState);
+            
+            String secondaryOnlytriggerDescription = "When the the hands are in the following state: " + secondaryOnlyIdentifierExplanation + ".";
+            addConfigItems(secondaryOnlyName, secondaryOnlytriggerDescription);
         }
     }
     

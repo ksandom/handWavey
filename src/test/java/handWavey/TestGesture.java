@@ -58,6 +58,7 @@ class TestGesture {
         assertEquals("", audioEvents.getItem("combined-pActive0Open-sAny0Open-exit").get());
         
         assertEquals("", actionEvents.getItem("combined-pActive0Open-enter").get());
+        assertEquals("", actionEvents.getItem("combined-sActive0Open-enter").get());
         
         assertEquals("", actionEvents.getItem("general-zone-pActive-enter").get());
         assertEquals("", actionEvents.getItem("general-segment-p0-enter").get());
