@@ -220,8 +220,6 @@ public class Gesture {
         String fullName = name + "-" + directionName;
         String description = "Action to take when " + directionString + " this state: " + whenDescription;
         
-        // TODO Remove debugging.
-        //System.out.println("audio:  _" + fullName + "_");
         this.actionEvents.newItem(fullName, "", description);
     }
     
@@ -231,8 +229,6 @@ public class Gesture {
         String fullName = name + "-" + directionName;
         String description = "Sound to play when " + directionString + " this state: " + whenDescription;
         
-        // TODO Remove debugging.
-        //System.out.println("audio:  _" + fullName + "_");
         this.audioEvents.newItem(fullName, "", description);
     }
 }
