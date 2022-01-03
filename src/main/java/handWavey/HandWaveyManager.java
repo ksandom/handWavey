@@ -200,7 +200,8 @@ public class HandWaveyManager {
         
         
         // Get Audio path.
-        this.audioPath = Config.singleton().getGroup("audioConfig").getItem("pathToAudio").get() + File.separator;;
+        // TODO To be replaced by events code.
+        this.audioPath = Config.singleton().getGroup("audioConfig").getItem("pathToAudio").get() + File.separator;
         
         
         // Get event sounds.
@@ -275,6 +276,7 @@ public class HandWaveyManager {
     }
     
     private void loadEventSoundFromConfig(String eventID) {
+        // TODO This will soon be replaced by the events code.
         this.debug.out(3, "Load eventID " + eventID);
         Group audioEvents = Config.singleton().getGroup("audioEvents");
         String filePath = audioEvents.getItem(eventID).get();
@@ -538,6 +540,7 @@ public class HandWaveyManager {
     }
     
     public void triggerEvent(String eventID) {
+        // TODO This will soon be replaced by the events code.
         String fileName = this.eventSounds.get(eventID);
         
         if (fileName != "") {
