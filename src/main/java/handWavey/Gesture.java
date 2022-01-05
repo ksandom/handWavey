@@ -110,6 +110,8 @@ public class Gesture {
                     for (int secondaryState = 0; secondaryState < stateCount; secondaryState++) {
                         if (secondaryState == this.absent) {
                             assembleCombinedEvent(primaryZone, primarySegment, primaryState, "OOB", 0, this.absent);
+                            assembleIndividualHandEvent("p", primaryZone, primarySegment, primaryState);
+                            assembleIndividualHandEvent("s", primaryZone, primarySegment, primaryState);
                         } else {
                             for ( String secondaryZone :  zones ) {
                                 for (int secondarySegment = -1; secondarySegment < this.maximumSegments; secondarySegment++) {
@@ -140,16 +142,14 @@ public class Gesture {
         
         // Full event.
         addConfigItems(name, triggerDescription);
+    }
+    
+    private void assembleIndividualHandEvent(String handLetter, String zone, int segment, int handState) {
+        String name = "individual-" + generateSingleHandGestureName(handLetter, zone, segment, handState);
+        String identifierExplanation = generateSingleHandGestureDescription(handLetter, zone, segment, handState);
         
-        
-        // Duplicate the primary only event for the secondary.
-        if (secondaryHandState == Gesture.absent) {
-            String secondaryOnlyName = "combined-" + generateSingleHandGestureName("s", primaryZone, primarySegment, primaryHandState);
-            String secondaryOnlyIdentifierExplanation = generateSingleHandGestureDescription("s", primaryZone, primarySegment, primaryHandState);
-            
-            String secondaryOnlytriggerDescription = "When the the hands are in the following state: " + secondaryOnlyIdentifierExplanation + ".";
-            addConfigItems(secondaryOnlyName, secondaryOnlytriggerDescription);
-        }
+        String triggerDescription = "When the the hands are in the following state: " + identifierExplanation + ".";
+        addConfigItems(name, triggerDescription);
     }
     
     private void addConfigItems(String name, String triggerDescription) {
@@ -177,7 +177,7 @@ public class Gesture {
         String secondaryHand = "";
         
         if (secondaryHandState == this.absent) {
-            result = primaryHand;
+            result = primaryHand + "-sAbsent";
         } else {
             secondaryHand = generateSingleHandGestureName("s", secondaryZone, secondarySegment, secondaryHandState);
             result = primaryHand + "-" + secondaryHand;
@@ -186,7 +186,7 @@ public class Gesture {
         return result;
     }
     
-    private String generateSingleHandGestureName(String letter, String zone, int segment, int handState) {
+    public String generateSingleHandGestureName(String letter, String zone, int segment, int handState) {
         // eg pActive0Closed
         return letter + capitalise(zone) + String.valueOf(segment) + capitalise(handState(handState));
     }
@@ -199,7 +199,7 @@ public class Gesture {
             String secondary = generateSingleHandGestureDescription("s", secondaryZone, secondarySegment, secondaryHandState);
             result = capitalise(primary) + " And " + secondary;
         } else {
-            result = capitalise(primary);
+            result = capitalise(primary) + " And the secondary hand is absent.";
         }
         
         return result;
