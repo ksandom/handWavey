@@ -32,17 +32,19 @@ class TestGesture {
 
     @Test
     public void testGestureName() {
-        assertEquals("pActive0Open-sAny0Open", this.gesture.generateGestureName("active", 0, Gesture.open, "any", 0, Gesture.open));
-        assertEquals("pActive0Closed-sAny0Open", this.gesture.generateGestureName("active", 0, Gesture.closed, "any", 0, Gesture.open));
-        assertEquals("pActive0Closed-sAbsent", this.gesture.generateGestureName("active", 0, Gesture.closed,  "any", 0, Gesture.absent));
-        assertEquals("pActive0Closed", this.gesture.generateSingleHandGestureName("p", "active", 0, Gesture.closed));
-        assertEquals("sAction1Open", this.gesture.generateSingleHandGestureName("s", "action", 1, Gesture.open));
+        assertEquals("combined-pActive0Open-sAny0Open", this.gesture.gestureName("active", 0, Gesture.open, "any", 0, Gesture.open));
+        assertEquals("combined-pNone2Closed-sAny3Open", this.gesture.gestureName("none", 2, Gesture.closed, "any", 3, Gesture.open));
+        assertEquals("combined-pActive0Open-sAbsent", this.gesture.gestureName("active", 0, Gesture.open, "any", 0, Gesture.absent));
+        assertEquals("individual-pActive0Open", this.gesture.gestureName("p", "active", 0, Gesture.open));
+        assertEquals("individual-sActive0Open", this.gesture.gestureName("s", "active", 0, Gesture.open));
     }
     
     @Test
     public void testGestureDescription() {
-        assertEquals("The primary hand is in the active zone, is in segment 0, and is in the open state. And the secondary hand is in the any zone, is in segment 0, and is in the closed state.", this.gesture.generateGestureDescription("active", 0, Gesture.open, "any", 0, Gesture.closed));
-        assertEquals("The primary hand is in the active zone, is in segment 0, and is in the open state. And the secondary hand is absent.", this.gesture.generateGestureDescription("active", 0, Gesture.open, "any", 0, Gesture.absent));
+        assertEquals("The primary hand is in the active zone, is in segment 0, and is in the open state. And the secondary hand is in the any zone, is in segment 0, and is in the closed state.", this.gesture.gestureDescription("active", 0, Gesture.open, "any", 0, Gesture.closed));
+        assertEquals("The primary hand is in the active zone, is in segment 0, and is in the open state. And the secondary hand is absent.", this.gesture.gestureDescription("active", 0, Gesture.open, "any", 0, Gesture.absent));
+        assertEquals("The primary hand is in the active zone, is in segment 0, and is in the open state.", this.gesture.gestureDescription("p", "active", 0, Gesture.open));
+        assertEquals("The secondary hand is in the active zone, is in segment 0, and is in the open state.", this.gesture.gestureDescription("s", "active", 0, Gesture.open));
     }
 
     @Test
@@ -72,10 +74,16 @@ class TestGesture {
         assertEquals("", actionEvents.getItem("general-zone-pActive-enter").get());
         assertEquals("", actionEvents.getItem("general-segment-p0-enter").get());
         assertEquals("", actionEvents.getItem("general-state-pOpen-enter").get());
+        assertEquals("", actionEvents.getItem("general-zone-sActive-enter").get());
+        assertEquals("", actionEvents.getItem("general-segment-s0-enter").get());
+        assertEquals("", actionEvents.getItem("general-state-sOpen-enter").get());
         
         // Any change in a single component.
         assertEquals("", actionEvents.getItem("general-zone-pAnyChange").get());
         assertEquals("", actionEvents.getItem("general-segment-pAnyChange").get());
         assertEquals("", actionEvents.getItem("general-state-pAnyChange").get());
+        assertEquals("", actionEvents.getItem("general-zone-sAnyChange").get());
+        assertEquals("", actionEvents.getItem("general-segment-sAnyChange").get());
+        assertEquals("", actionEvents.getItem("general-state-sAnyChange").get());
     }
 }

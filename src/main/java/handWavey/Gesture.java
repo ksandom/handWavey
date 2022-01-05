@@ -120,7 +120,6 @@ public class Gesture {
                             }
                         }
                     }
-                    
                 }
             }
         }
@@ -138,7 +137,7 @@ public class Gesture {
         String name = "combined-" + generateGestureName(primaryZone, primarySegment, primaryHandState, secondaryZone, secondarySegment, secondaryHandState);
         String identifierExplanation = generateGestureDescription(primaryZone, primarySegment, primaryHandState, secondaryZone, secondarySegment, secondaryHandState);
         
-        String triggerDescription = "When the the hands are in the following state: " + identifierExplanation + ".";
+        String triggerDescription = "When the hands are in the following state: " + identifierExplanation + ".";
         
         // Full event.
         addConfigItems(name, triggerDescription);
@@ -148,7 +147,7 @@ public class Gesture {
         String name = "individual-" + generateSingleHandGestureName(handLetter, zone, segment, handState);
         String identifierExplanation = generateSingleHandGestureDescription(handLetter, zone, segment, handState);
         
-        String triggerDescription = "When the the hands are in the following state: " + identifierExplanation + ".";
+        String triggerDescription = "When the " + hand(handLetter) + " hand is in the following state: " + identifierExplanation + ".";
         addConfigItems(name, triggerDescription);
     }
     
@@ -171,7 +170,7 @@ public class Gesture {
         return (handLetter == "p")?"primary":"secondary";
     }
     
-    public String generateGestureName(String primaryZone, int primarySegment, int primaryHandState, String secondaryZone, int secondarySegment, int secondaryHandState) {
+    private String generateGestureName(String primaryZone, int primarySegment, int primaryHandState, String secondaryZone, int secondarySegment, int secondaryHandState) {
         String result = "";
         String primaryHand = generateSingleHandGestureName("p", primaryZone, primarySegment, primaryHandState);
         String secondaryHand = "";
@@ -186,12 +185,12 @@ public class Gesture {
         return result;
     }
     
-    public String generateSingleHandGestureName(String letter, String zone, int segment, int handState) {
+    private String generateSingleHandGestureName(String letter, String zone, int segment, int handState) {
         // eg pActive0Closed
         return letter + capitalise(zone) + String.valueOf(segment) + capitalise(handState(handState));
     }
     
-    public String generateGestureDescription(String primaryZone, int primarySegment, int primaryHandState, String secondaryZone, int secondarySegment, int secondaryHandState) {
+    private String generateGestureDescription(String primaryZone, int primarySegment, int primaryHandState, String secondaryZone, int secondarySegment, int secondaryHandState) {
         String result = "";
         String primary = generateSingleHandGestureDescription("p", primaryZone, primarySegment, primaryHandState);
         
@@ -230,5 +229,24 @@ public class Gesture {
         String description = "Sound to play when " + directionString + " this state: " + whenDescription;
         
         this.audioEvents.newItem(fullName, "", description);
+    }
+    
+    
+    // Externally facing naming.
+    public String gestureName(String primaryZone, int primarySegment, int primaryHandState, String secondaryZone, int secondarySegment, int secondaryHandState) {
+        return "combined-" + generateGestureName(primaryZone, primarySegment, primaryHandState, secondaryZone, secondarySegment, secondaryHandState);
+    }
+    
+    public String gestureName(String letter, String zone, int segment, int handState) {
+        return "individual-" + generateSingleHandGestureName(letter, zone, segment, handState);
+    }
+    
+    // Externally facing descriptions.
+    public String gestureDescription(String primaryZone, int primarySegment, int primaryHandState, String secondaryZone, int secondarySegment, int secondaryHandState) {
+        return capitalise(generateGestureDescription(primaryZone, primarySegment, primaryHandState, secondaryZone, secondarySegment, secondaryHandState));
+    }
+    
+    public String gestureDescription(String letter, String zone, int segment, int handState) {
+        return capitalise(generateSingleHandGestureDescription(letter, zone, segment, handState));
     }
 }
