@@ -2,6 +2,7 @@ package handWavey;
 
 import mouseAndKeyboardOutput.*;
 import audio.*;
+import macro.MacroLine;
 import config.Config;
 import config.Group;
 import debug.Debug;
@@ -22,11 +23,15 @@ public class HandWaveyEvent {
     private Group actionEvents;
     private Group audioEvents;
     
+    private MacroLine macroLine;
+    
     private Debug debug = new Debug(1, "HandWaveyEvent");
     
     public HandWaveyEvent(Output output, Boolean useAudio) {
         this.output = output;
         this.useAudio = useAudio;
+        
+        this.macroLine = new MacroLine(this.output);
         
         this.actionEvents = Config.singleton().getGroup("actionEvents");
         this.audioEvents = Config.singleton().getGroup("audioEvents");
@@ -39,10 +44,16 @@ public class HandWaveyEvent {
             cacheEvent(eventName);
         }
         
-        // TODO Action.
+        String macroLine = this.actionCache.get(eventName);
+        if (macroLine != "") {
+            this.macroLine.runLine(macroLine);
+        }
         
         if (this.useAudio) {
-            BackgroundSound.play(this.audioCache.get(eventName));
+            String fileToPlay = this.audioCache.get(eventName);
+            if (fileToPlay != "") {
+                BackgroundSound.play(fileToPlay);
+            }
         }
     }
     
