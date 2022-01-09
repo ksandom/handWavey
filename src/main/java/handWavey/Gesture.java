@@ -83,12 +83,38 @@ public class Gesture {
             "setButton(\"right\");",
             "");
         overrideDefault(
-            "general-segment-p3-enter",
+            "general-segment-p2-enter",
             "rewind();freeze();setButton(\"middle\");overrideZone(\"scroll\");",
             "");
         overrideDefault(
-            "general-segment-p3-exit",
+            "general-segment-p2-exit",
             "rewind();freeze();releaseZone(\"scroll\");",
+            "");
+        
+        // Set keys.
+        overrideDefault(
+            "general-segment-s0-enter",
+            "keyDown(\"ctrl\");",
+            "");
+        overrideDefault(
+            "general-segment-s0-exit",
+            "keyDown(\"ctrl\");",
+            "");
+        overrideDefault(
+            "general-segment-s1-enter",
+            "keyDown(\"alt\");",
+            "");
+        overrideDefault(
+            "general-segment-s1-exit",
+            "keyDown(\"alt\");",
+            "");
+        overrideDefault(
+            "general-segment-s2-enter",
+            "keyDown(\"shift\");",
+            "");
+        overrideDefault(
+            "general-segment-s2-exit",
+            "keyDown(\"shift\");",
             "");
         
         // General auido feedback.

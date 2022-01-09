@@ -57,9 +57,9 @@ public class MacroCore {
         }
     }
     
-    /*
+    /* TODO:
         * #Override defaults in config before load finishes.
-        * Set zone action to doubleclick.
+        * #Set zone action to doubleclick.
         * Add events to HandsState.
         * Add keyboard commands
         * Add other commands

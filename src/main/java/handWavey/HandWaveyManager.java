@@ -606,7 +606,7 @@ public class HandWaveyManager {
     
     // This is where everything gets glued together.
     public void sendHandSummaries(HandSummary[] handSummaries) {
-        this.handsState.notifyGotFrame();
+        this.handsState.setHandSummaries(handSummaries);
         
         this.handSummaries = handSummaries;
         

@@ -1,14 +1,24 @@
 package handWavey;
 
 import config.*;
+import dataCleaner.Changed;
 import debug.Debug;
 import java.util.HashMap;
 import java.sql.Timestamp;
 
 public class HandsState {
     private static HandsState handsState = null;
+    private HandSummary[] handSummaries;
     
     private Debug debug;
+    
+    private Changed primaryZoneChanged = new Changed("");
+    private Changed primarySegmentChanged = new Changed(-1);
+    private Changed primaryStateChanged = new Changed(Gesture.absent);
+    
+    private Changed secondaryZoneChanged = new Changed("");
+    private Changed secondarySegmentChanged = new Changed(-1);
+    private Changed secondaryStateChanged = new Changed(Gesture.absent);
     
     private double zNoMoveBegin = 0;
     private double zActiveBegin = 0;
@@ -48,6 +58,10 @@ public class HandsState {
     
     private long segmentChangeTime = 0;
     
+    // TODO Migrate other dimensions.
+    private double zMultiplier = -1;
+
+    
     private Boolean isNew = false;
     
     public HandsState() {
@@ -81,6 +95,11 @@ public class HandsState {
             this.debug.out(0, "Unknown zoneMode " + this.zoneMode + ". This will likely cause badness.");
         }
         
+        Group axisOrientation = handSummaryManager.getGroup("axisOrientation");
+        int configuredZMultiplier = Integer.parseInt(axisOrientation.getItem("zMultiplier").get());
+        this.zMultiplier = configuredZMultiplier;
+
+        
         
         // Configure hand gesture zones.
         Group primaryHand = config.getGroup("gestureConfig").getGroup("primaryHand");
@@ -108,6 +127,56 @@ public class HandsState {
         }
         
         return HandsState.handsState;
+    }
+    
+    
+    public void setHandSummaries(HandSummary[] handSummaries) {
+        this.handSummaries = handSummaries;
+        notifyGotFrame();
+    }
+    
+    public void figureOutStuff() {
+        Double primaryHandZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
+        this.primaryZoneChanged.set(this.handsState.deriveZone(primaryHandZ));
+        // TODO make zone getting based on primaryZoneChanged.
+        
+        this.primarySegmentChanged.set(getHandSegment(true, this.handSummaries[0]));
+        this.primaryStateChanged.set(getHandState(this.handSummaries[0]));
+
+        if (secondaryHandIsActive()) {
+            Double secondaryHandZ = this.handSummaries[1].getHandZ() * this.zMultiplier;
+            this.secondaryZoneChanged.set(this.handsState.deriveZone(secondaryHandZ));
+            this.secondarySegmentChanged.set(getHandSegment(true, this.handSummaries[1]));
+            this.secondaryStateChanged.set(getHandState(this.handSummaries[1]));
+        }
+        
+        // TODO Based on changes, trigger events.
+        
+        // TODO Remove these?
+        figureOutMouseButtons();
+        figureOutKeys();
+    }
+    
+    
+    
+    
+    private int getHandState(HandSummary handSummary) {
+        if (handSummary.isValid() == false) {
+            return Gesture.absent;
+        }
+        if (handSummary.handIsOpen()) {
+            return Gesture.open;
+        }
+        
+        return Gesture.closed;
+    }
+    
+    public Boolean secondaryHandIsActive() {
+        return ((this.handSummaries.length > 1) && (this.handSummaries[1] != null) && (this.handSummaries[1].isValid()));
+    }
+    
+    public int getHandSegment(Boolean isPrimary, HandSummary handSummary) {
+        return getHandSegment(handSummary.getHandRoll(), isPrimary, handSummary.handIsLeft());
     }
     
     public int getHandSegment(double handRoll, Boolean isPrimary, Boolean isLeft) {
@@ -186,6 +255,7 @@ public class HandsState {
             }
         }
         
+        // TODO At the minimum this needs to be hand agnostic. But probably removed entirely.
         if (this.primarySegment == 2) {
             if (zone != "none" && zone != "noMove" && zone != "action") {
                 zone = "scroll";
@@ -307,11 +377,6 @@ public class HandsState {
     
     public Boolean shouldKeyUp(String keyName) {
         return this.keys.get(keyName).toFalse();
-    }
-    
-    public void figureOutStuff() {
-        figureOutMouseButtons();
-        figureOutKeys();
     }
     
     private long getNow() {
