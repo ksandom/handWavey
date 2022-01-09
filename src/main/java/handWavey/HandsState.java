@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.sql.Timestamp;
 
 public class HandsState {
+    private static HandsState handsState = null;
+    
     private Debug debug;
     
     private double zNoMoveBegin = 0;
@@ -98,6 +100,14 @@ public class HandsState {
         this.keys.put("ctrl", new Should(false));
         this.keys.put("shift", new Should(false));
         this.keys.put("mouseButton", new Should(false));
+    }
+    
+    public static HandsState singleton() {
+        if (HandsState.handsState == null) {
+            HandsState.handsState = new HandsState();
+        }
+        
+        return HandsState.handsState;
     }
     
     public int getHandSegment(double handRoll, Boolean isPrimary, Boolean isLeft) {

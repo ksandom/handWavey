@@ -29,4 +29,10 @@ class TestOutput {
         assertEquals(122, this.output.testInt("posX"));
         assertEquals(221, this.output.testInt("posY"));
     }
+
+    @Test
+    public void testEmptyParameters() {
+        this.macroLine.runLine("click();");
+        assertEquals(1, this.output.testInt("clicked"));
+    }
 }

@@ -52,6 +52,55 @@ public class Gesture {
         generateChangeEventsConfig();
         generateGeneralEventsConfig();
         generateCombinedEventsConfig();
+        
+        setDefaults();
+    }
+    
+    private void setDefaults() {
+        // Double click when entering the action zone.
+        overrideDefault(
+            "general-zone-pAction-enter",
+            "rewind();freeze();doubleClick();",
+            "metalDing07.wav");
+        
+        // Normal click behavior.
+        overrideDefault(
+            "general-state-pClosed-enter",
+            "rewind();freeze();mouseDown();",
+            "metalDing07.wav");
+        overrideDefault(
+            "general-state-pOpen-enter",
+            "rewind();freeze();mouseUp();",
+            "metalDing08.wav");
+        
+        // Set buttons.
+        overrideDefault(
+            "general-segment-p0-enter",
+            "setButton(\"left\");",
+            "");
+        overrideDefault(
+            "general-segment-p1-enter",
+            "setButton(\"right\");",
+            "");
+        overrideDefault(
+            "general-segment-p3-enter",
+            "rewind();freeze();setButton(\"middle\");overrideZone(\"scroll\");",
+            "");
+        overrideDefault(
+            "general-segment-p3-exit",
+            "rewind();freeze();releaseZone(\"scroll\");",
+            "");
+        
+        // General auido feedback.
+        this.audioEvents.getItem("general-zone-pAnyChange").overrideDefault("metalDing01.wav");
+        this.audioEvents.getItem("general-zone-sAnyChange").overrideDefault("metalDing03.wav");
+        this.audioEvents.getItem("general-segment-pAnyChange").overrideDefault("metalDing02.wav");
+        this.audioEvents.getItem("general-segment-sAnyChange").overrideDefault("metalDing04.wav");
+    }
+    
+    private void overrideDefault(String eventName, String actionLine, String audioNotification) {
+        this.actionEvents.getItem(eventName).overrideDefault(actionLine);
+        this.audioEvents.getItem(eventName).overrideDefault(audioNotification);
     }
     
     private void generateChangeEventsConfig() {

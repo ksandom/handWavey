@@ -81,7 +81,7 @@ public class HandWaveyManager {
         handWaveyConfig.defineGeneralConfig();
         
         this.output = new GenericOutput();
-        this.handsState = new HandsState();
+        this.handsState = HandsState.singleton();
         
         reloadConfig();
     }
