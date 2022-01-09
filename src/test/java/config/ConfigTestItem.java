@@ -67,4 +67,25 @@ public class ConfigTestItem {
         assertEquals(this.item.get(), "thing2");
         assertEquals(this.item.getOldValue(), "thing1");
     }
+    
+    @Test void testOverrideDefault() {
+        // Known state?
+        assertEquals(this.defaultValue, this.item.get());
+        
+        // Change the default and see it reflected.
+        this.item.overrideDefault("wow");
+        assertEquals("wow", this.item.get());
+        
+        // It should work on subsequent tries.
+        this.item.overrideDefault("wow2");
+        assertEquals("wow2", this.item.get());
+        
+        // Changing from default should be reflected in the output.
+        this.item.set("wow3");
+        assertEquals("wow3", this.item.get());
+        
+        // It should not affect things once we have a non-default value.
+        this.item.overrideDefault("wow4");
+        assertEquals("wow3", this.item.get());
+    }
 }

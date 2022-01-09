@@ -34,4 +34,13 @@ public class Item extends Dirt{ // An individual piece of configuratoin. A.K.A a
     public String getDescription() {
         return this.description;
     }
+    
+    public void overrideDefault(String newValue) {
+        if (this.value == this.defaultValue) {
+            this.value = newValue;
+            this.oldValue = newValue;
+        }
+        
+        this.defaultValue = newValue;
+    }
 }
