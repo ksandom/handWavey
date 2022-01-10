@@ -232,10 +232,21 @@ public class Gesture {
     }
     
     private String handState(int handState) {
-        return this.states[handState];
+        String result = "";
+        
+        if (handState < 0) {
+            return "OOB<0";
+        } else if (handState >= this.states.length) {
+            return "OOB>n(" + String.valueOf(this.states.length) + ")";
+        }
+        
+        result = this.states[handState];
+        
+        return result;
     }
     
     public String capitalise(String value) {
+        // TODO Gracefully handle 0 length strings.
         return value.substring(0, 1).toUpperCase() + value.substring(1);
     }
     

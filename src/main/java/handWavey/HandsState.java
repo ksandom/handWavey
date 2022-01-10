@@ -12,13 +12,8 @@ public class HandsState {
     
     private Debug debug;
     
-    private Changed primaryZoneChanged = new Changed("");
-    private Changed primarySegmentChanged = new Changed(-1);
-    private Changed primaryStateChanged = new Changed(Gesture.absent);
-    
-    private Changed secondaryZoneChanged = new Changed("");
-    private Changed secondarySegmentChanged = new Changed(-1);
-    private Changed secondaryStateChanged = new Changed(Gesture.absent);
+    private HandStateEvents primaryState = new HandStateEvents(true);
+    private HandStateEvents secondaryState = new HandStateEvents(false);
     
     private double zNoMoveBegin = 0;
     private double zActiveBegin = 0;
@@ -137,27 +132,37 @@ public class HandsState {
     
     public void figureOutStuff() {
         Double primaryHandZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
-        this.primaryZoneChanged.set(this.handsState.deriveZone(primaryHandZ));
-        // TODO make zone getting based on primaryZoneChanged.
+        this.primaryState.setZone(this.handsState.deriveZone(primaryHandZ));
+        // TODO make zone getting based on this.primaryState.getZone.
         
-        this.primarySegmentChanged.set(getHandSegment(true, this.handSummaries[0]));
-        this.primaryStateChanged.set(getHandState(this.handSummaries[0]));
+        this.primaryState.setSegment(getHandSegment(true, this.handSummaries[0]));
+        this.primaryState.setState(getHandState(this.handSummaries[0]));
 
         if (secondaryHandIsActive()) {
             Double secondaryHandZ = this.handSummaries[1].getHandZ() * this.zMultiplier;
-            this.secondaryZoneChanged.set(this.handsState.deriveZone(secondaryHandZ));
-            this.secondarySegmentChanged.set(getHandSegment(true, this.handSummaries[1]));
-            this.secondaryStateChanged.set(getHandState(this.handSummaries[1]));
+            this.secondaryState.setZone(this.handsState.deriveZone(secondaryHandZ));
+            this.secondaryState.setSegment(getHandSegment(true, this.handSummaries[1]));
         }
+        this.secondaryState.setState(getHandState(this.handSummaries[1]));
         
-        // TODO Based on changes, trigger events.
+        if (this.primaryState.somethingChanged() || this.secondaryState.somethingChanged()) {
+            for (String event : this.primaryState.getEvents()) {
+                // TODO Trigger events.
+            }
+            
+            for (String event : this.secondaryState.getEvents()) {
+                // TODO Trigger events.
+            }
+            
+            // TODO Trigger combined events.
+            String combinedEnterEvent = "combined-" + primaryState.getIndividualEnterEvent() + "-" + secondaryState.getIndividualEnterEvent() + "-enter";
+            String combinedExitEvent = "combined-" + primaryState.getIndividualExitEvent() + "-" + secondaryState.getIndividualExitEvent() + "-enter";
+        }
         
         // TODO Remove these?
         figureOutMouseButtons();
         figureOutKeys();
     }
-    
-    
     
     
     private int getHandState(HandSummary handSummary) {
