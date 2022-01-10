@@ -18,15 +18,14 @@ import java.sql.Timestamp;
 
 public class Gesture {
     private Debug debug;
-    private String[] zones = {"any", "notOOB", "OOB", "none", "noMove", "active", "action", "absolute", "relative"};
+    private String[] zones = {"notOOB", "OOB", "none", "noMove", "active", "action", "absolute", "relative"};
     
     // States.
-    private int stateCount = 4;
+    private int stateCount = 3;
     private String[] states = new String[this.stateCount];
     public static final int open = 0;
     public static final int closed = 1;
-    public static final int any = 2;
-    public static final int absent = 3;
+    public static final int absent = 2;
     public static final int entering = 4;
     public static final int exiting = 5;
     
@@ -40,7 +39,6 @@ public class Gesture {
     public Gesture() {
         this.states[this.open] = "open";
         this.states[this.closed] = "closed";
-        this.states[this.any] = "any";
         this.states[this.absent] = "absent";
         
         this.actionEvents = Config.singleton().getGroup("actionEvents");
@@ -237,7 +235,7 @@ public class Gesture {
         return this.states[handState];
     }
     
-    private String capitalise(String value) {
+    public String capitalise(String value) {
         return value.substring(0, 1).toUpperCase() + value.substring(1);
     }
     
@@ -260,7 +258,7 @@ public class Gesture {
         return result;
     }
     
-    private String generateSingleHandGestureName(String letter, String zone, int segment, int handState) {
+    public String generateSingleHandGestureName(String letter, String zone, int segment, int handState) {
         // eg pActive0Closed
         return letter + capitalise(zone) + String.valueOf(segment) + capitalise(handState(handState));
     }

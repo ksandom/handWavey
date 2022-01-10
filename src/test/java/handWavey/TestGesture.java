@@ -32,17 +32,18 @@ class TestGesture {
 
     @Test
     public void testGestureName() {
-        assertEquals("combined-pActive0Open-sAny0Open", this.gesture.gestureName("active", 0, Gesture.open, "any", 0, Gesture.open));
-        assertEquals("combined-pNone2Closed-sAny3Open", this.gesture.gestureName("none", 2, Gesture.closed, "any", 3, Gesture.open));
-        assertEquals("combined-pActive0Open-sAbsent", this.gesture.gestureName("active", 0, Gesture.open, "any", 0, Gesture.absent));
+        assertEquals("combined-pActive0Open-sNone0Open", this.gesture.gestureName("active", 0, Gesture.open, "none", 0, Gesture.open));
+        assertEquals("combined-pNone2Closed-sNone3Open", this.gesture.gestureName("none", 2, Gesture.closed, "none", 3, Gesture.open));
+        assertEquals("combined-pActive0Open-sAbsent", this.gesture.gestureName("active", 0, Gesture.open, "none", 0, Gesture.absent));
         assertEquals("individual-pActive0Open", this.gesture.gestureName("p", "active", 0, Gesture.open));
         assertEquals("individual-sActive0Open", this.gesture.gestureName("s", "active", 0, Gesture.open));
+        assertEquals("sActive0Open", this.gesture.generateSingleHandGestureName("s", "active", 0, Gesture.open));
     }
     
     @Test
     public void testGestureDescription() {
-        assertEquals("The primary hand is in the active zone, is in segment 0, and is in the open state. And the secondary hand is in the any zone, is in segment 0, and is in the closed state.", this.gesture.gestureDescription("active", 0, Gesture.open, "any", 0, Gesture.closed));
-        assertEquals("The primary hand is in the active zone, is in segment 0, and is in the open state. And the secondary hand is absent.", this.gesture.gestureDescription("active", 0, Gesture.open, "any", 0, Gesture.absent));
+        assertEquals("The primary hand is in the active zone, is in segment 0, and is in the open state. And the secondary hand is in the active zone, is in segment 0, and is in the closed state.", this.gesture.gestureDescription("active", 0, Gesture.open, "active", 0, Gesture.closed));
+        assertEquals("The primary hand is in the active zone, is in segment 0, and is in the open state. And the secondary hand is absent.", this.gesture.gestureDescription("active", 0, Gesture.open, "none", 0, Gesture.absent));
         assertEquals("The primary hand is in the active zone, is in segment 0, and is in the open state.", this.gesture.gestureDescription("p", "active", 0, Gesture.open));
         assertEquals("The secondary hand is in the active zone, is in segment 0, and is in the open state.", this.gesture.gestureDescription("s", "active", 0, Gesture.open));
     }
@@ -57,11 +58,11 @@ class TestGesture {
         // All of these should exist, and should not return null.
         
         // Combinations of hands together.
-        assertEquals("", actionEvents.getItem("combined-pActive0Open-sAny0Open-enter").get());
-        assertEquals("", actionEvents.getItem("combined-pActive0Open-sAny0Open-exit").get());
+        assertEquals("", actionEvents.getItem("combined-pActive0Open-sNone0Open-enter").get());
+        assertEquals("", actionEvents.getItem("combined-pActive0Open-sNone0Open-exit").get());
         
-        assertEquals("", audioEvents.getItem("combined-pActive0Open-sAny0Open-enter").get());
-        assertEquals("", audioEvents.getItem("combined-pActive0Open-sAny0Open-exit").get());
+        assertEquals("", audioEvents.getItem("combined-pActive0Open-sNone0Open-enter").get());
+        assertEquals("", audioEvents.getItem("combined-pActive0Open-sNone0Open-exit").get());
 
         // Use both hands, but one is absent.
         assertEquals("", actionEvents.getItem("combined-pActive0Open-sAbsent-enter").get());
