@@ -1,14 +1,17 @@
 package handWavey;
 
+import debug.Debug;
 import mouseAndKeyboardOutput.*;
 import audio.*;
 import macro.MacroLine;
 import config.Config;
 import config.Group;
 import debug.Debug;
-import java.util.HashMap;
 import java.io.File;
+import java.util.HashMap;
+import java.util.List;
 
+/* For taking the right actions when an event is triggers. */
 public class HandWaveyEvent {
     public static final Boolean audioDisabled = false;
     public static final Boolean audioEnabled = true;
@@ -25,13 +28,14 @@ public class HandWaveyEvent {
     
     private MacroLine macroLine;
     
-    private Debug debug = new Debug(1, "HandWaveyEvent");
+    // TODO Make this debug level configurable.
+    private Debug debug = new Debug(2, "HandWaveyEvent");
     
-    public HandWaveyEvent(Output output, Boolean useAudio) {
+    public HandWaveyEvent(Output output, Boolean useAudio, HandsState handsState) {
         this.output = output;
         this.useAudio = useAudio;
         
-        this.macroLine = new MacroLine(this.output);
+        this.macroLine = new MacroLine(this.output, handsState);
         
         this.actionEvents = Config.singleton().getGroup("actionEvents");
         this.audioEvents = Config.singleton().getGroup("audioEvents");
@@ -39,19 +43,34 @@ public class HandWaveyEvent {
         this.audioPath = Config.singleton().getGroup("audioConfig").getItem("pathToAudio").get() + File.separator;
     }
     
+    public void triggerEvents(List<String> events) {
+        this.debug.out(1, "Received " + String.valueOf(events.size()) + " events.");
+        for (String eventName : events) {
+            triggerEvent(eventName, "  ");
+        }
+    }
+    
     public void triggerEvent(String eventName) {
+        triggerEvent(eventName, "");
+    }
+    
+    public void triggerEvent(String eventName, String indent) {
         if (!eventIsCached(eventName)) {
+            this.debug.out(1, indent + "Cache event: " + eventName + ".");
             cacheEvent(eventName);
         }
         
+        this.debug.out(1, indent + "Event: " + eventName + ".");
         String macroLine = this.actionCache.get(eventName);
         if (macroLine != "") {
-            this.macroLine.runLine(macroLine);
+            this.debug.out(2, indent + "  macroLine: \"" + macroLine + "\"");
+            //this.macroLine.runLine(macroLine);
         }
         
         if (this.useAudio) {
             String fileToPlay = this.audioCache.get(eventName);
             if (fileToPlay != "") {
+                this.debug.out(2, indent + "  fileToPlay: \"" + fileToPlay + "\"");
                 BackgroundSound.play(fileToPlay);
             }
         }
@@ -62,19 +81,19 @@ public class HandWaveyEvent {
     }
     
     private void cacheEvent(String eventName) {
-        cacheAction(eventName);
-        cacheAudio(eventName);
+        cacheEventAction(eventName);
+        cacheEventAudio(eventName);
     }
     
-    private void cacheAction(String eventName) {
+    private void cacheEventAction(String eventName) {
         this.debug.out(3, "Load eventName " + eventName);
         String action = this.actionEvents.getItem(eventName).get();
         
         this.audioCache.put(eventName, action);
-        this.debug.out(1, "Loaded action for event " + eventName + ".");
+        this.debug.out(1, "    Loaded action for event " + eventName + ".");
     }
     
-    private void cacheAudio(String eventName) {
+    private void cacheEventAudio(String eventName) {
         this.debug.out(3, "Load eventName " + eventName);
         String filePath = this.audioEvents.getItem(eventName).get();
         String fullPath = "";
@@ -84,6 +103,6 @@ public class HandWaveyEvent {
         }
         
         this.audioCache.put(eventName, filePath);
-        this.debug.out(1, "Loaded " + fullPath + " for event " + eventName + ".");
+        this.debug.out(1, "    Loaded " + fullPath + " for event " + eventName + ".");
     }
 }

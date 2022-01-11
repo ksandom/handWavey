@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 public class HandsState {
     private static HandsState handsState = null;
     private HandSummary[] handSummaries;
+    private HandWaveyEvent handWaveyEvent;
     
     private Debug debug;
     
@@ -62,7 +63,6 @@ public class HandsState {
     public HandsState() {
         Config config = Config.singleton();
         Group handSummaryManager = config.getGroup("handSummaryManager");
-        
         
         // TODO Give this class its own debug level?
         int debugLevel = Integer.parseInt(handSummaryManager.getItem("debugLevel").get());
@@ -124,6 +124,10 @@ public class HandsState {
         return HandsState.handsState;
     }
     
+    public void setHandWaveyEvent(HandWaveyEvent handWaveyEvent) {
+        this.handWaveyEvent = handWaveyEvent;
+    }
+    
     
     public void setHandSummaries(HandSummary[] handSummaries) {
         this.handSummaries = handSummaries;
@@ -150,17 +154,11 @@ public class HandsState {
         }
         
         if (this.primaryState.somethingChanged() || this.secondaryState.somethingChanged()) {
-            for (String event : this.primaryState.getEvents()) {
-                // TODO Trigger events.
-            }
+            this.handWaveyEvent.triggerEvents(this.primaryState.getEvents());
+            this.handWaveyEvent.triggerEvents(this.secondaryState.getEvents());
             
-            for (String event : this.secondaryState.getEvents()) {
-                // TODO Trigger events.
-            }
-            
-            // TODO Trigger combined events.
-            String combinedEnterEvent = "combined-" + primaryState.getIndividualEnterEvent() + "-" + secondaryState.getIndividualEnterEvent() + "-enter";
-            String combinedExitEvent = "combined-" + primaryState.getIndividualExitEvent() + "-" + secondaryState.getIndividualExitEvent() + "-enter";
+            this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualEnterEvent() + "-" + secondaryState.getIndividualEnterEvent() + "-enter");
+            this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualExitEvent() + "-" + secondaryState.getIndividualExitEvent() + "-enter");
         }
         
         // TODO Remove these?

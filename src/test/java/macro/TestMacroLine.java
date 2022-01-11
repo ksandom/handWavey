@@ -2,6 +2,7 @@ package macro;
 
 import macro.*;
 import mouseAndKeyboardOutput.*;
+import handWavey.HandsState;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
@@ -10,11 +11,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class TestOutput {
     private MacroLine macroLine;
     private Output output;
+    private HandsState handsState;
     
     @BeforeEach
     void setUp() {
         this.output = new NullOutput();
-        this.macroLine = new MacroLine(this.output);
+        this.handsState = HandsState.singleton();
+        this.macroLine = new MacroLine(this.output, this.handsState);
     }
 
     @AfterEach

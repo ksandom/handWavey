@@ -70,6 +70,7 @@ class TestGesture {
         // Full gestures for a single hand.
         assertEquals("", actionEvents.getItem("individual-pActive0Open-enter").get());
         assertEquals("", actionEvents.getItem("individual-sActive0Open-enter").get());
+        assertEquals("", actionEvents.getItem("individual-pNoMove0Open-exit").get());
         
         // A specific change in a single component.
         assertEquals("", actionEvents.getItem("general-zone-pActive-enter").get());

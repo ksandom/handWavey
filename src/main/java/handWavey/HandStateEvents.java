@@ -4,6 +4,7 @@ import dataCleaner.Changed;
 import java.util.List;
 import java.util.ArrayList;
 
+/* For figuring out what events should be triggered when something changes. */
 public class HandStateEvents {
     private Changed zoneChanged = new Changed("OOB");
     private Changed segmentChanged = new Changed(0);
@@ -16,6 +17,7 @@ public class HandStateEvents {
     public HandStateEvents(Boolean isPrimary) {
         this.handLetter = (isPrimary)?"p":"s";
         this.gesture = new Gesture();
+        this.gesture.generateConfig();
     }
     
     public void setZone(String zone) {

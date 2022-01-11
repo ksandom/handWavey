@@ -24,6 +24,7 @@ public class HandWaveyManager {
     private History historyX;
     private History historyY;
     private History historyScroll;
+    private HandWaveyEvent handWaveyEvent;
         
     private HashMap<String, String> eventSounds = new HashMap<String, String>();
     private String audioPath;
@@ -82,6 +83,8 @@ public class HandWaveyManager {
         
         this.output = new GenericOutput();
         this.handsState = HandsState.singleton();
+        this.handWaveyEvent = new HandWaveyEvent(this.output, true, this.handsState);
+        this.handsState.setHandWaveyEvent(this.handWaveyEvent);
         
         reloadConfig();
     }

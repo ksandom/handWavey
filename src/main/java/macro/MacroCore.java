@@ -9,11 +9,11 @@ public class MacroCore {
     private Output output;
     private HandsState handsState;
     
-    public MacroCore(String context, Output output) {
+    public MacroCore(String context, Output output, HandsState handsState) {
         this.debug = new Debug(1, context);
         this.output = output;
         
-        this.handsState = HandsState.singleton();
+        this.handsState = handsState;
     }
     
     protected void doInstruction(String instruction) {
