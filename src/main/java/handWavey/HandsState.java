@@ -143,7 +143,11 @@ public class HandsState {
             this.secondaryState.setZone(this.handsState.deriveZone(secondaryHandZ));
             this.secondaryState.setSegment(getHandSegment(true, this.handSummaries[1]));
         }
-        this.secondaryState.setState(getHandState(this.handSummaries[1]));
+        if (this.handSummaries[1] != null) {
+            this.secondaryState.setState(getHandState(this.handSummaries[1]));
+        } else {
+            this.secondaryState.setState(Gesture.absent);
+        }
         
         if (this.primaryState.somethingChanged() || this.secondaryState.somethingChanged()) {
             for (String event : this.primaryState.getEvents()) {
