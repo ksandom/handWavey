@@ -231,7 +231,7 @@ public class Gesture {
         addAudioFeedbackConfig(name, triggerDescription, Gesture.exiting);
     }
     
-    private String handState(int handState) {
+    public String handState(int handState) {
         String result = "";
         
         if (handState < 0) {

@@ -88,4 +88,13 @@ class TestGesture {
         assertEquals("", actionEvents.getItem("general-segment-sAnyChange").get());
         assertEquals("", actionEvents.getItem("general-state-sAnyChange").get());
     }
+    
+    @Test
+    public void testHandState() {
+        assertEquals("OOB<0", this.gesture.handState(-1));
+        assertEquals("OOB>n(3)", this.gesture.handState(10));
+        assertEquals("open", this.gesture.handState(Gesture.open));
+        assertEquals("closed", this.gesture.handState(Gesture.closed));
+        assertEquals("absent", this.gesture.handState(Gesture.absent));
+    }
 }
