@@ -58,17 +58,17 @@ public class Gesture {
         // Double click when entering the action zone.
         overrideDefault(
             "general-zone-pAction-enter",
-            "rewind();freeze();doubleClick();",
+            "lockCursor();rewindCursorPosition();doubleClick();",
             "metalDing07.wav");
         
         // Normal click behavior.
         overrideDefault(
             "general-state-pClosed-enter",
-            "rewind();freeze();mouseDown();",
+            "lockCursor();rewindCursorPosition();mouseDown();",
             "metalDing07.wav");
         overrideDefault(
             "general-state-pOpen-enter",
-            "rewind();freeze();mouseUp();",
+            "rewindCursorPosition();rewindScroll();mouseUp();unlockCursor();",
             "metalDing08.wav");
         
         // Set buttons.
@@ -82,11 +82,11 @@ public class Gesture {
             "");
         overrideDefault(
             "general-segment-p2-enter",
-            "rewind();freeze();setButton(\"middle\");overrideZone(\"scroll\");",
+            "setButton(\"middle\");overrideZone(\"scroll\");",
             "");
         overrideDefault(
             "general-segment-p2-exit",
-            "rewind();freeze();releaseZone(\"scroll\");",
+            "releaseZone();",
             "");
         
         // Set keys.
@@ -113,6 +113,12 @@ public class Gesture {
         overrideDefault(
             "general-segment-s2-exit",
             "keyDown(\"shift\");",
+            "");
+        
+        // Stabilise gesture changes.
+        overrideDefault(
+            "general-segment-pAnyChange",
+            "lockCursor();rewindCursorPosition();",
             "");
         
         // General auido feedback.

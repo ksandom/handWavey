@@ -3,17 +3,20 @@ package macro;
 import mouseAndKeyboardOutput.*;
 import debug.Debug;
 import handWavey.HandsState;
+import handWavey.HandWaveyManager;
 
 public class MacroCore {
     protected Debug debug;
     private Output output;
     private HandsState handsState;
+    private HandWaveyManager handWaveyManager = null;
     
-    public MacroCore(String context, Output output, HandsState handsState) {
+    public MacroCore(String context, Output output, HandsState handsState, HandWaveyManager handWaveyManager) {
         this.debug = new Debug(1, context);
         this.output = output;
         
         this.handsState = handsState;
+        this.handWaveyManager = handWaveyManager;
     }
     
     protected void doInstruction(String instruction) {
@@ -32,6 +35,8 @@ public class MacroCore {
                     toInt(parm(parameters, 0, "0")), // Debug level.
                     parm(parameters, 1, "Missing debug text in macro.")); // Text to output.
                 break;
+            
+            // Mouse instructions.
             case "moveMouse":
                 this.output.setPosition(
                     toInt(parm(parameters, 0, 0)), // X
@@ -54,19 +59,43 @@ public class MacroCore {
                 this.output.mouseUp(
                     getButton(parameters, 0)); // Mouse button. ("left", "middle", "right")
                 break;
+            case "rewindScroll":
+                this.handWaveyManager.rewindScroll();
+                break;
+            case "rewindCursorPosition":
+                this.handWaveyManager.rewindCursorPosition();
+                break;
+            case "lockCursor":
+                this.handWaveyManager.setCursorLock();
+                break;
+            case "unlockCursor":
+                this.handWaveyManager.releaseCursorLock();
+                break;
+            case "overrideZone":
+                this.handsState.overrideZone(parm(parameters, 0, "scroll"));
+                break;
+            case "releaseZone":
+                this.handsState.releaseZone();
+                break;
+            case "setButton":
+                this.handsState.setMouseButton(parm(parameters, 0, "left"));
+                break;
+            default:
+                this.debug.out(1, "Unknown command: " + command);
+                break;
         }
     }
     
     /* TODO:
         * #Override defaults in config before load finishes.
         * #Set zone action to doubleclick.
-        * Add events to HandsState.
-        * Add keyboard commands
-        * Add other commands
+        * #Add events to HandsState.
         * Rewind
             move to handsState
                 movingMeans
                 history
+        * Add keyboard commands
+        * Add other commands
 
 
         this.output.getMouseButtonID("left")
@@ -87,6 +116,7 @@ public class MacroCore {
     private int getButton(String[] parameters, int position) {
         // If a button is specified, use that. Otherwise use the one that handsState thinks we should use.
         String button = parm(parameters, position, this.handsState.whichMouseButton());
+        this.debug.out(1, "Used button: " + button);
         return this.output.getMouseButtonID(button);
     }
     
@@ -99,7 +129,11 @@ public class MacroCore {
             // Parameter is not provided.
             return defaultValue;
         } else {
-            return parameters[position];
+            if (parameters[position] == "") {
+                return defaultValue;
+            } else {
+                return parameters[position];
+            }
         }
     }
     

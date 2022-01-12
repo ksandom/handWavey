@@ -27,6 +27,8 @@ public class HandsState {
     
     private String zone = "none";
     private String oldZone = "none";
+    private String zoneOverride = "";
+    private String chosenButton = "left";
     
     private Boolean zoneMouseDown = false;
     private Boolean gestureMouseDown = false;
@@ -237,7 +239,7 @@ public class HandsState {
         this.secondarySegment = -1;
     }
     
-    private String deriveZone(double handZ) {
+    public String deriveZone(double handZ) {
         String zone = "Unknown";
         
         if (this.zoneMode == "touchScreen") {
@@ -263,15 +265,25 @@ public class HandsState {
         }
         
         // TODO At the minimum this needs to be hand agnostic. But probably removed entirely.
-        if (this.primarySegment == 2) {
+        // if (this.primarySegment == 2) {
+        if (this.zoneOverride != "") {
             if (zone != "none" && zone != "noMove" && zone != "action") {
-                zone = "scroll";
+                zone = this.zoneOverride;
             }
         }
         
         return zone;
     }
     
+    public void overrideZone(String zone) {
+        this.zoneOverride = zone;
+        this.debug.out(1, "Zone override: " + zone);
+    }
+    
+    public void releaseZone() {
+        this.debug.out(1, "Zone release from: " + this.zoneOverride);
+        this.zoneOverride = "";
+    }
     
     public String getZone(double handZ) {
         String newZone = deriveZone(handZ);
@@ -336,17 +348,12 @@ public class HandsState {
     }
     
     public String whichMouseButton() {
-        String result = "";
-        
-        if (this.primarySegment == 1) {
-            result = "right";
-        } else if (this.primarySegment == 2) {
-            result = "middle";
-        } else {
-            result = "left";
-        }
-        
-        return result;
+        return this.chosenButton;
+    }
+    
+    public void setMouseButton(String button) {
+        this.chosenButton = button;
+        this.debug.out(1, "Set mouse button to: " + button);
     }
     
     public void setHandClosed(Boolean handClosed) {

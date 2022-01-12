@@ -3,6 +3,7 @@ package handWavey;
 import handWavey.Gesture;
 import handWavey.HandWaveyConfig;
 import handWavey.HandsState;
+import handWavey.HandWaveyManager;
 import mouseAndKeyboardOutput.*;
 import config.Config;
 import config.Group;
@@ -18,10 +19,12 @@ class TestHandWaveyEvent {
     private HandWaveyEvent handWaveyEvent;
     private Output output;
     private HandsState handsState;
+    private HandWaveyManager handWaveyManager;
 
     @BeforeEach
     void setUp() {
         Config.setSingletonFilename("handWaveyConfigTest");
+        this.handWaveyManager = new HandWaveyManager();
         this.config = Config.singleton();
         this.handWaveyConfig = new HandWaveyConfig("unitTest");
         this.handWaveyConfig.defineGeneralConfig();
@@ -29,7 +32,7 @@ class TestHandWaveyEvent {
         this.gesture.generateConfig();
         this.output = new NullOutput();
         this.handsState = HandsState.singleton();
-        this.handWaveyEvent = new HandWaveyEvent(this.output, HandWaveyEvent.audioDisabled, this.handsState);
+        this.handWaveyEvent = new HandWaveyEvent(this.output, HandWaveyEvent.audioDisabled, this.handsState, this.handWaveyManager);
         this.handsState.setHandWaveyEvent(this.handWaveyEvent);
     }
 

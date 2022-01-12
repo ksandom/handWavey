@@ -16,6 +16,7 @@ public class HandWaveyEvent {
     public static final Boolean audioDisabled = false;
     public static final Boolean audioEnabled = true;
     
+    private HandWaveyManager handWaveyManager;
     private Output output;
     private Boolean useAudio;
     private String audioPath;
@@ -28,11 +29,11 @@ public class HandWaveyEvent {
     // TODO Make this debug level configurable.
     private Debug debug = new Debug(2, "HandWaveyEvent");
     
-    public HandWaveyEvent(Output output, Boolean useAudio, HandsState handsState) {
+    public HandWaveyEvent(Output output, Boolean useAudio, HandsState handsState, HandWaveyManager handWaveyManager) {
         this.output = output;
         this.useAudio = useAudio;
-       
-        this.macroLine = new MacroLine(this.output, handsState);
+        
+        this.macroLine = new MacroLine(this.output, handsState, handWaveyManager);
         
         this.actionEvents = Config.singleton().getGroup("actionEvents");
         this.audioEvents = Config.singleton().getGroup("audioEvents");

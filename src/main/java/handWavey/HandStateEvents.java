@@ -94,11 +94,3 @@ public class HandStateEvents {
             this.stateChanged.toInt());
     }
 }
-
-/*
-assertEquals("combined-pActive0Open-sAny0Open", this.gesture.gestureName("active", 0, Gesture.open, "any", 0, Gesture.open));
-assertEquals("combined-pNone2Closed-sAny3Open", this.gesture.gestureName("none", 2, Gesture.closed, "any", 3, Gesture.open));
-assertEquals("combined-pActive0Open-sAbsent", this.gesture.gestureName("active", 0, Gesture.open, "any", 0, Gesture.absent));
-assertEquals("individual-pActive0Open", this.gesture.gestureName("p", "active", 0, Gesture.open));
-assertEquals("individual-sActive0Open", this.gesture.gestureName("s", "active", 0, Gesture.open));
-*/

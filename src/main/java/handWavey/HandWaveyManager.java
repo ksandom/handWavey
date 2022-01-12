@@ -83,7 +83,7 @@ public class HandWaveyManager {
         
         this.output = new GenericOutput();
         this.handsState = HandsState.singleton();
-        this.handWaveyEvent = new HandWaveyEvent(this.output, true, this.handsState);
+        this.handWaveyEvent = new HandWaveyEvent(this.output, true, this.handsState, this);
         this.handsState.setHandWaveyEvent(this.handWaveyEvent);
         
         reloadConfig();
@@ -300,7 +300,7 @@ public class HandWaveyManager {
         this.output.setPosition(x, y);
     }
     
-    private void rewindCursorPosition() {
+    public void rewindCursorPosition() {
         Timestamp now = new Timestamp(System.currentTimeMillis());
         long nowMillis = now.getTime();
         long rewindTime = nowMillis - this.rewindCursorTime;
@@ -313,7 +313,7 @@ public class HandWaveyManager {
         this.output.setPosition(earlierX, earlierY);
     }
     
-    private void rewindScroll() {
+    public void rewindScroll() {
         Timestamp now = new Timestamp(System.currentTimeMillis());
         long nowMillis = now.getTime();
         long rewindTime = nowMillis - this.rewindScrollTime;
@@ -330,7 +330,7 @@ public class HandWaveyManager {
         return now.getTime();
     }
     
-    private void setCursorLock() {
+    public void setCursorLock() {
         long now = getNow();
         this.cursorLock = now + this.cursorLockTime;
         this.debug.out(1, "Cursor locked at " + String.valueOf(now) + " for " + String.valueOf(this.cursorLockTime) + " milliseconds until " + String.valueOf(this.cursorLock) + ".");
@@ -344,7 +344,7 @@ public class HandWaveyManager {
         }
     }
     
-    private void releaseCursorLock() {
+    public void releaseCursorLock() {
         // Figure out what feedback we are going to give.
         if (this.cursorLock > 0) {
             if (cusorIsLocked()) {
@@ -613,39 +613,41 @@ public class HandWaveyManager {
         
         this.handSummaries = handSummaries;
         
-        Double handZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
-        String zone = this.handsState.getZone(handZ);
-        this.handsState.setHandClosed(!this.handSummaries[0].handIsOpen());
-        
-        this.handsState.derivePrimaryHandSegment(this.handSummaries[0].getHandRoll(), this.handSummaries[0].handIsLeft());
-        if (secondaryHandIsActive()) {
-            this.handsState.deriveSecondaryHandSegment(this.handSummaries[1].getHandRoll(), this.handSummaries[1].handIsLeft());
-        } else {
-            this.handsState.noSecondaryHand();
-        }
-        
-        // Figure out the current state of of gestures.
         this.handsState.figureOutStuff();
         
-        // This should happen before any potential de-stabilisation has happened.
-        if (this.handsState.shouldMouseUp() == true) {
-            this.debug.out(1, "Mouse down at " + coordsToString(this.movingMeanX.get(), this.movingMeanY.get()));
-            this.output.mouseUp(this.output.getLastMouseButton());
-            
-            releaseCursorLock();
-            
-            triggerEvent("mouse-up");
-            if (zone == "scroll") {
-                rewindScroll();
-            } else  {
-                rewindCursorPosition();
-            }
-        }
+        Double handZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
+        String zone = this.handsState.deriveZone(handZ);
+//         this.handsState.setHandClosed(!this.handSummaries[0].handIsOpen());
+//         
+//         this.handsState.derivePrimaryHandSegment(this.handSummaries[0].getHandRoll(), this.handSummaries[0].handIsLeft());
+//         if (secondaryHandIsActive()) {
+//             this.handsState.deriveSecondaryHandSegment(this.handSummaries[1].getHandRoll(), this.handSummaries[1].handIsLeft());
+//         } else {
+//             this.handsState.noSecondaryHand();
+//         }
+        
+        // Figure out the current state of of gestures.
+        
+//         // This should happen before any potential de-stabilisation has happened.
+//         if (this.handsState.shouldMouseUp() == true) {
+//             this.debug.out(1, "Mouse down at " + coordsToString(this.movingMeanX.get(), this.movingMeanY.get()));
+//             this.output.mouseUp(this.output.getLastMouseButton());
+//             
+//             releaseCursorLock();
+//             
+//             triggerEvent("mouse-up");
+//             if (zone == "scroll") {
+//                 rewindScroll();
+//             } else  {
+//                 rewindCursorPosition();
+//             }
+//         }
         
         handleKeyUps();
 
         // Move the mouse cursor.
         if (!cusorIsLocked() && !this.handsState.inSegmentStanddown()) {
+            this.debug.out(1, "Got here aaaA \"" + zone + "\"");
             if ((zone == "none") || (zone == "noMove")) {
                 if (this.zoneMode == "touchPad") {
                     updateMovingMeans(zone, handZ);
@@ -661,11 +663,12 @@ public class HandWaveyManager {
                 updateMovingMeans(zone, handZ);
                 moveMouseRelativeFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
             } else if (zone == "action") {
-            } else if (zone == "scroll") {
+            } else if (zone == "scroll") { // TODO This isn't getting triggered even though it should match.
+                this.debug.out(1, "Got here aaaB - inside");
                 if (this.handsState.zoneIsNew()) {
                     rewindCursorPosition();
                 }
-                
+                this.debug.out(1, "Got here aaaC");
                 updateMovingMeans(zone, handZ);
                 scrollFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
             } else {
@@ -677,30 +680,31 @@ public class HandWaveyManager {
                 updateMovingMeans(zone, handZ);
                 touchPadNone(this.movingMeanX.get(), this.movingMeanY.get());
             }
+            this.debug.out(1, "Got here aaaD");
         }
         
         // This should happen after any potential stabilisation has happened.
-        if (this.handsState.shouldMouseDown() == true) {
-            if (zone == "scroll") {
-                rewindScroll();
-            } else  {
-                rewindCursorPosition();
-            }
-            
-            setCursorLock();
-            
-            String button = this.handsState.whichMouseButton();
-            this.debug.out(1, "Mouse down (" + button + ") at " + coordsToString(this.movingMeanX.get(), this.movingMeanY.get()));
-            this.output.mouseDown(this.output.getMouseButtonID(button));
-            triggerEvent("mouse-down");
-        }
+//         if (this.handsState.shouldMouseDown() == true) {
+//             if (zone == "scroll") {
+//                 rewindScroll();
+//             } else  {
+//                 rewindCursorPosition();
+//             }
+//             
+//             setCursorLock();
+//             
+//             String button = this.handsState.whichMouseButton();
+//             this.debug.out(1, "Mouse down (" + button + ") at " + coordsToString(this.movingMeanX.get(), this.movingMeanY.get()));
+//             this.output.mouseDown(this.output.getMouseButtonID(button));
+//             triggerEvent("mouse-down");
+//         }
         
         handleKeysDowns();
         
         // Audio events.
-        if (this.handsState.zoneIsNew()) {
-            String eventID = "zone-" + zone;
-            triggerEvent(eventID);
-        }
+//         if (this.handsState.zoneIsNew()) {
+//             String eventID = "zone-" + zone;
+//             triggerEvent(eventID);
+//         }
     }
 }

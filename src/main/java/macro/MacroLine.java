@@ -2,10 +2,11 @@ package macro;
 
 import mouseAndKeyboardOutput.*;
 import handWavey.HandsState;
+import handWavey.HandWaveyManager;
 
 public class MacroLine extends MacroCore {
-    public MacroLine(Output output, HandsState handsState) {
-        super("MacroName", output, handsState);
+    public MacroLine(Output output, HandsState handsState, HandWaveyManager handWaveyManager) {
+        super("MacroName", output, handsState, handWaveyManager);
     }
     
     public void runLine(String line) {
