@@ -67,9 +67,12 @@ public class HandStateEvents {
         }
         
         if (this.stateChanged.hasChanged()){
+            String fromState = this.gesture.capitalise(this.gesture.handState(this.stateChanged.fromInt()));
+            String toState = this.gesture.capitalise(this.gesture.handState(this.stateChanged.toInt()));
+            
             result.add("general-state-" + this.handLetter + "AnyChange");
-            result.add("general-state-" + this.handLetter + this.stateChanged.fromInt() + "-exit");
-            result.add("general-state-" + this.handLetter + this.stateChanged.toInt() + "-enter");
+            result.add("general-state-" + this.handLetter + fromState + "-exit");
+            result.add("general-state-" + this.handLetter + toState + "-enter");
         }
         
         return result;

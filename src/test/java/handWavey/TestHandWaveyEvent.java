@@ -15,7 +15,7 @@ class TestHandWaveyEvent {
     private Gesture gesture;
     private Config config;
     private HandWaveyConfig handWaveyConfig;
-    private HandWaveyEvent eventHandler;
+    private HandWaveyEvent handWaveyEvent;
     private Output output;
     private HandsState handsState;
 
@@ -26,10 +26,11 @@ class TestHandWaveyEvent {
         this.handWaveyConfig = new HandWaveyConfig("unitTest");
         this.handWaveyConfig.defineGeneralConfig();
         this.gesture = new Gesture();
+        this.gesture.generateConfig();
         this.output = new NullOutput();
         this.handsState = HandsState.singleton();
-        this.eventHandler = new HandWaveyEvent(this.output, HandWaveyEvent.audioDisabled, this.handsState);
-        this.handsState.setHandWaveyEvent(this.eventHandler);
+        this.handWaveyEvent = new HandWaveyEvent(this.output, HandWaveyEvent.audioDisabled, this.handsState);
+        this.handsState.setHandWaveyEvent(this.handWaveyEvent);
     }
 
     @AfterEach
@@ -37,9 +38,16 @@ class TestHandWaveyEvent {
         this.gesture = null;
         this.config = null;
         this.handWaveyConfig = null;
+        this.handWaveyEvent = null;
+        this.output = null;
+        this.handsState = null;
     }
 
-//     @Test
-//     public void testSomething() {
-//     }
+    @Test
+    public void testTriggerEvent() {
+        this.config.getGroup("actionEvents").getItem("general-state-pClosed-enter").set("click();");
+        assertEquals(0, this.output.testInt("clicked"));
+        this.handWaveyEvent.triggerEvent("general-state-pClosed-enter");
+        assertEquals(1, this.output.testInt("clicked"));
+    }
 }

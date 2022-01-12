@@ -18,9 +18,6 @@ public class HandWaveyEvent {
     
     private Output output;
     private Boolean useAudio;
-    
-    private HashMap<String, String> actionCache = new HashMap<String, String>();
-    private HashMap<String, String> audioCache = new HashMap<String, String>();
     private String audioPath;
     
     private Group actionEvents;
@@ -34,7 +31,7 @@ public class HandWaveyEvent {
     public HandWaveyEvent(Output output, Boolean useAudio, HandsState handsState) {
         this.output = output;
         this.useAudio = useAudio;
-        
+       
         this.macroLine = new MacroLine(this.output, handsState);
         
         this.actionEvents = Config.singleton().getGroup("actionEvents");
@@ -55,20 +52,15 @@ public class HandWaveyEvent {
     }
     
     public void triggerEvent(String eventName, String indent) {
-        if (!eventIsCached(eventName)) {
-            this.debug.out(1, indent + "Cache event: " + eventName + ".");
-            cacheEvent(eventName);
-        }
-        
-        this.debug.out(1, indent + "Event: " + eventName + ".");
-        String macroLine = this.actionCache.get(eventName);
+        this.debug.out(2, indent + "Event: " + eventName + ".");
+        String macroLine = this.getEventAction(eventName);
         if (macroLine != "") {
             this.debug.out(2, indent + "  macroLine: \"" + macroLine + "\"");
-            //this.macroLine.runLine(macroLine);
+            this.macroLine.runLine(macroLine);
         }
         
         if (this.useAudio) {
-            String fileToPlay = this.audioCache.get(eventName);
+            String fileToPlay = this.getEventAudio(eventName);
             if (fileToPlay != "") {
                 this.debug.out(2, indent + "  fileToPlay: \"" + fileToPlay + "\"");
                 BackgroundSound.play(fileToPlay);
@@ -76,25 +68,21 @@ public class HandWaveyEvent {
         }
     }
     
-    private Boolean eventIsCached(String eventName) {
-        return (this.actionCache.containsKey(eventName) && this.audioCache.containsKey(eventName));
-    }
-    
-    private void cacheEvent(String eventName) {
-        cacheEventAction(eventName);
-        cacheEventAudio(eventName);
-    }
-    
-    private void cacheEventAction(String eventName) {
-        this.debug.out(3, "Load eventName " + eventName);
+    private String getEventAction(String eventName) {
+        if (this.actionEvents.getItem(eventName) == null) {
+            return "";
+        }
+        
         String action = this.actionEvents.getItem(eventName).get();
         
-        this.audioCache.put(eventName, action);
-        this.debug.out(1, "    Loaded action for event " + eventName + ".");
+        return action;
     }
     
-    private void cacheEventAudio(String eventName) {
-        this.debug.out(3, "Load eventName " + eventName);
+    private String getEventAudio(String eventName) {
+        if (this.audioEvents.getItem(eventName) == null) {
+            return "";
+        }
+        
         String filePath = this.audioEvents.getItem(eventName).get();
         String fullPath = "";
         
@@ -102,7 +90,6 @@ public class HandWaveyEvent {
             fullPath = this.audioPath + filePath;
         }
         
-        this.audioCache.put(eventName, filePath);
-        this.debug.out(1, "    Loaded " + fullPath + " for event " + eventName + ".");
+        return fullPath;
     }
 }

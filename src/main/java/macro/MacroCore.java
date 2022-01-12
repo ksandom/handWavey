@@ -26,7 +26,6 @@ public class MacroCore {
     }
     
     protected void doInstruction(String command, String[] parameters) {
-        
         switch (command) {
             case "debug":
                 this.debug.out(
@@ -47,6 +46,7 @@ public class MacroCore {
                     getButton(parameters, 0)); // Mouse button. ("left", "middle", "right")
                 break;
             case "mouseDown":
+                System.out.println(getButton(parameters, 0));
                 this.output.mouseDown(
                     getButton(parameters, 0)); // Mouse button. ("left", "middle", "right")
                 break;
