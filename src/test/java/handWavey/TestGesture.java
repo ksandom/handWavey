@@ -82,7 +82,7 @@ class TestGesture {
         
         // Any change in a single component.
         assertEquals("", actionEvents.getItem("general-zone-pAnyChange").get());
-        assertEquals("freeze();rewindCursorPosition();", actionEvents.getItem("general-segment-pAnyChange").get());
+        assertEquals("lockCursor();rewindCursorPosition();", actionEvents.getItem("general-segment-pAnyChange").get());
         assertEquals("", actionEvents.getItem("general-state-pAnyChange").get());
         assertEquals("", actionEvents.getItem("general-zone-sAnyChange").get());
         assertEquals("", actionEvents.getItem("general-segment-sAnyChange").get());
