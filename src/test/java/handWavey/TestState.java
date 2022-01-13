@@ -385,42 +385,4 @@ class TestState {
         assertEquals(2, this.handsState.getHandSegment(pi*-1, primary, left)); // Alternative value.
         assertEquals(1, this.handsState.getHandSegment(handLeft, primary, left));
     }
-    
-    @Test
-    public void testHandSegmentButtons() {
-        Boolean primary = true;
-        Boolean secondary = false;
-        Boolean left = true;
-        Boolean right = false;
-        
-        double handTop = 0;
-        double handRight = pi*-0.5;
-        double handBottom = pi;
-        double handLeft = pi*0.5;
-        
-        this.handsState.derivePrimaryHandSegment(handTop, left);
-        assertEquals("left", this.handsState.whichMouseButton());
-        
-        this.handsState.derivePrimaryHandSegment(handLeft, left);
-        assertEquals("right", this.handsState.whichMouseButton());
-        
-        this.handsState.derivePrimaryHandSegment(handBottom, left);
-        assertEquals("middle", this.handsState.whichMouseButton());
-        
-        this.handsState.derivePrimaryHandSegment(handRight, left);
-        assertEquals("left", this.handsState.whichMouseButton());
-        
-        
-        this.handsState.derivePrimaryHandSegment(handTop, right);
-        assertEquals("left", this.handsState.whichMouseButton());
-        
-        this.handsState.derivePrimaryHandSegment(handLeft, right);
-        assertEquals("left", this.handsState.whichMouseButton());
-        
-        this.handsState.derivePrimaryHandSegment(handBottom, right);
-        assertEquals("middle", this.handsState.whichMouseButton());
-        
-        this.handsState.derivePrimaryHandSegment(handRight, right);
-        assertEquals("right", this.handsState.whichMouseButton());
-    }
 }
