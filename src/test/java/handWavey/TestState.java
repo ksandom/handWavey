@@ -106,110 +106,17 @@ class TestState {
         * We should get mouse down and up events when entering and exiting the action zone.
         */
         
-        this.handsState.figureOutMouseButtons();
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
         assertEquals("none", this.handsState.getZone(-151));
-        
-        this.handsState.figureOutMouseButtons();
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
         assertEquals("none", this.handsState.getZone(-150));
-        assertEquals(false, this.handsState.zoneIsNew());
-        
-        this.handsState.figureOutMouseButtons();
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
         assertEquals("absolute", this.handsState.getZone(-149));
-        assertEquals(true, this.handsState.zoneIsNew());
-        assertEquals("none", this.handsState.getOldZone());
-        
-        this.handsState.figureOutMouseButtons();
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
         assertEquals("absolute", this.handsState.getZone(10));
-        assertEquals(false, this.handsState.zoneIsNew());
-        assertEquals("none", this.handsState.getOldZone());
-        
-        this.handsState.figureOutMouseButtons();
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
         assertEquals("absolute", this.handsState.getZone(50));
-        assertEquals(false, this.handsState.zoneIsNew());
-        assertEquals("none", this.handsState.getOldZone());
-        
-        this.handsState.figureOutMouseButtons();
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
         assertEquals("relative", this.handsState.getZone(51));
-        assertEquals(true, this.handsState.zoneIsNew());
-        assertEquals("absolute", this.handsState.getOldZone());
-        
-        this.handsState.figureOutMouseButtons();
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
         assertEquals("relative", this.handsState.getZone(100));
-        assertEquals(false, this.handsState.zoneIsNew());
-        assertEquals("absolute", this.handsState.getOldZone());
-        
-        this.handsState.figureOutMouseButtons();
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
         assertEquals("action", this.handsState.getZone(101));
-        assertEquals(true, this.handsState.zoneIsNew());
-        assertEquals("relative", this.handsState.getOldZone());
-        
-        this.handsState.figureOutMouseButtons();
-        assertEquals(true, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
         assertEquals("action", this.handsState.getZone(102));
-        assertEquals(false, this.handsState.zoneIsNew());
-        assertEquals("relative", this.handsState.getOldZone());
-        
-        this.handsState.figureOutMouseButtons();
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
-        assertEquals("action", this.handsState.getZone(103));
-        assertEquals(false, this.handsState.zoneIsNew());
-        assertEquals("relative", this.handsState.getOldZone());
-        
-        this.handsState.figureOutMouseButtons();
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
         assertEquals("action", this.handsState.getZone(99));
-        assertEquals(false, this.handsState.zoneIsNew());
-        assertEquals("relative", this.handsState.getOldZone());
-        
-        this.handsState.figureOutMouseButtons();
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
         assertEquals("relative", this.handsState.getZone(70));
-        assertEquals(true, this.handsState.zoneIsNew());
-        assertEquals("action", this.handsState.getOldZone());
-        
-        this.handsState.figureOutMouseButtons();
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(true, this.handsState.shouldMouseUp());
-        
-        assertEquals("relative", this.handsState.getZone(70));
-        assertEquals(false, this.handsState.zoneIsNew());
-        assertEquals("action", this.handsState.getOldZone());
-        
-        this.handsState.figureOutMouseButtons();
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
     }
 
     @Test
@@ -219,146 +126,12 @@ class TestState {
         * There should be no broken assumptions from skipping a zone. It should simply do the right thing based on where we are now.
         */
         
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
         assertEquals("none", this.handsState.getZone(-151));
-        
-        this.handsState.figureOutMouseButtons();
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
         assertEquals("absolute", this.handsState.getZone(-149));
-        
-        this.handsState.figureOutMouseButtons();
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
         assertEquals("action", this.handsState.getZone(101));
-        
-        this.handsState.figureOutMouseButtons();
-        assertEquals(true, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
         assertEquals("action", this.handsState.getZone(99));
-        
-        this.handsState.figureOutMouseButtons();
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
         assertEquals("relative", this.handsState.getZone(70));
-        
-        this.handsState.figureOutMouseButtons();
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(true, this.handsState.shouldMouseUp());
-        
         assertEquals("relative", this.handsState.getZone(70));
-        
-        this.handsState.figureOutMouseButtons();
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-    }
-    
-    @Test
-    public void testHandClosedGesture() {
-        /* Here we want to test that the states work correctly with the hand being open and closed.
-        */
-        
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
-        assertEquals("none", this.handsState.getZone(-151));
-        this.handsState.setHandClosed(false);
-        this.handsState.figureOutMouseButtons();
-        
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
-        assertEquals("absolute", this.handsState.getZone(-149));
-        this.handsState.setHandClosed(true);
-        this.handsState.figureOutMouseButtons();
-        
-        assertEquals(true, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
-        assertEquals("absolute", this.handsState.getZone(-149));
-        this.handsState.setHandClosed(true);
-        this.handsState.figureOutMouseButtons();
-        
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
-        assertEquals("absolute", this.handsState.getZone(-149));
-        this.handsState.setHandClosed(false);
-        this.handsState.figureOutMouseButtons();
-        
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(true, this.handsState.shouldMouseUp());
-        
-        assertEquals("absolute", this.handsState.getZone(-149));
-        this.handsState.setHandClosed(false);
-        this.handsState.figureOutMouseButtons();
-        
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-    }
-    
-    @Test
-    public void testHandClosedGestureWithZones() {
-        /* Here we want to test that the states work correctly with the hand being open and closed while moving through zones.
-        */
-        
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
-        assertEquals("none", this.handsState.getZone(-151));
-        this.handsState.setHandClosed(false);
-        this.handsState.figureOutMouseButtons();
-        
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
-        assertEquals("absolute", this.handsState.getZone(-149));
-        this.handsState.setHandClosed(true);
-        this.handsState.figureOutMouseButtons();
-        
-        assertEquals(true, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
-        assertEquals("action", this.handsState.getZone(101));
-        this.handsState.setHandClosed(true);
-        this.handsState.figureOutMouseButtons();
-        
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
-        assertEquals("action", this.handsState.getZone(99));
-        this.handsState.setHandClosed(true);
-        this.handsState.figureOutMouseButtons();
-        
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
-        assertEquals("relative", this.handsState.getZone(70));
-        this.handsState.setHandClosed(true);
-        this.handsState.figureOutMouseButtons();
-        
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
-        
-        assertEquals("relative", this.handsState.getZone(70));
-        this.handsState.setHandClosed(false);
-        this.handsState.figureOutMouseButtons();
-        
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(true, this.handsState.shouldMouseUp());
-        
-        assertEquals("relative", this.handsState.getZone(70));
-        this.handsState.setHandClosed(false);
-        this.handsState.figureOutMouseButtons();
-        
-        assertEquals(false, this.handsState.shouldMouseDown());
-        assertEquals(false, this.handsState.shouldMouseUp());
     }
     
     @Test

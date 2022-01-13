@@ -202,29 +202,6 @@ public class HandWaveyManager {
         this.relativeSensitivity = Double.parseDouble(handSummaryManager.getItem("relativeSensitivity").get());
         
         
-        // Get Audio path.
-        // TODO To be replaced by events code.
-        this.audioPath = Config.singleton().getGroup("audioConfig").getItem("pathToAudio").get() + File.separator;
-        
-        
-        // Get event sounds.
-        loadEventSoundFromConfig("zone-none");
-        loadEventSoundFromConfig("zone-noMove");
-        loadEventSoundFromConfig("zone-active");
-        loadEventSoundFromConfig("zone-action");
-        
-        loadEventSoundFromConfig("zone-absolute");
-        loadEventSoundFromConfig("zone-relative");
-        
-        loadEventSoundFromConfig("zone-scroll");
-        
-        loadEventSoundFromConfig("mouse-down");
-        loadEventSoundFromConfig("mouse-up");
-        
-        loadEventSoundFromConfig("imposterHand-replace");
-        loadEventSoundFromConfig("imposterHand-discard");
-        
-        
         // Load touchpad mode config.
         Group touchPadConfig = handSummaryManager.getGroup("touchPad");
         this.touchPadInputMultiplier = Double.parseDouble(touchPadConfig.getItem("inputMultiplier").get());
@@ -276,15 +253,6 @@ public class HandWaveyManager {
                 }
             }
         }
-    }
-    
-    private void loadEventSoundFromConfig(String eventID) {
-        // TODO This will soon be replaced by the events code.
-        this.debug.out(3, "Load eventID " + eventID);
-        Group audioEvents = Config.singleton().getGroup("audioEvents");
-        String filePath = audioEvents.getItem(eventID).get();
-        
-        this.eventSounds.put(eventID, filePath);
     }
     
     private void moveMouse(int x, int y) {
@@ -543,51 +511,14 @@ public class HandWaveyManager {
     }
     
     public void triggerEvent(String eventID) {
-        // TODO This will soon be replaced by the events code.
-        String fileName = this.eventSounds.get(eventID);
-        
-        if (fileName != "") {
-            String fullPath = this.audioPath + fileName;
-            this.debug.out(1, "Triggering event " + eventID + " File: " + fullPath);
-            
-            BackgroundSound.play(fullPath);
-        }
-    }
-    
-    private Boolean secondaryHandIsActive() {
-        return ((this.handSummaries.length > 1) && (this.handSummaries[1] != null) && (this.handSummaries[1].isValid()));
-    }
-    
-    private String coordsToString(double x, double y) {
-        return String.valueOf(Math.round(x)) + ", " + String.valueOf(Math.round(y));
-    }
-    
-    private void handleKeysDowns() {
-        for (String key : this.output.getKeysIKnow()) {
-            if (this.handsState.shouldKeyDown(key)) {
-                this.debug.out(1, "Key down: " + key);
-                this.output.keyDown(this.output.getKeyID(key));
-            }
-        }
-    }
-    
-    private void handleKeyUps() {
-        for (String key : this.output.getKeysIKnow()) {
-            if (this.handsState.shouldKeyUp(key)) {
-                this.debug.out(1, "Key up:   " + key);
-                this.output.keyUp(this.output.getKeyID(key));
-            }
-        }
+        this.handWaveyEvent.triggerEvent(eventID);
     }
     
     /* TODO
     
-    * Audio feedback on:
-        * Hand segment change.
-        * Secondary hand in range.
     * Data cleaning:
         * How many frames for a mouse event to be acted on?
-    * Config based mapping to actions.
+        * Adjust timings?
     * VNC for initial compatibility with wayland?
     * Config to/from disk.
     * Make audio feedback for hands left/right hand aware.
@@ -616,35 +547,8 @@ public class HandWaveyManager {
         this.handsState.figureOutStuff();
         
         Double handZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
-        String zone = this.handsState.deriveZone(handZ);
-//         this.handsState.setHandClosed(!this.handSummaries[0].handIsOpen());
-//         
-//         this.handsState.derivePrimaryHandSegment(this.handSummaries[0].getHandRoll(), this.handSummaries[0].handIsLeft());
-//         if (secondaryHandIsActive()) {
-//             this.handsState.deriveSecondaryHandSegment(this.handSummaries[1].getHandRoll(), this.handSummaries[1].handIsLeft());
-//         } else {
-//             this.handsState.noSecondaryHand();
-//         }
+        String zone = this.handsState.getZone(handZ);
         
-        // Figure out the current state of of gestures.
-        
-//         // This should happen before any potential de-stabilisation has happened.
-//         if (this.handsState.shouldMouseUp() == true) {
-//             this.debug.out(1, "Mouse down at " + coordsToString(this.movingMeanX.get(), this.movingMeanY.get()));
-//             this.output.mouseUp(this.output.getLastMouseButton());
-//             
-//             releaseCursorLock();
-//             
-//             triggerEvent("mouse-up");
-//             if (zone == "scroll") {
-//                 rewindScroll();
-//             } else  {
-//                 rewindCursorPosition();
-//             }
-//         }
-        
-        //handleKeyUps();
-
         // Move the mouse cursor.
         if (!cusorIsLocked() && !this.handsState.inSegmentStanddown()) {
             if ((zone.equals("none")) || (zone.equals("noMove"))) {
@@ -665,9 +569,6 @@ public class HandWaveyManager {
                 updateMovingMeans(zone, handZ);
                 touchPadNone(this.movingMeanX.get(), this.movingMeanY.get());
             } else if (zone.equals("scroll")) { // TODO This isn't getting triggered even though it should match.
-                if (this.handsState.zoneIsNew()) {
-                    rewindCursorPosition();
-                }
                 updateMovingMeans(zone, handZ);
                 scrollFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
             } else {
@@ -680,29 +581,5 @@ public class HandWaveyManager {
                 touchPadNone(this.movingMeanX.get(), this.movingMeanY.get());
             }
         }
-        
-        // This should happen after any potential stabilisation has happened.
-//         if (this.handsState.shouldMouseDown() == true) {
-//             if (zone == "scroll") {
-//                 rewindScroll();
-//             } else  {
-//                 rewindCursorPosition();
-//             }
-//             
-//             setCursorLock();
-//             
-//             String button = this.handsState.whichMouseButton();
-//             this.debug.out(1, "Mouse down (" + button + ") at " + coordsToString(this.movingMeanX.get(), this.movingMeanY.get()));
-//             this.output.mouseDown(this.output.getMouseButtonID(button));
-//             triggerEvent("mouse-down");
-//         }
-        
-        //handleKeysDowns();
-        
-        // Audio events.
-//         if (this.handsState.zoneIsNew()) {
-//             String eventID = "zone-" + zone;
-//             triggerEvent(eventID);
-//         }
     }
 }

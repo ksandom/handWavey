@@ -30,13 +30,6 @@ public class HandsState {
     private String zoneOverride = "";
     private String chosenButton = "left";
     
-    private Boolean zoneMouseDown = false;
-    private Boolean gestureMouseDown = false;
-    private Boolean resultMouseDownDown = false;
-    private Boolean resultMouseDownUp = false;
-    
-    private HashMap<String, Should> keys = new HashMap<String, Should>();
-    
     private float pi = (float)3.1415926536;
     
     private int primarySegments = 4;
@@ -109,13 +102,6 @@ public class HandsState {
         this.secondarySegments = Integer.parseInt(secondaryHand.getItem("rotationSegments").get());
         this.secondarySegmentWidth = (this.pi * 2) / this.secondarySegments;
         this.secondaryOffset = Double.parseDouble(secondaryHand.getItem("rotationOffset").get());
-        
-        
-        // Set up key tracking.
-        this.keys.put("alt", new Should(false));
-        this.keys.put("ctrl", new Should(false));
-        this.keys.put("shift", new Should(false));
-        this.keys.put("mouseButton", new Should(false));
     }
     
     public static HandsState singleton() {
@@ -138,7 +124,7 @@ public class HandsState {
     
     public void figureOutStuff() {
         Double primaryHandZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
-        this.primaryState.setZone(this.handsState.deriveZone(primaryHandZ));
+        this.primaryState.setZone(this.handsState.getZone(primaryHandZ));
         // TODO make zone getting based on this.primaryState.getZone.
         
         this.primaryState.setSegment(getHandSegment(true, this.handSummaries[0]));
@@ -146,7 +132,7 @@ public class HandsState {
 
         if (secondaryHandIsActive()) {
             Double secondaryHandZ = this.handSummaries[1].getHandZ() * this.zMultiplier;
-            this.secondaryState.setZone(this.handsState.deriveZone(secondaryHandZ));
+            this.secondaryState.setZone(this.handsState.getZone(secondaryHandZ));
             this.secondaryState.setSegment(getHandSegment(true, this.handSummaries[1]));
         }
         if (this.handSummaries[1] != null) {
@@ -162,12 +148,7 @@ public class HandsState {
             this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualEnterEvent() + "-" + secondaryState.getIndividualEnterEvent() + "-enter");
             this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualExitEvent() + "-" + secondaryState.getIndividualExitEvent() + "-enter");
         }
-        
-        // TODO Remove these?
-        figureOutMouseButtons();
-        figureOutKeys();
     }
-    
     
     private int getHandState(HandSummary handSummary) {
         if (handSummary.isValid() == false) {
@@ -239,7 +220,7 @@ public class HandsState {
         this.secondarySegment = -1;
     }
     
-    public String deriveZone(double handZ) {
+    private String deriveZone(double handZ) {
         String zone = "Unknown";
         
         if (this.zoneMode == "touchScreen") {
@@ -264,15 +245,22 @@ public class HandsState {
             }
         }
         
-        // TODO At the minimum this needs to be hand agnostic. But probably removed entirely.
-        // if (this.primarySegment == 2) {
-        if (this.zoneOverride != "") {
-            if (zone != "none" && zone != "noMove" && zone != "action") {
-                zone = this.zoneOverride;
-            }
+        return zone;
+    }
+    
+    public String getZone(double handZ) {
+        String newZone = deriveZone(handZ);
+        String bufferZone = deriveZone(handZ + this.zoneBuffer);
+        
+        if ((bufferZone == newZone) && (newZone != this.zone)) {
+            this.zone = newZone;
         }
         
-        return zone;
+        if (this.zoneOverride != "") {
+            return this.zoneOverride;
+        }
+        
+        return this.zone;
     }
     
     public void overrideZone(String zone) {
@@ -285,68 +273,6 @@ public class HandsState {
         this.zoneOverride = "";
     }
     
-    public String getZone(double handZ) {
-        String newZone = deriveZone(handZ);
-        String bufferZone = deriveZone(handZ + this.zoneBuffer);
-        
-        if ((bufferZone == newZone) && (newZone != this.zone)) {
-            this.isNew = true;
-            this.oldZone = this.zone;
-            
-            switch(newZone) {
-                case "none":
-                    this.zoneMouseDown = false;
-                    break;
-                case "noMove":
-                    this.zoneMouseDown = false;
-                    break;
-                case "active":
-                    this.zoneMouseDown = false;
-                    break;
-                case "absolute":
-                    this.zoneMouseDown = false;
-                    break;
-                case "relative":
-                    this.zoneMouseDown = false;
-                    break;
-                case "action":
-                    this.zoneMouseDown = true;
-                    break;
-            }
-            
-            this.zone = newZone;
-            this.debug.out(1, "Entered zone " + newZone + "  at depth " + String.valueOf(Math.round(handZ)));
-        } else {
-            this.isNew = false;
-        }
-        
-        return this.zone;
-    }
-    
-    public Boolean zoneIsNew() {
-        return this.isNew;
-    }
-    
-    public String getOldZone() {
-        return this.oldZone;
-    }
-    
-    public void figureOutMouseButtons() {
-        this.keys.get("mouseButton").set(((this.zoneMouseDown || this.gestureMouseDown) && this.zone != "none"));
-    }
-    
-    private Boolean combinedMouseDown() {
-        return ((this.zoneMouseDown || this.gestureMouseDown) && this.zone != "none");
-    }
-    
-    public Boolean shouldMouseDown() {
-        return this.keys.get("mouseButton").toTrue();
-    }
-    
-    public Boolean shouldMouseUp() {
-        return this.keys.get("mouseButton").toFalse();
-    }
-    
     public String whichMouseButton() {
         return this.chosenButton;
     }
@@ -354,43 +280,6 @@ public class HandsState {
     public void setMouseButton(String button) {
         this.chosenButton = button;
         this.debug.out(1, "Set mouse button to: " + button);
-    }
-    
-    public void setHandClosed(Boolean handClosed) {
-        this.gestureMouseDown = handClosed;
-    }
-    
-    public void figureOutKeys() {
-        switch (this.secondarySegment) {
-            case -1:
-                this.keys.get("alt").set(false);
-                this.keys.get("ctrl").set(false);
-                this.keys.get("shift").set(false);
-                break;
-            case 0:
-                this.keys.get("alt").set(false);
-                this.keys.get("ctrl").set(true);
-                this.keys.get("shift").set(false);
-                break;
-            case 1:
-                this.keys.get("alt").set(true);
-                this.keys.get("ctrl").set(false);
-                this.keys.get("shift").set(false);
-                break;
-            case 2:
-                this.keys.get("alt").set(false);
-                this.keys.get("ctrl").set(false);
-                this.keys.get("shift").set(true);
-                break;
-        }
-    }
-    
-    public Boolean shouldKeyDown(String keyName) {
-        return this.keys.get(keyName).toTrue();
-    }
-    
-    public Boolean shouldKeyUp(String keyName) {
-        return this.keys.get(keyName).toFalse();
     }
     
     private long getNow() {

@@ -307,51 +307,6 @@ public class HandWaveyConfig {
         
         Group audioEvents = this.config.newGroup("audioEvents");
         audioEvents.newItem(
-            "zone-none",
-            "metalDing01.wav",
-            "Sound to play when the hand moves into the none zone.");
-        
-        audioEvents.newItem(
-            "zone-noMove",
-            "metalDing02.wav",
-            "Sound to play when the hand moves into the noMove zone.");
-        
-        audioEvents.newItem(
-            "zone-active",
-            "metalDing03.wav",
-            "Sound to play when the hand moves into the active zone.");
-        
-        audioEvents.newItem(
-            "zone-action",
-            "metalDing04.wav",
-            "Sound to play when the hand moves into the action zone.");
-        
-        audioEvents.newItem(
-            "zone-absolute",
-            "metalDing02.wav",
-            "Sound to play when the hand moves into the absolute zone.");
-        
-        audioEvents.newItem(
-            "zone-relative",
-            "metalDing03.wav",
-            "Sound to play when the hand moves into the relative zone.");
-        
-        audioEvents.newItem(
-            "zone-scroll",
-            "metalDing05.wav",
-            "Sound to play when the hand switches to the scroll zone.");
-        
-        audioEvents.newItem(
-            "mouse-down",
-            "metalDing07.wav",
-            "Sound to play when the mouse is clicked.");
-        
-        audioEvents.newItem(
-            "mouse-up",
-            "metalDing08.wav",
-            "Sound to play when the mouse button is released.");
-        
-        audioEvents.newItem(
             "imposterHand-replace",
             "",
             "When we detect that a hand ID is not what we expect, but are able to replace it and continue.");
