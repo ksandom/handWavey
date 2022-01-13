@@ -277,7 +277,7 @@ public class HandsState {
     
     public void overrideZone(String zone) {
         this.zoneOverride = zone;
-        this.debug.out(1, "Zone override: " + zone);
+        this.debug.out(1, "Zone override: " + this.zoneOverride);
     }
     
     public void releaseZone() {

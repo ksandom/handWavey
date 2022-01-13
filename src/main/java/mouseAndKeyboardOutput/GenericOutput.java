@@ -138,16 +138,12 @@ public class GenericOutput implements Output {
         int result = InputEvent.BUTTON1_MASK;
         
         // https://docs.oracle.com/javase/7/docs/api/java/awt/event/InputEvent.html
-        switch(buttonName) {
-            case "left":
-                result = InputEvent.BUTTON1_MASK;
-                break;
-            case "middle":
-                result = InputEvent.BUTTON2_MASK;
-                break;
-            case "right":
-                result = InputEvent.BUTTON3_MASK;
-                break;
+        if (buttonName.equals("left")) {
+            result = InputEvent.BUTTON1_MASK;
+        } else if (buttonName.equals("middle")) {
+            result = InputEvent.BUTTON2_MASK;
+        } else if (buttonName.equals("right")) {
+            result = InputEvent.BUTTON3_MASK;
         }
         
         return result;

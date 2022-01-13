@@ -643,32 +643,31 @@ public class HandWaveyManager {
 //             }
 //         }
         
-        handleKeyUps();
+        //handleKeyUps();
 
         // Move the mouse cursor.
         if (!cusorIsLocked() && !this.handsState.inSegmentStanddown()) {
-            this.debug.out(1, "Got here aaaA \"" + zone + "\"");
-            if ((zone == "none") || (zone == "noMove")) {
+            if ((zone.equals("none")) || (zone.equals("noMove"))) {
                 if (this.zoneMode == "touchPad") {
                     updateMovingMeans(zone, handZ);
                     touchPadNone(this.movingMeanX.get(), this.movingMeanY.get());
                 }
-            } else if (zone == "active") {
+            } else if (zone.equals("active")) {
                 updateMovingMeans(zone, handZ);
                 moveMouseTouchPadFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
-            } else if (zone == "absolute") {
+            } else if (zone.equals("absolute")) {
                 updateMovingMeans(zone, handZ);
                 moveMouseAbsoluteFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
-            } else if (zone == "relative") {
+            } else if (zone.equals("relative")) {
                 updateMovingMeans(zone, handZ);
                 moveMouseRelativeFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
-            } else if (zone == "action") {
-            } else if (zone == "scroll") { // TODO This isn't getting triggered even though it should match.
-                this.debug.out(1, "Got here aaaB - inside");
+            } else if (zone.equals("action")) {
+                updateMovingMeans(zone, handZ);
+                touchPadNone(this.movingMeanX.get(), this.movingMeanY.get());
+            } else if (zone.equals("scroll")) { // TODO This isn't getting triggered even though it should match.
                 if (this.handsState.zoneIsNew()) {
                     rewindCursorPosition();
                 }
-                this.debug.out(1, "Got here aaaC");
                 updateMovingMeans(zone, handZ);
                 scrollFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
             } else {
@@ -680,7 +679,6 @@ public class HandWaveyManager {
                 updateMovingMeans(zone, handZ);
                 touchPadNone(this.movingMeanX.get(), this.movingMeanY.get());
             }
-            this.debug.out(1, "Got here aaaD");
         }
         
         // This should happen after any potential stabilisation has happened.
@@ -699,7 +697,7 @@ public class HandWaveyManager {
 //             triggerEvent("mouse-down");
 //         }
         
-        handleKeysDowns();
+        //handleKeysDowns();
         
         // Audio events.
 //         if (this.handsState.zoneIsNew()) {
