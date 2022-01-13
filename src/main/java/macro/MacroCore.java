@@ -51,7 +51,6 @@ public class MacroCore {
                     getButton(parameters, 0)); // Mouse button. ("left", "middle", "right")
                 break;
             case "mouseDown":
-                System.out.println(getButton(parameters, 0));
                 this.output.mouseDown(
                     getButton(parameters, 0)); // Mouse button. ("left", "middle", "right")
                 break;
@@ -80,6 +79,7 @@ public class MacroCore {
             case "setButton":
                 this.handsState.setMouseButton(parm(parameters, 0, "left"));
                 break;
+            
             default:
                 this.debug.out(1, "Unknown command: " + command);
                 break;
@@ -87,9 +87,6 @@ public class MacroCore {
     }
     
     /* TODO:
-        * #Override defaults in config before load finishes.
-        * #Set zone action to doubleclick.
-        * #Add events to HandsState.
         * Rewind
             move to handsState
                 movingMeans
@@ -98,16 +95,12 @@ public class MacroCore {
         * Add other commands
 
 
-        this.output.getMouseButtonID("left")
-        this.output.scroll(1);
                 this.output.keyDown(1);
                 keyUp
-                assertEquals(99, this.output.getKeyID("thing"));
                 
                 setButton
-                setKey
-                overrideZone
-                releaseZone
+                keyDown
+                keyUp
                 rewind
                 freeze
     */

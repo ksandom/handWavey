@@ -13,13 +13,20 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 
 public class GenericOutput implements Output {
     private GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     private GraphicsDevice[] gs = this.ge.getScreenDevices();
     private Robot robot = null;
     private int button = 0;
+    private int downButton = 0;
     private String[] keysIKnow = {"ctrl", "alt", "shift"};
+    
+    private static final int invalid = -1;
+    
+    private HashMap<String, Integer> keys = new HashMap<String, Integer>();
+    private HashMap<String, Integer> buttons = new HashMap<String, Integer>();
     
     public GenericOutput() {
         try {
@@ -27,8 +34,44 @@ public class GenericOutput implements Output {
         } catch (AWTException e) {
             e.printStackTrace();
         }
+        
+        defineKeys();
+        defineButtons();
+        
+        this.button = getMouseButtonID("left");
+        this.downButton = this.button;
     }
 
+    private void defineKeys() {
+        //
+        // Add keys here:
+        //
+        
+        // From: https://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyEvent.html
+        defineKey("ctrl", KeyEvent.VK_CONTROL);
+        defineKey("alt", KeyEvent.VK_ALT);
+        defineKey("shift", KeyEvent.VK_SHIFT);
+    }
+    
+    private void defineKey(String keyName, int keyCode) {
+        this.keys.put(keyName, keyCode);
+    }
+    
+    private void defineButtons() {
+        //
+        // Add mouse buttons here:
+        //
+        
+        // TODO From: https://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyEvent.html
+        defineButton("left", InputEvent.BUTTON1_MASK);
+        defineButton("middle", InputEvent.BUTTON2_MASK);
+        defineButton("right", InputEvent.BUTTON3_MASK);
+    }
+    
+    private void defineButton(String buttonName, int buttonCode) {
+        this.buttons.put(buttonName, buttonCode);
+    }
+    
     public Dimension getDesktopResolution() {
         int x = 0;
         int y = 0;
@@ -105,24 +148,31 @@ public class GenericOutput implements Output {
     }
     
     public void doubleClick(int button) {
-        click(button);
-        click(button);
+        if (isValid(button)) {
+            click(button);
+            click(button);
+        }
     }
     
     public void mouseDown(int button) {
-        try {
-            this.robot.mousePress(button);
-            this.button = button;
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+        if (isValid(button)) {
+            try {
+                this.robot.mousePress(button);
+                this.button = button;
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
         }
     }
     
     public void mouseUp(int button) {
-        try {
-            this.robot.mouseRelease(button);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+        if (isValid(button)) {
+            try {
+                this.robot.mouseRelease(this.downButton);
+                // this.robot.mouseRelease(button); // TODO Restore the ability to press multiple buttons at a time.
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
         }
     }
     
@@ -134,53 +184,45 @@ public class GenericOutput implements Output {
         this.robot.mouseWheel(amount);
     }
     
+    private Boolean isValid(int value) {
+        return (value != -1);
+    }
+    
     public int getMouseButtonID(String buttonName) {
-        int result = InputEvent.BUTTON1_MASK;
+        int result = this.invalid;
         
-        // https://docs.oracle.com/javase/7/docs/api/java/awt/event/InputEvent.html
-        if (buttonName.equals("left")) {
-            result = InputEvent.BUTTON1_MASK;
-        } else if (buttonName.equals("middle")) {
-            result = InputEvent.BUTTON2_MASK;
-        } else if (buttonName.equals("right")) {
-            result = InputEvent.BUTTON3_MASK;
+        if (this.buttons.containsKey(buttonName)) {
+            result = this.buttons.get(buttonName);
         }
-        
         return result;
     }
     
     public int getKeyID(String keyName) {
-        int result = 0;
+        int result = this.invalid;
         
-        // From: https://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyEvent.html
-        switch(keyName) {
-            case "ctrl":
-                result = KeyEvent.VK_CONTROL;
-                break;
-            case "alt":
-                result = KeyEvent.VK_ALT;
-                break;
-            case "shift":
-                result = KeyEvent.VK_SHIFT;
-                break;
+        if (this.keys.containsKey(keyName)) {
+            result = this.keys.get(keyName);
         }
-        
         return result;
     }
     
     public void keyDown(int key) {
-        try {
-            this.robot.keyPress(key);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+        if (isValid(key)) {
+            try {
+                this.robot.keyPress(key);
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
         }
     }
     
     public void keyUp(int key) {
-        try {
-            this.robot.keyRelease(key);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+        if (isValid(key)) {
+            try {
+                this.robot.keyRelease(key);
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
         }
     }
     
