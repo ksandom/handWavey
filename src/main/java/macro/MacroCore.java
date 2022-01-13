@@ -80,6 +80,19 @@ public class MacroCore {
                 this.handsState.setMouseButton(parm(parameters, 0, "left"));
                 break;
             
+            // Keyboard instructions.
+            case "keyDown":
+                this.output.keyDown(this.output.getKeyID(parm(parameters, 0, "")));
+                break;
+            case "keyUp":
+                this.output.keyUp(this.output.getKeyID(parm(parameters, 0, "")));
+                break;
+            case "keyPress":
+                this.output.keyDown(this.output.getKeyID(parm(parameters, 0, "")));
+                this.output.keyUp(this.output.getKeyID(parm(parameters, 0, "")));
+                break;
+            
+            // Oh ohhhhhhhh.
             default:
                 this.debug.out(1, "Unknown command: " + command);
                 break;

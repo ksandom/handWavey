@@ -96,7 +96,7 @@ public class Gesture {
             "");
         overrideDefault(
             "general-segment-s0-exit",
-            "keyDown(\"ctrl\");",
+            "keyUp(\"ctrl\");",
             "");
         overrideDefault(
             "general-segment-s1-enter",
@@ -104,7 +104,7 @@ public class Gesture {
             "");
         overrideDefault(
             "general-segment-s1-exit",
-            "keyDown(\"alt\");",
+            "keyUp(\"alt\");",
             "");
         overrideDefault(
             "general-segment-s2-enter",
@@ -112,7 +112,11 @@ public class Gesture {
             "");
         overrideDefault(
             "general-segment-s2-exit",
-            "keyDown(\"shift\");",
+            "keyUp(\"shift\");",
+            "");
+        overrideDefault(
+            "general-zone-sActive-exit",
+            "keyUp(\"shift\");keyUp(\"alt\");keyUp(\"ctrl\");",
             "");
         
         // Stabilise gesture changes.
