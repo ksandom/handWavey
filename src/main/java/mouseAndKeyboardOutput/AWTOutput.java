@@ -150,39 +150,39 @@ public class AWTOutput implements Output {
         this.robot.mouseMove(x, y);
     }
     
-    public void click(int button) {
-        if (isValid(button)) {
-            this.debug.out(1, "Click with button ID: " + String.valueOf(button));
+    public void click(String button) {
+        if (isValidButton(button)) {
+            this.debug.out(1, "Click with button: " + button);
             mouseDown(button);
             mouseUp(button);
         }
     }
     
-    public void doubleClick(int button) {
-        if (isValid(button)) {
-            this.debug.out(1, "Doubleclick with button ID: " + String.valueOf(button));
+    public void doubleClick(String button) {
+        if (isValidButton(button)) {
+            this.debug.out(1, "Doubleclick with button: " + button);
             click(button);
             click(button);
         }
     }
     
-    public void mouseDown(int button) {
-        if (isValid(button)) {
+    public void mouseDown(String button) {
+        if (isValidButton(button)) {
             try {
-                this.debug.out(1, "MouseDown with button ID: " + String.valueOf(button));
-                this.robot.mousePress(button);
-                this.button = button;
-                this.downButton = button;
+                this.button = getMouseButtonID(button);
+                this.debug.out(1, "MouseDown with button: " + button + "/" + String.valueOf(this.button));
+                this.downButton = this.button;
+                this.robot.mousePress(this.button);
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }
         }
     }
     
-    public void mouseUp(int button) {
-        if (isValid(button)) {
+    public void mouseUp(String button) {
+        if (isValidButton(button)) {
             try {
-                this.debug.out(1, "MouseUp with button ID: " + String.valueOf(this.downButton) + "(" + String.valueOf(button) + " requested.)");
+                this.debug.out(1, "MouseUp with button ID: " + String.valueOf(this.downButton) + "(" + button + "/" + String.valueOf(getMouseButtonID(button)) + " requested.)");
                 this.robot.mouseRelease(this.downButton);
                 // this.robot.mouseRelease(button); // TODO Restore the ability to press multiple buttons at a time.
             } catch (IllegalArgumentException e) {
@@ -201,11 +201,15 @@ public class AWTOutput implements Output {
         this.robot.mouseWheel(amount);
     }
     
-    private Boolean isValid(int value) {
-        return (value != AWTOutput.invalid);
+    private Boolean isValidButton(String value) {
+        return this.buttons.containsKey(value);
     }
     
-    public int getMouseButtonID(String buttonName) {
+    private Boolean isValidKey(String value) {
+        return this.keys.containsKey(value);
+    }
+    
+    private int getMouseButtonID(String buttonName) {
         int result = AWTOutput.invalid;
         
         if (this.buttons.containsKey(buttonName)) {
@@ -214,7 +218,7 @@ public class AWTOutput implements Output {
         return result;
     }
     
-    public int getKeyID(String keyName) {
+    private int getKeyID(String keyName) {
         int result = AWTOutput.invalid;
         
         if (this.keys.containsKey(keyName)) {
@@ -223,22 +227,22 @@ public class AWTOutput implements Output {
         return result;
     }
     
-    public void keyDown(int key) {
-        if (isValid(key)) {
+    public void keyDown(String key) {
+        if (isValidKey(key)) {
             try {
-                this.debug.out(1, "KeyDown with key ID: " + String.valueOf(key));
-                this.robot.keyPress(key);
+                this.debug.out(1, "KeyDown: " + key);
+                this.robot.keyPress(getKeyID(key));
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }
         }
     }
     
-    public void keyUp(int key) {
-        if (isValid(key)) {
+    public void keyUp(String key) {
+        if (isValidKey(key)) {
             try {
-                this.debug.out(1, "KeyUp with key ID: " + String.valueOf(key));
-                this.robot.keyRelease(key);
+                this.debug.out(1, "KeyUp: " + key);
+                this.robot.keyRelease(getKeyID(key));
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }
@@ -249,7 +253,7 @@ public class AWTOutput implements Output {
         return this.keys.keySet();
     }
     
-    public void sleep(int microseconds) {
+    private void sleep(int microseconds) {
         try {
             Thread.sleep(microseconds);
         } catch (InterruptedException e) {

@@ -1,5 +1,7 @@
 package mouseAndKeyboardOutput;
 
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.Dimension;
 import java.util.*;
 
@@ -27,30 +29,43 @@ public class NullOutput implements Output {
         this.y = y;
     }
     
-    public void click(int button) {
+    public void click(String button) {
         this.clicked = true;
-        this.lastButton = button;
+        this.lastButton = getMouseButtonID(button);
     }
     
-    public void doubleClick(int button) {
+    public void doubleClick(String button) {
         this.clicked = true;
-        this.lastButton = button;
+        this.lastButton = getMouseButtonID(button);
     }
     
-    public void mouseDown(int button) {
-        this.lastButton = button;
+    public void mouseDown(String button) {
+        this.lastButton = getMouseButtonID(button);
     }
     
-    public void mouseUp(int button) {
-        this.lastButton = button;
+    public void mouseUp(String button) {
+        this.lastButton = getMouseButtonID(button);
     }
     
-    public int getLastMouseButton() {
+    private int getLastMouseButton() {
         return this.lastButton;
     }
     
-    public int getMouseButtonID(String buttonName) {
-        return 5;
+    private int getMouseButtonID(String buttonName) {
+        int result = 0;
+        switch (buttonName) {
+            case "left":
+                result = InputEvent.BUTTON1_MASK;
+                break;
+            case "middle":
+                result = InputEvent.BUTTON2_MASK;
+                break;
+            case "right":
+                result = InputEvent.BUTTON3_MASK;
+                break;
+        }
+        
+        return result;
     }
     
     
@@ -59,16 +74,29 @@ public class NullOutput implements Output {
     }
     
     
-    public void keyDown(int key) {
-        this.lastKey = key;
+    public void keyDown(String key) {
+        this.lastKey = getKeyID(key);
     }
     
-    public void keyUp(int key) {
-        this.lastKey = key;
+    public void keyUp(String key) {
+        this.lastKey = getKeyID(key);
     }
     
-    public int getKeyID(String keyName) {
-        return 99;
+    private int getKeyID(String keyName) {
+        int result = 0;
+        switch (keyName) {
+            case "ctrl":
+                result = KeyEvent.VK_CONTROL;
+                break;
+            case"alt":
+                result = KeyEvent.VK_ALT;
+                break;
+            case "shift":
+                result = KeyEvent.VK_SHIFT;
+                break;
+        }
+        
+        return result;
     }
     
     public Set<String> getKeysIKnow() {
@@ -99,6 +127,9 @@ public class NullOutput implements Output {
                 break;
             case "lastKey":
                 result = this.lastKey;
+                break;
+            case "lastMouseButton":
+                result = this.lastButton;
                 break;
         }
         

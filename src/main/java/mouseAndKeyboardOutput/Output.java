@@ -8,18 +8,18 @@ public interface Output {
     abstract Dimension getDesktopResolution();
     abstract void setPosition(int x, int y);
     
-    abstract void click(int button);
-    abstract void doubleClick(int button);
-    abstract void mouseDown(int button);
-    abstract void mouseUp(int button);
-    abstract int getLastMouseButton();
-    abstract int getMouseButtonID(String buttonName);
+    abstract void click(String button);
+    abstract void doubleClick(String button);
+    abstract void mouseDown(String button);
+    abstract void mouseUp(String button);
+    //abstract int getLastMouseButton();
+    //abstract int getMouseButtonID(String buttonName);
     
     abstract void scroll(int amount);
     
-    abstract void keyDown(int key);
-    abstract void keyUp(int key);
-    abstract int getKeyID(String keyName);
+    abstract void keyDown(String key);
+    abstract void keyUp(String key);
+    //abstract int getKeyID(String keyName);
     abstract Set<String> getKeysIKnow();
     
     abstract int testInt(String testName); // For testing internals in unit tests. Can simply return nothing.;

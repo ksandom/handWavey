@@ -2,6 +2,8 @@ package mouseAndKeyboardOutput;
 
 import mouseAndKeyboardOutput.*;
 import java.awt.Dimension;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
@@ -37,38 +39,33 @@ class TestOutput {
     @Test
     public void testClick() {
         assertEquals(0, this.output.testInt("clicked"));
-        this.output.click(3);
-        assertEquals(3, this.output.getLastMouseButton());
+        this.output.click("left");
+        assertEquals(InputEvent.BUTTON1_MASK, this.output.testInt("lastMouseButton"));
         assertEquals(1, this.output.testInt("clicked"));
     }
     
     @Test
     public void testDoubleClick() {
         assertEquals(0, this.output.testInt("clicked"));
-        this.output.doubleClick(4);
-        assertEquals(4, this.output.getLastMouseButton());
+        this.output.doubleClick("middle");
+        assertEquals(InputEvent.BUTTON2_MASK, this.output.testInt("lastMouseButton"));
         assertEquals(1, this.output.testInt("clicked"));
     }
     
     @Test
     public void testMouseDown() {
-        this.output.mouseDown(4);
-        assertEquals(4, this.output.getLastMouseButton());
-        this.output.mouseDown(5);
-        assertEquals(5, this.output.getLastMouseButton());
+        this.output.mouseDown("left");
+        assertEquals(InputEvent.BUTTON1_MASK, this.output.testInt("lastMouseButton"));
+        this.output.mouseDown("right");
+        assertEquals(InputEvent.BUTTON3_MASK, this.output.testInt("lastMouseButton"));
     }
     
     @Test
     public void testMouseUp() {
-        this.output.mouseUp(4);
-        assertEquals(4, this.output.getLastMouseButton());
-        this.output.mouseUp(5);
-        assertEquals(5, this.output.getLastMouseButton());
-    }
-    
-    @Test
-    public void testGetMouseButtonID() {
-        assertEquals(5, this.output.getMouseButtonID("left"));
+        this.output.mouseUp("left");
+        assertEquals(InputEvent.BUTTON1_MASK, this.output.testInt("lastMouseButton"));
+        this.output.mouseUp("right");
+        assertEquals(InputEvent.BUTTON3_MASK, this.output.testInt("lastMouseButton"));
     }
     
     @Test
@@ -84,23 +81,18 @@ class TestOutput {
     
     @Test
     public void testKeyDown() {
-        this.output.keyDown(1);
-        assertEquals(1, this.output.testInt("lastKey"));
-        this.output.keyDown(3);
-        assertEquals(3, this.output.testInt("lastKey"));
+        this.output.keyDown("ctrl");
+        assertEquals(KeyEvent.VK_CONTROL, this.output.testInt("lastKey"));
+        this.output.keyDown("alt");
+        assertEquals(KeyEvent.VK_ALT, this.output.testInt("lastKey"));
     }
     
     @Test
     public void testKeyUp() {
-        this.output.keyUp(2);
-        assertEquals(2, this.output.testInt("lastKey"));
-        this.output.keyUp(7);
-        assertEquals(7, this.output.testInt("lastKey"));
-    }
-    
-    @Test
-    public void testGetKeyID() {
-        assertEquals(99, this.output.getKeyID("thing"));
+        this.output.keyUp("ctrl");
+        assertEquals(KeyEvent.VK_CONTROL, this.output.testInt("lastKey"));
+        this.output.keyUp("alt");
+        assertEquals(KeyEvent.VK_ALT, this.output.testInt("lastKey"));
     }
     
     @Test

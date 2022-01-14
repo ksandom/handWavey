@@ -27,6 +27,11 @@ public class HandWaveyConfig {
             "This number is incremented by the programmer whenever existing config items get changed (eg new description, default value etc) so that conflicts can be resolved.");
         configFormatVersion.set("2021-11-26"); // Update it here.
 
+        this.config.newItem(
+            "output",
+            "AWTOutput",
+            "[AWTOutput, NullOutput]: Which method to use to control the mouse and keyboard. Default is AWTOutput, which will be the best setting in most situations. NullOutput is there purely for testing.");
+        
         Group debug = this.config.newGroup("debug");
         debug.newItem(
             "HandWaveyManager",

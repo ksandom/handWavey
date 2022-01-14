@@ -82,12 +82,25 @@ public class HandWaveyManager {
         HandWaveyConfig handWaveyConfig = new HandWaveyConfig("handWavey");
         handWaveyConfig.defineGeneralConfig();
         
-        this.output = new AWTOutput();
+        String chosenOutput = Config.singleton().getItem("output").get();
+        selectOutput(chosenOutput);
+        
         this.handsState = HandsState.singleton();
         this.handWaveyEvent = new HandWaveyEvent(this.output, true, this.handsState, this);
         this.handsState.setHandWaveyEvent(this.handWaveyEvent);
         
         reloadConfig();
+    }
+    
+    public void selectOutput(String chosenOutput) {
+        switch (chosenOutput) {
+            case "AWTOutput":
+                this.output = new AWTOutput();
+                break;
+            case "NullOutput":
+                this.output = new NullOutput();
+                break;
+        }
     }
     
     public void reloadConfig() {

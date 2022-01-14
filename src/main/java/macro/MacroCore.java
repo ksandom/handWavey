@@ -82,14 +82,14 @@ public class MacroCore {
             
             // Keyboard instructions.
             case "keyDown":
-                this.output.keyDown(this.output.getKeyID(parm(parameters, 0, "")));
+                this.output.keyDown(parm(parameters, 0, ""));
                 break;
             case "keyUp":
-                this.output.keyUp(this.output.getKeyID(parm(parameters, 0, "")));
+                this.output.keyUp(parm(parameters, 0, ""));
                 break;
             case "keyPress":
-                this.output.keyDown(this.output.getKeyID(parm(parameters, 0, "")));
-                this.output.keyUp(this.output.getKeyID(parm(parameters, 0, "")));
+                this.output.keyDown(parm(parameters, 0, ""));
+                this.output.keyUp(parm(parameters, 0, ""));
                 break;
             
             // Oh ohhhhhhhh.
@@ -99,32 +99,12 @@ public class MacroCore {
         }
     }
     
-    /* TODO:
-        * Rewind
-            move to handsState
-                movingMeans
-                history
-        * Add keyboard commands
-        * Add other commands
-
-
-                this.output.keyDown(1);
-                keyUp
-                
-                setButton
-                keyDown
-                keyUp
-                rewind
-                freeze
-    */
     
-    
-    private int getButton(String[] parameters, int position) {
+    private String getButton(String[] parameters, int position) {
         // If a button is specified, use that. Otherwise use the one that handsState thinks we should use.
         String button = parm(parameters, position, this.handsState.whichMouseButton());
-        int buttonID = this.output.getMouseButtonID(button);
-        this.debug.out(1, "Used button: " + button + " => " + String.valueOf(buttonID));
-        return buttonID;
+        this.debug.out(1, "Used button: " + button);
+        return button;
     }
     
     private int toInt(String input) {
@@ -135,6 +115,7 @@ public class MacroCore {
         if (position > parameters.length-1) {
             // Parameter is not provided.
             return defaultValue;
+
         } else {
             if (parameters[position] == "") {
                 return defaultValue;
