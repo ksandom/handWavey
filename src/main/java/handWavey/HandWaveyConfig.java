@@ -38,11 +38,11 @@ public class HandWaveyConfig {
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. This option tunes the UltraMotion input method.");
         debug.newItem(
             "HandWaveyEvent",
-            "2",
+            "0",
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. HandWaveyEvent is for taking the right actions when an event is triggers. If you're not sure if your eventActions or eventAudio is not behaving correctly, this is the place to look.");
         debug.newItem(
             "HandsState",
-            "1",
+            "0",
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. HandsState tracks what gesture the hands are currently making, and triggers events based on changes.");
         debug.newItem(
             "MacroLine",
@@ -269,7 +269,7 @@ public class HandWaveyConfig {
             "Small change in output moves the pointer very precisely. A larger movement moves the pointer much more drastically.");
         touchPadConfig.newItem(
             "maxSpeed",
-            "20",
+            "25",
             "Maximum speed per second.");
         
         
@@ -303,7 +303,7 @@ public class HandWaveyConfig {
             "Small change in output moves the pointer very precisely. A larger movement moves the pointer much more drastically.");
         scrollConfig.newItem(
             "maxSpeed",
-            "20",
+            "35",
             "Maximum speed per second.");
         scrollConfig.newItem(
             "rewindScrollTime",

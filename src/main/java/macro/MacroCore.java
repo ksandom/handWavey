@@ -94,7 +94,7 @@ public class MacroCore {
             
             // Oh ohhhhhhhh.
             default:
-                this.debug.out(1, "Unknown command: " + command);
+                this.debug.out(0, "Unknown command: " + command);
                 break;
         }
     }
@@ -122,8 +122,9 @@ public class MacroCore {
     private int getButton(String[] parameters, int position) {
         // If a button is specified, use that. Otherwise use the one that handsState thinks we should use.
         String button = parm(parameters, position, this.handsState.whichMouseButton());
-        this.debug.out(1, "Used button: " + button);
-        return this.output.getMouseButtonID(button);
+        int buttonID = this.output.getMouseButtonID(button);
+        this.debug.out(1, "Used button: " + button + " => " + String.valueOf(buttonID));
+        return buttonID;
     }
     
     private int toInt(String input) {

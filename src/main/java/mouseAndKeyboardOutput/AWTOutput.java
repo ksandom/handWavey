@@ -68,7 +68,7 @@ public class AWTOutput implements Output {
         // Add mouse buttons here:
         //
         
-        // TODO From: https://docs.oracle.com/javase/7/docs/api/java/awt/event/MouseEvent.html
+        // From: https://docs.oracle.com/javase/7/docs/api/java/awt/event/MouseEvent.html
         defineButton("left", InputEvent.BUTTON1_MASK);
         defineButton("middle", InputEvent.BUTTON2_MASK);
         defineButton("right", InputEvent.BUTTON3_MASK);
@@ -172,6 +172,7 @@ public class AWTOutput implements Output {
                 this.debug.out(1, "MouseDown with button ID: " + String.valueOf(button));
                 this.robot.mousePress(button);
                 this.button = button;
+                this.downButton = button;
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }
@@ -195,7 +196,8 @@ public class AWTOutput implements Output {
     }
     
     public void scroll(int amount) {
-        this.debug.out(1, "Scroll by: " + String.valueOf(amount));
+        int debugLevel = (amount == 0)?2:1;
+        this.debug.out(debugLevel, "Scroll by: " + String.valueOf(amount));
         this.robot.mouseWheel(amount);
     }
     
