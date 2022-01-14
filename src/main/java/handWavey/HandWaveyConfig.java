@@ -27,11 +27,33 @@ public class HandWaveyConfig {
             "This number is incremented by the programmer whenever existing config items get changed (eg new description, default value etc) so that conflicts can be resolved.");
         configFormatVersion.set("2021-11-26"); // Update it here.
 
-        Group ultraMotion = this.config.newGroup("ultraMotion");
-        ultraMotion.newItem(
-            "debugLevel",
+        Group debug = this.config.newGroup("debug");
+        debug.newItem(
+            "HandWaveyManager",
             "1",
-            "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5  is probably more detail than you'll ever want.");
+            "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. HandWaveyManager is the glue that brings everything together. If you're having trouble working out what to debug, start here.");
+        debug.newItem(
+            "UltraMotionInput",
+            "1",
+            "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. This option tunes the UltraMotion input method.");
+        debug.newItem(
+            "HandWaveyEvent",
+            "2",
+            "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. HandWaveyEvent is for taking the right actions when an event is triggers. If you're not sure if your eventActions or eventAudio is not behaving correctly, this is the place to look.");
+        debug.newItem(
+            "HandsState",
+            "1",
+            "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. HandsState tracks what gesture the hands are currently making, and triggers events based on changes.");
+        debug.newItem(
+            "MacroLine",
+            "1",
+            "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. MacroLine process commands that have come directly from events.");
+        debug.newItem(
+            "AWTOutput",
+            "1",
+            "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. AWTOutput is the default way to control the mouse and keyboard of a machine.");
+        
+        Group ultraMotion = this.config.newGroup("ultraMotion");
         ultraMotion.newItem(
             "maxHands",
             "2",
@@ -59,10 +81,6 @@ public class HandWaveyConfig {
             "When the hand is at the min height, how far from the center of the cone can the hand be horizontally before it it considered to be too unreliable.");
 
         Group handSummaryManager = this.config.newGroup("handSummaryManager");
-        handSummaryManager.newItem(
-            "debugLevel",
-            "1",
-            "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5  is probably more detail than you'll ever want.");
         handSummaryManager.newItem(
             "maxChange",
             "30",

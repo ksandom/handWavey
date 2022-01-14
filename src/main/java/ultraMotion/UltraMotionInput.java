@@ -37,8 +37,7 @@ public class UltraMotionInput extends Listener {
         this.openThreshold = Float.parseFloat(ultraMotionConfig.getItem("openThreshold").get());
         this.maxHands = Integer.parseInt(ultraMotionConfig.getItem("maxHands").get());
         
-        int debugLevel = Integer.parseInt(ultraMotionConfig.getItem("debugLevel").get());
-        this.debug = new Debug(debugLevel, "UltraMotionInput");
+        this.debug = Debug.getDebug("UltraMotionInput");
         
         // Configure the cone of silence for ignoring input from outside the reliable cone.
         Group conOfSilence = ultraMotionConfig.getGroup("coneOfSilence");
@@ -102,15 +101,15 @@ public class UltraMotionInput extends Listener {
     }
     
     public void onInit(Controller controller) {
-        this.debug.out(1, "UltraMotionInput: Initialized");
+        this.debug.out(0, "Initialised.");
     }
 
     public void onConnect(Controller controller) {
-        this.debug.out(1, "UltraMotionInput: Connected");
+        this.debug.out(0, "Connected.");
     }
 
     public void onDisconnect(Controller controller) {
-        this.debug.out(1, "UltraMotionInput: Disconnected");
+        this.debug.out(0, "Disconnected.");
         
         if (this.ultraMotionManager != null) {
             this.ultraMotionManager.exit();
@@ -118,13 +117,13 @@ public class UltraMotionInput extends Listener {
     }
 
     public void onExit(Controller controller) {
-        this.debug.out(1, "UltraMotionInput: Exited");
+        this.debug.out(0, "Exited.");
     }
 
     public void onFrame(Controller controller) {
         // Get the most recent frame and report some basic information
         Frame frame = controller.frame();
-        this.debug.out(2, "UltraMotionInput: Frame id: " + frame.id()
+        this.debug.out(2, "Frame id: " + frame.id()
                          + ", timestamp: " + frame.timestamp()
                          + ", hands: " + frame.hands().count());
 

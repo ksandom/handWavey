@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.io.File;
 
+/* HandWaveyManager is the glue that brings everything together. */
 public class HandWaveyManager {
     private HandSummary[] handSummaries;
     private HashMap<String, Zone> zones = new HashMap<String, Zone>();
@@ -81,7 +82,7 @@ public class HandWaveyManager {
         HandWaveyConfig handWaveyConfig = new HandWaveyConfig("handWavey");
         handWaveyConfig.defineGeneralConfig();
         
-        this.output = new GenericOutput();
+        this.output = new AWTOutput();
         this.handsState = HandsState.singleton();
         this.handWaveyEvent = new HandWaveyEvent(this.output, true, this.handsState, this);
         this.handsState.setHandWaveyEvent(this.handWaveyEvent);
@@ -95,8 +96,7 @@ public class HandWaveyManager {
         
         
         // Set up the debugging.
-        int debugLevel = Integer.parseInt(handSummaryManager.getItem("debugLevel").get());
-        this.debug = new Debug(debugLevel, "HandWaveyManager");
+        this.debug = Debug.getDebug("HandWaveyManager");
         
         
         // Set up maxChange.
@@ -112,7 +112,10 @@ public class HandWaveyManager {
         
         
         // Get the total desktop resolution.
-        this.output.info();
+        if (this.debug.getLevel() >= 2) {
+            this.output.info();
+        }
+        
         Dimension desktopResolution = this.output.getDesktopResolution();
         this.desktopWidth = desktopResolution.width;
         this.desktopHeight = desktopResolution.height;

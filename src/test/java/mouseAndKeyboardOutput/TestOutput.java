@@ -105,6 +105,6 @@ class TestOutput {
     
     @Test
     public void testGetKeysIKnow() {
-        assertEquals(3, this.output.getKeysIKnow().length);
+        assertEquals(3, this.output.getKeysIKnow().size());
     }
 }

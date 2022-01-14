@@ -1,6 +1,7 @@
 package mouseAndKeyboardOutput;
 
 import java.awt.Dimension;
+import java.util.*;
 
 public interface Output {
     abstract void info();
@@ -19,7 +20,7 @@ public interface Output {
     abstract void keyDown(int key);
     abstract void keyUp(int key);
     abstract int getKeyID(String keyName);
-    abstract String[] getKeysIKnow();
+    abstract Set<String> getKeysIKnow();
     
     abstract int testInt(String testName); // For testing internals in unit tests. Can simply return nothing.;
 }

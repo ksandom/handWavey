@@ -26,8 +26,9 @@ class TestState {
         Config config = Config.singleton();
         
         // Override some config so that we know that the unit tests will get expected values.
+        config.getGroup("debug").getItem("HandWaveyManager").set("2");
+        
         Group handSummaryManager = config.getGroup("handSummaryManager");
-        handSummaryManager.getItem("debugLevel").set("2");
         handSummaryManager.getItem("rangeMethod").set("manual");
         
         Group axisOrientation = handSummaryManager.getGroup("axisOrientation");

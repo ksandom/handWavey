@@ -12,7 +12,7 @@ public class MacroCore {
     private HandWaveyManager handWaveyManager = null;
     
     public MacroCore(String context, Output output, HandsState handsState, HandWaveyManager handWaveyManager) {
-        this.debug = new Debug(1, context);
+        this.debug = Debug.getDebug(context);
         this.output = output;
         
         this.handsState = handsState;

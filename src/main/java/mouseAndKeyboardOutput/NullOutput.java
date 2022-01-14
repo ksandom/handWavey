@@ -1,6 +1,7 @@
 package mouseAndKeyboardOutput;
 
 import java.awt.Dimension;
+import java.util.*;
 
 public class NullOutput implements Output {
     private int x = 0;
@@ -70,8 +71,13 @@ public class NullOutput implements Output {
         return 99;
     }
     
-    public String[] getKeysIKnow() {
-        return new String[] {"a", "b", "c"};
+    public Set<String> getKeysIKnow() {
+        Set<String> keys = new HashSet<String>();
+        keys.add("a");
+        keys.add("b");
+        keys.add("c");
+        
+        return keys;
     }
     
     

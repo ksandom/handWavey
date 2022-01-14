@@ -1,6 +1,7 @@
 package debug;
 
 import debug.Debug;
+import config.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
@@ -35,25 +36,57 @@ public class DebugTest {
 
     @Test
     public void testOutput() {
-        assertEquals(this.debug.getDebugText(3, "Blah."), "Debug 3 (Unit tests): Blah.");
+        assertEquals("Debug 3 (Unit tests): Blah.", this.debug.getDebugText(3, "Blah."));
     }
 
     @Test
     public void testWhen() {
-        assertEquals(this.debug.shouldOutput(2), true);
-        assertEquals(this.debug.shouldOutput(3), true);
-        assertEquals(this.debug.shouldOutput(4), false);
+        assertEquals(true, this.debug.shouldOutput(2));
+        assertEquals(true, this.debug.shouldOutput(3));
+        assertEquals(false, this.debug.shouldOutput(4));
 
         this.debug.setLevel(1);
 
-        assertEquals(this.debug.shouldOutput(0), true);
-        assertEquals(this.debug.shouldOutput(1), true);
-        assertEquals(this.debug.shouldOutput(2), false);
+        assertEquals(true, this.debug.shouldOutput(0));
+        assertEquals(true, this.debug.shouldOutput(1));
+        assertEquals(false, this.debug.shouldOutput(2));
 
         this.debug.setLevel(0);
 
-        assertEquals(this.debug.shouldOutput(0), true);
-        assertEquals(this.debug.shouldOutput(1), false);
-        assertEquals(this.debug.shouldOutput(2), false);
+        assertEquals(true, this.debug.shouldOutput(0));
+        assertEquals(false, this.debug.shouldOutput(1));
+        assertEquals(false, this.debug.shouldOutput(2));
+    }
+
+    @Test
+    public void testContextBasedSetup() {
+        // Optimal: Debugging should be set up as configured.
+        
+        Config.singleton().newGroup("debug").newItem("aContext3", "2", "A test value.");
+        
+        Debug debug = Debug.getDebug("aContext3");
+        assertEquals("Debug 1 (aContext3): Blah.", debug.getDebugText(1, "Blah."));
+        assertNotNull(debug);
+        assertEquals(2, debug.getLevel());
+    }
+
+    @Test
+    public void testContextBasedSetupWithoutConfigItem() {
+        // Sub-optimal: Config item is missing. Should gracefully return a working object so that debugging can be done.
+        Config.singleton().newGroup("debug");
+        
+        Debug debug = Debug.getDebug("aContext2");
+        assertEquals("Debug 1 (aContext2): Blah.", debug.getDebugText(1, "Blah."));
+        assertNotNull(debug);
+        assertEquals(1, debug.getLevel());
+    }
+
+    @Test
+    public void testContextBasedSetupWithoutAnyConfig() {
+        // Sub-optimal: Config item, and debug group are missing. Should gracefully return a working object so that debugging can be done.
+        Debug debug = Debug.getDebug("aContext1");
+        assertEquals("Debug 1 (aContext1): Blah.", debug.getDebugText(1, "Blah."));
+        assertNotNull(debug);
+        assertEquals(1, debug.getLevel());
     }
 }

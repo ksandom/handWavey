@@ -1,23 +1,10 @@
 package handWavey;
 
 import config.*;
-import debug.Debug;
 import java.util.HashMap;
 import java.sql.Timestamp;
 
-/* TODO
-* HandsState should track which gesture is active, and whether it has changed (therefore whether to trigger an action.)
-    * Each of the general changes.
-    * Combined
-        * Full (both available hands).
-        * Individual.
-* HandWaveyManager should receive that information, and trigger an Event handler/interpreter to send the actions to the appropriate place.
-* Migrate existing events to the new set-up.
-* Migrate hard-coded stuff to the new set-up.
-*/
-
 public class Gesture {
-    private Debug debug;
     private String[] zones = {"notOOB", "OOB", "none", "noMove", "active", "action", "absolute", "relative"};
     
     // States.

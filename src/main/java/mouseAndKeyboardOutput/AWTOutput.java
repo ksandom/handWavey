@@ -1,5 +1,6 @@
 package mouseAndKeyboardOutput;
 
+import debug.Debug;
 import java.io.IOException;
 import java.awt.AWTException;
 import java.awt.Robot;
@@ -13,22 +14,25 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.util.HashMap;
+import java.util.*;
 
-public class GenericOutput implements Output {
+/* AWTOutput is the default way to control the mouse and keyboard of a machine. */
+public class AWTOutput implements Output {
+    private Debug debug;
+    
     private GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     private GraphicsDevice[] gs = this.ge.getScreenDevices();
     private Robot robot = null;
     private int button = 0;
     private int downButton = 0;
-    private String[] keysIKnow = {"ctrl", "alt", "shift"};
-    
     private static final int invalid = -1;
     
     private HashMap<String, Integer> keys = new HashMap<String, Integer>();
     private HashMap<String, Integer> buttons = new HashMap<String, Integer>();
     
-    public GenericOutput() {
+    public AWTOutput() {
+        this.debug = Debug.getDebug("AWTOutput");
+        
         try {
             this.robot = new Robot();
         } catch (AWTException e) {
@@ -51,6 +55,8 @@ public class GenericOutput implements Output {
         defineKey("ctrl", KeyEvent.VK_CONTROL);
         defineKey("alt", KeyEvent.VK_ALT);
         defineKey("shift", KeyEvent.VK_SHIFT);
+        
+        this.debug.out(1, "Defined keyboard keys: " + this.keys.keySet().toString());
     }
     
     private void defineKey(String keyName, int keyCode) {
@@ -62,10 +68,12 @@ public class GenericOutput implements Output {
         // Add mouse buttons here:
         //
         
-        // TODO From: https://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyEvent.html
+        // TODO From: https://docs.oracle.com/javase/7/docs/api/java/awt/event/MouseEvent.html
         defineButton("left", InputEvent.BUTTON1_MASK);
         defineButton("middle", InputEvent.BUTTON2_MASK);
         defineButton("right", InputEvent.BUTTON3_MASK);
+        
+        this.debug.out(1, "Defined mouse buttons: " + this.buttons.keySet().toString());
     }
     
     private void defineButton(String buttonName, int buttonCode) {
@@ -143,12 +151,16 @@ public class GenericOutput implements Output {
     }
     
     public void click(int button) {
-        mouseDown(button);
-        mouseUp(button);
+        if (isValid(button)) {
+            this.debug.out(1, "Click with button ID: " + String.valueOf(button));
+            mouseDown(button);
+            mouseUp(button);
+        }
     }
     
     public void doubleClick(int button) {
         if (isValid(button)) {
+            this.debug.out(1, "Doubleclick with button ID: " + String.valueOf(button));
             click(button);
             click(button);
         }
@@ -157,6 +169,7 @@ public class GenericOutput implements Output {
     public void mouseDown(int button) {
         if (isValid(button)) {
             try {
+                this.debug.out(1, "MouseDown with button ID: " + String.valueOf(button));
                 this.robot.mousePress(button);
                 this.button = button;
             } catch (IllegalArgumentException e) {
@@ -168,6 +181,7 @@ public class GenericOutput implements Output {
     public void mouseUp(int button) {
         if (isValid(button)) {
             try {
+                this.debug.out(1, "MouseUp with button ID: " + String.valueOf(this.downButton) + "(" + String.valueOf(button) + " requested.)");
                 this.robot.mouseRelease(this.downButton);
                 // this.robot.mouseRelease(button); // TODO Restore the ability to press multiple buttons at a time.
             } catch (IllegalArgumentException e) {
@@ -181,15 +195,16 @@ public class GenericOutput implements Output {
     }
     
     public void scroll(int amount) {
+        this.debug.out(1, "Scroll by: " + String.valueOf(amount));
         this.robot.mouseWheel(amount);
     }
     
     private Boolean isValid(int value) {
-        return (value != -1);
+        return (value != AWTOutput.invalid);
     }
     
     public int getMouseButtonID(String buttonName) {
-        int result = this.invalid;
+        int result = AWTOutput.invalid;
         
         if (this.buttons.containsKey(buttonName)) {
             result = this.buttons.get(buttonName);
@@ -198,7 +213,7 @@ public class GenericOutput implements Output {
     }
     
     public int getKeyID(String keyName) {
-        int result = this.invalid;
+        int result = AWTOutput.invalid;
         
         if (this.keys.containsKey(keyName)) {
             result = this.keys.get(keyName);
@@ -209,6 +224,7 @@ public class GenericOutput implements Output {
     public void keyDown(int key) {
         if (isValid(key)) {
             try {
+                this.debug.out(1, "KeyDown with key ID: " + String.valueOf(key));
                 this.robot.keyPress(key);
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
@@ -219,6 +235,7 @@ public class GenericOutput implements Output {
     public void keyUp(int key) {
         if (isValid(key)) {
             try {
+                this.debug.out(1, "KeyUp with key ID: " + String.valueOf(key));
                 this.robot.keyRelease(key);
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
@@ -226,8 +243,8 @@ public class GenericOutput implements Output {
         }
     }
     
-    public String[] getKeysIKnow() {
-        return this.keysIKnow;
+    public Set<String> getKeysIKnow() {
+        return this.keys.keySet();
     }
     
     public void sleep(int microseconds) {

@@ -26,12 +26,13 @@ public class HandWaveyEvent {
     
     private MacroLine macroLine;
     
-    // TODO Make this debug level configurable.
-    private Debug debug = new Debug(2, "HandWaveyEvent");
+    private Debug debug;
     
     public HandWaveyEvent(Output output, Boolean useAudio, HandsState handsState, HandWaveyManager handWaveyManager) {
         this.output = output;
         this.useAudio = useAudio;
+        
+        this.debug = Debug.getDebug("HandWaveyEvent");
         
         this.macroLine = new MacroLine(this.output, handsState, handWaveyManager);
         

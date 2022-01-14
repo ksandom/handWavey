@@ -59,10 +59,8 @@ public class HandsState {
         Config config = Config.singleton();
         Group handSummaryManager = config.getGroup("handSummaryManager");
         
-        // TODO Give this class its own debug level?
-        int debugLevel = Integer.parseInt(handSummaryManager.getItem("debugLevel").get());
-        this.debug = new Debug(debugLevel, "HandsState");
-
+        this.debug = Debug.getDebug("HandsState");
+        
         
         // Configure zone behavior.
         this.zoneMode = handSummaryManager.getItem("zoneMode").get();
