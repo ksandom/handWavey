@@ -62,6 +62,8 @@ public class HandWaveyManager {
     private double touchPadMaxSpeed = 20;
     
     private int rewindCursorTime = 300;
+    private int repeatRewindCursorTime = 700;
+    private long lastCursorRewind = 0;
     private int cursorLockTime = 400;
     private long cursorLock = 0;
     
@@ -229,6 +231,7 @@ public class HandWaveyManager {
         // Load click config.
         Group click = handSummaryManager.getGroup("click");
         this.rewindCursorTime = Integer.parseInt(click.getItem("rewindCursorTime").get());
+        this.repeatRewindCursorTime = Integer.parseInt(click.getItem("repeatRewindCursorTime").get());
         int cursorHistorySize = Integer.parseInt(click.getItem("historySize").get());
         this.historyX = new History(cursorHistorySize, 0);
         this.historyY = new History(cursorHistorySize, 0);
@@ -287,7 +290,14 @@ public class HandWaveyManager {
     public void rewindCursorPosition() {
         Timestamp now = new Timestamp(System.currentTimeMillis());
         long nowMillis = now.getTime();
-        long rewindTime = nowMillis - this.rewindCursorTime;
+        long rewindTime = 0;
+        long timeSinceLastRewind = nowMillis - this.lastCursorRewind;
+        
+        if (timeSinceLastRewind < this.repeatRewindCursorTime) {
+            rewindTime = this.lastCursorRewind;
+        } else {
+            rewindTime = nowMillis - this.rewindCursorTime;
+        }
         
         int earlierX = (int) Math.round(this.historyX.get(rewindTime));
         int earlierY = (int) Math.round(this.historyY.get(rewindTime));
@@ -295,6 +305,8 @@ public class HandWaveyManager {
         this.debug.out(1, "Rewind cursor position by " + this.rewindCursorTime + " milliseconds to around " + String.valueOf(rewindTime) + ", " + String.valueOf(earlierX) + "," + String.valueOf(earlierY) + " for mouse down/up event.");
         
         this.output.setPosition(earlierX, earlierY);
+        
+        this.lastCursorRewind = rewindTime;
     }
     
     public void rewindScroll() {

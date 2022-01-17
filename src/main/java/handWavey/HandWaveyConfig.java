@@ -183,20 +183,6 @@ public class HandWaveyConfig {
             "movingMeanEnd",
             "20",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
-        
-        Group click = touchScreen.newGroup("click");
-        click.newItem(
-            "rewindCursorTime",
-            "300",
-            "int milliseconds. When we do a clicking motion, we move in a way that disrupts the cursor. The idea of this setting is to get a position that is just before we started doing the gesture. The default should be pretty close for most people, but if you find that the cursor is still disrupted by the gesture, increase this number. If it rewinds to a time well before you began the gesture, then decrease this number.");
-        click.newItem(
-            "sample1InXFrames",
-            "4",
-            "int. Collect a sample for the history 1 in every __ frames. Typically we receive a frame between 5-30 times per second. Setting this number lower will provide more resolution to get an accurate result. Setting it higher will reduce the CPU used (particularly if the movingMean is set to a high value.)");
-        click.newItem(
-            "historySize",
-            "40",
-            "int <4096. How many samples to keep. We only need enough to rewind by what ever amount of time is defined in rewindCursorTime. Eg: If we get 32 frames per second, and sample1InXFrames collects every 4th frame, that's 8 frames per second. If we set rewindCursorTime to 250 milliseconds, we'd need a history size of about 2 or more. But we don't really lose much by setting it a bit higher (the hunt time for the correct value will take slightly longer), and we will benefit from having the choice. So 40  is probably more than we'd ever need, but also not particularly heavy.");
 
         Group scroll = touchScreen.newGroup("scroll");
         scroll.newItem(
@@ -281,11 +267,15 @@ public class HandWaveyConfig {
         Group clickConfig = handSummaryManager.newGroup("click");
         clickConfig.newItem(
             "rewindCursorTime",
-            "200",
+            "300",
             "int milliseconds. When we do a clicking motion, we move in a way that disrupts the cursor. The idea of this setting is to get a position that is just before we started doing the gesture. The default should be pretty close for most people, but if you find that the cursor is still disrupted by the gesture, increase this number. If it rewinds to a time well before you began the gesture, then decrease this number.");
         clickConfig.newItem(
+            "repeatRewindCursorTime",
+            "1100",
+            "int milliseconds. When the rewind is triggered within this many milliseconds from the last rewind, use the same cursor position as last time. This is so that a mouse up uses the same position as a mouse down.");
+        clickConfig.newItem(
             "historySize",
-            "40",
+            "400",
             "int <4096. How many samples to keep. We only need enough to rewind by what ever amount of time is defined in rewindCursorTime. Eg: If we get 5-30 frames per second, 40 should be plenty to cater to rewind times up to 1000 milliseconds.");
         clickConfig.newItem(
             "cursorLockTime",
