@@ -48,6 +48,14 @@ public class HandsState {
     
     private long segmentChangeTime = 0;
     
+    private long newHands = 0;
+    private Boolean newHandsHandled = false;
+    private int oldHandsTimeout = 800;
+    private int cursorFreezeFirstMillis = 200;
+    private Boolean newHandsCursorFreeze = false;
+    private int clickFreezeFirstMillis = 500;
+    private Boolean newHandsClickFreeze = false;
+    
     // TODO Migrate other dimensions.
     private double zMultiplier = -1;
 
@@ -98,6 +106,13 @@ public class HandsState {
         this.secondarySegments = Integer.parseInt(secondaryHand.getItem("rotationSegments").get());
         this.secondarySegmentWidth = (this.pi * 2) / this.secondarySegments;
         this.secondaryOffset = Double.parseDouble(secondaryHand.getItem("rotationOffset").get());
+        
+        
+        // Configure new hands tracking.
+        Group newHands = config.getGroup("newHands");
+        this.oldHandsTimeout = Integer.parseInt(newHands.getItem("oldHandsTimeout").get());
+        this.cursorFreezeFirstMillis = Integer.parseInt(newHands.getItem("cursorFreezeFirstMillis").get());
+        this.clickFreezeFirstMillis = Integer.parseInt(newHands.getItem("clickFreezeFirstMillis").get());
     }
     
     public static HandsState singleton() {
@@ -268,10 +283,49 @@ public class HandsState {
         this.previousFrameAge = now - this.currentFrameTime;
         this.currentFrameTime = now;
         
+        if (this.previousFrameAge > this.oldHandsTimeout) {
+            // Old hands.
+            this.newHandsHandled = false;
+        } else {
+            if (this.newHandsHandled == false) {
+                this.newHandsHandled = true;
+                this.newHands = now;
+                this.newHandsCursorFreeze = true;
+                this.newHandsClickFreeze = true;
+                this.debug.out(1, "Hand is new. Triggering cursor and click freeze.");
+                // TODO Trigger any freeze events here.
+            } else {
+                long elapsedTime = now - this.newHands;
+                if (this.newHandsCursorFreeze == true) {
+                    if (elapsedTime > this.cursorFreezeFirstMillis) {
+                        this.newHandsCursorFreeze = false;
+                        this.debug.out(1, "Releasing newHand cursor freeze.");
+                        // TODO Unfreeze event here.
+                    }
+                }
+                
+                if (this.newHandsClickFreeze == true) {
+                    if (elapsedTime > this.cursorFreezeFirstMillis) {
+                        this.newHandsClickFreeze = false;
+                        this.debug.out(1, "Releasing newHand cursor freeze.");
+                        // TODO Unfreeze event here.
+                    }
+                }
+            }
+        }
+        
         // We really don't need to track anything that long.
         if (this.previousFrameAge > this.sillyFrameAge) {
             this.previousFrameAge = this.sillyFrameAge;
         }
+    }
+    
+    public Boolean newHandsCursorFreeze() {
+        return newHandsCursorFreeze;
+    }
+    
+    public Boolean newHandsClickFreeze() {
+        return newHandsClickFreeze;
     }
     
     public long getPreviousFrameAge() {

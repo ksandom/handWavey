@@ -591,7 +591,7 @@ public class HandWaveyManager {
         
         // Move the mouse cursor.
         if (!cusorIsLocked()) {
-            if ((zone.equals("none")) || (zone.equals("noMove"))) {
+            if ((zone.equals("none")) || (zone.equals("noMove")) || this.handsState.newHandsCursorFreeze() == true) {
                 if (this.zoneMode == "touchPad") {
                     updateMovingMeans(zone, handZ);
                     touchPadNone(this.movingMeanX.get(), this.movingMeanY.get());

@@ -47,7 +47,7 @@ public class HandWaveyConfig {
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. HandWaveyEvent is for taking the right actions when an event is triggers. If you're not sure if your eventActions or eventAudio is not behaving correctly, this is the place to look.");
         debug.newItem(
             "HandsState",
-            "0",
+            "1",
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. HandsState tracks what gesture the hands are currently making, and triggers events based on changes.");
         debug.newItem(
             "MacroLine",
@@ -57,6 +57,20 @@ public class HandWaveyConfig {
             "AWTOutput",
             "1",
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. AWTOutput is the default way to control the mouse and keyboard of a machine.");
+        
+        Group newHands = this.config.newGroup("newHands");
+        newHands.newItem(
+            "cursorFreezeFirstMillis",
+            "200",
+            "Int (milliseconds): While the hand enters into the view of the UltraMotion device, the data is erratic. Therefore we want to ignore the first few moments until the data has stabilised. This wait time is measured in milliseconds, and stops the cursor from moving.");
+        newHands.newItem(
+            "clickFreezeFirstMillis",
+            "500",
+            "Int (milliseconds): While the hand enters into the view of the UltraMotion device, the data is erratic. Therefore we want to ignore the first few moments until the data has stabilised. This wait time is measured in milliseconds, and stops accidental clicks.");
+        newHands.newItem(
+            "oldHandsTimeout",
+            "400",
+            "Int (milliseconds): If we haven't had any update in this amount of time, any new frame that we receive is deemed to be new. Under normal, active operation, we receive 10s of frames per seciond. Ie <100 milliseconds.");
         
         Group ultraMotion = this.config.newGroup("ultraMotion");
         ultraMotion.newItem(

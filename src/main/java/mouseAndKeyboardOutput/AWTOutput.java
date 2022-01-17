@@ -23,9 +23,9 @@ public class AWTOutput implements Output {
     private GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     private GraphicsDevice[] gs = this.ge.getScreenDevices();
     private Robot robot = null;
-    private int button = 0;
-    private int downButton = 0;
     private static final int invalid = -1;
+    private int button = 0;
+    private int downButton = AWTOutput.invalid;
     
     private HashMap<String, Integer> keys = new HashMap<String, Integer>();
     private HashMap<String, Integer> buttons = new HashMap<String, Integer>();
@@ -152,6 +152,7 @@ public class AWTOutput implements Output {
     
     public void click(String button) {
         if (isValidButton(button)) {
+            mouseUp(button);
             this.debug.out(1, "Click with button: " + button);
             mouseDown(button);
             mouseUp(button);
@@ -180,11 +181,12 @@ public class AWTOutput implements Output {
     }
     
     public void mouseUp(String button) {
-        if (isValidButton(button)) {
+        if (this.downButton != AWTOutput.invalid) {
             try {
                 this.debug.out(1, "MouseUp with button ID: " + String.valueOf(this.downButton) + "(" + button + "/" + String.valueOf(getMouseButtonID(button)) + " requested.)");
                 this.robot.mouseRelease(this.downButton);
                 // this.robot.mouseRelease(button); // TODO Restore the ability to press multiple buttons at a time.
+                this.downButton = AWTOutput.invalid;
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }
