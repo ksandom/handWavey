@@ -304,9 +304,21 @@ public class HandWaveyManager {
         
         this.debug.out(1, "Rewind cursor position by " + this.rewindCursorTime + " milliseconds to around " + String.valueOf(rewindTime) + ", " + String.valueOf(earlierX) + "," + String.valueOf(earlierY) + " for mouse down/up event.");
         
-        this.output.setPosition(earlierX, earlierY);
-        
-        this.lastCursorRewind = rewindTime;
+        // Only apply when we have real values.
+        if (earlierX != 0 && earlierY != 0) { // TODO Use a better test of not being in the start-up state.
+            // Move the mouse cursor.
+            this.output.setPosition(earlierX, earlierY);
+            
+            // Remove any accumulating movement.
+            this.diffRemainderX = 0;
+            this.diffRemainderY = 0;
+            
+            // Update the persistent position so that any changes happen from here.
+            this.touchPadX = earlierX;
+            this.touchPadY = earlierY;
+            
+            this.lastCursorRewind = rewindTime;
+        }
     }
     
     public void rewindScroll() {
