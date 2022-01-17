@@ -35,7 +35,6 @@ public class HandsState {
     private int primarySegments = 4;
     private double primaryOffset = 0;
     private double primarySegmentWidth = this.pi/2;
-    private int segmentStanddown = 300;
     private int secondarySegments = 4;
     private double secondaryOffset = 0;
     private double secondarySegmentWidth = this.pi/2;
@@ -94,7 +93,6 @@ public class HandsState {
         this.primarySegments = Integer.parseInt(primaryHand.getItem("rotationSegments").get());
         this.primarySegmentWidth = (this.pi * 2) / this.primarySegments;
         this.primaryOffset = Double.parseDouble(primaryHand.getItem("rotationOffset").get());
-        this.segmentStanddown = Integer.parseInt(primaryHand.getItem("segmentStanddown").get());
         
         Group secondaryHand = config.getGroup("gestureConfig").getGroup("secondaryHand");
         this.secondarySegments = Integer.parseInt(secondaryHand.getItem("rotationSegments").get());
@@ -192,26 +190,6 @@ public class HandsState {
         }
         
         return segmentNumber;
-    }
-    
-    public void derivePrimaryHandSegment(double handRoll, Boolean isLeft) {
-        int oldSegment = this.primarySegment;
-        this.primarySegment = getHandSegment(handRoll, true, isLeft);
-        
-        if (this.primarySegment != oldSegment) {
-            this.debug.out(1, "Primary segment has changed. Set cursor/scroll standdown. Will expire after segmentStanddown(" + String.valueOf(this.segmentStanddown) + ") milliseconds.");
-            this.segmentChangeTime = getNow();
-        }
-    }
-    
-    public void deriveSecondaryHandSegment(double handRoll, Boolean isLeft) {
-        this.secondarySegment = getHandSegment(handRoll, false, isLeft);
-    }
-    
-    public Boolean inSegmentStanddown() {
-        long segmentAge = getNow() - this.segmentChangeTime;
-        
-        return (segmentAge < this.segmentStanddown);
     }
     
     public void noSecondaryHand() {

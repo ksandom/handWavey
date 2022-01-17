@@ -590,7 +590,7 @@ public class HandWaveyManager {
         String zone = this.handsState.getZone(handZ);
         
         // Move the mouse cursor.
-        if (!cusorIsLocked() && !this.handsState.inSegmentStanddown()) {
+        if (!cusorIsLocked()) {
             if ((zone.equals("none")) || (zone.equals("noMove"))) {
                 if (this.zoneMode == "touchPad") {
                     updateMovingMeans(zone, handZ);
