@@ -54,6 +54,10 @@ public class HandWaveyConfig {
             "1",
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. MacroLine process commands that have come directly from events.");
         debug.newItem(
+            "OutputProtection",
+            "1",
+            "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. OutputProtection makes sure that we are doing sensible things with the mouse and keyboard. Eg we aren't calling mouseUp on the same button without doing a mouseDown in between.");
+        debug.newItem(
             "AWTOutput",
             "1",
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. AWTOutput is the default way to control the mouse and keyboard of a machine.");

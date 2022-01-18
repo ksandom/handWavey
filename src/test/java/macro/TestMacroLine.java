@@ -11,13 +11,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestOutput {
     private MacroLine macroLine;
-    private Output output;
+    private OutputProtection output;
     private HandsState handsState;
     private HandWaveyManager handWaveyManager;
     
     @BeforeEach
     void setUp() {
-        this.output = new NullOutput();
+        this.output = new OutputProtection(new NullOutput());
         this.handsState = HandsState.singleton();
         this.handWaveyManager = new HandWaveyManager();
         this.macroLine = new MacroLine(this.output, this.handsState, this.handWaveyManager);

@@ -17,7 +17,7 @@ class TestHandWaveyEvent {
     private Config config;
     private HandWaveyConfig handWaveyConfig;
     private HandWaveyEvent handWaveyEvent;
-    private Output output;
+    private OutputProtection output;
     private HandsState handsState;
     private HandWaveyManager handWaveyManager;
 
@@ -30,7 +30,7 @@ class TestHandWaveyEvent {
         this.handWaveyConfig.defineGeneralConfig();
         this.gesture = new Gesture();
         this.gesture.generateConfig();
-        this.output = new NullOutput();
+        this.output = new OutputProtection(new NullOutput());
         this.handsState = HandsState.singleton();
         this.handWaveyEvent = new HandWaveyEvent(this.output, HandWaveyEvent.audioDisabled, this.handsState, this.handWaveyManager);
         this.handsState.setHandWaveyEvent(this.handWaveyEvent);

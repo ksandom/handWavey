@@ -20,7 +20,7 @@ public class HandWaveyManager {
     private MovingMean movingMeanX = new MovingMean(1, 0);
     private MovingMean movingMeanY = new MovingMean(1, 0);
     private Debug debug;
-    private Output output;
+    private OutputProtection output;
     private HandsState handsState;
     private History historyX;
     private History historyY;
@@ -97,10 +97,10 @@ public class HandWaveyManager {
     public void selectOutput(String chosenOutput) {
         switch (chosenOutput) {
             case "AWTOutput":
-                this.output = new AWTOutput();
+                this.output = new OutputProtection(new AWTOutput());
                 break;
             case "NullOutput":
-                this.output = new NullOutput();
+                this.output = new OutputProtection(new NullOutput());
                 break;
         }
     }

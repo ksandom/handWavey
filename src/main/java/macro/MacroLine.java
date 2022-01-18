@@ -5,7 +5,7 @@ import handWavey.HandsState;
 import handWavey.HandWaveyManager;
 
 public class MacroLine extends MacroCore {
-    public MacroLine(Output output, HandsState handsState, HandWaveyManager handWaveyManager) {
+    public MacroLine(OutputProtection output, HandsState handsState, HandWaveyManager handWaveyManager) {
         super("MacroLine", output, handsState, handWaveyManager);
     }
     

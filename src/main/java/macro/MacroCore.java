@@ -7,11 +7,11 @@ import handWavey.HandWaveyManager;
 
 public class MacroCore {
     protected Debug debug;
-    private Output output;
+    private OutputProtection output;
     private HandsState handsState;
     private HandWaveyManager handWaveyManager = null;
     
-    public MacroCore(String context, Output output, HandsState handsState, HandWaveyManager handWaveyManager) {
+    public MacroCore(String context, OutputProtection output, HandsState handsState, HandWaveyManager handWaveyManager) {
         this.debug = Debug.getDebug(context);
         this.output = output;
         
@@ -62,6 +62,10 @@ public class MacroCore {
                 this.output.mouseUp(
                     getButton(parameters, 0)); // Mouse button. ("left", "middle", "right")
                 break;
+            case "releaseButtons":
+                if (!canPerformActions(command)) break;
+                this.output.releaseButtons();
+                break;
             case "rewindScroll":
                 if (!canPerformActions(command)) break;
                 this.handWaveyManager.rewindScroll();
@@ -98,6 +102,10 @@ public class MacroCore {
                 if (!canPerformActions(command)) break;
                 this.output.keyDown(parm(parameters, 0, ""));
                 this.output.keyUp(parm(parameters, 0, ""));
+                break;
+            case "releaseKeys":
+                if (!canPerformActions(command)) break;
+                this.output.releaseKeys();
                 break;
             
             // Oh ohhhhhhhh.

@@ -17,7 +17,7 @@ public class HandWaveyEvent {
     public static final Boolean audioEnabled = true;
     
     private HandWaveyManager handWaveyManager;
-    private Output output;
+    private OutputProtection output;
     private Boolean useAudio;
     private String audioPath;
     
@@ -28,7 +28,7 @@ public class HandWaveyEvent {
     
     private Debug debug;
     
-    public HandWaveyEvent(Output output, Boolean useAudio, HandsState handsState, HandWaveyManager handWaveyManager) {
+    public HandWaveyEvent(OutputProtection output, Boolean useAudio, HandsState handsState, HandWaveyManager handWaveyManager) {
         this.output = output;
         this.useAudio = useAudio;
         

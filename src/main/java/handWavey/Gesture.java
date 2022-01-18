@@ -55,7 +55,7 @@ public class Gesture {
             "metalDing07.wav");
         overrideDefault(
             "general-state-pOpen-enter",
-            "rewindCursorPosition();rewindScroll();mouseUp();unlockCursor();",
+            "rewindCursorPosition();rewindScroll();releaseButtons();unlockCursor();",
             "metalDing08.wav");
         
         // Set buttons.
@@ -103,7 +103,7 @@ public class Gesture {
             "");
         overrideDefault(
             "general-zone-sActive-exit",
-            "keyUp(\"shift\");keyUp(\"alt\");keyUp(\"ctrl\");",
+            "releaseKeys();",
             "");
         
         // Stabilise gesture changes.
