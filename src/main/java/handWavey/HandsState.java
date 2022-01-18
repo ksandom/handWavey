@@ -136,7 +136,6 @@ public class HandsState {
     public void figureOutStuff() {
         Double primaryHandZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
         this.primaryState.setZone(this.handsState.getZone(primaryHandZ));
-        // TODO make zone getting based on this.primaryState.getZone.
         
         this.primaryState.setSegment(getHandSegment(true, this.handSummaries[0]));
         this.primaryState.setState(getHandState(this.handSummaries[0]));

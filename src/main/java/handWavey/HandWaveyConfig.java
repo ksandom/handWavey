@@ -65,7 +65,7 @@ public class HandWaveyConfig {
             "Int (milliseconds): While the hand enters into the view of the UltraMotion device, the data is erratic. Therefore we want to ignore the first few moments until the data has stabilised. This wait time is measured in milliseconds, and stops the cursor from moving.");
         newHands.newItem(
             "clickFreezeFirstMillis",
-            "500",
+            "800",
             "Int (milliseconds): While the hand enters into the view of the UltraMotion device, the data is erratic. Therefore we want to ignore the first few moments until the data has stabilised. This wait time is measured in milliseconds, and stops accidental clicks.");
         newHands.newItem(
             "oldHandsTimeout",

@@ -152,7 +152,6 @@ public class AWTOutput implements Output {
     
     public void click(String button) {
         if (isValidButton(button)) {
-            mouseUp(button);
             this.debug.out(1, "Click with button: " + button);
             mouseDown(button);
             mouseUp(button);
@@ -169,6 +168,7 @@ public class AWTOutput implements Output {
     
     public void mouseDown(String button) {
         if (isValidButton(button)) {
+            mouseUp(button);
             try {
                 this.button = getMouseButtonID(button);
                 this.debug.out(1, "MouseDown with button: " + button + "/" + String.valueOf(this.button));
