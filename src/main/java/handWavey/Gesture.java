@@ -111,6 +111,10 @@ public class Gesture {
             "general-segment-pAnyChange",
             "lockCursor();rewindCursorPosition();",
             "");
+        overrideDefault(
+            "newHandUnfreezeClick",
+            "setButton(\"left\");releaseButtons();releaseKeys();",
+            "");
         
         // General auido feedback.
         this.audioEvents.getItem("general-zone-pAnyChange").overrideDefault("metalDing01.wav");

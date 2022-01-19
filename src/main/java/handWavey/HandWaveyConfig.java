@@ -69,7 +69,7 @@ public class HandWaveyConfig {
             "Int (milliseconds): While the hand enters into the view of the UltraMotion device, the data is erratic. Therefore we want to ignore the first few moments until the data has stabilised. This wait time is measured in milliseconds, and stops the cursor from moving.");
         newHands.newItem(
             "clickFreezeFirstMillis",
-            "800",
+            "1200",
             "Int (milliseconds): While the hand enters into the view of the UltraMotion device, the data is erratic. Therefore we want to ignore the first few moments until the data has stabilised. This wait time is measured in milliseconds, and stops accidental clicks.");
         newHands.newItem(
             "oldHandsTimeout",
@@ -329,6 +329,18 @@ public class HandWaveyConfig {
         
         
         Group actionEvents = this.config.newGroup("actionEvents"); // Entirely generated in Gesture.
+        actionEvents.newItem(
+            "newHandFreeze",
+            "",
+            "When a new primary hand is introduced, the cursor and the ability to click the mouse or press keys, is disabled while the device stabilises.");
+        actionEvents.newItem(
+            "newHandUnfreezeCursor",
+            "",
+            "When the time has expired for the Cursor freeze after a new primary hand is introduced.");
+        actionEvents.newItem(
+            "newHandUnfreezeClick",
+            "",
+            "When the time has expired for the Click freeze after a new primary hand is introduced.");
         
         Group audioConfig = this.config.newGroup("audioConfig");
         audioConfig.newItem(
@@ -338,10 +350,21 @@ public class HandWaveyConfig {
         
         Group audioEvents = this.config.newGroup("audioEvents");
         audioEvents.newItem(
+            "newHandFreeze",
+            "",
+            "When a new primary hand is introduced, the cursor and the ability to click the mouse or press keys, is disabled while the device stabilises.");
+        audioEvents.newItem(
+            "newHandUnfreezeCursor",
+            "",
+            "When the time has expired for the Cursor freeze after a new primary hand is introduced.");
+        audioEvents.newItem(
+            "newHandUnfreezeClick",
+            "",
+            "When the time has expired for the Click freeze after a new primary hand is introduced.");
+        audioEvents.newItem(
             "imposterHand-replace",
             "",
             "When we detect that a hand ID is not what we expect, but are able to replace it and continue.");
-        
         audioEvents.newItem(
             "imposterHand-discard",
             "",

@@ -292,22 +292,22 @@ public class HandsState {
                 this.newHandsCursorFreeze = true;
                 this.newHandsClickFreeze = true;
                 this.debug.out(1, "Hand is new. Triggering cursor and click freeze.");
-                // TODO Trigger any freeze events here.
+                this.handWaveyEvent.triggerEvent("newHandFreeze");
             } else {
                 long elapsedTime = now - this.newHands;
                 if (this.newHandsCursorFreeze == true) {
                     if (elapsedTime > this.cursorFreezeFirstMillis) {
                         this.newHandsCursorFreeze = false;
                         this.debug.out(1, "Releasing newHand cursor freeze.");
-                        // TODO Unfreeze event here.
+                        this.handWaveyEvent.triggerEvent("newHandUnfreezeCursor");
                     }
                 }
                 
                 if (this.newHandsClickFreeze == true) {
                     if (elapsedTime > this.cursorFreezeFirstMillis) {
                         this.newHandsClickFreeze = false;
-                        this.debug.out(1, "Releasing newHand cursor freeze.");
-                        // TODO Unfreeze event here.
+                        this.debug.out(1, "Releasing newHand click freeze.");
+                        this.handWaveyEvent.triggerEvent("newHandUnfreezeClick");
                     }
                 }
             }
