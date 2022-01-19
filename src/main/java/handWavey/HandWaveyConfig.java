@@ -27,10 +27,24 @@ public class HandWaveyConfig {
             "This number is incremented by the programmer whenever existing config items get changed (eg new description, default value etc) so that conflicts can be resolved.");
         configFormatVersion.set("2021-11-26"); // Update it here.
 
-        this.config.newItem(
-            "output",
-            "AWTOutput",
-            "[AWTOutput, NullOutput]: Which method to use to control the mouse and keyboard. Default is AWTOutput, which will be the best setting in most situations. NullOutput is there purely for testing.");
+        Group output = this.config.newGroup("output");
+        output.newItem(
+            "device",
+            "AWT",
+            "[AWT, VNC, Null]: Which method to use to control the mouse and keyboard. Default is AWTOutput, which will be the best setting in most situations. VNC gives you a method of controlling a separate computer, and needs to be configured in the config group. NullOutput is there purely for testing.");
+        Group vnc = output.newGroup("VNC");
+        vnc.newItem(
+            "host",
+            "192.168.18.21",
+            "The hostname to connect to.");
+        vnc.newItem(
+            "port",
+            "5900",
+            "When you start the VNC server, you'll get either a port number (eg 5901), or a desktop number (eg :1). If it's a desktop number, it should be added to 5900 to get the number that you want here. Eg :1 + 5900 = 5901.");
+        vnc.newItem( // TODO Find a better way of doing this. See VNCOutput.java for more info.
+            "password",
+            "",
+            "WARNING: This is currently stored in plain text. Please take that into account when assessing the security of your setup. It's worth having the VNC server only listening where it's needed, and in addition having the firewall configured to block it externally.");
         
         Group debug = this.config.newGroup("debug");
         debug.newItem(
@@ -61,6 +75,14 @@ public class HandWaveyConfig {
             "AWTOutput",
             "1",
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. AWTOutput is the default way to control the mouse and keyboard of a machine.");
+        debug.newItem(
+            "Pressables",
+            "1",
+            "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. Pressables is a class for tracking which keys/buttons we can press and how that translates into the protocol that controls the mouse and keyboard. If there are keys/buttons that you want to use that aren't supported, this is the place to start.");
+        debug.newItem(
+            "VNCOutput",
+            "1",
+            "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. VNCOutput is a way to control the mouse and keyboard of a separate machine.");
         
         Group newHands = this.config.newGroup("newHands");
         newHands.newItem(

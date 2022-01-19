@@ -84,7 +84,7 @@ public class HandWaveyManager {
         HandWaveyConfig handWaveyConfig = new HandWaveyConfig("handWavey");
         handWaveyConfig.defineGeneralConfig();
         
-        String chosenOutput = Config.singleton().getItem("output").get();
+        String chosenOutput = Config.singleton().getGroup("output").getItem("device").get();
         selectOutput(chosenOutput);
         
         this.handsState = HandsState.singleton();
@@ -96,11 +96,14 @@ public class HandWaveyManager {
     
     public void selectOutput(String chosenOutput) {
         switch (chosenOutput) {
-            case "AWTOutput":
+            case "AWT":
                 this.output = new OutputProtection(new AWTOutput());
                 break;
-            case "NullOutput":
+            case "Null":
                 this.output = new OutputProtection(new NullOutput());
+                break;
+            case "VNC":
+                this.output = new OutputProtection(new VNCOutput(chosenOutput));
                 break;
         }
     }

@@ -31,7 +31,7 @@ public class Protector {
     public Boolean setUp(String name) {
         Boolean result = true;
         
-        if (isUp(name)) {
+        if (isDown(name)) {
             this.things.remove(name);
             result = false;
         }

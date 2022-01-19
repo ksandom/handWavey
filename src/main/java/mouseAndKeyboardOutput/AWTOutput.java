@@ -23,12 +23,11 @@ public class AWTOutput implements Output {
     private GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     private GraphicsDevice[] gs = this.ge.getScreenDevices();
     private Robot robot = null;
-    private static final int invalid = -1;
     private int button = 0;
-    private int downButton = AWTOutput.invalid;
+    private int downButton = Pressables.INVALID;
     
-    private HashMap<String, Integer> keys = new HashMap<String, Integer>();
-    private HashMap<String, Integer> buttons = new HashMap<String, Integer>();
+    private Pressables buttons = new Pressables();
+    private Pressables keys = new Pressables();
     
     public AWTOutput() {
         this.debug = Debug.getDebug("AWTOutput");
@@ -39,47 +38,13 @@ public class AWTOutput implements Output {
             e.printStackTrace();
         }
         
-        defineKeys();
-        defineButtons();
+        this.keys.defineKeys();
+        this.buttons.defineButtons();
         
         this.button = getMouseButtonID("left");
         this.downButton = this.button;
     }
 
-    private void defineKeys() {
-        //
-        // Add keys here:
-        //
-        
-        // From: https://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyEvent.html
-        defineKey("ctrl", KeyEvent.VK_CONTROL);
-        defineKey("alt", KeyEvent.VK_ALT);
-        defineKey("shift", KeyEvent.VK_SHIFT);
-        
-        this.debug.out(1, "Defined keyboard keys: " + this.keys.keySet().toString());
-    }
-    
-    private void defineKey(String keyName, int keyCode) {
-        this.keys.put(keyName, keyCode);
-    }
-    
-    private void defineButtons() {
-        //
-        // Add mouse buttons here:
-        //
-        
-        // From: https://docs.oracle.com/javase/7/docs/api/java/awt/event/MouseEvent.html
-        defineButton("left", InputEvent.BUTTON1_MASK);
-        defineButton("middle", InputEvent.BUTTON2_MASK);
-        defineButton("right", InputEvent.BUTTON3_MASK);
-        
-        this.debug.out(1, "Defined mouse buttons: " + this.buttons.keySet().toString());
-    }
-    
-    private void defineButton(String buttonName, int buttonCode) {
-        this.buttons.put(buttonName, buttonCode);
-    }
-    
     public Dimension getDesktopResolution() {
         int x = 0;
         int y = 0;
@@ -181,12 +146,12 @@ public class AWTOutput implements Output {
     }
     
     public void mouseUp(String button) {
-        if (this.downButton != AWTOutput.invalid) {
+        if (this.downButton != Pressables.INVALID) {
             try {
                 this.debug.out(1, "MouseUp with button ID: " + String.valueOf(this.downButton) + "(" + button + "/" + String.valueOf(getMouseButtonID(button)) + " requested.)");
                 this.robot.mouseRelease(this.downButton);
                 // this.robot.mouseRelease(button); // TODO Restore the ability to press multiple buttons at a time.
-                this.downButton = AWTOutput.invalid;
+                this.downButton = Pressables.INVALID;
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }
@@ -204,29 +169,19 @@ public class AWTOutput implements Output {
     }
     
     private Boolean isValidButton(String value) {
-        return this.buttons.containsKey(value);
+        return this.buttons.isValidPressable(value);
     }
     
     private Boolean isValidKey(String value) {
-        return this.keys.containsKey(value);
+        return this.keys.isValidPressable(value);
     }
     
     private int getMouseButtonID(String buttonName) {
-        int result = AWTOutput.invalid;
-        
-        if (this.buttons.containsKey(buttonName)) {
-            result = this.buttons.get(buttonName);
-        }
-        return result;
+        return this.buttons.getPressableID(buttonName);
     }
     
     private int getKeyID(String keyName) {
-        int result = AWTOutput.invalid;
-        
-        if (this.keys.containsKey(keyName)) {
-            result = this.keys.get(keyName);
-        }
-        return result;
+        return this.keys.getPressableID(keyName);
     }
     
     public void keyDown(String key) {
@@ -252,7 +207,7 @@ public class AWTOutput implements Output {
     }
     
     public Set<String> getKeysIKnow() {
-        return this.keys.keySet();
+        return this.keys.getPressablesIKnow();
     }
     
     private void sleep(int microseconds) {
