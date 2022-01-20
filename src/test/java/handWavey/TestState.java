@@ -29,7 +29,6 @@ class TestState {
         config.getGroup("debug").getItem("HandWaveyManager").set("2");
         
         Group handSummaryManager = config.getGroup("handSummaryManager");
-        handSummaryManager.getItem("rangeMethod").set("manual");
         
         Group axisOrientation = handSummaryManager.getGroup("axisOrientation");
         axisOrientation.getItem("xMultiplier").set("1");

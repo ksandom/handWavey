@@ -130,10 +130,6 @@ public class HandWaveyConfig {
             "maxChange",
             "30",
             "If the difference between the current input position and the previous input position is larger than this number, ignore it, and reset the state so that subsequent input makes sense. This is usually caused by going OOB on one side of the usable cone, and re-entering on the other side of the cone. When this number is too high, errors can slip through that cause the mouse cursor to jump. When it's too low, the cursor will regularly stop when you move your hand too fast. This symptom should not be confused with a hang due to something like garbage collection.");
-        handSummaryManager.newItem(
-            "rangeMethod",
-            "manual",
-            "How the range of possible hand positions is configured. Current possible values are: manual.");
         
         Group axisOrientation = handSummaryManager.newGroup("axisOrientation");
         axisOrientation.newItem(
