@@ -118,7 +118,8 @@ public class HandWaveyManager {
         
         
         // Set up maxChange.
-        this.maxChange = Integer.parseInt(handSummaryManager.getItem("maxChange").get());
+        Group dataCleaning = Config.singleton().getGroup("dataCleaning");
+        this.maxChange = Integer.parseInt(dataCleaning.getItem("maxChange").get());
         
         
         // Get configured multipliers.

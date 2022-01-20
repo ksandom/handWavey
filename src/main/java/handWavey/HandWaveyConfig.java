@@ -84,7 +84,13 @@ public class HandWaveyConfig {
             "1",
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. VNCOutput is a way to control the mouse and keyboard of a separate machine.");
         
-        Group newHands = this.config.newGroup("newHands");
+        Group dataCleaning = this.config.newGroup("dataCleaning");
+        dataCleaning.newItem(
+            "maxChange",
+            "30",
+            "If the difference between the current input position and the previous input position is larger than this number, ignore it, and reset the state so that subsequent input makes sense. This is usually caused by going OOB on one side of the usable cone, and re-entering on the other side of the cone. When this number is too high, errors can slip through that cause the mouse cursor to jump. When it's too low, the cursor will regularly stop when you move your hand too fast. This symptom should not be confused with a hang due to something like garbage collection.");
+        
+        Group newHands = dataCleaning.newGroup("newHands");
         newHands.newItem(
             "cursorFreezeFirstMillis",
             "200",
@@ -126,10 +132,6 @@ public class HandWaveyConfig {
             "When the hand is at the min height, how far from the center of the cone can the hand be horizontally before it it considered to be too unreliable.");
 
         Group handSummaryManager = this.config.newGroup("handSummaryManager");
-        handSummaryManager.newItem(
-            "maxChange",
-            "30",
-            "If the difference between the current input position and the previous input position is larger than this number, ignore it, and reset the state so that subsequent input makes sense. This is usually caused by going OOB on one side of the usable cone, and re-entering on the other side of the cone. When this number is too high, errors can slip through that cause the mouse cursor to jump. When it's too low, the cursor will regularly stop when you move your hand too fast. This symptom should not be confused with a hang due to something like garbage collection.");
         
         Group axisOrientation = handSummaryManager.newGroup("axisOrientation");
         axisOrientation.newItem(

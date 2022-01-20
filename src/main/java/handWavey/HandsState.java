@@ -109,7 +109,7 @@ public class HandsState {
         
         
         // Configure new hands tracking.
-        Group newHands = config.getGroup("newHands");
+        Group newHands = config.getGroup("dataCleaning").getGroup("newHands");
         this.oldHandsTimeout = Integer.parseInt(newHands.getItem("oldHandsTimeout").get());
         this.cursorFreezeFirstMillis = Integer.parseInt(newHands.getItem("cursorFreezeFirstMillis").get());
         this.clickFreezeFirstMillis = Integer.parseInt(newHands.getItem("clickFreezeFirstMillis").get());
