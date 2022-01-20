@@ -142,7 +142,7 @@ public class HandsState {
 
         if (secondaryHandIsActive()) {
             Double secondaryHandZ = this.handSummaries[1].getHandZ() * this.zMultiplier;
-            this.secondaryState.setZone(this.handsState.getZone(secondaryHandZ));
+            this.secondaryState.setZone(this.handsState.getZone(secondaryHandZ, false));
             this.secondaryState.setSegment(getHandSegment(true, this.handSummaries[1]));
         }
         if (this.handSummaries[1] != null) {
@@ -153,10 +153,14 @@ public class HandsState {
         
         if (this.primaryState.somethingChanged() || this.secondaryState.somethingChanged()) {
             this.handWaveyEvent.triggerEvents(this.primaryState.getEvents());
-            this.handWaveyEvent.triggerEvents(this.secondaryState.getEvents());
+            if (secondaryHandIsActiveOrChanged()) {
+                this.handWaveyEvent.triggerEvents(this.secondaryState.getEvents());
+            }
             
             this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualEnterEvent() + "-" + secondaryState.getIndividualEnterEvent() + "-enter");
-            this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualExitEvent() + "-" + secondaryState.getIndividualExitEvent() + "-enter");
+            if (secondaryHandIsActiveOrChanged()) {
+                this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualExitEvent() + "-" + secondaryState.getIndividualExitEvent() + "-enter");
+            }
         }
     }
     
@@ -173,6 +177,15 @@ public class HandsState {
     
     public Boolean secondaryHandIsActive() {
         return ((this.handSummaries.length > 1) && (this.handSummaries[1] != null) && (this.handSummaries[1].isValid()));
+    }
+    
+    public Boolean secondaryHandIsActiveOrChanged() {
+        Boolean result = false;
+        if (secondaryHandIsActive() || this.secondaryState.freshlyAbsent()) {
+            result = true;
+        }
+        
+        return result;
     }
     
     public int getHandSegment(Boolean isPrimary, HandSummary handSummary) {
@@ -239,6 +252,10 @@ public class HandsState {
     }
     
     public String getZone(double handZ) {
+        return getZone(handZ, true);
+    }
+    
+    public String getZone(double handZ, Boolean allowOverride) {
         String newZone = deriveZone(handZ);
         String bufferZone = deriveZone(handZ + this.zoneBuffer);
         
@@ -246,7 +263,7 @@ public class HandsState {
             this.zone = newZone;
         }
         
-        if (this.zoneOverride != "") {
+        if ((allowOverride && this.zoneOverride != "")) {
             return this.zoneOverride;
         }
         

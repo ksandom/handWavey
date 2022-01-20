@@ -32,6 +32,10 @@ public class HandStateEvents {
         this.stateChanged.set(state);
     }
     
+    public Boolean freshlyAbsent() {
+        return (this.stateChanged.toInt() == Gesture.absent && this.stateChanged.hasChanged());
+    }
+    
     public Boolean somethingChanged() {
         return (this.zoneChanged.hasChanged() || this.segmentChanged.hasChanged() || this.stateChanged.hasChanged());
     }

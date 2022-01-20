@@ -121,6 +121,47 @@ class TestState {
     }
 
     @Test
+    public void testZoneOverride() {
+        /* In this test we test a sequence of getZone()s by changing the z axis, and then testing the results. We override the zone to scroll part way through then test again. Then we dissallow the override as if we are using the secondary hand.
+        
+        * We should get different zones depending on where are are on the Z axis.
+        * We should get scroll regardless of Z while in the override.
+        * We should not get the override when it is dissallowed.
+        */
+        
+        assertEquals("none", this.handsState.getZone(-182));
+        assertEquals("absolute", this.handsState.getZone(-149));
+        assertEquals("relative", this.handsState.getZone(51));
+        assertEquals("action", this.handsState.getZone(101));
+        
+        this.handsState.overrideZone("scroll");
+        
+        assertEquals("scroll", this.handsState.getZone(-182));
+        assertEquals("scroll", this.handsState.getZone(-149));
+        assertEquals("scroll", this.handsState.getZone(51));
+        assertEquals("scroll", this.handsState.getZone(101));
+        
+        assertEquals("none", this.handsState.getZone(-182, false));
+        assertEquals("absolute", this.handsState.getZone(-149, false));
+        assertEquals("relative", this.handsState.getZone(51, false));
+        assertEquals("action", this.handsState.getZone(101, false));
+        
+        assertEquals("scroll", this.handsState.getZone(-151));
+        
+        this.handsState.releaseZone();
+        
+        assertEquals("none", this.handsState.getZone(-182));
+        assertEquals("absolute", this.handsState.getZone(-149));
+        assertEquals("relative", this.handsState.getZone(51));
+        assertEquals("action", this.handsState.getZone(101));
+        
+        assertEquals("none", this.handsState.getZone(-182, false));
+        assertEquals("absolute", this.handsState.getZone(-149, false));
+        assertEquals("relative", this.handsState.getZone(51, false));
+        assertEquals("action", this.handsState.getZone(101, false));
+}
+
+    @Test
     public void testEraticZones() {
         /* This is a clone of the testZones test, but with slightly more eratic data.
         
