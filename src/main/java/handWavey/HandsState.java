@@ -139,7 +139,7 @@ public class HandsState {
         this.primaryState.setSegment(getHandSegment(true, this.handSummaries[0]));
         this.primaryState.setState(getHandState(this.handSummaries[0]));
 
-        if (secondaryHandIsActive()) {
+        if (secondaryHandIsActiveOrChanged()) {
             Double secondaryHandZ = this.handSummaries[1].getHandZ() * this.zMultiplier;
             this.secondaryState.setZone(this.handsState.getZone(secondaryHandZ, false));
             this.secondaryState.setSegment(getHandSegment(true, this.handSummaries[1]));
@@ -156,10 +156,25 @@ public class HandsState {
                 this.handWaveyEvent.triggerEvents(this.secondaryState.getEvents());
             }
             
-            this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualEnterEvent() + "-" + secondaryState.getIndividualEnterEvent() + "-enter");
             if (secondaryHandIsActiveOrChanged()) {
-                this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualExitEvent() + "-" + secondaryState.getIndividualExitEvent() + "-enter");
+                this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualEnterEvent() + "-" + secondaryState.getIndividualEnterEvent() + "-enter");
+                this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualExitEvent() + "-" + secondaryState.getIndividualExitEvent() + "-exit");
             }
+        }
+    }
+    
+    // Trigger events for the **current** state that would have been lost during a clickFreeze.
+    private void triggerLostEvents() {
+        this.debug.out(1, "Triggering events for the **current** state that may have been lost during the clickFreeze.");
+        
+        this.handWaveyEvent.triggerEvents(this.primaryState.getCurrentEvents());
+        if (secondaryHandIsActiveOrChanged()) {
+            this.handWaveyEvent.triggerEvents(this.secondaryState.getCurrentEvents());
+        }
+        
+        if (secondaryHandIsActive()) {
+            this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualEnterEvent() + "-" + secondaryState.getIndividualEnterEvent() + "-enter");
+            this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualExitEvent() + "-" + secondaryState.getIndividualExitEvent() + "-exit");
         }
     }
     
@@ -315,7 +330,7 @@ public class HandsState {
                     if (elapsedTime > this.cursorFreezeFirstMillis) {
                         this.newHandsCursorFreeze = false;
                         this.debug.out(1, "Releasing newHand cursor freeze.");
-                        this.handWaveyEvent.triggerEvent("newHandUnfreezeCursor");
+                        this.handWaveyEvent.triggerEvent("special-newHandUnfreezeCursor");
                     }
                 }
                 
@@ -323,7 +338,9 @@ public class HandsState {
                     if (elapsedTime > this.cursorFreezeFirstMillis) {
                         this.newHandsClickFreeze = false;
                         this.debug.out(1, "Releasing newHand click freeze.");
-                        this.handWaveyEvent.triggerEvent("newHandUnfreezeClick");
+                        this.handWaveyEvent.triggerEvent("special-newHandUnfreezeClick-beforeLost");
+                        triggerLostEvents();
+                        this.handWaveyEvent.triggerEvent("special-newHandUnfreezeClick-afterLost");
                     }
                 }
             }

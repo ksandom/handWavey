@@ -49,7 +49,7 @@ public class HandWaveyConfig {
         Group debug = this.config.newGroup("debug");
         debug.newItem(
             "HandWaveyManager",
-            "1",
+            "0",
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. HandWaveyManager is the glue that brings everything together. If you're having trouble working out what to debug, start here.");
         debug.newItem(
             "UltraMotionInput",
@@ -59,10 +59,6 @@ public class HandWaveyConfig {
             "HandWaveyEvent",
             "2",
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. HandWaveyEvent is for taking the right actions when an event is triggers. If you're not sure if your eventActions or eventAudio is not behaving correctly, this is the place to look.");
-        debug.newItem(
-            "HandsState",
-            "1",
-            "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. HandsState tracks what gesture the hands are currently making, and triggers events based on changes.");
         debug.newItem(
             "MacroLine",
             "1",
@@ -83,6 +79,14 @@ public class HandWaveyConfig {
             "VNCOutput",
             "1",
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. VNCOutput is a way to control the mouse and keyboard of a separate machine.");
+        debug.newItem(
+            "HandsState",
+            "1",
+            "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. HandsState tracks what gesture the hands are currently making, and triggers events based on changes.");
+        debug.newItem(
+            "HandStateEvents",
+            "0",
+            "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. If you want information about events, you should first check out HandWaveyEvent. If you're not sure why those events are being triggered, then this class will tell you about the state changes that are generating those events. Normally users won't need this information.");
         
         Group dataCleaning = this.config.newGroup("dataCleaning");
         dataCleaning.newItem(
@@ -348,17 +352,21 @@ public class HandWaveyConfig {
         
         Group actionEvents = this.config.newGroup("actionEvents"); // Entirely generated in Gesture.
         actionEvents.newItem(
-            "newHandFreeze",
+            "special-newHandFreeze",
             "",
             "When a new primary hand is introduced, the cursor and the ability to click the mouse or press keys, is disabled while the device stabilises.");
         actionEvents.newItem(
-            "newHandUnfreezeCursor",
+            "special-newHandUnfreezeCursor",
             "",
             "When the time has expired for the Cursor freeze after a new primary hand is introduced.");
         actionEvents.newItem(
-            "newHandUnfreezeClick",
+            "special-newHandUnfreezeClick-beforeLost",
             "",
-            "When the time has expired for the Click freeze after a new primary hand is introduced.");
+            "When the time has expired for the Click freeze after a new primary hand is introduced. This event is triggered before the lost events are re-generated.");
+        actionEvents.newItem(
+            "special-newHandUnfreezeClick-afterLost",
+            "",
+            "When the time has expired for the Click freeze after a new primary hand is introduced. This event is triggered after the lost events are re-generated.");
         
         Group audioConfig = this.config.newGroup("audioConfig");
         audioConfig.newItem(
@@ -368,17 +376,21 @@ public class HandWaveyConfig {
         
         Group audioEvents = this.config.newGroup("audioEvents");
         audioEvents.newItem(
-            "newHandFreeze",
+            "special-newHandFreeze",
             "",
             "When a new primary hand is introduced, the cursor and the ability to click the mouse or press keys, is disabled while the device stabilises.");
         audioEvents.newItem(
-            "newHandUnfreezeCursor",
+            "special-newHandUnfreezeCursor",
             "",
             "When the time has expired for the Cursor freeze after a new primary hand is introduced.");
         audioEvents.newItem(
-            "newHandUnfreezeClick",
+            "special-newHandUnfreezeClick-beforeLost",
             "",
-            "When the time has expired for the Click freeze after a new primary hand is introduced.");
+            "When the time has expired for the Click freeze after a new primary hand is introduced. This event is triggered before the lost events are re-generated.");
+        audioEvents.newItem(
+            "special-newHandUnfreezeClick-afterLost",
+            "",
+            "When the time has expired for the Click freeze after a new primary hand is introduced. This event is triggered after the lost events are re-generated.");
         audioEvents.newItem(
             "imposterHand-replace",
             "",
