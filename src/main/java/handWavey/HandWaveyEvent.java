@@ -43,7 +43,9 @@ public class HandWaveyEvent {
     }
     
     public void triggerEvents(List<String> events) {
-        this.debug.out(1, "Received " + String.valueOf(events.size()) + " events.");
+        int numberOfEvents = events.size();
+        int debugLevel = (numberOfEvents > 0)?1:3;
+        this.debug.out(debugLevel, "Received " + String.valueOf(numberOfEvents) + " events.");
         for (String eventName : events) {
             triggerEvent(eventName, "  ");
         }
@@ -54,19 +56,29 @@ public class HandWaveyEvent {
     }
     
     public void triggerEvent(String eventName, String indent) {
-        this.debug.out(2, indent + "Event: " + eventName + ".");
+        // Get the info we need for the event.
         String macroLine = this.getEventAction(eventName);
-        if (macroLine != "") {
+        String fileToPlay = "";
+        if (this.useAudio) fileToPlay = this.getEventAudio(eventName);
+        
+        // Make the decisions.
+        Boolean doMacro = (macroLine != "");
+        Boolean doAudio = (this.useAudio && fileToPlay != "");
+        
+        // Only output at debug level 1 if we are going to do something. Otherwise at level 3.
+        int debugLevel = (doMacro || doAudio)?1:3;
+        this.debug.out(debugLevel, indent + "Event: " + eventName + ".");
+        
+        // Do macro.
+        if (doMacro) {
             this.debug.out(2, indent + "  macroLine: \"" + macroLine + "\"");
             this.macroLine.runLine(macroLine);
         }
         
-        if (this.useAudio) {
-            String fileToPlay = this.getEventAudio(eventName);
-            if (fileToPlay != "") {
-                this.debug.out(2, indent + "  fileToPlay: \"" + fileToPlay + "\"");
-                BackgroundSound.play(fileToPlay);
-            }
+        // Do Audio.
+        if (doAudio) {
+            this.debug.out(2, indent + "  fileToPlay: \"" + fileToPlay + "\"");
+            BackgroundSound.play(fileToPlay);
         }
     }
     
