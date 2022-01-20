@@ -131,9 +131,7 @@ public class HandWaveyConfig {
             "160",
             "When the hand is at the min height, how far from the center of the cone can the hand be horizontally before it it considered to be too unreliable.");
 
-        Group handSummaryManager = this.config.newGroup("handSummaryManager");
-        
-        Group axisOrientation = handSummaryManager.newGroup("axisOrientation");
+        Group axisOrientation = this.config.newGroup("axisOrientation");
         axisOrientation.newItem(
             "xMultiplier",
             "1",
@@ -147,7 +145,7 @@ public class HandWaveyConfig {
             "-1",
             "Set this to -1 when you need to invert Z (how far away from you your hand goes). UltraMotion takes care of this for you. So I can't currently think of a use-case for it, but am including it for completeness.");
         
-        Group physicalBoundaries = handSummaryManager.newGroup("physicalBoundaries");
+        Group physicalBoundaries = this.config.newGroup("physicalBoundaries");
         physicalBoundaries.newItem(
             "x",
             "200",
@@ -165,17 +163,17 @@ public class HandWaveyConfig {
             "120",
             "+ and - this value in depth from the center of the visible cone above the device.");
 
-        handSummaryManager.newItem(
+        this.config.newItem(
             "zoneMode",
             "touchPad",
             "(touchScreen, touchPad). What type of device the zones approximate. The names are not an exact comparison, but should at least give an idea of how they work.");
 
-        handSummaryManager.newItem(
+        this.config.newItem(
             "zoneBuffer",
             "30",
             "Once a zone is entered, how far beyond the threshold must the hand retreat before the zone is considered exited?");
 
-        Group zones = handSummaryManager.newGroup("zones");
+        Group zones = this.config.newGroup("zones");
         Group touchScreen = zones.newGroup("touchScreen");
         Group zoneNone = touchScreen.newGroup("zoneNone");
         // None currently doesn't require any config. Its group is here solely for completeness.
@@ -283,7 +281,7 @@ public class HandWaveyConfig {
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         
         
-        Group touchPadConfig = handSummaryManager.newGroup("touchPad");
+        Group touchPadConfig = this.config.newGroup("touchPad");
         touchPadConfig.newItem(
             "inputMultiplier",
             "1",
@@ -302,7 +300,7 @@ public class HandWaveyConfig {
             "Maximum speed per second.");
         
         
-        Group clickConfig = handSummaryManager.newGroup("click");
+        Group clickConfig = this.config.newGroup("click");
         clickConfig.newItem(
             "rewindCursorTime",
             "300",
@@ -321,7 +319,7 @@ public class HandWaveyConfig {
             "int milliseconds <4096. How long to stop the cursor from moving after a mouse down event. This is to make it easy to click on something without dragging it. Making this shorter will make drags feel more responsive. Making it longer will make it easier to click when you are having trouble completing a click quickly.");
 
 
-        Group scrollConfig = handSummaryManager.newGroup("scroll");
+        Group scrollConfig = this.config.newGroup("scroll");
         scrollConfig.newItem(
             "inputMultiplier",
             "1",
@@ -391,7 +389,7 @@ public class HandWaveyConfig {
             "When we detect that a hand ID is not what we expect, but not are able to replace it and continue.");
         
         
-        handSummaryManager.newItem(
+        this.config.newItem(
             "relativeSensitivity",
             "0.15",
             "How sensitive is the relative zone compared to the absolute zone? Decimal between 0 and 1.");

@@ -28,23 +28,21 @@ class TestState {
         // Override some config so that we know that the unit tests will get expected values.
         config.getGroup("debug").getItem("HandWaveyManager").set("2");
         
-        Group handSummaryManager = config.getGroup("handSummaryManager");
-        
-        Group axisOrientation = handSummaryManager.getGroup("axisOrientation");
+        Group axisOrientation = config.getGroup("axisOrientation");
         axisOrientation.getItem("xMultiplier").set("1");
         axisOrientation.getItem("yMultiplier").set("1");
         axisOrientation.getItem("zMultiplier").set("-1");
         
-        Group physicalBoundaries = handSummaryManager.getGroup("physicalBoundaries");
+        Group physicalBoundaries = config.getGroup("physicalBoundaries");
         physicalBoundaries.getItem("x").set("100");
         physicalBoundaries.getItem("yMin").set("200");
         physicalBoundaries.getItem("yMax").set("400");
         physicalBoundaries.getItem("z").set("120");
         
-        handSummaryManager.getItem("zoneMode").set("touchScreen");
-        handSummaryManager.getItem("zoneBuffer").set("30");
+        config.getItem("zoneMode").set("touchScreen");
+        config.getItem("zoneBuffer").set("30");
 
-        Group zones = handSummaryManager.getGroup("zones");
+        Group zones = config.getGroup("zones");
         Group touchScreen = zones.getGroup("touchScreen");
         Group zoneNone = touchScreen.getGroup("zoneNone");
         
@@ -77,7 +75,7 @@ class TestState {
         tpAction.getItem("movingMeanBegin").set("20");
         tpAction.getItem("movingMeanEnd").set("20");
 
-        handSummaryManager.getItem("relativeSensitivity").set("0.1");
+        config.getItem("relativeSensitivity").set("0.1");
         
         
         Group gestureConfig = config.getGroup("gestureConfig");

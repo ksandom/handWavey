@@ -64,24 +64,23 @@ public class HandsState {
     
     public HandsState() {
         Config config = Config.singleton();
-        Group handSummaryManager = config.getGroup("handSummaryManager");
         
         this.debug = Debug.getDebug("HandsState");
         
         
         // Configure zone behavior.
-        this.zoneMode = handSummaryManager.getItem("zoneMode").get();
-        this.zoneBuffer = Double.parseDouble(handSummaryManager.getItem("zoneBuffer").get());
+        this.zoneMode = config.getItem("zoneMode").get();
+        this.zoneBuffer = Double.parseDouble(config.getItem("zoneBuffer").get());
         
         
         // Configure Z axis thresholds.
         if (this.zoneMode == "touchScreen") {
-            Group touchScreen = handSummaryManager.getGroup("zones").getGroup("touchScreen");
+            Group touchScreen = config.getGroup("zones").getGroup("touchScreen");
             this.zAbsoluteBegin = Double.parseDouble(touchScreen.getGroup("absolute").getItem("threshold").get());
             this.zRelativeBegin = Double.parseDouble(touchScreen.getGroup("relative").getItem("threshold").get());
             this.zActionBegin = Double.parseDouble(touchScreen.getGroup("action").getItem("threshold").get());
         } else if (this.zoneMode == "touchPad") {
-            Group touchPad = handSummaryManager.getGroup("zones").getGroup("touchPad");
+            Group touchPad = config.getGroup("zones").getGroup("touchPad");
             this.zNoMoveBegin = Double.parseDouble(touchPad.getGroup("noMove").getItem("threshold").get());
             this.zActiveBegin = Double.parseDouble(touchPad.getGroup("active").getItem("threshold").get());
             this.zActionBegin = Double.parseDouble(touchPad.getGroup("action").getItem("threshold").get());
@@ -90,7 +89,7 @@ public class HandsState {
             this.debug.out(0, "Unknown zoneMode " + this.zoneMode + ". This will likely cause badness.");
         }
         
-        Group axisOrientation = handSummaryManager.getGroup("axisOrientation");
+        Group axisOrientation = config.getGroup("axisOrientation");
         int configuredZMultiplier = Integer.parseInt(axisOrientation.getItem("zMultiplier").get());
         this.zMultiplier = configuredZMultiplier;
 

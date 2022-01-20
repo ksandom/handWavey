@@ -15,11 +15,12 @@ import java.io.File;
 
 /* HandWaveyManager is the glue that brings everything together. */
 public class HandWaveyManager {
+    private Debug debug;
+    private Config config;
     private HandSummary[] handSummaries;
     private HashMap<String, Zone> zones = new HashMap<String, Zone>();
     private MovingMean movingMeanX = new MovingMean(1, 0);
     private MovingMean movingMeanY = new MovingMean(1, 0);
-    private Debug debug;
     private OutputProtection output;
     private HandsState handsState;
     private History historyX;
@@ -84,7 +85,8 @@ public class HandWaveyManager {
         HandWaveyConfig handWaveyConfig = new HandWaveyConfig("handWavey");
         handWaveyConfig.defineGeneralConfig();
         
-        String chosenOutput = Config.singleton().getGroup("output").getItem("device").get();
+        this.config = Config.singleton();
+        String chosenOutput = this.config.getGroup("output").getItem("device").get();
         selectOutput(chosenOutput);
         
         this.handsState = HandsState.singleton();
@@ -110,8 +112,6 @@ public class HandWaveyManager {
     
     public void reloadConfig() {
         // This function reloads, and calcuates config based on the settings currently in Config. It does not trigger a reload of the config from file.
-        Group handSummaryManager = Config.singleton().getGroup("handSummaryManager");
-        
         
         // Set up the debugging.
         this.debug = Debug.getDebug("HandWaveyManager");
@@ -123,7 +123,7 @@ public class HandWaveyManager {
         
         
         // Get configured multipliers.
-        Group axisOrientation = handSummaryManager.getGroup("axisOrientation");
+        Group axisOrientation = this.config.getGroup("axisOrientation");
         int configuredXMultiplier = Integer.parseInt(axisOrientation.getItem("xMultiplier").get());
         int configuredYMultiplier = Integer.parseInt(axisOrientation.getItem("yMultiplier").get());
         int configuredZMultiplier = Integer.parseInt(axisOrientation.getItem("zMultiplier").get());
@@ -147,7 +147,7 @@ public class HandWaveyManager {
         
         // Figure out how to best fit the desktop into the physical space.
         // TODO This could be abstracted out into testable code.
-        Group physicalBoundaries = handSummaryManager.getGroup("physicalBoundaries");
+        Group physicalBoundaries = this.config.getGroup("physicalBoundaries");
         int pX = Integer.parseInt(physicalBoundaries.getItem("x").get());
         int pXDiff = pX * 2;
         int pYMin = Integer.parseInt(physicalBoundaries.getItem("yMin").get());
@@ -170,9 +170,9 @@ public class HandWaveyManager {
         
         
         // Configure Z axis thresholds.
-        this.zoneMode = handSummaryManager.getItem("zoneMode").get();
+        this.zoneMode = this.config.getItem("zoneMode").get();
         if (this.zoneMode == "touchScreen") {
-            Group touchScreen = handSummaryManager.getGroup("zones").getGroup("touchScreen");
+            Group touchScreen = this.config.getGroup("zones").getGroup("touchScreen");
             this.zAbsoluteBegin = Double.parseDouble(touchScreen.getGroup("absolute").getItem("threshold").get());
             this.zRelativeBegin = Double.parseDouble(touchScreen.getGroup("relative").getItem("threshold").get());
             this.zActionBegin = Double.parseDouble(touchScreen.getGroup("action").getItem("threshold").get());
@@ -191,7 +191,7 @@ public class HandWaveyManager {
                 Integer.parseInt(touchScreen.getGroup("action").getItem("movingMeanBegin").get()),
                 Integer.parseInt(touchScreen.getGroup("action").getItem("movingMeanEnd").get())));
         } else if (this.zoneMode == "touchPad") {
-            Group touchPad = handSummaryManager.getGroup("zones").getGroup("touchPad");
+            Group touchPad = this.config.getGroup("zones").getGroup("touchPad");
             this.zNoMoveBegin = Double.parseDouble(touchPad.getGroup("noMove").getItem("threshold").get());
             this.zActiveBegin = Double.parseDouble(touchPad.getGroup("active").getItem("threshold").get());
             this.zActionBegin = Double.parseDouble(touchPad.getGroup("action").getItem("threshold").get());
@@ -221,11 +221,11 @@ public class HandWaveyManager {
         }
         
         // Get relative sensitivity.
-        this.relativeSensitivity = Double.parseDouble(handSummaryManager.getItem("relativeSensitivity").get());
+        this.relativeSensitivity = Double.parseDouble(this.config.getItem("relativeSensitivity").get());
         
         
         // Load touchpad mode config.
-        Group touchPadConfig = handSummaryManager.getGroup("touchPad");
+        Group touchPadConfig = this.config.getGroup("touchPad");
         this.touchPadInputMultiplier = Double.parseDouble(touchPadConfig.getItem("inputMultiplier").get());
         this.touchPadOutputMultiplier = Double.parseDouble(touchPadConfig.getItem("outputMultiplier").get());
         this.touchPadAcceleration = Double.parseDouble(touchPadConfig.getItem("acceleration").get());
@@ -233,7 +233,7 @@ public class HandWaveyManager {
         
         
         // Load click config.
-        Group click = handSummaryManager.getGroup("click");
+        Group click = this.config.getGroup("click");
         this.rewindCursorTime = Integer.parseInt(click.getItem("rewindCursorTime").get());
         this.repeatRewindCursorTime = Integer.parseInt(click.getItem("repeatRewindCursorTime").get());
         int cursorHistorySize = Integer.parseInt(click.getItem("historySize").get());
@@ -242,7 +242,7 @@ public class HandWaveyManager {
         
         
         // Load scroll config.
-        Group scrollConfig = handSummaryManager.getGroup("scroll");
+        Group scrollConfig = this.config.getGroup("scroll");
         this.scrollInputMultiplier = Double.parseDouble(scrollConfig.getItem("inputMultiplier").get());
         this.scrollOutputMultiplier = Double.parseDouble(scrollConfig.getItem("outputMultiplier").get());
         this.scrollAcceleration = Double.parseDouble(scrollConfig.getItem("acceleration").get());
@@ -259,8 +259,7 @@ public class HandWaveyManager {
     private void checkZones() {
         // Compare every zone to every other zone to make sure that there are no unusable zones.
         
-        Group handSummaryManager = Config.singleton().getGroup("handSummaryManager");
-        double zoneBuffer = Double.parseDouble(handSummaryManager.getItem("zoneBuffer").get());
+        double zoneBuffer = Double.parseDouble(this.config.getItem("zoneBuffer").get());
         
         for (String outerKey: this.zones.keySet()) {
             Zone outerZone = this.zones.get(outerKey);
