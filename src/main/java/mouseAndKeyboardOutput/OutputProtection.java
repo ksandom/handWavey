@@ -1,3 +1,12 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Protects the outputs/user interfaces from the user/macros doing stupid things like pressing the same key twice without releasing it in-between.
+
+To use this, simply create an instance of this class, and assign it an Output. Eg:
+OutputProtection output = new OutputProtection(new AWTOutput());
+*/
+
 package mouseAndKeyboardOutput;
 
 import debug.Debug;
@@ -19,10 +28,6 @@ public class OutputProtection {
         this.buttonProtector = new Protector(this.debug, this.output);
         this.keyProtector = new Protector(this.debug, this.output);
     }
-    
-
-    
-    
     
     public void info() {
         System.out.println("Output protection active for:");

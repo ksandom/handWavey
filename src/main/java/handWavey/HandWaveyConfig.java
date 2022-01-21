@@ -1,3 +1,9 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+All HandWavey configuration is either defined here, or in Gesture.generateConfig().
+*/
+
 package handWavey;
 
 import java.io.File;

@@ -1,3 +1,9 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+A concise representation of the state of a hand. It only contains what we actually need.
+*/
+
 package handWavey;
 
 import handWavey.*;

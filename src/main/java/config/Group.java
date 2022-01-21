@@ -1,3 +1,11 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Provides a directory/folder like behaviour for configuration.
+
+Intended to be used to group related configuration items together.
+*/
+
 package config;
 
 import config.Dirt;

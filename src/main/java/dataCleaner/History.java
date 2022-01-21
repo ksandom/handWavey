@@ -1,3 +1,11 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Keeps a record of values at a point in time for very recent history.
+
+This gives the ability to get the closest value at an arbitrary point in time.
+*/
+
 package dataCleaner;
 
 import java.util.Arrays;

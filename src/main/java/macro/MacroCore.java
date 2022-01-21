@@ -1,3 +1,11 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Provides all macro functionality.
+
+Specific implementations like MacroLine, which provides single line macros, should extend this class. Whenever code could be used by multiple implementations, putting it here should be considered.
+*/
+
 package macro;
 
 import mouseAndKeyboardOutput.*;

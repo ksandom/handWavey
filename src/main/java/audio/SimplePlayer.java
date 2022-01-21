@@ -1,3 +1,9 @@
+// Sourced from: https://stackoverflow.com/questions/2416935/how-to-play-wav-files-with-java
+
+/*
+Play a .WAV file.
+*/
+
 package audio;
 
 import java.io.File;

@@ -1,3 +1,9 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Provides calculations in relation to a specific zone.
+*/
+
 package handWavey;
 
 public class Zone {

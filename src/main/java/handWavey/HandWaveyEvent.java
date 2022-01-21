@@ -1,3 +1,9 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+For taking the right actions when an event is triggers.
+*/
+
 package handWavey;
 
 import debug.Debug;
@@ -11,7 +17,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-/* For taking the right actions when an event is triggers. */
 public class HandWaveyEvent {
     public static final Boolean audioDisabled = false;
     public static final Boolean audioEnabled = true;

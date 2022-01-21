@@ -1,3 +1,11 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Gets all information about hand positions from the UltraMotion/LeapMotion device and sends the information that we need via the HandSummary class to the HandWaveyManager via the sendHandSummaries function.
+
+This is used for receiving data from the UltraMotion/LeapMotion device for tracking hand positions.
+*/
+
 package ultraMotion;
 
 import config.Config;

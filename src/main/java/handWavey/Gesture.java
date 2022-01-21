@@ -1,3 +1,11 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+For identifying what events should be generated for a given set of characteristics.
+
+Also generates the config for those events.
+*/
+
 package handWavey;
 
 import config.*;

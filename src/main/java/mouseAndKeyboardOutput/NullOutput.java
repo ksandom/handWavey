@@ -1,3 +1,11 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Provides the Null output option by implementing the Output interface.
+
+This isn't intended for use by users. It's instead intended to assist with testing.
+*/
+
 package mouseAndKeyboardOutput;
 
 import java.awt.event.InputEvent;

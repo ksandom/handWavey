@@ -1,3 +1,29 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Provides individually configurable leveled debug for different classes.
+
+There are two ways of calling this:
+
+
+## Config provided level
+
+`Debug debug = Debug.getDebug("configProvidedLevel");`
+
+The debug level is then defined in
+
+`Config.singleton().getGroup("debug").newItem("configProvidedLevel", "1", "Description of the setting.")`
+
+The advantage of this method is that all debug options can be placed together.
+
+## Hard-coded level
+
+`Debug debug = new Debug(1, "hardCodedLevel");`
+
+This method gives you simplicity if you just need to get a little output right now.
+
+*/
+
 package debug;
 
 import config.*;

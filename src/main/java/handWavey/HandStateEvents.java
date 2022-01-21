@@ -1,3 +1,9 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+For figuring out what events should be triggered when something changes.
+*/
+
 package handWavey;
 
 import dataCleaner.Changed;
@@ -6,7 +12,6 @@ import java.util.ArrayList;
 
 import debug.Debug;
 
-/* For figuring out what events should be triggered when something changes. */
 public class HandStateEvents {
     private Debug debug;
     private Changed zoneChanged = new Changed("OOB");

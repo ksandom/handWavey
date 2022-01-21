@@ -1,3 +1,9 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Tracks when a item/group/all of configuration has changed from the default or stored state.
+*/
+
 package config;
 
 import config.Config;

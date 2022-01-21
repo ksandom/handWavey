@@ -1,3 +1,9 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Provides the VNC output option by implementing the Output interface.
+*/
+
 package mouseAndKeyboardOutput;
 
 import java.awt.event.InputEvent;

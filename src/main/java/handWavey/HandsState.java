@@ -1,3 +1,11 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Keeps track of the state of BOTH hands, and:
+* generates the appropriate events as needed.
+* provides information to other classes to make decisions. eg choosing the correct zone.
+*/
+
 package handWavey;
 
 import config.*;

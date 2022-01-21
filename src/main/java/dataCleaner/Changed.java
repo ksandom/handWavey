@@ -1,3 +1,14 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Tracks whether the state of something has changed.
+
+It can provide:
+* Whether it has changed.
+* The old value.
+* The new value.
+*/
+
 package dataCleaner;
 
 public class Changed {

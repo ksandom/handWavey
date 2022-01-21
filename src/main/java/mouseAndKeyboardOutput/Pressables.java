@@ -1,3 +1,11 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Pressables is a class for tracking which keys/buttons we can press and how that translates into the protocol that controls the mouse and keyboard. If there are keys/buttons that you want to use that aren't supported, this is the place to start.
+
+It assumes the use of KeyEvent and MouseEvent java classes.
+*/
+
 package mouseAndKeyboardOutput;
 
 import java.awt.event.InputEvent;
@@ -6,11 +14,6 @@ import java.util.*;
 
 import debug.Debug;
 
-/*
-Pressables is a class for tracking which keys/buttons we can press and how that translates into the protocol that controls the mouse and keyboard. If there are keys/buttons that you want to use that aren't supported, this is the place to start.
-
-It assumes the use of KeyEvent and MouseEvent java classes.
-*/
 public class Pressables {
     public static final int INVALID = -1;
     private HashMap<String, Integer> pressables = new HashMap<String, Integer>();

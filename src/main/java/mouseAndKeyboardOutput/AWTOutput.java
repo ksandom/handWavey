@@ -1,3 +1,11 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Provides the AWT output option by implementing the Output interface.
+
+This is the everyday interface that should work with most everyday user interfaces.
+*/
+
 package mouseAndKeyboardOutput;
 
 import debug.Debug;

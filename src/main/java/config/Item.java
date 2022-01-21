@@ -1,8 +1,14 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Tracks a single configuration item.
+*/
+
 package config;
 
 import config.Dirt;
 
-public class Item extends Dirt{ // An individual piece of configuratoin. A.K.A a setting.
+public class Item extends Dirt{ // An individual piece of configuration. A.K.A a setting.
     private String description;
     private String defaultValue;
     private String value;

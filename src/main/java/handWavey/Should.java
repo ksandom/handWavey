@@ -1,3 +1,9 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+For tracking state changes that need an action to happen once on-change.
+*/
+
 package handWavey;
 
 public class Should {

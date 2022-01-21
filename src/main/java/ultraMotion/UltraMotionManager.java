@@ -1,3 +1,11 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Gets the UltraMotionInput up and running, which does all of the hard work.
+
+This is used for receiving data from the UltraMotion/LeapMotion device for tracking hand positions.
+*/
+
 package handWavey;
 
 import config.Config;

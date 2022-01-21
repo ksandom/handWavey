@@ -1,3 +1,11 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Handles running macros that are formatted in a single line. Ie when used in events.
+
+This extends the MacroCore class which provides almost all of its functionality.
+*/
+
 package macro;
 
 import mouseAndKeyboardOutput.*;

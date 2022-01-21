@@ -1,3 +1,25 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Glues everything together.
+
+I know this class is huge. I'm slowly pulling more and more of its functionality out into separate, testable, classes.
+
+To quickly understand how it all fits together, take a look at sendHandSummaries() near the bottom of this file. To summarise:
+
+* Input (currently UltraMotionInput) sends some HandSummary s to this class via the sendHandSummaries() function.
+* this.handsState.figureOutStuff(); then figures out:
+    * Which of each of these the hands are in and tracks them via HandStateEvents.
+        * zone (none, noMove, active, action, absolute, relative)
+        * segment (0-3 normally, but could be more, or less.)
+        * state (open, closed, absent, out of bounds)
+    * Triggers events for any changes.
+* There is then some logic to determine how movement should be treated.
+
+If you want to add configuration options, start in HandWaveyConfig.
+
+*/
+
 package handWavey;
 
 import handWavey.Zone;

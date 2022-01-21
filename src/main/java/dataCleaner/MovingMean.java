@@ -1,3 +1,11 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Provides an arbitrarily size moving mean for stablising data.
+
+The size can be dynamically changed with resize(). In the interests of performance, the result is not completely correct, but is close enough for current use-cases;
+*/
+
 package dataCleaner;
 
 import java.util.Arrays;

@@ -1,3 +1,5 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
 package handWavey;
 
 import handWavey.Should;

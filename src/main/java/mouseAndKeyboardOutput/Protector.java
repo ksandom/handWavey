@@ -1,3 +1,9 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Functionality for OutputProtection that protects the outputs/user interfaces from the user/macros doing stupid things like pressing the same key twice without releasing it in-between.
+*/
+
 package mouseAndKeyboardOutput;
 
 import debug.Debug;

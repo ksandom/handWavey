@@ -1,3 +1,9 @@
+// (c) 2022 Kevin Sandom under the GPL v3. See LICENSE for details.
+
+/*
+Play a .WAV file in a new thread so that it does not block the current thread.
+*/
+
 package audio;
 
 public class BackgroundSound extends Thread {
