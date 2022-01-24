@@ -51,31 +51,25 @@ public class MacroCore {
                     toInt(parm(parameters, 1, 0))); // Y
                 break;
             case "click":
-                if (!canPerformActions(command)) break;
                 this.output.click(
                     getButton(parameters, 0)); // Mouse button. ("left", "middle", "right")
                 break;
             case "doubleClick":
-                if (!canPerformActions(command)) break;
                 this.output.doubleClick(
                     getButton(parameters, 0)); // Mouse button. ("left", "middle", "right")
                 break;
             case "mouseDown":
-                if (!canPerformActions(command)) break;
                 this.output.mouseDown(
                     getButton(parameters, 0)); // Mouse button. ("left", "middle", "right")
                 break;
             case "mouseUp":
-                if (!canPerformActions(command)) break;
                 this.output.mouseUp(
                     getButton(parameters, 0)); // Mouse button. ("left", "middle", "right")
                 break;
             case "releaseButtons":
-                if (!canPerformActions(command)) break;
                 this.output.releaseButtons();
                 break;
             case "rewindScroll":
-                if (!canPerformActions(command)) break;
                 this.handWaveyManager.rewindScroll();
                 break;
             case "rewindCursorPosition":
@@ -99,20 +93,16 @@ public class MacroCore {
             
             // Keyboard instructions.
             case "keyDown":
-                if (!canPerformActions(command)) break;
                 this.output.keyDown(parm(parameters, 0, ""));
                 break;
             case "keyUp":
-                if (!canPerformActions(command)) break;
                 this.output.keyUp(parm(parameters, 0, ""));
                 break;
             case "keyPress":
-                if (!canPerformActions(command)) break;
                 this.output.keyDown(parm(parameters, 0, ""));
                 this.output.keyUp(parm(parameters, 0, ""));
                 break;
             case "releaseKeys":
-                if (!canPerformActions(command)) break;
                 this.output.releaseKeys();
                 break;
             
@@ -123,17 +113,6 @@ public class MacroCore {
         }
     }
     
-    
-    private Boolean canPerformActions(String command) {
-        Boolean result = true;
-        
-        if (this.handsState.newHandsClickFreeze() == true) {
-            this.debug.out(1, "newHand clickFreeze is in effect. So the " + command + " action was ignored. If this is not the behavior you expect, take a look at the settings for newHand.");
-            result = false;
-        }
-        
-        return result;
-    }
     
     private String getButton(String[] parameters, int position) {
         // If a button is specified, use that. Otherwise use the one that handsState thinks we should use.

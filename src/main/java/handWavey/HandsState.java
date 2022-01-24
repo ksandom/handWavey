@@ -62,7 +62,6 @@ public class HandsState {
     private int cursorFreezeFirstMillis = 200;
     private Boolean newHandsCursorFreeze = false;
     private int eventFreezeFirstMillis = 500;
-    private Boolean newHandsClickFreeze = false;
     
     // TODO Migrate other dimensions.
     private double zMultiplier = -1;
@@ -174,21 +173,6 @@ public class HandsState {
                     this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualExitEvent() + "-" + secondaryState.getIndividualExitEvent() + "-exit");
                 }
             }
-        }
-    }
-    
-    // Trigger events for the **current** state that would have been lost during a clickFreeze.
-    private void triggerLostEvents() {
-        this.debug.out(1, "Triggering events for the **current** state that may have been lost during the clickFreeze.");
-        
-        this.handWaveyEvent.triggerEvents(this.primaryState.getCurrentEvents());
-        if (secondaryHandIsActiveOrChanged()) {
-            this.handWaveyEvent.triggerEvents(this.secondaryState.getCurrentEvents());
-        }
-        
-        if (secondaryHandIsActive()) {
-            this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualEnterEvent() + "-" + secondaryState.getIndividualEnterEvent() + "-enter");
-            this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualExitEvent() + "-" + secondaryState.getIndividualExitEvent() + "-exit");
         }
     }
     
@@ -335,8 +319,7 @@ public class HandsState {
                 this.newHandsHandled = true;
                 this.newHands = now;
                 this.newHandsCursorFreeze = true;
-                this.newHandsClickFreeze = true;
-                this.debug.out(1, "Hand is new. Triggering cursor and click freeze.");
+                this.debug.out(1, "Hand is new. Triggering cursor freeze.");
                 this.handWaveyEvent.triggerEvent("newHandFreeze");
             } else {
                 long elapsedTime = now - this.newHands;
@@ -345,16 +328,6 @@ public class HandsState {
                         this.newHandsCursorFreeze = false;
                         this.debug.out(1, "Releasing newHand cursor freeze.");
                         this.handWaveyEvent.triggerEvent("special-newHandUnfreezeCursor");
-                    }
-                }
-                
-                if (this.newHandsClickFreeze == true) {
-                    if (elapsedTime > this.cursorFreezeFirstMillis) {
-                        this.newHandsClickFreeze = false;
-                        this.debug.out(1, "Releasing newHand click freeze.");
-                        this.handWaveyEvent.triggerEvent("special-newHandUnfreezeEvent-beforeLost");
-                        triggerLostEvents();
-                        this.handWaveyEvent.triggerEvent("special-newHandUnfreezeEvent-afterLost");
                     }
                 }
             }
@@ -367,11 +340,7 @@ public class HandsState {
     }
     
     public Boolean newHandsCursorFreeze() {
-        return newHandsCursorFreeze;
-    }
-    
-    public Boolean newHandsClickFreeze() {
-        return newHandsClickFreeze;
+        return this.newHandsCursorFreeze;
     }
     
     public long getPreviousFrameAge() {

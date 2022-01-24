@@ -366,13 +366,9 @@ public class HandWaveyConfig {
             "",
             "When the time has expired for the Cursor freeze after a new primary hand is introduced.");
         actionEvents.newItem(
-            "special-newHandUnfreezeEvent-beforeLost",
+            "special-newHandUnfreezeEvent",
             "",
-            "When the time has expired for the Event freeze after a new primary hand is introduced. This event is triggered before the lost events are re-generated.");
-        actionEvents.newItem(
-            "special-newHandUnfreezeEvent-afterLost",
-            "",
-            "When the time has expired for the Event freeze after a new primary hand is introduced. This event is triggered after the lost events are re-generated.");
+            "When the time has expired for the Event freeze after a new primary hand is introduced. This event is triggered.");
         
         Group audioConfig = this.config.newGroup("audioConfig");
         audioConfig.newItem(
@@ -390,13 +386,9 @@ public class HandWaveyConfig {
             "",
             "When the time has expired for the Cursor freeze after a new primary hand is introduced.");
         audioEvents.newItem(
-            "special-newHandUnfreezeEvent-beforeLost",
+            "special-newHandUnfreezeEvent",
             "",
-            "When the time has expired for the Event freeze after a new primary hand is introduced. This event is triggered before the lost events are re-generated.");
-        audioEvents.newItem(
-            "special-newHandUnfreezeEvent-afterLost",
-            "",
-            "When the time has expired for the Event freeze after a new primary hand is introduced. This event is triggered after the lost events are re-generated.");
+            "When the time has expired for the Event freeze after a new primary hand is introduced.");
         audioEvents.newItem(
             "imposterHand-replace",
             "",

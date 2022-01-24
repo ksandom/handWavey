@@ -120,7 +120,7 @@ public class Gesture {
             "lockCursor();rewindCursorPosition();",
             "");
         overrideDefault(
-            "special-newHandUnfreezeEvent-beforeLost",
+            "special-newHandUnfreezeEvent",
             "setButton(\"left\");releaseButtons();releaseKeys();",
             "");
         
