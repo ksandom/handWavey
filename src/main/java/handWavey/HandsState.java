@@ -61,7 +61,7 @@ public class HandsState {
     private int oldHandsTimeout = 800;
     private int cursorFreezeFirstMillis = 200;
     private Boolean newHandsCursorFreeze = false;
-    private int clickFreezeFirstMillis = 500;
+    private int eventFreezeFirstMillis = 500;
     private Boolean newHandsClickFreeze = false;
     
     // TODO Migrate other dimensions.
@@ -119,7 +119,7 @@ public class HandsState {
         Group newHands = config.getGroup("dataCleaning").getGroup("newHands");
         this.oldHandsTimeout = Integer.parseInt(newHands.getItem("oldHandsTimeout").get());
         this.cursorFreezeFirstMillis = Integer.parseInt(newHands.getItem("cursorFreezeFirstMillis").get());
-        this.clickFreezeFirstMillis = Integer.parseInt(newHands.getItem("clickFreezeFirstMillis").get());
+        this.eventFreezeFirstMillis = Integer.parseInt(newHands.getItem("eventFreezeFirstMillis").get());
     }
     
     public static HandsState singleton() {
@@ -141,32 +141,38 @@ public class HandsState {
     }
     
     public void figureOutStuff() {
-        Double primaryHandZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
-        this.primaryState.setZone(this.handsState.getZone(primaryHandZ));
+        Boolean shouldUpdatePrimary = (!this.handSummaries[0].handIsNew());
+        Boolean shouldUpdateSecondary = (secondaryHandIsActiveOrChanged() && !this.handSummaries[1].handIsNew());
         
-        this.primaryState.setSegment(getHandSegment(true, this.handSummaries[0]));
-        this.primaryState.setState(getHandState(this.handSummaries[0]));
+        if (shouldUpdatePrimary) {
+            Double primaryHandZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
+            this.primaryState.setZone(this.handsState.getZone(primaryHandZ));
+            
+            this.primaryState.setSegment(getHandSegment(true, this.handSummaries[0]));
+            this.primaryState.setState(getHandState(this.handSummaries[0]));
+        }
 
-        if (secondaryHandIsActiveOrChanged()) {
+        if (shouldUpdateSecondary) {
             Double secondaryHandZ = this.handSummaries[1].getHandZ() * this.zMultiplier;
             this.secondaryState.setZone(this.handsState.getZone(secondaryHandZ, false));
             this.secondaryState.setSegment(getHandSegment(true, this.handSummaries[1]));
-        }
-        if (this.handSummaries[1] != null) {
+        } else if (this.handSummaries[1] != null) {
             this.secondaryState.setState(getHandState(this.handSummaries[1]));
         } else {
             this.secondaryState.setState(Gesture.absent);
         }
         
-        if (this.primaryState.somethingChanged() || this.secondaryState.somethingChanged()) {
-            this.handWaveyEvent.triggerEvents(this.primaryState.getEvents());
-            if (secondaryHandIsActiveOrChanged()) {
-                this.handWaveyEvent.triggerEvents(this.secondaryState.getEvents());
-            }
-            
-            if (secondaryHandIsActiveOrChanged()) {
-                this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualEnterEvent() + "-" + secondaryState.getIndividualEnterEvent() + "-enter");
-                this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualExitEvent() + "-" + secondaryState.getIndividualExitEvent() + "-exit");
+        if (shouldUpdatePrimary || shouldUpdateSecondary) {
+            if (this.primaryState.somethingChanged() || this.secondaryState.somethingChanged()) {
+                this.handWaveyEvent.triggerEvents(this.primaryState.getEvents());
+                if (secondaryHandIsActiveOrChanged()) {
+                    this.handWaveyEvent.triggerEvents(this.secondaryState.getEvents());
+                }
+                
+                if (secondaryHandIsActiveOrChanged()) {
+                    this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualEnterEvent() + "-" + secondaryState.getIndividualEnterEvent() + "-enter");
+                    this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualExitEvent() + "-" + secondaryState.getIndividualExitEvent() + "-exit");
+                }
             }
         }
     }
@@ -346,9 +352,9 @@ public class HandsState {
                     if (elapsedTime > this.cursorFreezeFirstMillis) {
                         this.newHandsClickFreeze = false;
                         this.debug.out(1, "Releasing newHand click freeze.");
-                        this.handWaveyEvent.triggerEvent("special-newHandUnfreezeClick-beforeLost");
+                        this.handWaveyEvent.triggerEvent("special-newHandUnfreezeEvent-beforeLost");
                         triggerLostEvents();
-                        this.handWaveyEvent.triggerEvent("special-newHandUnfreezeClick-afterLost");
+                        this.handWaveyEvent.triggerEvent("special-newHandUnfreezeEvent-afterLost");
                     }
                 }
             }

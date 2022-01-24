@@ -106,8 +106,8 @@ public class HandWaveyConfig {
             "200",
             "Int (milliseconds): While the hand enters into the view of the UltraMotion device, the data is erratic. Therefore we want to ignore the first few moments until the data has stabilised. This wait time is measured in milliseconds, and stops the cursor from moving.");
         newHands.newItem(
-            "clickFreezeFirstMillis",
-            "1200",
+            "eventFreezeFirstMillis",
+            "400",
             "Int (milliseconds): While the hand enters into the view of the UltraMotion device, the data is erratic. Therefore we want to ignore the first few moments until the data has stabilised. This wait time is measured in milliseconds, and stops accidental clicks.");
         newHands.newItem(
             "oldHandsTimeout",
@@ -366,13 +366,13 @@ public class HandWaveyConfig {
             "",
             "When the time has expired for the Cursor freeze after a new primary hand is introduced.");
         actionEvents.newItem(
-            "special-newHandUnfreezeClick-beforeLost",
+            "special-newHandUnfreezeEvent-beforeLost",
             "",
-            "When the time has expired for the Click freeze after a new primary hand is introduced. This event is triggered before the lost events are re-generated.");
+            "When the time has expired for the Event freeze after a new primary hand is introduced. This event is triggered before the lost events are re-generated.");
         actionEvents.newItem(
-            "special-newHandUnfreezeClick-afterLost",
+            "special-newHandUnfreezeEvent-afterLost",
             "",
-            "When the time has expired for the Click freeze after a new primary hand is introduced. This event is triggered after the lost events are re-generated.");
+            "When the time has expired for the Event freeze after a new primary hand is introduced. This event is triggered after the lost events are re-generated.");
         
         Group audioConfig = this.config.newGroup("audioConfig");
         audioConfig.newItem(
@@ -390,13 +390,13 @@ public class HandWaveyConfig {
             "",
             "When the time has expired for the Cursor freeze after a new primary hand is introduced.");
         audioEvents.newItem(
-            "special-newHandUnfreezeClick-beforeLost",
+            "special-newHandUnfreezeEvent-beforeLost",
             "",
-            "When the time has expired for the Click freeze after a new primary hand is introduced. This event is triggered before the lost events are re-generated.");
+            "When the time has expired for the Event freeze after a new primary hand is introduced. This event is triggered before the lost events are re-generated.");
         audioEvents.newItem(
-            "special-newHandUnfreezeClick-afterLost",
+            "special-newHandUnfreezeEvent-afterLost",
             "",
-            "When the time has expired for the Click freeze after a new primary hand is introduced. This event is triggered after the lost events are re-generated.");
+            "When the time has expired for the Event freeze after a new primary hand is introduced. This event is triggered after the lost events are re-generated.");
         audioEvents.newItem(
             "imposterHand-replace",
             "",

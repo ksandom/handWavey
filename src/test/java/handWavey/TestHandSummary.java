@@ -11,13 +11,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestHandSummary {
     private HandSummary handSummary;
+    private HandWaveyConfig handWaveyConfig;
     private Config config;
 
     @BeforeEach
     void setUp() {
-        this.handSummary = new HandSummary(42);
-        this.config = new Config("handWaveyConfigTest.yml");
+        this.handWaveyConfig = new HandWaveyConfig("unitTest");
+        this.handWaveyConfig.defineGeneralConfig();
+        this.config = Config.singleton();
 
+        this.handSummary = new HandSummary(42);
         this.handSummary.setHandPosition(10, 200, 20);
         this.handSummary.setHandAngles(0.1, 0, -0.1);
         this.handSummary.setArmAngles(0.2, 0, -0.2);
@@ -29,6 +32,7 @@ class TestHandSummary {
     void destroy() {
         this.handSummary = null;
         this.config = null;
+        this.handWaveyConfig = null;
     }
 
     @Test

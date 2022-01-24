@@ -24,7 +24,7 @@ class TestHandWaveyConfig {
 
     @Test
     public void testID() {
-        handWaveyConfig.defineGeneralConfig();
+        this.handWaveyConfig.defineGeneralConfig();
         
         assertEquals("2021-11-26", Config.singleton().getItem("configFormatVersion").get());
     }
