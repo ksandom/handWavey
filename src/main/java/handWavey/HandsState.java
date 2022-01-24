@@ -141,7 +141,7 @@ public class HandsState {
     
     public void figureOutStuff() {
         Boolean shouldUpdatePrimary = (!this.handSummaries[0].handIsNew());
-        Boolean shouldUpdateSecondary = (secondaryHandIsActiveOrChanged() && !this.handSummaries[1].handIsNew());
+        Boolean shouldUpdateSecondary = (secondaryHandIsActiveOrChanged());
         
         if (shouldUpdatePrimary) {
             Double primaryHandZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
@@ -151,14 +151,14 @@ public class HandsState {
             this.primaryState.setState(getHandState(this.handSummaries[0]));
         }
 
-        if (shouldUpdateSecondary) {
+        if (this.handSummaries[1] == null) {
+            this.secondaryState.setState(Gesture.absent);
+        } else if (shouldUpdateSecondary) {
             Double secondaryHandZ = this.handSummaries[1].getHandZ() * this.zMultiplier;
             this.secondaryState.setZone(this.handsState.getZone(secondaryHandZ, false));
             this.secondaryState.setSegment(getHandSegment(true, this.handSummaries[1]));
         } else if (this.handSummaries[1] != null) {
             this.secondaryState.setState(getHandState(this.handSummaries[1]));
-        } else {
-            this.secondaryState.setState(Gesture.absent);
         }
         
         if (shouldUpdatePrimary || shouldUpdateSecondary) {
@@ -188,7 +188,10 @@ public class HandsState {
     }
     
     public Boolean secondaryHandIsActive() {
-        return ((this.handSummaries.length > 1) && (this.handSummaries[1] != null) && (this.handSummaries[1].isValid()));
+        if (this.handSummaries.length < 2) return false;
+        if (this.handSummaries[1] == null) return false;
+        if (this.handSummaries[1].handIsNew()) return false;
+        return (this.handSummaries[1].isValid());
     }
     
     public Boolean secondaryHandIsActiveOrChanged() {
