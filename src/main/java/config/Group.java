@@ -14,10 +14,17 @@ import java.util.HashMap;
 
 public class Group extends Dirt { // A collection of related configuration Items.
     private HashMap<String, Item> items = new HashMap<String, Item>();
-    private HashMap<String, config.Group> groups = new HashMap<String, config.Group>();
+    protected HashMap<String, config.Group> groups = new HashMap<String, config.Group>();
 
     public Group() {
         super(true);
+    }
+    
+    public Item newItem(String key, String defaultValue, String description, Boolean canHideIfUnchanged) {
+        Item newItem = newItem(key, defaultValue, description);
+        newItem.setCanHideIfUnchanged(canHideIfUnchanged);
+        
+        return newItem;
     }
     
     public Item newItem(String key, String defaultValue, String description) {
@@ -56,5 +63,13 @@ public class Group extends Dirt { // A collection of related configuration Items
         for (Item item : this.items.values()) {
             item.finishedStartup();
         }
+    }
+    
+    public HashMap _getGroups() {
+        return this.groups;
+    }
+    
+    public HashMap _getItems() {
+        return this.items;
     }
 }

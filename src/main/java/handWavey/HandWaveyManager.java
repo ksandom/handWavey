@@ -104,10 +104,20 @@ public class HandWaveyManager {
     private Boolean shouldDiscardOldPosition = true;
     
     public HandWaveyManager() {
+        initialSetup(false);
+    }
+    
+    public HandWaveyManager(Boolean loadConfig) {
+        initialSetup(loadConfig);
+    }
+    
+    private void initialSetup(Boolean loadConfig) {
         HandWaveyConfig handWaveyConfig = new HandWaveyConfig("handWavey");
         handWaveyConfig.defineGeneralConfig();
         
         this.config = Config.singleton();
+        if (loadConfig) loadAndSaveConfigToDisk();
+        
         String chosenOutput = this.config.getGroup("output").getItem("device").get();
         selectOutput(chosenOutput);
         
@@ -129,6 +139,20 @@ public class HandWaveyManager {
             case "VNC":
                 this.output = new OutputProtection(new VNCOutput(chosenOutput));
                 break;
+        }
+    }
+    
+    private void loadAndSaveConfigToDisk() {
+        this.config.load(); // Load any changes that the user has made.
+        
+        String saveBackConfig = Config.singleton().getItem("saveBackConfig").get();
+        if (!saveBackConfig.equals("false")) {
+            this.config.save(); // Save all config to disk so that any new settings are available to the user.
+        } else {
+            Debug debug = new Debug(0, "HandWaveyManager-startup");
+            debug.out(0, "   !!!! saveBackConfig is disabled.                                 !!!!");
+            debug.out(0, "   !!!! So the config files will not be updated/repaired as needed. !!!!");
+            debug.out(0, "   !!!! Make sure to set it back to true as soon as possible.       !!!!");
         }
     }
     
@@ -584,7 +608,6 @@ public class HandWaveyManager {
     * Data cleaning:
         * How many frames for a mouse event to be acted on?
         * Adjust timings?
-    * VNC for initial compatibility with wayland?
     * Config to/from disk.
     * Make audio feedback for hands left/right hand aware.
     * How to build the final asset?

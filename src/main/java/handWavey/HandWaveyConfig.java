@@ -17,7 +17,7 @@ public class HandWaveyConfig {
     
     public HandWaveyConfig(String fileName) {
         this.fileName = fileName;
-        Config.setSingletonFilename(this.fileName + ".yml");
+        Config.setSingletonFilename(this.fileName);
         this.config = Config.singleton();
     }
     
@@ -27,10 +27,31 @@ public class HandWaveyConfig {
     }
     
     public void defineGeneralConfig() {
+        // Add groups to separate out into separate files.
+        this.config.addGroupToSeparate("output");
+        this.config.addGroupToSeparate("dataCleaning");
+        this.config.addGroupToSeparate("ultraMotion");
+        this.config.addGroupToSeparate("axisOrientation");
+        this.config.addGroupToSeparate("physicalBoundaries");
+        this.config.addGroupToSeparate("zones");
+        this.config.addGroupToSeparate("touchPad");
+        this.config.addGroupToSeparate("click");
+        this.config.addGroupToSeparate("scroll");
+        this.config.addGroupToSeparate("actionEvents");
+        this.config.addGroupToSeparate("audioConfig");
+        this.config.addGroupToSeparate("audioEvents");
+        this.config.addGroupToSeparate("gestureConfig");
+        
+        // Build up general config.
         Item configFormatVersion = this.config.newItem(
             "configFormatVersion",
             "2021-11-26",
             "This number is incremented by the programmer whenever existing config items get changed (eg new description, default value etc) so that conflicts can be resolved.");
+        configFormatVersion.set("2021-11-26"); // Update it here.
+        Item saveBackConfig = this.config.newItem(
+            "saveBackConfig",
+            "true",
+            "[true, false] Save back config after loading it. This has the effect of cleaning up the configuration files, and reflecting changes with new versions in the config file. The only time you'll want to turn this off while developing a config that you may want to share around. Ie if you make a mistake, it won't get lost. Increase debugging on Persistance to at least 1, and pay attention to the debug output to spot any mistakes that you've made. \"true\" == save back. \"false\" == don't save back.");
         configFormatVersion.set("2021-11-26"); // Update it here.
 
         Group output = this.config.newGroup("output");
@@ -41,7 +62,7 @@ public class HandWaveyConfig {
         Group vnc = output.newGroup("VNC");
         vnc.newItem(
             "host",
-            "192.168.18.21",
+            "127.0.0.1",
             "The hostname to connect to.");
         vnc.newItem(
             "port",
@@ -85,6 +106,14 @@ public class HandWaveyConfig {
             "VNCOutput",
             "1",
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. VNCOutput is a way to control the mouse and keyboard of a separate machine.");
+        debug.newItem(
+            "Persistence",
+            "1",
+            "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. Persistence is responsible for saving and loading configuration.");
+        debug.newItem(
+            "Config",
+            "0",
+            "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. Config is responsible for managing configuration. It will be rare that you'll need to do anything with this. But it's here for if you do need to. Not that this setting it not applied until the first configuration file has been loaded. Before that it defaults to level 0 and there is no debugging that isn't already displayed at level 0.");
         debug.newItem(
             "HandsState",
             "1",

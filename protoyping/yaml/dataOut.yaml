@@ -1,0 +1,18 @@
+items:
+  thing1: {description: blah blah blah blah asdasd, value: donkey, defaultValue: box}
+  thing2: {description: blah2 wheeeeeeee, value: door, defaultValue: gate}
+groups:
+  group1:
+    items:
+      thing1: {description: 'blah is a really long description that should be enough
+          to satisfy an icecream. Yes, and icecream. You didn''t see that coming now
+          did you?', value: wheel, defaultValue: box}
+    groups:
+      group1a:
+        items:
+          thing1: {description: blah, value: wheel, defaultValue: box}
+          aTestItem: {defaultValue: b, description: Some "letters"., value: a}
+        groups: {}
+      aTestGroup:
+        groups: {}
+        items: {}

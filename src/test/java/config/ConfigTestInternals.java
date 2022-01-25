@@ -20,18 +20,18 @@ class ConfigTester extends Config {
 }
 
 public class ConfigTestInternals {
-    String fileName;
+    String directoryName;
     ConfigTester ct;
     
     @BeforeEach
     void setUp() {
-        this.fileName = "handWaveyConfigTest.yml";
-        this.ct = new ConfigTester(this.fileName);
+        this.directoryName = "handWaveyConfigTest";
+        this.ct = new ConfigTester(this.directoryName);
     }
     
     @AfterEach
     void destroy() {
-        this.fileName = null;
+        this.directoryName = null;
         this.ct = null;
     }
     
@@ -42,12 +42,12 @@ public class ConfigTestInternals {
     
     @Test
     public void testFullPath() {
-        assertNotNull(this.ct.getFullPath(this.fileName));
+        assertNotNull(this.ct.getFullPath(this.directoryName));
     }
     
     @Test
     public void testFullPathValue() {
-        assertEquals(this.ct.getFullPath(this.fileName), this.ct.getBestPath() + this.fileName);
+        assertEquals(this.ct.getFullPath(this.directoryName), this.ct.getBestPath() + this.directoryName + "/");
     }
     
     @Test

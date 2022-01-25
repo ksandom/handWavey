@@ -9,30 +9,30 @@ package config;
 import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-/*
-TODOs
-* #Choose best path.
-* Load default.
-* Overwrite using file if it exists.
-  * Else write out default config to file.
-*/
-
+import debug.*;
 
 public class Config extends config.Group {
-    protected String fileName = "";
+    protected String directoryName = "";
     protected Boolean fileExists = false;
+    private String primaryFileName = "main.yml";
+    private HashMap groupsToSaveSeparately = new HashMap<String, Boolean>();
+    private Boolean missmatchingSeparates = false;
+    
     private static String singletonFileName = "";
     private static Config singletonConfig = null;
     
+    private Debug debug = new Debug(0, "Config");
+    
     public Config(String fileName) {
         this.makeClean();
-        this.fileName = getFullPath(fileName);
-        this.fileExists = new File(this.fileName).exists();
+        this.directoryName = getFullPath(fileName);
+        this.fileExists = new File(this.directoryName).exists();
         
         String fileState = (this.fileExists)?"exists":"new";
         
-        System.out.println("Load config from: " + this.fileName + " (" + fileState + ")");
+        System.out.println("Load config from: " + this.directoryName + " (" + fileState + ")");
     }
 
     public static void setSingletonFilename(String fileName) {
@@ -45,6 +45,74 @@ public class Config extends config.Group {
         }
 
         return Config.singletonConfig;
+    }
+    
+    public void addGroupToSeparate(String groupName) {
+        if (groupName == "") return;
+        this.groupsToSaveSeparately.put(groupName, true);
+    }
+    
+    public void load() {
+        load(true);
+    }
+    
+    public void load(Boolean loadEverything) {
+        Persistence persistence = new Persistence();
+        
+        String file = this.directoryName + this.primaryFileName;
+        persistence.load(file, this._getGroups(), this._getItems());
+        
+        // Reload the debug class now that we have configuration for it.
+        this.debug = Debug.getDebug("Config");
+        
+        // Load the sub-groups.
+        if (loadEverything) {
+            for (Object rawGroupName : this.groupsToSaveSeparately.keySet()) {
+                String groupName = (String) rawGroupName;
+                if (!separateGroupExists(groupName)) continue;
+                Group group = getGroup(groupName);
+                file = this.directoryName + groupName + ".yml";
+                persistence.load(file, group._getGroups(), group._getItems(), new HashMap());
+            }
+        }
+    }
+    
+    public void save() {
+        Persistence persistence = new Persistence();
+        
+        String file = this.directoryName + this.primaryFileName;
+        persistence.save(file, this._getGroups(), this._getItems(), this.groupsToSaveSeparately);
+        
+        for (Object rawGroupName : this.groupsToSaveSeparately.keySet()) {
+            String groupName = (String) rawGroupName;
+            if (!separateGroupExists(groupName)) continue;
+            Group group = getGroup(groupName);
+            file = this.directoryName + groupName + ".yml";
+            persistence.save(file, group._getGroups(), group._getItems(), new HashMap());
+        }
+    }
+    
+    private Boolean separateGroupExists(String groupName) {
+        if (!this.groups.containsKey(groupName)) {
+            this.debug.out(0, "groupsToSaveSeparately contains \"" + groupName + "\" which does not appear to exist. This is a programmer error (missmatch between addGroupToSeparate() and existing groups that have been defined), and may mean that you are not getting the result that you expect.");
+            
+            this.missmatchingSeparates = true;
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+    public Boolean testSeparates() {
+        for (Object rawGroupName : this.groupsToSaveSeparately.keySet()) {
+            String groupName = (String) rawGroupName;
+            separateGroupExists(groupName);
+        }
+        return separatesMissmatch();
+    }
+    
+    public Boolean separatesMissmatch() {
+        return this.missmatchingSeparates;
     }
     
     protected String getBestPath() {
@@ -66,6 +134,18 @@ public class Config extends config.Group {
     }
     
     protected String getFullPath(String fileName) {
-        return getBestPath() + fileName;
+        String path = getBestPath();
+        String directoryPath = path + fileName;
+        
+        assertDirectory(directoryPath);
+        
+        return directoryPath + File.separator;
+    }
+    
+    private void assertDirectory(String path) {
+        File directory = new File(path);
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
     }
 }

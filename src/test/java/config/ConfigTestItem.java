@@ -34,6 +34,7 @@ public class ConfigTestItem {
         assertEquals(this.item.get(), this.defaultValue);
         assertNotEquals(this.item.get(), this.value);
         assertEquals(this.item.getDescription(), this.description);
+        assertEquals(this.item.getDefaultValue(), this.defaultValue);
     }
     
     @Test
@@ -89,5 +90,27 @@ public class ConfigTestItem {
         // It should not affect things once we have a non-default value.
         this.item.overrideDefault("wow4");
         assertEquals("wow3", this.item.get());
+    }
+    
+    @Test
+    public void testCanHide() {
+        assertEquals(this.item.canHideIfUnchanged(), false);
+        this.item.setCanHideIfUnchanged(true);
+        assertEquals(this.item.canHideIfUnchanged(), true);
+        this.item.setCanHideIfUnchanged(false);
+        assertEquals(this.item.canHideIfUnchanged(), false);
+    }
+    
+    @Test
+    public void testCanHideByGroup() {
+        Group aGroup = new Group();
+        Item item1 = aGroup.newItem("item1", "a", "A description.");
+        assertEquals(item1.canHideIfUnchanged(), false);
+        
+        Item item2 = aGroup.newItem("item2", "a", "A description.", true);
+        assertEquals(item2.canHideIfUnchanged(), true);
+        
+        Item item3 = aGroup.newItem("item3", "a", "A description.", false);
+        assertEquals(item3.canHideIfUnchanged(), false);
     }
 }

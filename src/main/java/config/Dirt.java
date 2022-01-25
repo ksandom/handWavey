@@ -27,7 +27,7 @@ public class Dirt { // Manages whether configuration has changed since a known s
         }
     }
     
-    protected void makeClean() {
+    public void makeClean() {
         this.dirty = false;
     }
     

@@ -147,8 +147,8 @@ public class Gesture {
                 String name = "general-" + eventType + "-" + handLetter + "AnyChange";
                 String description = "Triggered when the " + hand + " hand changes " + eventType + ".";
                 
-                this.actionEvents.newItem(name, "", description);
-                this.audioEvents.newItem(name, "", description);
+                this.actionEvents.newItem(name, "", description, true);
+                this.audioEvents.newItem(name, "", description, true);
             }
         }
     }
@@ -312,7 +312,7 @@ public class Gesture {
         String fullName = name + "-" + directionName;
         String description = "Action to take when " + directionString + " this state: " + whenDescription;
         
-        this.actionEvents.newItem(fullName, "", description);
+        this.actionEvents.newItem(fullName, "", description, true);
     }
     
     private void addAudioFeedbackConfig(String name, String whenDescription, int direction) {
@@ -321,7 +321,7 @@ public class Gesture {
         String fullName = name + "-" + directionName;
         String description = "Sound to play when " + directionString + " this state: " + whenDescription;
         
-        this.audioEvents.newItem(fullName, "", description);
+        this.audioEvents.newItem(fullName, "", description, true);
     }
     
     
