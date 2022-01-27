@@ -635,7 +635,8 @@ public class HandWaveyManager {
         this.handsState.figureOutStuff();
         
         Double handZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
-        String zone = this.handsState.getZone(handZ);
+        Boolean allowOverride = (!this.handSummaries[0].handIsNew());
+        String zone = this.handsState.getZone(handZ, allowOverride);
         
         // Move the mouse cursor.
         if (!cusorIsLocked()) {
