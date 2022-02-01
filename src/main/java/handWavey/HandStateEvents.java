@@ -18,6 +18,10 @@ public class HandStateEvents {
     private Changed segmentChanged = new Changed(0);
     private Changed stateChanged = new Changed(Gesture.absent);
     
+    private List<String> anyChangeEvents = new ArrayList<String>();
+    private List<String> enterEvents = new ArrayList<String>();
+    private List<String> exitEvents = new ArrayList<String>();
+    
     private Gesture gesture;
     
     private String handLetter ="p";
@@ -62,46 +66,58 @@ public class HandStateEvents {
         return (this.zoneChanged.hasChanged() || this.segmentChanged.hasChanged() || this.stateChanged.hasChanged());
     }
     
-    public List<String> getEvents() { // Normal use-case.
-        List<String> result = new ArrayList<String>();
+    public List<String> getAnyChangeEvents() {
+        return this.anyChangeEvents;
+    }
+    
+    public List<String> getExitEvents() {
+        return this.exitEvents;
+    }
+    
+    public List<String> getEnterEvents() {
+        return this.enterEvents;
+    }
+    
+    public void deriveEvents() { // Normal use-case.
+        this.anyChangeEvents = new ArrayList<String>();
+        this.exitEvents = new ArrayList<String>();
+        this.enterEvents = new ArrayList<String>();
         
         if (somethingChanged()) {
-            result.add(this.gesture.gestureName(
+            this.exitEvents.add(this.gesture.gestureName(
                 this.handLetter,
                 this.zoneChanged.fromStr(),
                 this.segmentChanged.fromInt(),
                 this.stateChanged.fromInt()) + "-exit");
-            result.add(this.gesture.gestureName(
+            this.enterEvents.add(this.gesture.gestureName(
                 this.handLetter,
                 this.zoneChanged.toStr(),
                 this.segmentChanged.toInt(),
                 this.stateChanged.toInt()) + "-enter");
         } else {
-            return result; // Return quickly if nothing has changed.
+            return; // Return quickly if nothing has changed.
         }
         
         if (this.zoneChanged.hasChanged() || reIntroduced()){
-            result.add("general-zone-" + this.handLetter + "AnyChange");
-            result.add("general-zone-" + this.handLetter + this.gesture.capitalise(this.zoneChanged.fromStr()) + "-exit");
-            result.add("general-zone-" + this.handLetter + this.gesture.capitalise(this.zoneChanged.toStr()) + "-enter");
+            this.anyChangeEvents.add("general-zone-" + this.handLetter + "AnyChange");
+            this.exitEvents.add("general-zone-" + this.handLetter + this.gesture.capitalise(this.zoneChanged.fromStr()) + "-exit");
+            this.enterEvents.add("general-zone-" + this.handLetter + this.gesture.capitalise(this.zoneChanged.toStr()) + "-enter");
         }
         
         if (this.segmentChanged.hasChanged() || reIntroduced()){
-            result.add("general-segment-" + this.handLetter + "AnyChange");
-            result.add("general-segment-" + this.handLetter + this.segmentChanged.fromInt() + "-exit");
-            result.add("general-segment-" + this.handLetter + this.segmentChanged.toInt() + "-enter");
+            this.anyChangeEvents.add("general-segment-" + this.handLetter + "AnyChange");
+            this.exitEvents.add("general-segment-" + this.handLetter + this.segmentChanged.fromInt() + "-exit");
+            this.enterEvents.add("general-segment-" + this.handLetter + this.segmentChanged.toInt() + "-enter");
         }
         
         if (this.stateChanged.hasChanged()){
             String fromState = this.gesture.capitalise(this.gesture.handState(this.stateChanged.fromInt()));
             String toState = this.gesture.capitalise(this.gesture.handState(this.stateChanged.toInt()));
             
-            result.add("general-state-" + this.handLetter + "AnyChange");
-            result.add("general-state-" + this.handLetter + fromState + "-exit");
-            result.add("general-state-" + this.handLetter + toState + "-enter");
+            this.anyChangeEvents.add("general-state-" + this.handLetter + "AnyChange");
+            this.exitEvents.add("general-state-" + this.handLetter + fromState + "-exit");
+            this.enterEvents.add("general-state-" + this.handLetter + toState + "-enter");
         }
-        
-        return result;
     }
     
     private Boolean reIntroduced() {

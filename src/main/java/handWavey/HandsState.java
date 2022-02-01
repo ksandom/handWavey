@@ -177,14 +177,30 @@ public class HandsState {
                 
                 this.debug.out(1, "Current state: " + primaryStateName + ", " + secondaryStateName);
                 
-                this.handWaveyEvent.triggerEvents(this.primaryState.getEvents());
+                // Derive events to be triggered.
+                this.primaryState.deriveEvents();
+                this.secondaryState.deriveEvents();
+                
+                // exit events.
+                this.handWaveyEvent.triggerEvents(this.primaryState.getExitEvents());
                 if (secondaryHandIsActiveOrChanged()) {
-                    this.handWaveyEvent.triggerEvents(this.secondaryState.getEvents());
+                    this.handWaveyEvent.triggerEvents(this.secondaryState.getExitEvents());
+                    
+                    this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualExitEvent() + "-" + secondaryState.getIndividualExitEvent() + "-exit");
                 }
                 
+                // andChange events.
+                this.handWaveyEvent.triggerEvents(this.primaryState.getAnyChangeEvents());
                 if (secondaryHandIsActiveOrChanged()) {
+                    this.handWaveyEvent.triggerEvents(this.secondaryState.getAnyChangeEvents());
+                }
+                
+                // enter events.
+                this.handWaveyEvent.triggerEvents(this.primaryState.getEnterEvents());
+                if (secondaryHandIsActiveOrChanged()) {
+                    this.handWaveyEvent.triggerEvents(this.secondaryState.getEnterEvents());
+                    
                     this.handWaveyEvent.triggerEvent("combined-" + primaryStateName + "-" + secondaryStateName + "-enter");
-                    this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualExitEvent() + "-" + secondaryState.getIndividualExitEvent() + "-exit");
                 }
             }
         }

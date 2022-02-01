@@ -3,6 +3,7 @@
 package handWavey;
 
 import handWavey.Gesture;
+import handWavey.HandWaveyConfig;
 import handWavey.HandStateEvents;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,8 @@ class TestHandState {
 
     @BeforeEach
     void setUp() {
+        HandWaveyConfig handWaveyConfig = new HandWaveyConfig("handWaveyUnitTest");
+        handWaveyConfig.defineGeneralConfig();
         this.primary = new HandStateEvents(true);
         this.secondary = new HandStateEvents(false);
     }
@@ -60,21 +63,42 @@ class TestHandState {
     @Test
     public void testGeneratedEvents() {
         // Nothing should have changed yet.
-        List<String> events = this.primary.getEvents();
-        assertEquals(0, events.size());
+        this.primary.deriveEvents();
+        List<String> exitEvents = this.primary.getExitEvents();
+        List<String> anyChangeEvents = this.primary.getAnyChangeEvents();
+        List<String> enterEvents = this.primary.getEnterEvents();
+        assertEquals(0, exitEvents.size());
+        assertEquals(0, anyChangeEvents.size());
+        assertEquals(0, enterEvents.size());
         
         // Change something.
         this.primary.setZone("active");
-        assertThat(this.primary.getEvents(), contains(
+        this.primary.deriveEvents();
+        exitEvents = this.primary.getExitEvents();
+        anyChangeEvents = this.primary.getAnyChangeEvents();
+        enterEvents = this.primary.getEnterEvents();
+        
+        System.out.println(exitEvents);
+        System.out.println(anyChangeEvents);
+        System.out.println(enterEvents);
+        
+        assertThat(exitEvents, contains(
             "individual-pOOB0Absent-exit",
+            "general-zone-pOOB-exit"));
+        assertThat(anyChangeEvents, contains(
+            "general-zone-pAnyChange"));
+        assertThat(enterEvents, contains(
             "individual-pActive0Absent-enter",
-            "general-zone-pAnyChange",
-            "general-zone-pOOB-exit",
             "general-zone-pActive-enter"));
         
         // Set the same thing again. The change state should be cleared.
         this.primary.setZone("active");
-        events = this.primary.getEvents();
-        assertEquals(0, events.size());
+        this.primary.deriveEvents();
+        exitEvents = this.primary.getExitEvents();
+        anyChangeEvents = this.primary.getAnyChangeEvents();
+        enterEvents = this.primary.getEnterEvents();
+        assertEquals(0, exitEvents.size());
+        assertEquals(0, anyChangeEvents.size());
+        assertEquals(0, enterEvents.size());
     }
 }
