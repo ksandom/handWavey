@@ -62,9 +62,6 @@ public class Config extends config.Group {
         String file = this.directoryName + this.primaryFileName;
         persistence.load(file, this._getGroups(), this._getItems());
         
-        // Reload the debug class now that we have configuration for it.
-        this.debug = Debug.getDebug("Config");
-        
         // Load the sub-groups.
         if (loadEverything) {
             for (Object rawGroupName : this.groupsToSaveSeparately.keySet()) {
@@ -75,6 +72,9 @@ public class Config extends config.Group {
                 persistence.load(file, group._getGroups(), group._getItems(), new HashMap());
             }
         }
+        
+        // Reload the debug class now that we have configuration for it.
+        this.debug = Debug.getDebug("Config");
     }
     
     public void save() {

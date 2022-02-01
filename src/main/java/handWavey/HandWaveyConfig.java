@@ -28,6 +28,7 @@ public class HandWaveyConfig {
     
     public void defineGeneralConfig() {
         // Add groups to separate out into separate files.
+        this.config.addGroupToSeparate("debug");
         this.config.addGroupToSeparate("output");
         this.config.addGroupToSeparate("dataCleaning");
         this.config.addGroupToSeparate("ultraMotion");
