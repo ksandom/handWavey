@@ -107,6 +107,11 @@ public class HandWaveyEvent {
         
         if (filePath != "") {
             fullPath = this.audioPath + filePath;
+            
+            if (!new File(fullPath).exists()) {
+                this.debug.out(0, "Would have played \"" + fullPath + "\". But the file does not appear to exist.");
+                fullPath = "";
+            }
         }
         
         return fullPath;
