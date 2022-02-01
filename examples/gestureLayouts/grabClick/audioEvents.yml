@@ -1,0 +1,37 @@
+groups: {}
+items:
+  special-newHandFreeze:
+    zDescription: When a new primary hand is introduced, the cursor and the ability
+      to click the mouse or press keys, is disabled while the device stabilises.
+    zzzEmpty: {}
+    yDefaultValue: ''
+    yOldValue: ''
+    value: ''
+  special-newHandUnfreezeCursor:
+    zDescription: When the time has expired for the Cursor freeze after a new primary
+      hand is introduced.
+    zzzEmpty: {}
+    yDefaultValue: ''
+    yOldValue: ''
+    value: ''
+  special-newHandUnfreezeEvent:
+    zDescription: When the time has expired for the Event freeze after a new primary
+      hand is introduced.
+    zzzEmpty: {}
+    yDefaultValue: ''
+    yOldValue: ''
+    value: ''
+  imposterHand-replace:
+    zDescription: When we detect that a hand ID is not what we expect, but are able
+      to replace it and continue.
+    zzzEmpty: {}
+    yDefaultValue: ''
+    yOldValue: ''
+    value: ''
+  imposterHand-discard:
+    zDescription: When we detect that a hand ID is not what we expect, but not are
+      able to replace it and continue.
+    zzzEmpty: {}
+    yDefaultValue: ''
+    yOldValue: ''
+    value: ''
