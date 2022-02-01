@@ -85,7 +85,7 @@ public class HandWaveyConfig {
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. This option tunes the UltraMotion input method.");
         debug.newItem(
             "HandWaveyEvent",
-            "2",
+            "0",
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. HandWaveyEvent is for taking the right actions when an event is triggers. If you're not sure if your eventActions or eventAudio is not behaving correctly, this is the place to look.");
         debug.newItem(
             "MacroLine",

@@ -140,9 +140,16 @@ public class HandsState {
     }
     
     public void figureOutStuff() {
-        Boolean shouldUpdatePrimary = (!this.handSummaries[0].handIsNew());
+        Boolean shouldUpdatePrimary = false;
         Boolean shouldUpdateSecondary = (secondaryHandIsActiveOrChanged());
+        Boolean primaryAbsent = (this.handSummaries[0] == null);
         
+        if (primaryAbsent) {
+            this.primaryState.setState(Gesture.absent);
+        } else {
+            shouldUpdatePrimary = (!this.handSummaries[0].handIsNew());
+        }
+
         if (shouldUpdatePrimary) {
             Double primaryHandZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
             this.primaryState.setZone(this.handsState.getZone(primaryHandZ));
@@ -161,15 +168,22 @@ public class HandsState {
             this.secondaryState.setState(getHandState(this.handSummaries[1]));
         }
         
-        if (shouldUpdatePrimary || shouldUpdateSecondary) {
-            if (this.primaryState.somethingChanged() || this.secondaryState.somethingChanged()) {
+        
+        if ((shouldUpdatePrimary || primaryAbsent) || shouldUpdateSecondary) {
+            Boolean anythingChanged = (this.primaryState.somethingChanged() || this.secondaryState.somethingChanged());
+            if (anythingChanged) {
+                String primaryStateName = primaryState.getIndividualEnterEvent();
+                String secondaryStateName = secondaryState.getIndividualEnterEvent();
+                
+                this.debug.out(1, "Current state: " + primaryStateName + ", " + secondaryStateName);
+                
                 this.handWaveyEvent.triggerEvents(this.primaryState.getEvents());
                 if (secondaryHandIsActiveOrChanged()) {
                     this.handWaveyEvent.triggerEvents(this.secondaryState.getEvents());
                 }
                 
                 if (secondaryHandIsActiveOrChanged()) {
-                    this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualEnterEvent() + "-" + secondaryState.getIndividualEnterEvent() + "-enter");
+                    this.handWaveyEvent.triggerEvent("combined-" + primaryStateName + "-" + secondaryStateName + "-enter");
                     this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualExitEvent() + "-" + secondaryState.getIndividualExitEvent() + "-exit");
                 }
             }
@@ -287,11 +301,11 @@ public class HandsState {
     
     public void overrideZone(String zone) {
         this.zoneOverride = zone;
-        this.debug.out(1, "Zone override: " + this.zoneOverride);
+        this.debug.out(2, "Zone override: " + this.zoneOverride);
     }
     
     public void releaseZone() {
-        this.debug.out(1, "Zone release from: " + this.zoneOverride);
+        this.debug.out(2, "Zone release from: " + this.zoneOverride);
         this.zoneOverride = "";
     }
     
@@ -301,7 +315,7 @@ public class HandsState {
     
     public void setMouseButton(String button) {
         this.chosenButton = button;
-        this.debug.out(1, "Set mouse button to: " + button);
+        this.debug.out(2, "Set mouse button to: " + button);
     }
     
     private long getNow() {
@@ -322,7 +336,7 @@ public class HandsState {
                 this.newHandsHandled = true;
                 this.newHands = now;
                 this.newHandsCursorFreeze = true;
-                this.debug.out(1, "Hand is new. Triggering cursor freeze.");
+                this.debug.out(2, "Hand is new. Triggering cursor freeze.");
                 this.handWaveyEvent.triggerEvent("newHandFreeze");
             } else {
                 long elapsedTime = now - this.newHands;

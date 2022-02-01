@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.sql.Timestamp;
 
 public class Gesture {
+    
     private String[] zones = {"notOOB", "OOB", "none", "noMove", "active", "action", "absolute", "relative"};
     
     // States.
@@ -121,7 +122,11 @@ public class Gesture {
             "");
         overrideDefault(
             "special-newHandUnfreezeEvent",
-            "setButton(\"left\");releaseButtons();releaseKeys();",
+            "setButton(\"left\");releaseButtons();releaseKeys();releaseZone();",
+            "");
+        overrideDefault(
+            "general-state-pAbsent-enter",
+            "setButton(\"left\");releaseButtons();releaseKeys();releaseZone();debug(\"0\", \"Cleaning up any stray keys/buttons.\")",
             "");
         
         // General auido feedback.

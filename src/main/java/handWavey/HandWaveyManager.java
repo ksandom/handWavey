@@ -634,6 +634,8 @@ public class HandWaveyManager {
         
         this.handsState.figureOutStuff();
         
+        if (this.handSummaries[0] == null) return;
+        
         Double handZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
         Boolean allowOverride = (!this.handSummaries[0].handIsNew());
         String zone = this.handsState.getZone(handZ, allowOverride);

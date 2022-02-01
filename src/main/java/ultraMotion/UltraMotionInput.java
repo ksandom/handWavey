@@ -147,6 +147,7 @@ public class UltraMotionInput extends Listener {
                 if (this.activeHandsExist == true) {
                     this.debug.out(1, "All hands are marked as invalid. Discarding so that we are ready for fresh hands.");
                     emptyHands();
+                    sendHandSummaries();
                 }
             }
         }
@@ -233,12 +234,16 @@ public class UltraMotionInput extends Listener {
         }
         
         if (this.handSummaries[0].isValid()) {
-            this.ultraMotionManager.getHandWaveyManager().sendHandSummaries(this.handSummaries);
+            sendHandSummaries();
         } else {
             this.ultraMotionManager.getHandWaveyManager().discardOldPosition();
         }
         
         this.lastHandCount = handCount;
+    }
+    
+    private void sendHandSummaries() {
+        this.ultraMotionManager.getHandWaveyManager().sendHandSummaries(this.handSummaries);
     }
     
     private void imposterReplace(int handPosition, int handID, String why) {
