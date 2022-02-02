@@ -63,7 +63,7 @@ public class Gesture {
             "lockCursor();rewindCursorPosition();mouseDown();",
             "metalDing07.wav");
         overrideDefault(
-            "general-state-pOpen-enter",
+            "general-state-pClosed-exit",
             "rewindCursorPosition();rewindScroll();releaseButtons();unlockCursor();",
             "metalDing08.wav");
         
