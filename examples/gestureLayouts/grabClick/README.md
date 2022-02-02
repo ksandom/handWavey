@@ -4,6 +4,7 @@
     * Click: Grab and let go (close your hand, and open it again).
     * Right click: Tilt your hand by 90 degrees, and then closing your hand. (Segment 1)
     * Middle click: Turn your hand up-side down and closing your hand. ((Segment 2))
+    * Double click: Touch the action zone (push you hand all the way through the visible area until you hear a different dong.)
 * Scroll by turning your hand upside down and then moving your hand vertically.
 * Keys
     * CTRL: Introduce a second second and keep it flat.
