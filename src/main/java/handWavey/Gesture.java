@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 
 public class Gesture {
     
-    private String[] zones = {"notOOB", "OOB", "none", "noMove", "active", "action", "absolute", "relative"};
+    private String[] zones = {"OOB", "notOOB", "none", "noMove", "active", "action", "absolute", "relative"};
     
     // States.
     private int stateCount = 3;
@@ -189,7 +189,7 @@ public class Gesture {
     }
     
     private void generateCombinedEventsConfig() {
-        // Combined events.
+        // Combined events using state, zone, and segment.
         for (int primaryState = 0; primaryState < stateCount-1; primaryState++) {
             for ( String primaryZone :  zones ) {
                 for (int primarySegment = -1; primarySegment < this.maximumSegments; primarySegment++) {

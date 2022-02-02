@@ -89,10 +89,33 @@ class TestHandState {
             "general-zone-pAnyChange"));
         assertThat(enterEvents, contains(
             "individual-pActive0Absent-enter",
+            "individual-pNonOOB0Absent-enter",
             "general-zone-pActive-enter"));
         
+        
+        // Change something.
+        this.primary.setZone("OOB");
+        this.primary.deriveEvents();
+        exitEvents = this.primary.getExitEvents();
+        anyChangeEvents = this.primary.getAnyChangeEvents();
+        enterEvents = this.primary.getEnterEvents();
+        
+        System.out.println(exitEvents);
+        System.out.println(anyChangeEvents);
+        System.out.println(enterEvents);
+        
+        assertThat(exitEvents, contains(
+            "individual-pActive0Absent-exit",
+            "individual-pNonOOB0Absent-exit",
+            "general-zone-pActive-exit"));
+        assertThat(anyChangeEvents, contains(
+            "general-zone-pAnyChange"));
+        assertThat(enterEvents, contains(
+            "individual-pOOB0Absent-enter",
+            "general-zone-pOOB-enter"));
+        
         // Set the same thing again. The change state should be cleared.
-        this.primary.setZone("active");
+        this.primary.setZone("OOB");
         this.primary.deriveEvents();
         exitEvents = this.primary.getExitEvents();
         anyChangeEvents = this.primary.getAnyChangeEvents();

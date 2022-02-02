@@ -146,6 +146,8 @@ public class HandsState {
         
         if (primaryAbsent) {
             this.primaryState.setState(Gesture.absent);
+            this.primaryState.setZone("OOB");
+            this.primaryState.setSegment(0);
         } else {
             shouldUpdatePrimary = (!this.handSummaries[0].handIsNew());
         }
@@ -160,6 +162,8 @@ public class HandsState {
 
         if (this.handSummaries[1] == null) {
             this.secondaryState.setState(Gesture.absent);
+            this.secondaryState.setZone("OOB");
+            this.secondaryState.setSegment(0);
         } else if (shouldUpdateSecondary) {
             Double secondaryHandZ = this.handSummaries[1].getHandZ() * this.zMultiplier;
             this.secondaryState.setZone(this.handsState.getZone(secondaryHandZ, false));
@@ -172,22 +176,45 @@ public class HandsState {
         if ((shouldUpdatePrimary || primaryAbsent) || shouldUpdateSecondary) {
             Boolean anythingChanged = (this.primaryState.somethingChanged() || this.secondaryState.somethingChanged());
             if (anythingChanged) {
-                String primaryStateName = primaryState.getIndividualEnterEvent();
-                String secondaryStateName = secondaryState.getIndividualEnterEvent();
+                String pStateEnter = primaryState.getIndividualEnterEvent();
+                String sStateEnter = secondaryState.getIndividualEnterEvent();
                 
-                this.debug.out(1, "Current state: " + primaryStateName + ", " + secondaryStateName);
+                this.debug.out(1, "Current state: " + pStateEnter + ", " + sStateEnter);
                 
                 // Derive events to be triggered.
                 this.primaryState.deriveEvents();
                 this.secondaryState.deriveEvents();
                 
+                
                 // exit events.
-                this.handWaveyEvent.triggerEvents(this.primaryState.getExitEvents());
                 if (secondaryHandIsActiveOrChanged()) {
-                    this.handWaveyEvent.triggerEvents(this.secondaryState.getExitEvents());
+                    String primaryStateExit = primaryState.getIndividualExitEvent();
+                    String secondaryStateExit = secondaryState.getIndividualExitEvent();
                     
-                    this.handWaveyEvent.triggerEvent("combined-" + primaryState.getIndividualExitEvent() + "-" + secondaryState.getIndividualExitEvent() + "-exit");
+                    this.handWaveyEvent.triggerEvent("combined-" + primaryStateExit + "-" + secondaryStateExit + "-exit");
+                    
+                    Boolean pNonOOBExit = primaryState.nonOOBExit();
+                    Boolean sNonOOBExit = secondaryState.nonOOBExit();
+                    
+                    String pNonOOBStateExit = primaryState.getNonOOBExitEvent();
+                    String sNonOOBStateExit = primaryState.getNonOOBExitEvent();
+                    
+                    if (pNonOOBExit) {
+                        this.handWaveyEvent.triggerEvent("combined-" + pNonOOBStateExit + "-" + secondaryStateExit + "-exit");
+                    }
+                    
+                    if (sNonOOBExit) {
+                        this.handWaveyEvent.triggerEvent("combined-" + primaryStateExit + "-" + sNonOOBStateExit + "-exit");
+                    }
+                    
+                    if (pNonOOBExit && sNonOOBExit) {
+                        this.handWaveyEvent.triggerEvent("combined-" + pNonOOBStateExit + "-" + sNonOOBStateExit + "-exit");
+                    }
+                    
+                    this.handWaveyEvent.triggerEvents(this.secondaryState.getExitEvents());
                 }
+                this.handWaveyEvent.triggerEvents(this.primaryState.getExitEvents());
+                
                 
                 // andChange events.
                 this.handWaveyEvent.triggerEvents(this.primaryState.getAnyChangeEvents());
@@ -195,12 +222,31 @@ public class HandsState {
                     this.handWaveyEvent.triggerEvents(this.secondaryState.getAnyChangeEvents());
                 }
                 
+                
                 // enter events.
                 this.handWaveyEvent.triggerEvents(this.primaryState.getEnterEvents());
                 if (secondaryHandIsActiveOrChanged()) {
                     this.handWaveyEvent.triggerEvents(this.secondaryState.getEnterEvents());
                     
-                    this.handWaveyEvent.triggerEvent("combined-" + primaryStateName + "-" + secondaryStateName + "-enter");
+                    this.handWaveyEvent.triggerEvent("combined-" + pStateEnter + "-" + sStateEnter + "-enter");
+                    
+                    Boolean pNonOOBEnter = primaryState.nonOOBEnter();
+                    Boolean sNonOOBEnter = secondaryState.nonOOBEnter();
+                    
+                    String pNonOOBStateEnter = primaryState.getNonOOBEnterEvent();
+                    String sNonOOBStateEnter = primaryState.getNonOOBEnterEvent();
+                    
+                    if (pNonOOBEnter) {
+                        this.handWaveyEvent.triggerEvent("combined-" + pNonOOBStateEnter + "-" + sNonOOBEnter + "-enter");
+                    }
+                    
+                    if (sNonOOBEnter) {
+                        this.handWaveyEvent.triggerEvent("combined-" + pNonOOBEnter + "-" + sNonOOBStateEnter + "-enter");
+                    }
+                    
+                    if (pNonOOBEnter && sNonOOBEnter) {
+                        this.handWaveyEvent.triggerEvent("combined-" + pNonOOBStateEnter + "-" + sNonOOBStateEnter + "-enter");
+                    }
                 }
             }
         }

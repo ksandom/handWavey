@@ -89,11 +89,28 @@ public class HandStateEvents {
                 this.zoneChanged.fromStr(),
                 this.segmentChanged.fromInt(),
                 this.stateChanged.fromInt()) + "-exit");
+            
+            if (nonOOBExit()) {
+                this.exitEvents.add(this.gesture.gestureName(
+                    this.handLetter,
+                    "nonOOB",
+                    this.segmentChanged.fromInt(),
+                    this.stateChanged.fromInt()) + "-exit");
+            }
+            
             this.enterEvents.add(this.gesture.gestureName(
                 this.handLetter,
                 this.zoneChanged.toStr(),
                 this.segmentChanged.toInt(),
                 this.stateChanged.toInt()) + "-enter");
+            
+            if (nonOOBEnter()) {
+                this.enterEvents.add(this.gesture.gestureName(
+                    this.handLetter,
+                    "nonOOB",
+                    this.segmentChanged.fromInt(),
+                    this.stateChanged.fromInt()) + "-enter");
+            }
         } else {
             return; // Return quickly if nothing has changed.
         }
@@ -118,6 +135,14 @@ public class HandStateEvents {
             this.exitEvents.add("general-state-" + this.handLetter + fromState + "-exit");
             this.enterEvents.add("general-state-" + this.handLetter + toState + "-enter");
         }
+    }
+    
+    public Boolean nonOOBEnter() {
+        return (this.zoneChanged.hasChanged() && this.zoneChanged.fromStr() == "OOB");
+    }
+    
+    public Boolean nonOOBExit() {
+        return (this.zoneChanged.hasChanged() && this.zoneChanged.toStr() == "OOB");
     }
     
     private Boolean reIntroduced() {
@@ -160,6 +185,22 @@ public class HandStateEvents {
         return this.gesture.generateSingleHandGestureName(
             this.handLetter,
             this.zoneChanged.toStr(),
+            this.segmentChanged.toInt(),
+            this.stateChanged.toInt());
+    }
+    
+    public String getNonOOBExitEvent() {
+        return this.gesture.generateSingleHandGestureName(
+            this.handLetter,
+            "nonOOB",
+            this.segmentChanged.fromInt(),
+            this.stateChanged.fromInt());
+    }
+    
+    public String getNonOOBEnterEvent() {
+        return this.gesture.generateSingleHandGestureName(
+            this.handLetter,
+            "nonOOB",
             this.segmentChanged.toInt(),
             this.stateChanged.toInt());
     }
