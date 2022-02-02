@@ -56,8 +56,10 @@ public class Persistence {
             // Work out if we can hide unused entries.
             if (items.get(key).canHideIfUnchanged()) {
                 String value = items.get(key).get();
-                if (value == items.get(key).getDefaultValue()) {
-                    if (value == "") continue;
+                if (value.equals(items.get(key).getDefaultValue())) {
+                    if (value.equals("")) {
+                        continue;
+                    }
                 }
             }
             

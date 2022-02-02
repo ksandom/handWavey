@@ -114,6 +114,8 @@ public class HandWaveyManager {
     private void initialSetup(Boolean loadConfig) {
         HandWaveyConfig handWaveyConfig = new HandWaveyConfig("handWavey");
         handWaveyConfig.defineGeneralConfig();
+        new Gesture().generateConfig();
+
         
         this.config = Config.singleton();
         if (loadConfig) loadAndSaveConfigToDisk();

@@ -31,7 +31,6 @@ public class HandStateEvents {
         
         this.handLetter = (isPrimary)?"p":"s";
         this.gesture = new Gesture();
-        this.gesture.generateConfig();
     }
     
     public void setZone(String zone) {
