@@ -135,8 +135,8 @@ public class Persistence {
             String inputDefaultValue = safeGet(inputItem, fullPath, "yDefaultValue", inputValue);
             String outputDefaultValue = outputItems.get(key).getDefaultValue();
             
-            if (!inputDefaultValue.equals(inputValue)) {
-                if (!inputDefaultValue.equals(outputDefaultValue)) {
+            if (!inputDefaultValue.equals(inputValue) || !inputItem.containsKey("yDefaultValue")) {
+                if (!inputDefaultValue.equals(outputDefaultValue) && inputItem.containsKey("yDefaultValue")) {
                     this.debug.out(0, "Warning: The defaultValue for " + fullPath + " has been updated from \"" + inputDefaultValue + "\" to \"" + outputDefaultValue + "\". But the value has been changed from the default to \"" + inputValue + "\", so the change in default is not going to take effect. This message will not show again.");
                 }
                 
