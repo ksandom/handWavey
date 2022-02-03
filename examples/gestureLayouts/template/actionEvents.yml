@@ -15,7 +15,7 @@ items:
   general-segment-p2-exit:
     value: releaseZone();
   special-newHandUnfreezeEvent:
-    value: setButton("left");releaseButtons();releaseKeys();releaseZone();
+    value: ""
   special-newHandUnfreezeCursor:
     value: ''
   general-segment-s1-exit:

@@ -122,11 +122,11 @@ public class Gesture {
             "");
         overrideDefault(
             "special-newHandUnfreezeEvent",
-            "setButton(\"left\");releaseButtons();releaseKeys();releaseZone();",
+            "",
             "");
         overrideDefault(
             "general-state-pAbsent-enter",
-            "setButton(\"left\");releaseButtons();releaseKeys();releaseZone();debug(\"0\", \"Cleaning up any stray keys/buttons.\")",
+            "setButton(\"left\");releaseButtons();releaseKeys();releaseZone();",
             "");
         
         // General auido feedback.
