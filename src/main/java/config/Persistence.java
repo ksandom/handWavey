@@ -174,7 +174,7 @@ public class Persistence {
             return (String) map.get(key);
         } 
         
-        this.debug.out(1, "No " + key + " entry in " + path + ". Assuming value of " + defaultValue + ".");
+        this.debug.out(2, "No " + key + " entry in " + path + ". Assuming value of " + defaultValue + ".");
         return defaultValue;
     }
 }
