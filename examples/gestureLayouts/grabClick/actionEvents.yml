@@ -1,23 +1,40 @@
 groups: {}
 items:
-  special-newHandFreeze:
-    zDescription: When a new primary hand is introduced, the cursor and the ability
-      to click the mouse or press keys, is disabled while the device stabilises.
-    zzzEmpty: {}
-    yDefaultValue: ''
-    yOldValue: ''
-    value: ''
-  special-newHandUnfreezeCursor:
-    zDescription: When the time has expired for the Cursor freeze after a new primary
-      hand is introduced.
-    zzzEmpty: {}
-    yDefaultValue: ''
-    yOldValue: ''
-    value: ''
+  general-state-pAbsent-enter:
+    value: setButton("left");releaseButtons();releaseKeys();releaseZone();debug("0",
+  general-segment-p0-enter:
+    value: setButton("left");
+  general-segment-s0-exit:
+    value: keyUp("ctrl");
+  general-zone-pAction-enter:
+    value: lockCursor();rewindCursorPosition();doubleClick();
+  general-state-pClosed-exit:
+    value: rewindCursorPosition();rewindScroll();releaseButtons();unlockCursor();
+  general-segment-s0-enter:
+    value: keyDown("ctrl");
+  general-segment-p2-exit:
+    value: releaseZone();
   special-newHandUnfreezeEvent:
-    zDescription: When the time has expired for the Event freeze after a new primary
-      hand is introduced. This event is triggered.
-    zzzEmpty: {}
-    yDefaultValue: ''
-    yOldValue: ''
+    value: setButton("left");releaseButtons();releaseKeys();releaseZone();
+  special-newHandUnfreezeCursor:
     value: ''
+  general-segment-s1-exit:
+    value: keyUp("alt");
+  general-zone-sActive-exit:
+    value: releaseKeys();
+  general-segment-p2-enter:
+    value: setButton("middle");overrideZone("scroll");
+  general-state-pClosed-enter:
+    value: lockCursor();rewindCursorPosition();mouseDown();
+  general-segment-s2-enter:
+    value: keyDown("shift");
+  special-newHandFreeze:
+    value: ''
+  general-segment-p1-enter:
+    value: setButton("right");
+  general-segment-pAnyChange:
+    value: lockCursor();rewindCursorPosition();
+  general-segment-s1-enter:
+    value: keyDown("alt");
+  general-segment-s2-exit:
+    value: keyUp("shift");

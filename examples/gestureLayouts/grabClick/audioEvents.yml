@@ -1,37 +1,26 @@
 groups: {}
 items:
+  general-state-pClosed-enter:
+    value: metalDing07.wav
   special-newHandFreeze:
-    zDescription: When a new primary hand is introduced, the cursor and the ability
-      to click the mouse or press keys, is disabled while the device stabilises.
-    zzzEmpty: {}
-    yDefaultValue: ''
-    yOldValue: ''
     value: ''
-  special-newHandUnfreezeCursor:
-    zDescription: When the time has expired for the Cursor freeze after a new primary
-      hand is introduced.
-    zzzEmpty: {}
-    yDefaultValue: ''
-    yOldValue: ''
+  general-segment-sAnyChange:
+    value: metalDing04.wav
+  general-zone-pAction-enter:
+    value: metalDing07.wav
+  general-zone-pAnyChange:
+    value: metalDing01.wav
+  general-state-pClosed-exit:
+    value: metalDing08.wav
+  general-zone-sAnyChange:
+    value: metalDing03.wav
+  general-segment-pAnyChange:
+    value: metalDing02.wav
+  imposterHand-replace:
     value: ''
   special-newHandUnfreezeEvent:
-    zDescription: When the time has expired for the Event freeze after a new primary
-      hand is introduced.
-    zzzEmpty: {}
-    yDefaultValue: ''
-    yOldValue: ''
     value: ''
-  imposterHand-replace:
-    zDescription: When we detect that a hand ID is not what we expect, but are able
-      to replace it and continue.
-    zzzEmpty: {}
-    yDefaultValue: ''
-    yOldValue: ''
+  special-newHandUnfreezeCursor:
     value: ''
   imposterHand-discard:
-    zDescription: When we detect that a hand ID is not what we expect, but not are
-      able to replace it and continue.
-    zzzEmpty: {}
-    yDefaultValue: ''
-    yOldValue: ''
     value: ''
