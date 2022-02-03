@@ -1,5 +1,11 @@
 # grabClick
 
+## Using it
+
+* Hold your hand as flat as possible without tensing up.
+
+## The Gestures
+
 * Clicks
     * Click: Grab and let go (close your hand, and open it again).
     * Right click: Tilt your hand by 90 degrees, and then closing your hand. (Segment 1)
@@ -20,3 +26,5 @@ As at 2022-08-03, this is the default gestureLayout for handWavey. Simply deleti
 ## Target audience
 
 This should be useable by most people.
+
+It's made to be very easy to learn.
