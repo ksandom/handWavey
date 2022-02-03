@@ -154,7 +154,11 @@ public class HandsState {
 
         if (shouldUpdatePrimary) {
             Double primaryHandZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
-            this.primaryState.setZone(this.handsState.getZone(primaryHandZ));
+            
+            String zone = this.handsState.getZone(primaryHandZ);
+            if (zone != this.zoneOverride) {
+                this.primaryState.setZone(zone);
+            }
             
             this.primaryState.setSegment(getHandSegment(true, this.handSummaries[0]));
             this.primaryState.setState(getHandState(this.handSummaries[0]));
