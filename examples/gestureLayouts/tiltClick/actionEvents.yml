@@ -1,43 +1,41 @@
 groups: {}
 items:
-  general-state-pAbsent-enter:
-    value: setButton("left");releaseButtons();releaseKeys();releaseZone();
-  general-segment-p0-enter:
-    value: ""
-  general-segment-s0-exit:
-    value: keyUp("ctrl");
   general-zone-pAction-enter:
     value: lockCursor();rewindCursorPosition();releaseButtons();doubleClick();
-  general-state-pClosed-exit:
+  general-segment-p0-enter:
+    value: ""
+  general-segment-p2-enter:
+    value: ""
+  general-segment-p2-exit:
     value: ""
   general-segment-s0-enter:
     value: keyDown("ctrl");
-  general-segment-p2-exit:
-    value: releaseZone();
+  general-segment-s0-exit:
+    value: keyUp("ctrl");
+  general-segment-s1-enter:
+    value: keyDown("alt");
+  general-segment-s1-exit:
+    value: keyUp("alt");
+  general-segment-s2-enter:
+    value: keyDown("shift");
+  general-segment-s2-exit:
+    value: keyUp("shift");
+  general-zone-sActive-exit:
+    value: releaseKeys();
+  general-state-pClosed-enter:
+    value: ""
+  general-state-pClosed-exit:
+    value: ""
   special-newHandUnfreezeEvent:
     value: ""
   special-newHandUnfreezeCursor:
     value: ''
-  general-segment-s1-exit:
-    value: keyUp("alt");
-  general-zone-sActive-exit:
-    value: releaseKeys();
-  general-segment-p2-enter:
-    value: ""
-  general-state-pClosed-enter:
-    value: ""
-  general-segment-s2-enter:
-    value: keyDown("shift");
   special-newHandFreeze:
     value: ''
   general-segment-p1-enter:
     value: setButton("right");
   general-segment-pAnyChange:
     value: lockCursor();rewindCursorPosition();
-  general-segment-s1-enter:
-    value: keyDown("alt");
-  general-segment-s2-exit:
-    value: keyUp("shift");
   individual-pNonOOB1Open-enter:
     value: setButton("left");lockCursor();rewindCursorPosition();mouseDown();
   individual-pNonOOB1Open-exit:
@@ -54,3 +52,5 @@ items:
     value: rewindCursorPosition();overrideZone("scroll");
   individual-pNonOOB0Closed-exit:
     value: rewindCursorPosition();rewindScroll();releaseZone();unlockCursor();
+  general-state-pAbsent-enter:
+    value: setButton("left");releaseButtons();releaseKeys();releaseZone();
