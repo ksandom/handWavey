@@ -20,6 +20,26 @@ groups:
         yDefaultValue: '0'
         yOldValue: '0'
         value: '0.3'
+      mergeIntoSegment:
+        zDescription: Merge unused segments into this segment. This has the effect
+          of not causing an unnecessary segment change event when accidentally moving
+          into an unused segment.
+        zzzEmpty: {}
+        yDefaultValue: '0'
+        yOldValue: '0'
+        value: '1'
+      mergeFrom:
+        zDescription: Merge between this value, and mergeTo, into mergeIntoSegment.
+        zzzEmpty: {}
+        yDefaultValue: '0'
+        yOldValue: '0'
+        value: '2'
+      mergeTo:
+        zDescription: Merge between this value, and mergeTo, into mergeIntoSegment.
+        zzzEmpty: {}
+        yDefaultValue: '0'
+        yOldValue: '0'
+        value: '4'
   secondaryHand:
     groups: {}
     items:
@@ -41,4 +61,24 @@ groups:
         yDefaultValue: '0'
         yOldValue: '0'
         value: '0.3'
+      mergeIntoSegment:
+        zDescription: Merge unused segments into this segment. This has the effect
+          of not causing an unnecessary segment change event when accidentally moving
+          into an unused segment.
+        zzzEmpty: {}
+        yDefaultValue: '0'
+        yOldValue: '0'
+        value: '0'
+      mergeFrom:
+        zDescription: Merge between this value, and mergeTo, into mergeIntoSegment.
+        zzzEmpty: {}
+        yDefaultValue: '0'
+        yOldValue: '0'
+        value: '0'
+      mergeTo:
+        zDescription: Merge between this value, and mergeTo, into mergeIntoSegment.
+        zzzEmpty: {}
+        yDefaultValue: '0'
+        yOldValue: '0'
+        value: '0'
 items: {}

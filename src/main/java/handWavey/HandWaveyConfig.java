@@ -444,6 +444,18 @@ public class HandWaveyConfig {
             "rotationOffset",
             "0",
             "In radians. Adjust where the segments are slightly to cater to your hand's natural bias.");
+        primaryHand.newItem(
+            "mergeIntoSegment",
+            "0",
+            "Merge unused segments into this segment. This has the effect of not causing an unnecessary segment change event when accidentally moving into an unused segment.");
+        primaryHand.newItem(
+            "mergeFrom",
+            "0",
+            "Merge between this value, and mergeTo, into mergeIntoSegment.");
+        primaryHand.newItem(
+            "mergeTo",
+            "0",
+            "Merge between this value, and mergeTo, into mergeIntoSegment.");
         Group secondaryHand = gestureConfig.newGroup("secondaryHand");
         secondaryHand.newItem(
             "rotationSegments",
@@ -453,5 +465,17 @@ public class HandWaveyConfig {
             "rotationOffset",
             "0",
             "In radians. Adjust where the segments are slightly to cater to your hand's natural bias.");
+        secondaryHand.newItem(
+            "mergeIntoSegment",
+            "0",
+            "Merge unused segments into this segment. This has the effect of not causing an unnecessary segment change event when accidentally moving into an unused segment.");
+        secondaryHand.newItem(
+            "mergeFrom",
+            "0",
+            "Merge between this value, and mergeTo, into mergeIntoSegment.");
+        secondaryHand.newItem(
+            "mergeTo",
+            "0",
+            "Merge between this value, and mergeTo, into mergeIntoSegment.");
     }
 }

@@ -46,6 +46,12 @@ public class HandsState {
     private int secondarySegments = 4;
     private double secondaryOffset = 0;
     private double secondarySegmentWidth = this.pi/2;
+    private int primaryMergeIntoSegment = 0;
+    private int primaryMergeFrom = 0;
+    private int primaryMergeTo = 0;
+    private int secondaryMergeIntoSegment = 0;
+    private int secondaryMergeFrom = 0;
+    private int secondaryMergeTo = 0;
     
     private int primarySegment = 0;
     private int secondarySegment = 0;
@@ -107,11 +113,17 @@ public class HandsState {
         this.primarySegments = Integer.parseInt(primaryHand.getItem("rotationSegments").get());
         this.primarySegmentWidth = (this.pi * 2) / this.primarySegments;
         this.primaryOffset = Double.parseDouble(primaryHand.getItem("rotationOffset").get());
+        this.primaryMergeIntoSegment = Integer.parseInt(primaryHand.getItem("mergeIntoSegment").get());
+        this.primaryMergeFrom = Integer.parseInt(primaryHand.getItem("mergeFrom").get());
+        this.primaryMergeTo = Integer.parseInt(primaryHand.getItem("mergeTo").get());
         
         Group secondaryHand = config.getGroup("gestureConfig").getGroup("secondaryHand");
         this.secondarySegments = Integer.parseInt(secondaryHand.getItem("rotationSegments").get());
         this.secondarySegmentWidth = (this.pi * 2) / this.secondarySegments;
         this.secondaryOffset = Double.parseDouble(secondaryHand.getItem("rotationOffset").get());
+        this.secondaryMergeIntoSegment = Integer.parseInt(secondaryHand.getItem("mergeIntoSegment").get());
+        this.secondaryMergeFrom = Integer.parseInt(secondaryHand.getItem("mergeFrom").get());
+        this.secondaryMergeTo = Integer.parseInt(secondaryHand.getItem("mergeTo").get());
         
         
         // Configure new hands tracking.
@@ -295,6 +307,9 @@ public class HandsState {
         // Get the current segmentCount and segmentWidth.
         int segmentCount = (isPrimary)?this.primarySegments:this.secondarySegments;
         double segmentWidth = (isPrimary)?this.primarySegmentWidth:this.secondarySegmentWidth;
+        int mergeIntoSegment = (isPrimary)?this.primaryMergeIntoSegment:this.secondaryMergeIntoSegment;
+        int mergeFrom = (isPrimary)?this.primaryMergeFrom:this.secondaryMergeFrom;
+        int mergeTo = (isPrimary)?this.primaryMergeTo:this.secondaryMergeTo;
         
         // Take care of, moving the range into the positive, move 0 into the center of segment 0, and add the user-specified offset.
         double userOffset = (isPrimary)?this.primaryOffset:this.secondaryOffset;
@@ -309,6 +324,11 @@ public class HandsState {
         int segmentNumber = (int) Math.floor((offsetRoll / segmentWidth) - (segmentCount / 2));
         while (segmentNumber < 0) {
             segmentNumber += segmentCount;
+        }
+        
+        // Work out if this is a merged segment.
+        if (segmentNumber >= mergeFrom && segmentNumber <= mergeTo) {
+            segmentNumber = mergeIntoSegment;
         }
         
         return segmentNumber;
