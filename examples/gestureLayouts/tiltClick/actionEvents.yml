@@ -38,19 +38,19 @@ items:
     value: keyDown("alt");
   general-segment-s2-exit:
     value: keyUp("shift");
-  individual-pActive1Open-enter:
+  individual-pNonOOB1Open-enter:
     value: setButton("left");lockCursor();rewindCursorPosition();mouseDown();
-  individual-pActive1Open-exit:
+  individual-pNonOOB1Open-exit:
     value: rewindCursorPosition();rewindScroll();releaseButtons();unlockCursor();
-  individual-pActive7Open-enter:
+  individual-pNonOOB7Open-enter:
     value: setButton("right");lockCursor();rewindCursorPosition();mouseDown();
-  individual-pActive7Open-exit:
+  individual-pNonOOB7Open-exit:
     value: rewindCursorPosition();rewindScroll();releaseButtons();unlockCursor();
-  individual-pActive1Closed-enter:
+  individual-pNonOOB1Closed-enter:
     value: setButton("middle");lockCursor();rewindCursorPosition();mouseDown();
-  individual-pActive1Closed-exit:
+  individual-pNonOOB1Closed-exit:
     value: rewindCursorPosition();rewindScroll();releaseButtons();unlockCursor();
-  individual-pActive0Closed-enter:
+  individual-pNonOOB0Closed-enter:
     value: rewindCursorPosition();overrideZone("scroll");
-  individual-pActive0Closed-exit:
+  individual-pNonOOB0Closed-exit:
     value: rewindCursorPosition();rewindScroll();releaseZone();unlockCursor();

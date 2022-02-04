@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 
 public class Gesture {
     
-    private String[] zones = {"OOB", "notOOB", "none", "noMove", "active", "action", "absolute", "relative"};
+    private String[] zones = {"OOB", "nonOOB", "none", "noMove", "active", "action", "absolute", "relative"};
     
     // States.
     private int stateCount = 3;

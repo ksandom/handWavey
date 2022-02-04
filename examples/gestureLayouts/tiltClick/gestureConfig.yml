@@ -19,7 +19,7 @@ groups:
         zzzEmpty: {}
         yDefaultValue: '0'
         yOldValue: '0'
-        value: '0.4'
+        value: '0.3'
   secondaryHand:
     groups: {}
     items:
@@ -40,5 +40,5 @@ groups:
         zzzEmpty: {}
         yDefaultValue: '0'
         yOldValue: '0'
-        value: '0.4'
+        value: '0.3'
 items: {}

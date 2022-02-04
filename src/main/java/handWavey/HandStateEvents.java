@@ -15,6 +15,7 @@ import debug.Debug;
 public class HandStateEvents {
     private Debug debug;
     private Changed zoneChanged = new Changed("OOB");
+    private Changed OOBChanged = new Changed("OOB");
     private Changed segmentChanged = new Changed(0);
     private Changed stateChanged = new Changed(Gesture.absent);
     
@@ -35,9 +36,14 @@ public class HandStateEvents {
     
     public void setZone(String zone) {
         this.zoneChanged.set(zone);
+        String OOBState = (zone == "OOB")?"OOB":"nonOOB";
+        this.OOBChanged.set(OOBState);
         
         if (this.zoneChanged.hasChanged()) {
             this.debug.out(1, this.handLetter + " hand has changed zone to " + zone);
+        }
+        if (this.OOBChanged.hasChanged()) {
+            this.debug.out(1, this.handLetter + " hand has changed OOBState to " + OOBState);
         }
     }
     
@@ -65,6 +71,10 @@ public class HandStateEvents {
         return (this.zoneChanged.hasChanged() || this.segmentChanged.hasChanged() || this.stateChanged.hasChanged());
     }
     
+    public Boolean somethingWithOOBStateChanged() {
+        return (this.OOBChanged.hasChanged() || this.segmentChanged.hasChanged() || this.stateChanged.hasChanged());
+    }
+    
     public List<String> getAnyChangeEvents() {
         return this.anyChangeEvents;
     }
@@ -89,12 +99,14 @@ public class HandStateEvents {
                 this.segmentChanged.fromInt(),
                 this.stateChanged.fromInt()) + "-exit");
             
-            if (nonOOBExit()) {
-                this.exitEvents.add(this.gesture.gestureName(
-                    this.handLetter,
-                    "nonOOB",
-                    this.segmentChanged.fromInt(),
-                    this.stateChanged.fromInt()) + "-exit");
+            if (somethingWithOOBStateChanged()) {
+                if (this.OOBChanged.fromStr() != "OOB") {
+                    this.exitEvents.add(this.gesture.gestureName(
+                        this.handLetter,
+                        this.OOBChanged.fromStr(),
+                        this.segmentChanged.fromInt(),
+                        this.stateChanged.fromInt()) + "-exit");
+                }
             }
             
             this.enterEvents.add(this.gesture.gestureName(
@@ -103,12 +115,14 @@ public class HandStateEvents {
                 this.segmentChanged.toInt(),
                 this.stateChanged.toInt()) + "-enter");
             
-            if (nonOOBEnter()) {
-                this.enterEvents.add(this.gesture.gestureName(
-                    this.handLetter,
-                    "nonOOB",
-                    this.segmentChanged.fromInt(),
-                    this.stateChanged.fromInt()) + "-enter");
+            if (somethingWithOOBStateChanged()) {
+                if (this.OOBChanged.toStr() != "OOB") {
+                    this.enterEvents.add(this.gesture.gestureName(
+                        this.handLetter,
+                        this.OOBChanged.toStr(),
+                        this.segmentChanged.toInt(),
+                        this.stateChanged.toInt()) + "-enter");
+                }
             }
         } else {
             return; // Return quickly if nothing has changed.

@@ -124,4 +124,85 @@ class TestHandState {
         assertEquals(0, anyChangeEvents.size());
         assertEquals(0, enterEvents.size());
     }
+    
+    @Test
+    public void testOOBStateEvents() {
+        // Nothing should have changed yet.
+        this.primary.deriveEvents();
+        List<String> exitEvents = this.primary.getExitEvents();
+        List<String> anyChangeEvents = this.primary.getAnyChangeEvents();
+        List<String> enterEvents = this.primary.getEnterEvents();
+        assertEquals(0, exitEvents.size());
+        assertEquals(0, anyChangeEvents.size());
+        assertEquals(0, enterEvents.size());
+        
+        // Change something.
+        this.primary.setZone("active");
+        this.primary.deriveEvents();
+        exitEvents = this.primary.getExitEvents();
+        anyChangeEvents = this.primary.getAnyChangeEvents();
+        enterEvents = this.primary.getEnterEvents();
+        
+        System.out.println("Change OOB.");
+        System.out.println(exitEvents);
+        System.out.println(anyChangeEvents);
+        System.out.println(enterEvents);
+        
+        assertThat(exitEvents, contains(
+            "individual-pOOB0Absent-exit",
+            "general-zone-pOOB-exit"));
+        assertThat(anyChangeEvents, contains(
+            "general-zone-pAnyChange"));
+        assertThat(enterEvents, contains(
+            "individual-pActive0Absent-enter",
+            "individual-pNonOOB0Absent-enter",
+            "general-zone-pActive-enter"));
+        
+        
+        // Change something that should not change OOB state.
+        this.primary.setZone("none");
+        this.primary.deriveEvents();
+        exitEvents = this.primary.getExitEvents();
+        anyChangeEvents = this.primary.getAnyChangeEvents();
+        enterEvents = this.primary.getEnterEvents();
+        
+        System.out.println("Not change OOB.");
+        System.out.println(exitEvents);
+        System.out.println(anyChangeEvents);
+        System.out.println(enterEvents);
+        
+        assertThat(exitEvents, contains(
+            "individual-pActive0Absent-exit",
+            "general-zone-pActive-exit"));
+        assertThat(anyChangeEvents, contains(
+            "general-zone-pAnyChange"));
+        assertThat(enterEvents, contains(
+            "individual-pNone0Absent-enter",
+            "general-zone-pNone-enter"));
+        
+        
+        // Change something that should change OOB state.
+        this.primary.setZone("none");
+        this.primary.setSegment(1);
+        this.primary.deriveEvents();
+        exitEvents = this.primary.getExitEvents();
+        anyChangeEvents = this.primary.getAnyChangeEvents();
+        enterEvents = this.primary.getEnterEvents();
+        
+        System.out.println("Change OOB.");
+        System.out.println(exitEvents);
+        System.out.println(anyChangeEvents);
+        System.out.println(enterEvents);
+        
+        assertThat(exitEvents, contains(
+            "individual-pNone0Absent-exit",
+            "individual-pNonOOB0Absent-exit",
+            "general-segment-p0-exit"));
+        assertThat(anyChangeEvents, contains(
+            "general-segment-pAnyChange"));
+        assertThat(enterEvents, contains(
+            "individual-pNone1Absent-enter",
+            "individual-pNonOOB1Absent-enter",
+            "general-segment-p1-enter"));
+    }
 }
