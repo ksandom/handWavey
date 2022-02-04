@@ -66,9 +66,9 @@ public class Persistence {
             // Store the item.
             HashMap item = new HashMap();
             item.put("value", items.get(key).get());
-            item.put("yDefaultValue", items.get(key).getDefaultValue());
-            item.put("yOldValue", items.get(key).getOldValue());
-            item.put("zDescription", items.get(key).getDescription());
+            item.put("defaultValue", items.get(key).getDefaultValue());
+            item.put("oldValue", items.get(key).getOldValue());
+            item.put("description", items.get(key).getDescription());
             itemMap.put(key, item);
             item.put("zzzEmpty", new HashMap());
         }
@@ -131,12 +131,12 @@ public class Persistence {
             Map inputItem = (Map) inputItems.get(key);
             
             String inputValue = safeGet(inputItem, fullPath, "value", "");
-            String oldInputValue = safeGet(inputItem, fullPath, "yOldValue", inputValue);
-            String inputDefaultValue = safeGet(inputItem, fullPath, "yDefaultValue", inputValue);
+            String oldInputValue = safeGet(inputItem, fullPath, "oldValue", inputValue);
+            String inputDefaultValue = safeGet(inputItem, fullPath, "defaultValue", inputValue);
             String outputDefaultValue = outputItems.get(key).getDefaultValue();
             
-            if (!inputDefaultValue.equals(inputValue) || !inputItem.containsKey("yDefaultValue")) {
-                if (!inputDefaultValue.equals(outputDefaultValue) && inputItem.containsKey("yDefaultValue")) {
+            if (!inputDefaultValue.equals(inputValue) || !inputItem.containsKey("defaultValue")) {
+                if (!inputDefaultValue.equals(outputDefaultValue) && inputItem.containsKey("defaultValue")) {
                     this.debug.out(0, "Warning: The defaultValue for " + fullPath + " has been updated from \"" + inputDefaultValue + "\" to \"" + outputDefaultValue + "\". But the value has been changed from the default to \"" + inputValue + "\", so the change in default is not going to take effect. This message will not show again.");
                 }
                 
