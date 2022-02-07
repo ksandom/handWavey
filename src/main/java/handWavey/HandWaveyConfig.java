@@ -378,7 +378,7 @@ public class HandWaveyConfig {
             "Maximum speed per second.");
         scrollConfig.newItem(
             "rewindScrollTime",
-            "300",
+            "200",
             "int milliseconds. When we do a middle clicking motion while doing the scrolling gesture, it's easy to accidentally scroll. The idea of this setting is to get a position that is just before we started doing the gesture. The default should be pretty close for most people, but if you find that the scroll is still disrupted by the gesture, increase this number. If it rewinds to a time well before you began the gesture, then decrease this number.");
         scrollConfig.newItem(
             "historySize",
