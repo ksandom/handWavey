@@ -39,11 +39,11 @@ items:
   individual-pNonOOB1Open-enter:
     value: setButton("left");lockCursor();rewindCursorPosition();mouseDown();
   individual-pNonOOB1Open-exit:
-    value: rewindCursorPosition();rewindScroll();releaseButtons();unlockCursor();
+    value: rewindCursorPosition();releaseButtons();unlockCursor();
   individual-pNonOOB7Open-enter:
     value: setButton("right");lockCursor();rewindCursorPosition();mouseDown();
   individual-pNonOOB7Open-exit:
-    value: rewindCursorPosition();rewindScroll();releaseButtons();unlockCursor();
+    value: rewindCursorPosition();releaseButtons();unlockCursor();
   individual-pNonOOB1Closed-enter:
     value: setButton("middle");lockCursor();rewindCursorPosition();mouseDown();
   individual-pNonOOB1Closed-exit:
@@ -51,7 +51,7 @@ items:
   individual-pNonOOB0Closed-enter:
     value: rewindCursorPosition();overrideZone("scroll");
   individual-pNonOOB0Closed-exit:
-    value: rewindCursorPosition();rewindScroll();releaseZone();unlockCursor();
+    value: rewindCursorPosition();releaseZone();unlockCursor();
   individual-pNonOOB7Closed-enter:
     value: keyDown("ctrl");rewindCursorPosition();overrideZone("scroll");
   individual-pNonOOB7Closed-exit:
