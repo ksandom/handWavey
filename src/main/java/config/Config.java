@@ -117,8 +117,10 @@ public class Config extends config.Group {
     
     protected String getBestPath() {
         List<String> possiblePaths = new ArrayList<String>();
+        String slash = File.separator;
         
-        possiblePaths.add("/.config/");
+        possiblePaths.add(slash + ".config/" + slash);
+        possiblePaths.add(slash);
         
         String home = System.getProperty("user.home");
         

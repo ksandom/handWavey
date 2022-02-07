@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
+import java.io.File;
 
 
 class ConfigTester extends Config {
@@ -47,14 +48,14 @@ public class ConfigTestInternals {
     
     @Test
     public void testFullPathValue() {
-        assertEquals(this.ct.getFullPath(this.directoryName), this.ct.getBestPath() + this.directoryName + "/");
+        assertEquals(this.ct.getBestPath() + this.directoryName + File.separator, this.ct.getFullPath(this.directoryName));
     }
     
     @Test
     public void testDirty() {
-        assertEquals(this.ct.isDirty(), false);
+        assertEquals(false, this.ct.isDirty());
         this.ct.finishedStartup();
         this.ct.makeDirty();
-        assertEquals(this.ct.isDirty(), true);
+        assertEquals(true, this.ct.isDirty());
     }
 }
