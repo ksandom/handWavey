@@ -313,17 +313,15 @@ public class HandsState {
         
         // Take care of, moving the range into the positive, move 0 into the center of segment 0, and add the user-specified offset.
         double userOffset = (isPrimary)?this.primaryOffset:this.secondaryOffset;
-        double offsetRoll = 0;
-        if (isLeft) {
-            offsetRoll = handedRoll + this.pi + (segmentWidth/2) - userOffset;
-        } else {
-            offsetRoll = handedRoll + this.pi + (segmentWidth/2) + userOffset;
-        }
+        double offsetRoll = handedRoll + this.pi + (segmentWidth/2) - userOffset;
         
         // Work out which segment we are in, then rotate it back because we rotated to make the entire range positive.
         int segmentNumber = (int) Math.floor((offsetRoll / segmentWidth) - (segmentCount / 2));
         while (segmentNumber < 0) {
             segmentNumber += segmentCount;
+        }
+        while (segmentNumber > segmentCount - 1) {
+            segmentNumber -= segmentCount;
         }
         
         // Work out if this is a merged segment.

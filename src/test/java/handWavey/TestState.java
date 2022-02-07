@@ -183,20 +183,20 @@ class TestState {
         Boolean right = false;
         
         double handTop = 0;
-        double handRight = pi*-0.5;
+        double handRight = pi * -0.5;
         double handBottom = pi;
-        double handLeft = pi*0.5;
+        double handLeft = pi * 0.5;
         
         assertEquals(0, this.handsState.getHandSegment(handTop, primary, right));
         assertEquals(1, this.handsState.getHandSegment(handRight, primary, right));
         assertEquals(2, this.handsState.getHandSegment(handBottom, primary, right));
-        assertEquals(3, this.handsState.getHandSegment(pi*-1.5, primary, right)); // Alternative value;
+        assertEquals(3, this.handsState.getHandSegment(pi * -1.5, primary, right)); // Alternative value;
         assertEquals(3, this.handsState.getHandSegment(handLeft, primary, right));
         
         assertEquals(0, this.handsState.getHandSegment(handTop, primary, left));
         assertEquals(3, this.handsState.getHandSegment(handRight, primary, left));
         assertEquals(2, this.handsState.getHandSegment(handBottom, primary, left));
-        assertEquals(2, this.handsState.getHandSegment(pi*-1, primary, left)); // Alternative value.
+        assertEquals(2, this.handsState.getHandSegment(pi * -1, primary, left)); // Alternative value.
         assertEquals(1, this.handsState.getHandSegment(handLeft, primary, left));
     }
     
@@ -208,9 +208,9 @@ class TestState {
         Boolean right = false;
         
         double handTop = 0;
-        double handRight = pi*-0.5;
+        double handRight = pi * -0.5;
         double handBottom = pi;
-        double handLeft = pi*0.5;
+        double handLeft = pi * 0.5;
         
         // Merge some segments together.
         Group primaryHand = Config.singleton().getGroup("gestureConfig").getGroup("primaryHand");
@@ -222,13 +222,43 @@ class TestState {
         assertEquals(0, this.handsState.getHandSegment(handTop, primary, right));
         assertEquals(1, this.handsState.getHandSegment(handRight, primary, right));
         assertEquals(5, this.handsState.getHandSegment(handBottom, primary, right));
-        assertEquals(5, this.handsState.getHandSegment(pi*-1.5, primary, right)); // Alternative value;
+        assertEquals(5, this.handsState.getHandSegment(pi * -1.5, primary, right)); // Alternative value;
         assertEquals(5, this.handsState.getHandSegment(handLeft, primary, right));
         
         assertEquals(0, this.handsState.getHandSegment(handTop, primary, left));
         assertEquals(5, this.handsState.getHandSegment(handRight, primary, left));
         assertEquals(5, this.handsState.getHandSegment(handBottom, primary, left));
-        assertEquals(5, this.handsState.getHandSegment(pi*-1, primary, left)); // Alternative value.
+        assertEquals(5, this.handsState.getHandSegment(pi * -1, primary, left)); // Alternative value.
         assertEquals(1, this.handsState.getHandSegment(handLeft, primary, left));
+    }
+    
+    @Test
+    public void testHandSegmentOffset() {
+        Boolean primary = true;
+        Boolean secondary = false;
+        Boolean left = true;
+        Boolean right = false;
+        
+        double handTop = 0;
+        double handRight = pi * -0.5;
+        double handBottom = pi;
+        double handLeft = pi * 0.5;
+        
+        // Update the offset,
+        Group primaryHand = Config.singleton().getGroup("gestureConfig").getGroup("primaryHand");
+        primaryHand.getItem("rotationOffset").set(String.valueOf(pi * -0.5));
+        this.handsState = new HandsState();
+        
+        assertEquals(1, this.handsState.getHandSegment(handTop, primary, right));
+        assertEquals(2, this.handsState.getHandSegment(handRight, primary, right));
+        assertEquals(3, this.handsState.getHandSegment(handBottom, primary, right));
+        assertEquals(0, this.handsState.getHandSegment(pi * -1.5, primary, right)); // Alternative value;
+        assertEquals(0, this.handsState.getHandSegment(handLeft, primary, right));
+        
+        assertEquals(1, this.handsState.getHandSegment(handTop, primary, left));
+        assertEquals(0, this.handsState.getHandSegment(handRight, primary, left));
+        assertEquals(3, this.handsState.getHandSegment(handBottom, primary, left));
+        assertEquals(3, this.handsState.getHandSegment(pi * -1, primary, left)); // Alternative value.
+        assertEquals(2, this.handsState.getHandSegment(handLeft, primary, left));
     }
 }
