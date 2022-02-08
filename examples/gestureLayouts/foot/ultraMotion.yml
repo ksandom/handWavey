@@ -1,0 +1,32 @@
+groups:
+  coneOfSilence:
+    groups: {}
+    items:
+      minHeight:
+        description: Beyond this height, the hand is considered too far away from
+          the sensor to be useable, and is thus discarded.
+        value: '50'
+      maxCAtMaxHeight:
+        description: When the hand is at min max height, how far from the center of
+          the cone can the hand be horizontally before it it considered to be too
+          unreliable.
+        value: '260'
+      maxCAtMinHeight:
+        description: When the hand is at the min height, how far from the center of
+          the cone can the hand be horizontally before it it considered to be too
+          unreliable.
+        value: '160'
+      maxHeight:
+        description: Beyond this height, the hand is considered too far away from
+          the sensor to be useable, and is thus discarded.
+        value: '500'
+items:
+  openThreshold:
+    description: 'Float: When the last bone of the middle finger is less than this
+      angle, the hand is assumed to be open.'
+    value: '1.8'
+  maxHands:
+    description: Maximum number of hands to track. Anything more than this setting
+      will be discarded, and assumptions can be made faster, so it will run faster.
+      The most recent hands above the threshold are the ones to be discarded.
+    value: '2'

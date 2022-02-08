@@ -1,0 +1,48 @@
+groups: {}
+items:
+  general-zone-pAction-enter:
+    value: lockCursor();rewindCursorPosition();click();
+  general-segment-p0-enter:
+    value: ""
+  general-segment-p1-enter:
+    value: lockCursor();rewindCursorPosition();mouseDown();
+  general-segment-p1-exit:
+    value: rewindCursorPosition();rewindScroll();releaseButtons();unlockCursor();
+  general-segment-p2-enter:
+    value: ""
+  general-segment-p2-exit:
+    value: ""
+  general-segment-s0-enter:
+    value: ""
+  general-segment-s0-exit:
+    value: ""
+  general-segment-s1-enter:
+    value: ""
+  general-segment-s1-exit:
+    value: ""
+  general-segment-s2-exit:
+    value: ""
+  general-segment-s2-enter:
+    value: ""
+  general-state-pClosed-enter:
+    value: ""
+  general-state-pClosed-exit:
+    value: ""
+  special-newHandUnfreezeEvent:
+    value: ""
+  special-newHandUnfreezeCursor:
+    value: ''
+  special-newHandFreeze:
+    value: ''
+  general-zone-sActive-enter:
+    value: setButton("middle");overrideZone("scroll");
+  general-zone-sActive-exit:
+    value: setButton("left");releaseZone();
+  general-zone-sAction-enter:
+    value: setButton("right");
+  general-zone-sAction-exit:
+    value: setButton("left");
+  general-state-pAbsent-enter:
+    value: setButton("left");releaseButtons();releaseKeys();releaseZone();debug("0",
+  general-segment-pAnyChange:
+    value: lockCursor();rewindCursorPosition();

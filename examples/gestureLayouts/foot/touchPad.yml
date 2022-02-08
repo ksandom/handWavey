@@ -1,0 +1,15 @@
+groups: {}
+items:
+  outputMultiplier:
+    description: Input is pretty small. Make it a bit bigger.
+    value: '2'
+  acceleration:
+    description: Small change in output moves the pointer very precisely. A larger
+      movement moves the pointer much more drastically.
+    value: '500'
+  inputMultiplier:
+    description: Input is pretty small. Make it a bit bigger.
+    value: '0.3'
+  maxSpeed:
+    description: Maximum speed per second.
+    value: '25'

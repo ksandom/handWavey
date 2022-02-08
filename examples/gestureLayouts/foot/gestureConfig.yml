@@ -1,0 +1,37 @@
+groups:
+  primaryHand:
+    groups: {}
+    items:
+      mergeTo:
+        description: Merge between this value, and mergeTo, into mergeIntoSegment.
+        value: '0'
+      mergeFrom:
+        description: Merge between this value, and mergeTo, into mergeIntoSegment.
+        value: '0'
+      rotationSegments:
+        description: When you rotate your hand; it enters different segments. Increasing
+        value: '1'
+      rotationOffset:
+        description: In radians. Adjust where the segments are slightly to cater to
+        value: '0'
+      mergeIntoSegment:
+        description: Merge unused segments into this segment. This has the effect
+        value: '0'
+  secondaryHand:
+    groups: {}
+    items:
+      mergeTo:
+        description: Merge between this value, and mergeTo, into mergeIntoSegment.
+        value: '0'
+      mergeFrom:
+        description: Merge between this value, and mergeTo, into mergeIntoSegment.
+        value: '0'
+      rotationSegments:
+        description: When you rotate your hand; it enters different segments. Increasing
+        value: '1'
+      rotationOffset:
+        description: In radians. Adjust where the segments are slightly to cater to
+        value: '0'
+      mergeIntoSegment:
+        description: Merge unused segments into this segment. This has the effect
+        value: '0'

@@ -1,0 +1,93 @@
+groups:
+  touchPad:
+    groups:
+      noMove:
+        groups: {}
+        items:
+          threshold:
+            description: Z greater than this value denotes the beginning of the noMove
+            value: '-150'
+      zoneNone:
+        groups: {}
+      scroll:
+        groups: {}
+        items:
+          movingMeanEnd:
+            description: int 1-4096. A moving mean is applied to the data stream to
+            value: '1'
+          movingMeanBegin:
+            description: int 1-4096. A moving mean is applied to the data stream to
+            value: '1'
+      active:
+        groups: {}
+        items:
+          movingMeanEnd:
+            description: int 1-4096. A moving mean is applied to the data stream to
+            value: '4'
+          threshold:
+            description: Z greater than this value denotes the beginning of the active
+            value: '-30'
+          movingMeanBegin:
+            description: int 1-4096. A moving mean is applied to the data stream to
+            value: '4'
+      action:
+        groups: {}
+        items:
+          movingMeanEnd:
+            description: int 1-4096. A moving mean is applied to the data stream to
+            value: '20'
+          threshold:
+            description: Z greater than this value denotes the beginning of the action
+            value: '50'
+          movingMeanBegin:
+            description: int 1-4096. A moving mean is applied to the data stream to
+            value: '20'
+  touchScreen:
+    groups:
+      absolute:
+        groups: {}
+        items:
+          movingMeanEnd:
+            description: int 1-4096. A moving mean is applied to the data stream to
+            value: '20'
+          threshold:
+            description: Z greater than this value denotes the beginning of the absolute
+            value: '-120'
+          movingMeanBegin:
+            description: int 1-4096. A moving mean is applied to the data stream to
+            value: '4'
+      zoneNone:
+        groups: {}
+      scroll:
+        groups: {}
+        items:
+          movingMeanEnd:
+            description: int 1-4096. A moving mean is applied to the data stream to
+            value: '1'
+          movingMeanBegin:
+            description: int 1-4096. A moving mean is applied to the data stream to
+            value: '1'
+      action:
+        groups: {}
+        items:
+          movingMeanEnd:
+            description: int 1-4096. A moving mean is applied to the data stream to
+            value: '20'
+          threshold:
+            description: Z greater than this value denotes the beginning of the action
+            value: '80'
+          movingMeanBegin:
+            description: int 1-4096. A moving mean is applied to the data stream to
+            value: '20'
+      relative:
+        groups: {}
+        items:
+          movingMeanEnd:
+            description: int 1-4096. A moving mean is applied to the data stream to
+            value: '40'
+          threshold:
+            description: Z greater than this value denotes the beginning of the relative
+            value: '0'
+          movingMeanBegin:
+            description: int 1-4096. A moving mean is applied to the data stream to
+            value: '20'
