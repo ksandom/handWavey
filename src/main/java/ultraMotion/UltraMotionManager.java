@@ -12,6 +12,7 @@ import config.Config;
 import config.*;
 import ultraMotion.*;
 import com.leapmotion.leap.*;
+import com.leapmotion.leap.Controller.PolicyFlag;
 import handWavey.HandWaveyManager;
 
 public class UltraMotionManager {
@@ -26,7 +27,13 @@ public class UltraMotionManager {
         this.handWaveyManager = hwm;
         this.config = Config.singleton();
 
+        // Make sure that we can run in the background on windows.
+        if (!this.controller.isPolicySet(Controller.PolicyFlag.POLICY_BACKGROUND_FRAMES)) {
+            this.controller.setPolicy(Controller.PolicyFlag.POLICY_BACKGROUND_FRAMES);
+        }
+        
         this.controller.addListener(ultraMotionInput);
+        
         this.active = true;
         
         this.ultraMotionInput.setUltraMotionManager(this);
