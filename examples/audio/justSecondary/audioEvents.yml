@@ -1,0 +1,26 @@
+groups: {}
+items:
+  general-state-pClosed-enter:
+    value: ""
+  special-newHandFreeze:
+    value: ''
+  general-segment-sAnyChange:
+    value: metalDing04.wav
+  general-zone-pAction-enter:
+    value: ""
+  general-zone-pAnyChange:
+    value: ""
+  general-state-pClosed-exit:
+    value: ""
+  general-zone-sAnyChange:
+    value: metalDing03.wav
+  general-segment-pAnyChange:
+    value: ""
+  imposterHand-replace:
+    value: ''
+  special-newHandUnfreezeEvent:
+    value: ''
+  special-newHandUnfreezeCursor:
+    value: ''
+  imposterHand-discard:
+    value: ''
