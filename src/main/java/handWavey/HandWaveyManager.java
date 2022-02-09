@@ -206,19 +206,28 @@ public class HandWaveyManager {
         this.xOffset = pX;
         this.yOffset = pYMin * -1;
         
-        if (desktopAspectRatio > physicalAspectRatio) { // desktop is wider
-            this.debug.out(1, "Desktop is wider than the cone. Optimising the usable cone for that.");
-            this.yMultiplier = configuredYMultiplier * (this.desktopHeight/pYDiff);
-            this.xMultiplier = configuredXMultiplier * (this.desktopHeight/pYDiff);
-        } else { // desktop is narrower
-            this.debug.out(1, "The cone is wider than the desktop. Optimising the usable cone for that.");
-            this.xMultiplier = configuredXMultiplier * (this.desktopWidth/pXDiff);
-            this.yMultiplier = configuredYMultiplier * (this.desktopWidth/pXDiff);
+        this.zoneMode = this.config.getItem("zoneMode").get();
+        if (this.zoneMode == "touchPad") {
+            this.debug.out(1, "touchPad zone mode only needs simple multipliers.");
+            this.xMultiplier = configuredXMultiplier;
+            this.yMultiplier = configuredYMultiplier;
+        } else {
+            if (desktopAspectRatio > physicalAspectRatio) { // desktop is wider
+                this.debug.out(1, "Desktop is wider than the cone. Optimising the usable cone for that.");
+                this.yMultiplier = configuredYMultiplier * (this.desktopHeight/pYDiff);
+                this.xMultiplier = configuredXMultiplier * (this.desktopHeight/pYDiff);
+            } else { // desktop is narrower
+                this.debug.out(1, "The cone is wider than the desktop. Optimising the usable cone for that.");
+                this.xMultiplier = configuredXMultiplier * (this.desktopWidth/pXDiff);
+                this.yMultiplier = configuredYMultiplier * (this.desktopWidth/pXDiff);
+            }
         }
         
+        this.debug.out(1, "xMultiplier: " + String.valueOf(this.xMultiplier));
+        this.debug.out(1, "yMultiplier: " + String.valueOf(this.yMultiplier));
+        this.debug.out(1, "zMultiplier: " + String.valueOf(this.zMultiplier));
         
         // Configure Z axis thresholds.
-        this.zoneMode = this.config.getItem("zoneMode").get();
         if (this.zoneMode == "touchScreen") {
             Group touchScreen = this.config.getGroup("zones").getGroup("touchScreen");
             this.zAbsoluteBegin = Double.parseDouble(touchScreen.getGroup("absolute").getItem("threshold").get());
@@ -476,8 +485,8 @@ public class HandWaveyManager {
         int diffY = (int) Math.round((yInput * accelerationMultiplier) * this.touchPadOutputMultiplier);
         
         // Apply the changes.
-        this.touchPadX = this.touchPadX + diffX;
-        this.touchPadY = this.touchPadY - diffY;
+        this.touchPadX = this.touchPadX + (diffX * (int)Math.round(this.xMultiplier));
+        this.touchPadY = this.touchPadY - (diffY * (int)Math.round(this.yMultiplier));
         
         // Carry over anything that happened, but didn't result in a movement. This means that we can make use of the finer movements without having to move the acceleration and multipliers to extremes.
         this.diffRemainderX = (diffX == 0)?xCoordDiff:0;
@@ -539,8 +548,8 @@ public class HandWaveyManager {
         }
         
         // Bring everything together to calcuate how far we should move the cursor.
-        double xInput = xCoordDiff * this.scrollInputMultiplier;
-        double yInput = yCoordDiff * this.scrollInputMultiplier;
+        double xInput = xCoordDiff * this.scrollInputMultiplier * (int)Math.round(this.xMultiplier);
+        double yInput = yCoordDiff * this.scrollInputMultiplier * (int)Math.round(this.yMultiplier);
         
         int diffX = 0;
         int diffY = 0;

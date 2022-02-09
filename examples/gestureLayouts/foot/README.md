@@ -2,7 +2,7 @@
 
 **HIGHLY EXPERIMENTAL**
 
-The foot layout is not currently fit for daily use. Some time investment will be needed to make it useable. If this will make a meaningful difference to your life (or someone you know/care for), please let me know, and we can work through addressing your needs together.
+The foot layout is not currently fit for daily use. Some time investment will be needed to make it useable. If this will make a meaningful difference to your life (or someone you know/care for), please [let me know](https://github.com/ksandom/handWavey/issues/3), and we can work through addressing your needs together.
 
 If you'd like to try it as it is, please pay close attention to all of this documentation to maximise your chances of success.
 
