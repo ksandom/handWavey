@@ -2,6 +2,8 @@
 
 A more intuitive/usable desktop control using leapmotion/ultramotion.
 
+If you use it, I'd love to [hear from you](https://github.com/ksandom/handWavey/issues/4).
+
 ## Requirements
 
 ### Hardware 
