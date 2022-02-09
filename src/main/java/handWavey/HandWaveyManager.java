@@ -621,17 +621,13 @@ public class HandWaveyManager {
     * Data cleaning:
         * How many frames for a mouse event to be acted on?
         * Adjust timings?
-    * Config to/from disk.
     * Make audio feedback for hands left/right hand aware.
     * How to build the final asset?
     * Documentation/automation:
-        * Installation.
         * Configuring.
             * touchPad acceleration.
             * scroll acceleration.
             * touchPad vs touchScreen.
-            * gestureConfig.
-            * audioFeedback.
     * Synth audio feedback for when close to zone boundaries.
     * Occasional freeze:
         * Usually sound stops. But other stuff still works.
