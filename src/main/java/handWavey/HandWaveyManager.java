@@ -123,8 +123,10 @@ public class HandWaveyManager {
         String chosenOutput = this.config.getGroup("output").getItem("device").get();
         selectOutput(chosenOutput);
         
+        Boolean useAudio = Boolean.parseBoolean(this.config.getGroup("audioConfig").getItem("useAudio").get());
+        
         this.handsState = HandsState.singleton();
-        this.handWaveyEvent = new HandWaveyEvent(this.output, true, this.handsState, this);
+        this.handWaveyEvent = new HandWaveyEvent(this.output, useAudio, this.handsState, this);
         this.handsState.setHandWaveyEvent(this.handWaveyEvent);
         
         reloadConfig();

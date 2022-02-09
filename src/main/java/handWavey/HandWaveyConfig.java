@@ -402,6 +402,10 @@ public class HandWaveyConfig {
         
         Group audioConfig = this.config.newGroup("audioConfig");
         audioConfig.newItem(
+            "useAudio",
+            "true",
+            "[true, false]: Audio notifications give the user feedback about what gestures they are making, and make it much easier to use handWavey. If you are getting more notifications than you'd like, you should first try using a configuration that has less notifications from the examples. But if you want audio notifications gone entirely, you can set this to false.");
+        audioConfig.newItem(
             "pathToAudio",
             "audio" + File.separator + "clips",
             "Where are all of the audio clips stored.");
