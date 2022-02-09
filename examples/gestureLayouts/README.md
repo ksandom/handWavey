@@ -2,29 +2,13 @@
 
 This is the place to share (via a pull request) and find other gesture layouts that might suit you better.
 
-## Users trying layouts found here
+## Development
 
-1. Copy the `.yml` files into your configuration directory.
-   On linux, you can do it with a command like this:
-   ```
-   cp *yml ~/.config/handWavey
-   ```
-1. Restart handWavey.
-
-## People creating new layouts
-
-### Considerations
-
-#### Tools to assist you.
-
-* You may want to set `saveBackConfig` in `main.yml` to `false` while writing your layout.
-
-#### What to include in your gestureLayout
+### What to include in your gestureLayout
 
 * You should include all of the files that are relevant to your layout.
     * At least:
         * `actionEvents.yml`
-        * `audioEvents.yml`
     * You may want to include:
         * `gestureConfig.yml`
     * Should not include:
