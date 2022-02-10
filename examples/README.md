@@ -10,9 +10,13 @@ In most cases you can drop the files into your configuration directory.
 
 1. Backup your existing configuration.
 2. Copy the `.yml` files into your configuration directory.
-   On linux, you can do it with a command like this:
+   On linux (and probably macOS), you can do it with a command like this:
    ```
    cp *yml ~/.config/handWavey
+   ```
+   On windows, you can do it like this:
+   ```
+   copy *.yml %USERPROFILE%\handWavey
    ```
 3. Restart handWavey.
 
