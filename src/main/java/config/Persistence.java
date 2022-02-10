@@ -115,6 +115,7 @@ public class Persistence {
     
     private void walkInput(String path, Map obj, HashMap<String, Group> outputGroups, HashMap<String, Item> outputItems, HashMap<String, Boolean> exclusions) {
         Map inputItems = new HashMap();
+        if (obj == null) return;
         if (obj.containsKey("items")) inputItems = (Map) obj.get("items");
         else {
             this.debug.out(1, "No items in " + path + ". This will be fixed on save.");
