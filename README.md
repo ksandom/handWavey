@@ -51,14 +51,6 @@ This is theoretically possible, but has not been tested.
 
 ## Install
 
-### Linux
-
-### Windows
-
-TODO - [Ticket](https://github.com/ksandom/handWavey/issues/2).
-
-### MacOS
-
-This is theoretically possible, but has not been tested.
-
-TODO - [Ticket](https://github.com/ksandom/handWavey/issues/1).
+* [Linux](blob/main/docs/user/install/installOnLinux.md).
+* [Windows](blob/main/docs/user/install/installOnWindows.md).
+* [MacOS](blob/main/docs/user/install/installOnMacOS.md). (This is theoretically possible, but has not been tested.)
