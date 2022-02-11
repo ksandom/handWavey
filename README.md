@@ -12,7 +12,7 @@ If you use it, I'd love to [hear from you](https://github.com/ksandom/handWavey/
 
 ### Softare
 
-* [LeapMotion SDK](https://github.com/ksandom/installUltraMotion).
+* [LeapMotion/UltraLeap SDK](https://github.com/ksandom/installUltraleap).
 * Java. One of:
     * [OpenJDK](https://openjdk.java.net/install/).
     * Or [Oracle's Java](https://www.oracle.com/java/technologies/downloads/).
@@ -21,29 +21,32 @@ If you use it, I'd love to [hear from you](https://github.com/ksandom/handWavey/
 
 ### Linux
 
+1. Satisfy the [requirements](#Requirements).
 1. Copy libraries from the LeapMotion SDK to lib.
-2. Test that you have everything installed correctly:
+1. Test that you have everything installed correctly:
    `./gradlew test`
-3. Run it:
+1. Run it:
    `./gradlew run`
 
 ### Windows
 
+1. Satisfy the [requirements](#Requirements).
 1. `copy build.gradle.windows build.gradle`
-2. Copy libraries from the LeapMotion SDK to lib.
-3. Test that you have everything installed correctly:
+1. Copy libraries from the LeapMotion SDK to lib.
+1. Test that you have everything installed correctly:
    `gradlew.bat test`
-4. Run it:
+1. Run it:
    `gradlew.bat run`
 
 ### MacOS
 
 This is theoretically possible, but has not been tested.
 
+1. Satisfy the [requirements](#Requirements).
 1. Copy libraries from the LeapMotion SDK to lib.
-2. Test that you have everything installed correctly:
+1. Test that you have everything installed correctly:
    `./gradlew test`
-3. Run it:
+1. Run it:
    `./gradlew run`
 
 ## Install
