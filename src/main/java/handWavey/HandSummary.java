@@ -174,6 +174,10 @@ public class HandSummary {
         return (handAge < this.eventFreezeFirstMillis);
     }
     
+    public void clearNewHand() {
+        this.introducedTime = now() - this.eventFreezeFirstMillis - 1;
+    }
+    
     private void markUpdated() {
         long now = now();
         

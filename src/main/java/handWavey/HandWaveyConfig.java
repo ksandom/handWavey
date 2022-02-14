@@ -132,6 +132,14 @@ public class HandWaveyConfig {
         
         Group newHands = dataCleaning.newGroup("newHands");
         newHands.newItem(
+            "earlyUnfreeze",
+            "true",
+            "Boolean (true|false): While the hand enters into the view of the UltraMotion device, the data is erratic. Therefore we want to ignore the first few moments until the data has stabilised. But if the hand gets to a location that we know is stable, we can assume that all is well, and unlock the cursor. Set to false if you are getting erratic behavior, yet the debug output is telling you that \"The hand seems ready.\"");
+        newHands.newItem(
+            "earlyUnfreezeZone",
+            "active",
+            "String (noMove, active, action): While the hand enters into the view of the UltraMotion device, the data is erratic. Therefore we want to ignore the first few moments until the data has stabilised. But if the hand gets to a location that we know is stable, we can assume that all is well, and unlock the cursor. Set this to the zone where the hand is most above the sensor. Most of fthe time, you'll want this to be \"active\".");
+        newHands.newItem(
             "cursorFreezeFirstMillis",
             "200",
             "Int (milliseconds): While the hand enters into the view of the UltraMotion device, the data is erratic. Therefore we want to ignore the first few moments until the data has stabilised. This wait time is measured in milliseconds, and stops the cursor from moving.");

@@ -68,6 +68,8 @@ public class HandsState {
     private int cursorFreezeFirstMillis = 200;
     private Boolean newHandsCursorFreeze = false;
     private int eventFreezeFirstMillis = 500;
+    private Boolean earlyUnfreeze = true;
+    private String earlyUnfreezeZone = "active";
     
     // TODO Migrate other dimensions.
     private double zMultiplier = -1;
@@ -131,6 +133,9 @@ public class HandsState {
         this.oldHandsTimeout = Integer.parseInt(newHands.getItem("oldHandsTimeout").get());
         this.cursorFreezeFirstMillis = Integer.parseInt(newHands.getItem("cursorFreezeFirstMillis").get());
         this.eventFreezeFirstMillis = Integer.parseInt(newHands.getItem("eventFreezeFirstMillis").get());
+        
+        this.earlyUnfreeze = Boolean.parseBoolean(newHands.getItem("earlyUnfreeze").get());
+        this.earlyUnfreezeZone = newHands.getItem("earlyUnfreezeZone").get();
     }
     
     public static HandsState singleton() {
@@ -155,6 +160,7 @@ public class HandsState {
         Boolean shouldUpdatePrimary = false;
         Boolean shouldUpdateSecondary = (secondaryHandIsActiveOrChanged());
         Boolean primaryAbsent = (this.handSummaries[0] == null);
+        Double primaryHandZ;
         
         if (primaryAbsent) {
             this.primaryState.setState(Gesture.absent);
@@ -162,10 +168,21 @@ public class HandsState {
             this.primaryState.setSegment(0);
         } else {
             shouldUpdatePrimary = (!this.handSummaries[0].handIsNew());
+            
+            if (!shouldUpdatePrimary && this.earlyUnfreeze) {
+                // Check if the hand is already in the active area. If so, let's just enable it.
+                primaryHandZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
+                if (this.handsState.getZone(primaryHandZ) == this.earlyUnfreezeZone) {
+                    shouldUpdatePrimary = true;
+                    this.handSummaries[0].clearNewHand();
+                    this.debug.out(1, "The hand seems ready. Skipping the rest of the cursorFreezeFirstMillis timeout.");
+                    releaseCursorFreeze();
+                }
+            }
         }
 
         if (shouldUpdatePrimary) {
-            Double primaryHandZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
+            primaryHandZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
             
             String zone = this.handsState.getZone(primaryHandZ);
             if (zone != this.zoneOverride) {
@@ -426,9 +443,7 @@ public class HandsState {
                 long elapsedTime = now - this.newHands;
                 if (this.newHandsCursorFreeze == true) {
                     if (elapsedTime > this.cursorFreezeFirstMillis) {
-                        this.newHandsCursorFreeze = false;
-                        this.debug.out(1, "Releasing newHand cursor freeze.");
-                        this.handWaveyEvent.triggerEvent("special-newHandUnfreezeCursor");
+                        releaseCursorFreeze();
                     }
                 }
             }
@@ -438,6 +453,12 @@ public class HandsState {
         if (this.previousFrameAge > this.sillyFrameAge) {
             this.previousFrameAge = this.sillyFrameAge;
         }
+    }
+    
+    private void releaseCursorFreeze() {
+        this.newHandsCursorFreeze = false;
+        this.debug.out(1, "Releasing newHand cursor freeze.");
+        this.handWaveyEvent.triggerEvent("special-newHandUnfreezeCursor");
     }
     
     public Boolean newHandsCursorFreeze() {
