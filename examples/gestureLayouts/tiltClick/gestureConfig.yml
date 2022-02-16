@@ -9,36 +9,21 @@ groups:
           that some segments are hard for a human hand to reach, so you need to keep
           that in mind when choosing this number. It is expected that some segments
           will be unused for this reason. Don't hurt yourself.
-        zzzEmpty: {}
-        defaultValue: '4'
-        oldValue: '4'
         value: '6'
       rotationOffset:
         description: In radians. Adjust where the segments are slightly to cater
           to your hand's natural bias.
-        zzzEmpty8: {}
-        defaultValue: '0'
-        oldValue: '0'
         value: '0.3'
       mergeIntoSegment:
         description: Merge unused segments into this segment. This has the effect
           of not causing an unnecessary segment change event when accidentally moving
           into an unused segment.
-        zzzEmpty: {}
-        defaultValue: '0'
-        oldValue: '0'
         value: '1'
       mergeFrom:
         description: Merge between this value, and mergeTo, into mergeIntoSegment.
-        zzzEmpty: {}
-        defaultValue: '0'
-        oldValue: '0'
         value: '2'
       mergeTo:
         description: Merge between this value, and mergeTo, into mergeIntoSegment.
-        zzzEmpty: {}
-        defaultValue: '0'
-        oldValue: '0'
         value: '3'
   secondaryHand:
     groups: {}
@@ -50,35 +35,20 @@ groups:
           that some segments are hard for a human hand to reach, so you need to keep
           that in mind when choosing this number. It is expected that some segments
           will be unused for this reason. Don't hurt yourself.
-        zzzEmpty: {}
-        defaultValue: '4'
-        oldValue: '4'
         value: '6'
       rotationOffset:
         description: In radians. Adjust where the segments are slightly to cater
           to your hand's natural bias.
-        zzzEmpty: {}
-        defaultValue: '0'
-        oldValue: '0'
         value: '0.3'
       mergeIntoSegment:
         description: Merge unused segments into this segment. This has the effect
           of not causing an unnecessary segment change event when accidentally moving
           into an unused segment.
-        zzzEmpty: {}
-        defaultValue: '0'
-        oldValue: '0'
         value: '0'
       mergeFrom:
         description: Merge between this value, and mergeTo, into mergeIntoSegment.
-        zzzEmpty: {}
-        defaultValue: '0'
-        oldValue: '0'
         value: '0'
       mergeTo:
         description: Merge between this value, and mergeTo, into mergeIntoSegment.
-        zzzEmpty: {}
-        defaultValue: '0'
-        oldValue: '0'
         value: '0'
 items: {}
