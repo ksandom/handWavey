@@ -123,6 +123,11 @@ public class HandWaveyConfig {
             "HandStateEvents",
             "0",
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. If you want information about events, you should first check out HandWaveyEvent. If you're not sure why those events are being triggered, then this class will tell you about the state changes that are generating those events. Normally users won't need this information.");
+        debug.newItem(
+            "bug.ShouldComplete",
+            "0",
+            "This setting is here for completeness, but is entirely irrelevant. You can safely ignore it.",
+            true);
         
         Group dataCleaning = this.config.newGroup("dataCleaning");
         dataCleaning.newItem(

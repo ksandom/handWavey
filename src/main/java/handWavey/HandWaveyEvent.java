@@ -13,6 +13,8 @@ import macro.MacroLine;
 import config.Config;
 import config.Group;
 import debug.Debug;
+import bug.ShouldComplete;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +30,8 @@ public class HandWaveyEvent {
     
     private Group actionEvents;
     private Group audioEvents;
+    
+    private ShouldComplete shouldCompleteEvent;
     
     private MacroLine macroLine;
     
@@ -45,9 +49,13 @@ public class HandWaveyEvent {
         this.audioEvents = Config.singleton().getGroup("audioEvents");
         
         this.audioPath = Config.singleton().getGroup("audioConfig").getItem("pathToAudio").get() + File.separator;
+        
+        this.shouldCompleteEvent = new ShouldComplete("HandWaveyEvent/event");
     }
     
     public void triggerEvents(List<String> events) {
+        if (events == null) return;
+        
         int numberOfEvents = events.size();
         int debugLevel = (numberOfEvents > 0)?1:3;
         this.debug.out(debugLevel, "Received " + String.valueOf(numberOfEvents) + " events.");
@@ -62,6 +70,8 @@ public class HandWaveyEvent {
     
     public void triggerEvent(String eventName, String indent) {
         // Get the info we need for the event.
+        this.shouldCompleteEvent.start(eventName);
+        
         String macroLine = this.getEventAction(eventName);
         String fileToPlay = "";
         if (this.useAudio) fileToPlay = this.getEventAudio(eventName);
@@ -79,6 +89,27 @@ public class HandWaveyEvent {
             this.debug.out(2, indent + "  macroLine: \"" + macroLine + "\"");
             this.macroLine.runLine(macroLine);
         }
+        
+        // Do Audio.
+        if (doAudio) {
+            this.debug.out(2, indent + "  fileToPlay: \"" + fileToPlay + "\"");
+            BackgroundSound.play(fileToPlay);
+        }
+        this.shouldCompleteEvent.finish();
+    }
+    
+    public void triggerAudioOnly(String eventName) {
+        // Get the info we need for the event.
+        String indent = "";
+        String fileToPlay = "";
+        if (this.useAudio) fileToPlay = this.getEventAudio(eventName);
+        
+        // Make the decisions.
+        Boolean doAudio = (this.useAudio && fileToPlay != "");
+        
+        // Only output at debug level 1 if we are going to do something. Otherwise at level 3.
+        int debugLevel = (doAudio)?1:3;
+        this.debug.out(debugLevel, indent + "AudioOnlyEvent: " + eventName + ".");
         
         // Do Audio.
         if (doAudio) {

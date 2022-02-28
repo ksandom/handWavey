@@ -12,6 +12,7 @@ import mouseAndKeyboardOutput.*;
 import debug.Debug;
 import handWavey.HandsState;
 import handWavey.HandWaveyManager;
+import bug.ShouldComplete;
 
 public class MacroCore {
     protected Debug debug;
@@ -19,12 +20,16 @@ public class MacroCore {
     private HandsState handsState;
     private HandWaveyManager handWaveyManager = null;
     
+    private ShouldComplete shouldCompleteInstruction;
+    
     public MacroCore(String context, OutputProtection output, HandsState handsState, HandWaveyManager handWaveyManager) {
         this.debug = Debug.getDebug(context);
         this.output = output;
         
         this.handsState = handsState;
         this.handWaveyManager = handWaveyManager;
+        
+        this.shouldCompleteInstruction = new ShouldComplete("MacroCore/instruction");
     }
     
     protected void doInstruction(String instruction) {
@@ -37,6 +42,7 @@ public class MacroCore {
     }
     
     protected void doInstruction(String command, String[] parameters) {
+        this.shouldCompleteInstruction.start(command);
         switch (command) {
             case "debug":
                 this.debug.out(
@@ -111,6 +117,7 @@ public class MacroCore {
                 this.debug.out(0, "Unknown command: " + command);
                 break;
         }
+        this.shouldCompleteInstruction.finish();
     }
     
     

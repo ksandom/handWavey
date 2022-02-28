@@ -30,6 +30,8 @@ import dataCleaner.History;
 import debug.Debug;
 import mouseAndKeyboardOutput.*;
 import audio.*;
+import bug.ShouldComplete;
+
 import java.awt.Dimension;
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -49,6 +51,7 @@ public class HandWaveyManager {
     private History historyY;
     private History historyScroll;
     private HandWaveyEvent handWaveyEvent;
+    private ShouldComplete shouldCompleteSFO;
         
     private HashMap<String, String> eventSounds = new HashMap<String, String>();
     private String audioPath;
@@ -128,6 +131,8 @@ public class HandWaveyManager {
         this.handsState = HandsState.singleton();
         this.handWaveyEvent = new HandWaveyEvent(this.output, useAudio, this.handsState, this);
         this.handsState.setHandWaveyEvent(this.handWaveyEvent);
+        
+        this.shouldCompleteSFO = new ShouldComplete("figureStuffOut");
         
         reloadConfig();
     }
@@ -637,11 +642,17 @@ public class HandWaveyManager {
     
     // This is where everything gets glued together.
     public void sendHandSummaries(HandSummary[] handSummaries) {
+        if (!this.shouldCompleteSFO.start("na")) {
+            this.handWaveyEvent.triggerAudioOnly("bug");
+        }
+        
         this.handsState.setHandSummaries(handSummaries);
         
         this.handSummaries = handSummaries;
         
         this.handsState.figureOutStuff();
+        
+        this.shouldCompleteSFO.finish();
         
         if (this.handSummaries[0] == null) return;
         

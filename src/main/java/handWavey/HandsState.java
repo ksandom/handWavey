@@ -12,6 +12,7 @@ import config.*;
 import dataCleaner.Changed;
 import debug.Debug;
 import java.util.HashMap;
+import java.util.List;
 import java.sql.Timestamp;
 
 public class HandsState {
@@ -209,8 +210,8 @@ public class HandsState {
         if ((shouldUpdatePrimary || primaryAbsent) || shouldUpdateSecondary) {
             Boolean anythingChanged = (this.primaryState.somethingChanged() || this.secondaryState.somethingChanged());
             if (anythingChanged) {
-                String pStateEnter = primaryState.getIndividualEnterEvent();
-                String sStateEnter = secondaryState.getIndividualEnterEvent();
+                String pStateEnter = this.primaryState.getIndividualEnterEvent();
+                String sStateEnter = this.secondaryState.getIndividualEnterEvent();
                 
                 this.debug.out(1, "Current state: " + pStateEnter + ", " + sStateEnter);
                 
@@ -249,8 +250,9 @@ public class HandsState {
                 this.handWaveyEvent.triggerEvents(this.primaryState.getExitEvents());
                 
                 
-                // andChange events.
-                this.handWaveyEvent.triggerEvents(this.primaryState.getAnyChangeEvents());
+                // anyChange events.
+                List<String> anyChangeEvents = this.primaryState.getAnyChangeEvents();
+                this.handWaveyEvent.triggerEvents(anyChangeEvents);
                 if (secondaryHandIsActiveOrChanged()) {
                     this.handWaveyEvent.triggerEvents(this.secondaryState.getAnyChangeEvents());
                 }
