@@ -439,6 +439,10 @@ public class HandWaveyConfig {
             "imposterHand-discard",
             "",
             "When we detect that a hand ID is not what we expect, but not are able to replace it and continue.");
+        audioEvents.newItem(
+            "bug",
+            "coocoo1.wav",
+            "When a bug is detected, play this sound.");
         
         
         this.config.newItem(
