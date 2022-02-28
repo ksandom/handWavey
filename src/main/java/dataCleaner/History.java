@@ -16,9 +16,14 @@ public class History {
     private int position = 0;
     private long[] timeStamp = new long[4096];
     private double[] data = new double[4096];
+    private int stepAllowance = 0;
     
     public History (int size, double seedValue) {
         this.size = size;
+        
+        // Allow more room to figure it out if the size is really small.
+        this.stepAllowance = (this.size > 4)?this.size:this.size*2;
+        
         this.position = 0;
         
         seed(seedValue);
@@ -74,6 +79,11 @@ public class History {
         long startTimestamp = this.getTimestampForOffset(start);
         long stopTimestamp = this.getTimestampForOffset(stop);
         
+        if (step > this.stepAllowance) { // Gracefully fail when it's taking too long.
+            System.out.println("History tried for too long (" + String.valueOf(step) + " steps). Just returning the most recent value.");
+            return 0;
+        }
+        
         if (timestamp >= stopTimestamp) {
             return stop; // It's younger than our youngest entry. Use that.
         }
@@ -93,7 +103,7 @@ public class History {
         int guessPosition = (int)Math.round(indexRange * positionPercent);
         int guess = indexRange - guessPosition + stop;
         long guessTimestamp = this.getTimestampForOffset(guess);
-
+        
         // Figure out how close we are.
         long highGuessValue = this.getTimestampForOffset(guess+1);
         long lowGuessValue = this.getTimestampForOffset(guess-1);
@@ -102,14 +112,14 @@ public class History {
         long guessDiff = Math.abs(guessTimestamp - timestamp);
         long lowGuessDiff = timestamp - highGuessValue;
         
-        if (highGuessDiff < lowGuessDiff) {
-            if (highGuessDiff > guessDiff) {
+        if (highGuessDiff < lowGuessDiff) { // High guess is better than low guess.
+            if (guessDiff <= highGuessDiff) { // Guess is better than the high guess.
                 return guess;
             } else {
                 return findOffsetForTimestamp(timestamp, guess, stop, step + 1);
             }
         } else {
-            if (lowGuessDiff > guessDiff) {
+            if (guessDiff <= lowGuessDiff) { // Guess is better than the low guess.
                 return guess;
             } else {
                 return findOffsetForTimestamp(timestamp, start, guess, step + 1);
