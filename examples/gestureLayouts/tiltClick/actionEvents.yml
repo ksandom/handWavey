@@ -33,7 +33,7 @@ items:
   special-newHandFreeze:
     value: ''
   general-segment-p1-enter:
-    value: setButton("right");
+    value: ''
   general-segment-pAnyChange:
     value: lockCursor();rewindCursorPosition();
   individual-pNonOOB1Open-enter:
