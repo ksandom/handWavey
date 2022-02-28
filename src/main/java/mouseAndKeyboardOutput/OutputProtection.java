@@ -51,13 +51,12 @@ public class OutputProtection {
     }
     
     public void mouseDown(String button) {
-        if (this.buttonProtector.setDown(button)) {
-            this.debug.out(1, "Mouse button " + button + " was already down. Making it up before putting it down again.");
-            mouseUp(button);
+        if (this.buttonProtector.isUp(button)) {
+            this.buttonProtector.setDown(button);
+            this.output.mouseDown(button);
+        } else {
+            this.debug.out(1, "Mouse button " + button + " was already down. Not doing it again.");
         }
-        
-        this.buttonProtector.setDown(button);
-        this.output.mouseDown(button);
     }
     
     public void mouseUp(String button) {
@@ -81,13 +80,12 @@ public class OutputProtection {
     
     
     public void keyDown(String key) {
-        if (this.keyProtector.setDown(key)) {
-            this.debug.out(1, "Keyboard key " + key + " was already down. Making it up before putting it down again.");
-            keyUp(key);
+        if (this.keyProtector.isUp(key)) {
+            this.keyProtector.setDown(key);
+            this.output.keyDown(key);
+        } else {
+            this.debug.out(1, "Keyboard key " + key + " was already down. Not doing it again.");
         }
-        
-        this.keyProtector.setDown(key);
-        this.output.keyDown(key);
     }
     
     public void keyUp(String key) {
