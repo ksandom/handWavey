@@ -57,7 +57,7 @@ public class Persistence {
             if (items.get(key).canHideIfUnchanged()) {
                 String value = items.get(key).get();
                 if (value.equals(items.get(key).getDefaultValue())) {
-                    if (value.equals("")) {
+                    if (value.equals("") || value.equals("0")) {
                         continue;
                     }
                 }
