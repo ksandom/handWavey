@@ -397,6 +397,11 @@ public class HandWaveyManager {
         
         this.debug.out(1, "Rewind scroll position by " + this.rewindScrollTime + " milliseconds to around " + String.valueOf(rewindTime) + ", " + String.valueOf(earlierScroll) + " for mouse down/up event.");
         
+        // Discard any lingering movement since it is now irrelevant.
+        this.diffScrollRemainderX = 0;
+        this.diffScrollRemainderY = 0;
+        
+        // Perform the action.
         this.output.scroll(earlierScroll * -1);
     }
     
