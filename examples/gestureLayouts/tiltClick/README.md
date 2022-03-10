@@ -1,4 +1,4 @@
-# grabClick
+# tiltClick
 
 ## Using it
 
