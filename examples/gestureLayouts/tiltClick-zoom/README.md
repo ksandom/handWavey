@@ -1,4 +1,4 @@
-# tiltClickDoubleClick
+# tiltClick-zoom
 
 ## Using it
 
@@ -10,10 +10,9 @@
     * Click: Tilt your hand off to the side it naturally wants to turn.
     * Right click: Tilt your hand slightly unnaturally.
     * Middle click: Close your hand, then tilt to the side it naturally wants to turn.
-    * Double click: 
-      * Touch the action zone.
-      * Hand in neutral position. Close your hand. Rotate slightly unnaturally.
+    * Double click: Touch the action zone.
 * Scroll: Hand in neutral position. Close your hand. Move hand up/down.
+* Zoom (CTRL + Scroll): Hand in neutral position. Close your hand. Rotate slightly unnaturally. Move hand up/down.
 * Keys <!-- (nice to haves) -->
     * CTRL: Introduce secondary hard. Tilt slightly unnaturally.
     * ALT: Introduce secondary hard. Keep relatively flat.
