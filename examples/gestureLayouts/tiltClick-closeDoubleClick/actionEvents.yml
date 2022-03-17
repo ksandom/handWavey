@@ -37,7 +37,7 @@ items:
   general-segment-pAnyChange:
     value: lockCursor();rewindCursorPosition();
   individual-pNonOOB1Open-enter:
-    value: setButton("left");lockCursor();rewindsetButtoCursorPosition();mouseDown();
+    value: setButton("left");lockCursor();rewindCursorPosition();mouseDown();
   individual-pNonOOB1Open-exit:
     value: rewindCursorPosition();releaseButtons();unlockCursor();
   individual-pNonOOB5Open-enter:
