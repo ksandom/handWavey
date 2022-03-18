@@ -235,7 +235,7 @@ public class HandWaveyManager {
         this.debug.out(1, "zMultiplier: " + String.valueOf(this.zMultiplier));
         
         // Configure Z axis thresholds.
-        if (this.zoneMode == "touchScreen") {
+        if (this.zoneMode.equals("touchScreen")) {
             Group touchScreen = this.config.getGroup("zones").getGroup("touchScreen");
             this.zAbsoluteBegin = Double.parseDouble(touchScreen.getGroup("absolute").getItem("threshold").get());
             this.zRelativeBegin = Double.parseDouble(touchScreen.getGroup("relative").getItem("threshold").get());
@@ -254,7 +254,7 @@ public class HandWaveyManager {
                 this.zActionBegin, this.zActionBegin+50,
                 Integer.parseInt(touchScreen.getGroup("action").getItem("movingMeanBegin").get()),
                 Integer.parseInt(touchScreen.getGroup("action").getItem("movingMeanEnd").get())));
-        } else if (this.zoneMode == "touchPad") {
+        } else if (this.zoneMode.equals("touchPad")) {
             Group touchPad = this.config.getGroup("zones").getGroup("touchPad");
             this.zNoMoveBegin = Double.parseDouble(touchPad.getGroup("noMove").getItem("threshold").get());
             this.zActiveBegin = Double.parseDouble(touchPad.getGroup("active").getItem("threshold").get());
@@ -276,7 +276,7 @@ public class HandWaveyManager {
                 Integer.parseInt(touchPad.getGroup("active").getItem("movingMeanEnd").get())));
         } else {
             // TODO This needs to produce some user feedback that the user will see. Once this runs as a service, a debug message won't be sufficient.
-            this.debug.out(0, "Unknown zoneMode " + this.zoneMode + ". This will likely cause badness.");
+            this.debug.out(0, "Unknown zoneMode \"" + this.zoneMode + "\". This will likely cause badness.");
         }
         
         this.debug.out(1, "Moving mean configured for zones:");
