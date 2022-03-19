@@ -1,0 +1,19 @@
+groups: {}
+items:
+  zoneMode:
+    defaultValue: touchPad
+    description: (touchScreen, touchPad). What type of device the zones approximate.
+      The names are not an exact comparison, but should at least give an idea of how
+      they work.
+    oldValue: touchPad
+    value: touchPad
+  relativeSensitivity:
+    defaultValue: '0.15'
+    description: How sensitive is the relative zone compared to the absolute zone?
+      Decimal between 0 and 1.
+    value: '0.15'
+  zoneBuffer:
+    defaultValue: '30'
+    description: Once a zone is entered, how far beyond the threshold must the hand
+      retreat before the zone is considered exited?
+    value: '30'
