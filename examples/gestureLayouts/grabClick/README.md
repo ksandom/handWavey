@@ -21,7 +21,7 @@
 
 Watch the posture of your hand. It should be relatively flat and relaxed. If it's not, find out why and fix it (eg habbit? Is something difficult). If you have feedback for how to make this easier, please create an [issue on github](https://github.com/ksandom/handWavey/issues).
 
-As at 2022-08-03, this is the default gestureLayout for handWavey. Simply deleting these files in your config directory should be enough to get this configuration. But it is a nice reference for creating new layouts.
+As at 2022-08-03, this is the default gestureLayout for handWavey. Simply deleting these files in your [configuration directory](https://github.com/ksandom/handWavey/blob/main/docs/user/configuration/whereIsMyConfigurationDirectory.md) should be enough to get this configuration. But it is a nice reference for creating new layouts.
 
 ## Target audience
 

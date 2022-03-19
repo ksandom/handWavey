@@ -2,14 +2,14 @@
 
 Here are configuration examples that you can use to adapt handWavey to your needs.
 
-In most cases you can drop the files into your configuration directory.
+In most cases you can drop the files into your [configuration directory](https://github.com/ksandom/handWavey/blob/main/docs/user/configuration/whereIsMyConfigurationDirectory.md).
 
 ## Users trying configurations found here
 
 ### Install
 
 1. Backup your existing configuration.
-2. Copy the `.yml` files into your configuration directory.
+2. Copy the `.yml` files into your [configuration directory](https://github.com/ksandom/handWavey/blob/main/docs/user/configuration/whereIsMyConfigurationDirectory.md).
    On linux (and probably macOS), you can do it with a command like this:
    ```
    cp *yml ~/.config/handWavey
@@ -33,7 +33,7 @@ In most cases you can drop the files into your configuration directory.
 
 #### Tools to assist you.
 
-* You may want to set `saveBackConfig` in `main.yml` to `false` while writing your layout. In practice, I found it easier to do my development in a separate directory, and simply copy them to the handWavey configuration directory to test it.
+* You may want to set `saveBackConfig` in `main.yml` to `false` while writing your layout. In practice, I found it easier to do my development in a separate directory, and simply copy them to the handWavey [configuration directory](https://github.com/ksandom/handWavey/blob/main/docs/user/configuration/whereIsMyConfigurationDirectory.md) to test it.
 
 #### What to include in your configuration
 

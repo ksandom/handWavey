@@ -4,7 +4,7 @@ You can get a lot of information from the terminal output. By default, it should
 
 ## Tuning the output
 
-* Edit debug.yml in your configuration directory.
+* Edit debug.yml in your [configuration directory](https://github.com/ksandom/handWavey/blob/main/docs/user/configuration/whereIsMyConfigurationDirectory.md).
 * Change the `value` of the desired Item/class [up or down](#debug-levels).
 
 ## What information is coming from which classes
