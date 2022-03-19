@@ -40,4 +40,12 @@ These define how the pointer will move when you move your hand.
 * touchPad: This behaves just like a touch pad on a laptop. If you pull back your hand towards you, it's like lifting your finger off the touch page. So you can move the cursor in precise stages. A quick flick will move it much further. This is the mode that almost everyone will want, and is the default.
 * touchScreen: This was my first go and is mostly just staying around because it's interesting to play with. It takes an absolute position of your hand, and turns it into an absolute position on the display. This is frustrating, stressful, slow, imprecise etc. Feel free to play with it, but I discourage you from using it on a day-to-day basis.
 
+## Documentation terminology
+
+* Rotating the hand
+    * Natural: Rolling (segment change) the hand so that the top of your hand moves outwards, away from you.
+    * Unnatural: Rolling (segment change) the hand so that the top of your hand moves inwards, towards you.
+
 ## Event types
+
+TODO Link
