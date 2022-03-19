@@ -4,6 +4,10 @@ This is the place to share (via a pull request) and find other gesture layouts t
 
 ## Development
 
+### What events to use
+
+You'll probably find that modifying an existing layout will get you pretty close, but you will likely benefit from understanding [how event naming works](https://github.com/ksandom/handWavey/blob/main/docs/user/configuration/howEventNamingWorks.md) so that you can use events that aren't listed by default.
+
 ### What to include in your gestureLayout
 
 * You should include all of the files that are relevant to your layout.
