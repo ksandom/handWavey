@@ -90,12 +90,14 @@ public class HandsState {
         
         
         // Configure Z axis thresholds.
-        if (this.zoneMode == "touchScreen") {
+        if (this.zoneMode.equals("touchScreen")) {
+            this.debug.out(1, "Using touchScreen zoneMode.");
             Group touchScreen = config.getGroup("zones").getGroup("touchScreen");
             this.zAbsoluteBegin = Double.parseDouble(touchScreen.getGroup("absolute").getItem("threshold").get());
             this.zRelativeBegin = Double.parseDouble(touchScreen.getGroup("relative").getItem("threshold").get());
             this.zActionBegin = Double.parseDouble(touchScreen.getGroup("action").getItem("threshold").get());
-        } else if (this.zoneMode == "touchPad") {
+        } else if (this.zoneMode.equals("touchPad")) {
+            this.debug.out(1, "Using touchPad zoneMode.");
             Group touchPad = config.getGroup("zones").getGroup("touchPad");
             this.zNoMoveBegin = Double.parseDouble(touchPad.getGroup("noMove").getItem("threshold").get());
             this.zActiveBegin = Double.parseDouble(touchPad.getGroup("active").getItem("threshold").get());
@@ -358,7 +360,7 @@ public class HandsState {
     private String deriveZone(double handZ) {
         String zone = "Unknown";
         
-        if (this.zoneMode == "touchScreen") {
+        if (this.zoneMode.equals("touchScreen")) {
             if (handZ > this.zActionBegin) {
                 zone = "action";
             } else if (handZ > this.zRelativeBegin) {
@@ -368,7 +370,7 @@ public class HandsState {
             } else {
                 zone = "none";
             }
-        } else if (this.zoneMode == "touchPad") {
+        } else if (this.zoneMode.equals("touchPad")) {
             if (handZ > this.zActionBegin) {
                 zone = "action";
             } else if (handZ > this.zActiveBegin) {
