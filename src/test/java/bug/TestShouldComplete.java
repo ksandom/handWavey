@@ -13,7 +13,7 @@ public class TestShouldComplete {
     
     @BeforeEach
     void setUp() {
-        this.shouldComplete = new ShouldComplete("A test context");
+        this.shouldComplete = new ShouldComplete("ATestContext");
     }
     
     @AfterEach
