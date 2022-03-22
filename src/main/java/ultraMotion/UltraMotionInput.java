@@ -165,7 +165,7 @@ public class UltraMotionInput extends Listener {
                     
                     this.handSummaries[handNumber].setOOB(false);
                 } else {
-                    if (this.handSummaries[handNumber] == null) {
+                    if (this.handSummaries[handNumber] == null || !this.handSummaries[handNumber].isValid()) {
                         continue;
                     }
                     
