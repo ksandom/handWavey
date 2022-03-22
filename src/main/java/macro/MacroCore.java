@@ -42,7 +42,9 @@ public class MacroCore {
     }
     
     protected void doInstruction(String command, String[] parameters) {
-        this.shouldCompleteInstruction.start(command);
+        String commandSummary = command + "(\"" + String.join("\", \"", parameters) + "\");";
+        this.shouldCompleteInstruction.start(commandSummary);
+        
         switch (command) {
             case "debug":
                 this.debug.out(

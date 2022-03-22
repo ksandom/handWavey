@@ -196,14 +196,14 @@ public class HandsState {
             this.primaryState.setState(getHandState(this.handSummaries[0]));
         }
 
-        if (this.handSummaries[1] == null) {
+        if (this.handSummaries[1] == null || !this.handSummaries[1].isValid()) {
             this.secondaryState.setState(Gesture.absent);
             this.secondaryState.setZone("OOB");
             this.secondaryState.setSegment(0);
         } else if (shouldUpdateSecondary) {
             Double secondaryHandZ = this.handSummaries[1].getHandZ() * this.zMultiplier;
             this.secondaryState.setZone(this.handsState.getZone(secondaryHandZ, false));
-            this.secondaryState.setSegment(getHandSegment(true, this.handSummaries[1]));
+            this.secondaryState.setSegment(getHandSegment(false, this.handSummaries[1]));
         } else if (this.handSummaries[1] != null) {
             this.secondaryState.setState(getHandState(this.handSummaries[1]));
         }

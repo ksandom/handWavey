@@ -19,7 +19,7 @@ public class ShouldComplete {
     private Boolean active = false;
     
     public ShouldComplete(String context) {
-        this.debug = Debug.getDebug("bug.ShouldComplete");
+        this.debug = Debug.getDebug("bug.ShouldComplete/" + context);
         
         this.context = context;
         this.title = "----- Bug detected. Previous " + this.context + " did not complete. -----";
@@ -39,10 +39,14 @@ public class ShouldComplete {
         this.active = true;
         this.lastAction = action;
         
+        this.debug.out(1, "Start(" + this.context + "): " + this.lastAction);
+        
         return result;
     }
     
     public void finish() {
+        this.debug.out(2, "Finish(" + this.context + "): " + this.lastAction);
+        
         this.active = false;
         this.lastAction = "";
         this.unfinishedOperation = "";
