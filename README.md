@@ -73,5 +73,5 @@ By using this software, you are taking responsibility for staying healthy.
 ## Contributing
 
 * [Pull requests](https://github.com/ksandom/handWavey/pulls) welcome.
-* [Report bugs](https://github.com/ksandom/handWavey/issues).
+* [Report bugs](https://github.com/ksandom/handWavey/blob/main/docs/user/howTo/reportABug.md).
 * Support me on [Patreon](https://www.patreon.com/randomksandom). - There will be better ways of doing this soon.
