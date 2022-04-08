@@ -28,3 +28,16 @@ Making the number larger will give you more information. Making it smaller will 
 * 3 - More
 * 4 - More
 * etc
+
+## The coocoo clock noise
+
+The coocoo clock noise indicates that something failed to complete. You'll likely see a chain of them close together. Functionally, it's similar to a stack trace, except it's concise, and context and config-aware.
+
+```
+Debug 0 (bug.ShouldComplete): ----- Bug detected. Previous exampleContext did not complete. -----
+Debug 0 (bug.ShouldComplete):     aBrokenCall();
+```
+
+## Reporting a bug
+
+Start with [howTo/reportABug](https://github.com/ksandom/handWavey/blob/main/docs/user/howTo/reportABug.md).
