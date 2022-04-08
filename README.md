@@ -66,3 +66,9 @@ If you notice any changes in discomfort, pain, stiffness, or you have any doubts
 Nothing in this repo, or any related material should be understood to be medical advice.
 
 By using this software, you are taking responsibility for staying healthy.
+
+## Contributing
+
+* [Pull requests](https://github.com/ksandom/handWavey/pulls) welcome.
+* [Report bugs](https://github.com/ksandom/handWavey/issues).
+* Support me on [Patreon](https://www.patreon.com/randomksandom). - There will be better ways of doing this soon.
