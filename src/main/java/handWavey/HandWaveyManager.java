@@ -108,10 +108,12 @@ public class HandWaveyManager {
     
     public HandWaveyManager() {
         initialSetup(false);
+        displayWarning();
     }
     
     public HandWaveyManager(Boolean loadConfig) {
         initialSetup(loadConfig);
+        displayWarning();
     }
     
     private void initialSetup(Boolean loadConfig) {
@@ -320,6 +322,27 @@ public class HandWaveyManager {
         checkZones();
     }
     
+    public void displayWarning() {
+        System.out.println("");
+        System.out.println("Thank you for using handWavey.");
+
+        System.out.println("");
+        System.out.println("For documentation, go here: https://github.com/ksandom/handWavey/tree/main/docs");
+        System.out.println("");
+        System.out.println("I believe this to be safe to use long term. But I have no medical or ergonomic background to back that up.");
+        System.out.println("Please use your intelligence and judgement when using this.");
+
+        System.out.println("");
+        System.out.println("If you notice any changes in discomfort, pain, stiffness, or you have any doubts whatsoever; please stop using it immediately, and seek medical advice. Only resume using it after you have medical advice saying that it's ok for you to resume.");
+        System.out.println("");
+
+        System.out.println("Nothing in this application, repo, or any related material should be understood to be medical advice.");
+
+        System.out.println("");
+        System.out.println("By using this software, you are taking responsibility for staying healthy.");
+        System.out.println("");
+    }
+
     private void checkZones() {
         // Compare every zone to every other zone to make sure that there are no unusable zones.
         

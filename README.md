@@ -54,3 +54,15 @@ This is theoretically possible, but has not been tested.
 * [Linux](blob/main/docs/user/install/installOnLinux.md).
 * [Windows](blob/main/docs/user/install/installOnWindows.md).
 * [MacOS](blob/main/docs/user/install/installOnMacOS.md). (This is theoretically possible, but has not been tested.)
+
+## Safety
+
+I believe this to be safe to use long term. But I have no medical or ergonomic background to back that up.
+
+Please use your intelligence and judgement when using this.
+
+If you notice any changes in discomfort, pain, stiffness, or you have any doubts whatsoever; please stop using it immediately, and seek medical advice. Only resume using it after you have medical advice saying that it's ok for you to resume.
+
+Nothing in this repo, or any related material should be understood to be medical advice.
+
+By using this software, you are taking responsibility for staying healthy.
