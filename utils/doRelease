@@ -1,0 +1,17 @@
+#!/bin/bash -ex
+
+newVersion="$(./utils/getNewVersion)"
+echo "New version = $newVersion"
+
+# Update the version on file.
+echo "$newVersion" > VERSION
+
+# Update in git.
+git add VERSION
+git commit -m "Release $newVersion"
+git tag "$newVersion"
+
+# Push it to the repo.
+# TODO Improve this so that it doesn't assume access to main.
+git push
+git push --tags
