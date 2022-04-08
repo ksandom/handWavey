@@ -1,0 +1,13 @@
+#!/bin/bash
+
+now=`date +%Y.%m.%d`
+previousVersion="$(cat VERSION)"
+previousLastDigit="$(echo "$previousVersion" | cut -d. -f4)"
+
+if [ "$now.$previousLastDigit" == "$previousVersion" ]; then
+    let lastDigit=$previousLastDigit+1
+else
+    lastDigit="0"
+fi
+
+echo "$now.$lastDigit"
