@@ -11,6 +11,7 @@ If you use it, I'd love to [hear from you](https://github.com/ksandom/handWavey/
 ### Hardware 
 
 * [LeapMotion controller](https://www.ultraleap.com/product/leap-motion-controller/#pricingandlicensing).
+   * [Getting the device set up well](https://support.leapmotion.com/hc/en-us/articles/360004322638-Taking-care-of-your-Leap-Motion-Controller).
 
 ### Softare
 
