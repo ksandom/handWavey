@@ -1,4 +1,4 @@
-# grabClick
+# foot
 
 **HIGHLY EXPERIMENTAL**
 
