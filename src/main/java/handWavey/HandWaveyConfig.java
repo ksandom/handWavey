@@ -180,7 +180,7 @@ public class HandWaveyConfig {
         ultraMotion.newItem(
             "openThreshold",
             "1.8",
-            "Float: When the last bone of the middle finger is less than this angle, the hand is assumed to be open.");
+            "Float: When the last bone of the openFinger is less than this angle, the hand is assumed to be open.");
         ultraMotion.newItem(
             "openFinger",
             "3",
