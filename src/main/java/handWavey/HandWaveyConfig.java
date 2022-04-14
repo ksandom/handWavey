@@ -181,6 +181,10 @@ public class HandWaveyConfig {
             "openThreshold",
             "1.8",
             "Float: When the last bone of the middle finger is less than this angle, the hand is assumed to be open.");
+        ultraMotion.newItem(
+            "openFinger",
+            "3",
+            "Int: Which finger to use to determine that the hand is open or closed. If you are having incorrect open/closed state, this is the first thing to check. Have a look at the \"Leap Motion Diagnostic Visualizer\" to see what every finger is doing when you see the incorrect behavior. On the devices that I've tested so far, finger 1 and 2 (pointing and index) are regularly in the incorrect state, while other fingers seem to be fine.");
         Group coneOfSilence = ultraMotion.newGroup("coneOfSilence");
         coneOfSilence.newItem(
             "maxHeight",
