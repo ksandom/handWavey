@@ -35,17 +35,21 @@ public class UltraMotionInput extends Listener {
     
     private Boolean activeHandsExist = false;
     
-    private int fingerToUse = 2;
+    private int fingerToUse = 3;
     private Bone.Type boneToUse = null;
 
     public UltraMotionInput () {
         this.boneToUse = Bone.Type.values()[Bone.Type.values().length-1];
         
+        this.debug = Debug.getDebug("UltraMotionInput");
+        
         Group ultraMotionConfig = Config.singleton().getGroup("ultraMotion");
         this.openThreshold = Float.parseFloat(ultraMotionConfig.getItem("openThreshold").get());
         this.maxHands = Integer.parseInt(ultraMotionConfig.getItem("maxHands").get());
+        this.fingerToUse = Integer.parseInt(ultraMotionConfig.getItem("openFinger").get());
         
-        this.debug = Debug.getDebug("UltraMotionInput");
+        this.debug.out(1, "Finger to use for open/closed state: " + String.valueOf(this.fingerToUse));
+        this.debug.out(1, "Open/closed threshold: " + String.valueOf(this.openThreshold));
         
         // Configure the cone of silence for ignoring input from outside the reliable cone.
         Group conOfSilence = ultraMotionConfig.getGroup("coneOfSilence");
