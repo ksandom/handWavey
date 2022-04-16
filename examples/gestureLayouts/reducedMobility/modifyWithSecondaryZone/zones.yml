@@ -1,0 +1,220 @@
+groups:
+  touchPad:
+    groups:
+      noMove:
+        groups: {}
+        items:
+          threshold:
+            zzzEmpty: {}
+            defaultValue: '-150'
+            description: Z greater than this value denotes the beginning of the noMove
+              zone.
+            oldValue: '-150'
+            value: '-150'
+      zoneNone:
+        groups: {}
+        items: {}
+      scroll:
+        groups: {}
+        items:
+          movingMeanEnd:
+            zzzEmpty: {}
+            defaultValue: '1'
+            description: int 1-4096. A moving mean is applied to the data stream to
+              make it more steady. This variable defined how many samples are used
+              in the mean. More == smoother, but less responsive. It's currently possible
+              to go up to 4096, although 50 is probably a lot. 1 effectively == disabled.
+              The "begin" portion when your hand enters the zone.
+            oldValue: '1'
+            value: '1'
+          movingMeanBegin:
+            zzzEmpty: {}
+            defaultValue: '1'
+            description: int 1-4096. A moving mean is applied to the data stream to
+              make it more steady. This variable defined how many samples are used
+              in the mean. More == smoother, but less responsive. It's currently possible
+              to go up to 4096, although 50 is probably a lot. 1 effectively == disabled.
+              The "begin" portion when your hand enters the zone.
+            oldValue: '1'
+            value: '1'
+      active:
+        groups: {}
+        items:
+          movingMeanEnd:
+            zzzEmpty: {}
+            defaultValue: '4'
+            description: int 1-4096. A moving mean is applied to the data stream to
+              make it more steady. This variable defined how many samples are used
+              in the mean. More == smoother, but less responsive. It's currently possible
+              to go up to 4096, although 50 is probably a lot. 1 effectively == disabled.
+              The "begin" portion when your hand enters the zone.
+            oldValue: '4'
+            value: '4'
+          threshold:
+            zzzEmpty: {}
+            defaultValue: '-50'
+            description: Z greater than this value denotes the beginning of the active
+              zone.
+            oldValue: '-50'
+            value: '-50'
+          movingMeanBegin:
+            zzzEmpty: {}
+            defaultValue: '4'
+            description: int 1-4096. A moving mean is applied to the data stream to
+              make it more steady. This variable defined how many samples are used
+              in the mean. More == smoother, but less responsive. It's currently possible
+              to go up to 4096, although 50 is probably a lot. 1 effectively == disabled.
+              The "begin" portion when your hand enters the zone.
+            oldValue: '4'
+            value: '4'
+      action:
+        groups: {}
+        items:
+          movingMeanEnd:
+            zzzEmpty: {}
+            defaultValue: '20'
+            description: int 1-4096. A moving mean is applied to the data stream to
+              make it more steady. This variable defined how many samples are used
+              in the mean. More == smoother, but less responsive. It's currently possible
+              to go up to 4096, although 50 is probably a lot. 1 effectively == disabled.
+              The "begin" portion when your hand enters the zone.
+            oldValue: '20'
+            value: '20'
+          threshold:
+            zzzEmpty: {}
+            defaultValue: '100'
+            description: Z greater than this value denotes the beginning of the action
+              zone.
+            oldValue: '100'
+            value: '80'
+          movingMeanBegin:
+            zzzEmpty: {}
+            defaultValue: '20'
+            description: int 1-4096. A moving mean is applied to the data stream to
+              make it more steady. This variable defined how many samples are used
+              in the mean. More == smoother, but less responsive. It's currently possible
+              to go up to 4096, although 50 is probably a lot. 1 effectively == disabled.
+              The "begin" portion when your hand enters the zone.
+            oldValue: '20'
+            value: '20'
+    items: {}
+  touchScreen:
+    groups:
+      absolute:
+        groups: {}
+        items:
+          movingMeanEnd:
+            zzzEmpty: {}
+            defaultValue: '20'
+            description: int 1-4096. A moving mean is applied to the data stream to
+              make it more steady. This variable defined how many samples are used
+              in the mean. More == smoother, but less responsive. It's currently possible
+              to go up to 4096, although 50 is probably a lot. 1 effectively == disabled.
+              The "begin" portion when your hand enters the zone.
+            oldValue: '20'
+            value: '20'
+          threshold:
+            zzzEmpty: {}
+            defaultValue: '-120'
+            description: Z greater than this value denotes the beginning of the absolute
+              zone.
+            oldValue: '-120'
+            value: '-120'
+          movingMeanBegin:
+            zzzEmpty: {}
+            defaultValue: '4'
+            description: int 1-4096. A moving mean is applied to the data stream to
+              make it more steady. This variable defined how many samples are used
+              in the mean. More == smoother, but less responsive. It's currently possible
+              to go up to 4096, although 50 is probably a lot. 1 effectively == disabled.
+              The "begin" portion when your hand enters the zone.
+            oldValue: '4'
+            value: '4'
+      zoneNone:
+        groups: {}
+        items: {}
+      scroll:
+        groups: {}
+        items:
+          movingMeanEnd:
+            zzzEmpty: {}
+            defaultValue: '1'
+            description: int 1-4096. A moving mean is applied to the data stream to
+              make it more steady. This variable defined how many samples are used
+              in the mean. More == smoother, but less responsive. It's currently possible
+              to go up to 4096, although 50 is probably a lot. 1 effectively == disabled.
+              The "begin" portion when your hand enters the zone.
+            oldValue: '1'
+            value: '1'
+          movingMeanBegin:
+            zzzEmpty: {}
+            defaultValue: '1'
+            description: int 1-4096. A moving mean is applied to the data stream to
+              make it more steady. This variable defined how many samples are used
+              in the mean. More == smoother, but less responsive. It's currently possible
+              to go up to 4096, although 50 is probably a lot. 1 effectively == disabled.
+              The "begin" portion when your hand enters the zone.
+            oldValue: '1'
+            value: '1'
+      action:
+        groups: {}
+        items:
+          movingMeanEnd:
+            zzzEmpty: {}
+            defaultValue: '20'
+            description: int 1-4096. A moving mean is applied to the data stream to
+              make it more steady. This variable defined how many samples are used
+              in the mean. More == smoother, but less responsive. It's currently possible
+              to go up to 4096, although 50 is probably a lot. 1 effectively == disabled.
+              The "begin" portion when your hand enters the zone.
+            oldValue: '20'
+            value: '20'
+          threshold:
+            zzzEmpty: {}
+            defaultValue: '80'
+            description: Z greater than this value denotes the beginning of the action
+              zone.
+            oldValue: '80'
+            value: '80'
+          movingMeanBegin:
+            zzzEmpty: {}
+            defaultValue: '20'
+            description: int 1-4096. A moving mean is applied to the data stream to
+              make it more steady. This variable defined how many samples are used
+              in the mean. More == smoother, but less responsive. It's currently possible
+              to go up to 4096, although 50 is probably a lot. 1 effectively == disabled.
+              The "begin" portion when your hand enters the zone.
+            oldValue: '20'
+            value: '20'
+      relative:
+        groups: {}
+        items:
+          movingMeanEnd:
+            zzzEmpty: {}
+            defaultValue: '40'
+            description: int 1-4096. A moving mean is applied to the data stream to
+              make it more steady. This variable defined how many samples are used
+              in the mean. More == smoother, but less responsive. It's currently possible
+              to go up to 4096, although 50 is probably a lot. 1 effectively == disabled.
+              The "begin" portion when your hand enters the zone.
+            oldValue: '40'
+            value: '40'
+          threshold:
+            zzzEmpty: {}
+            defaultValue: '0'
+            description: Z greater than this value denotes the beginning of the relative
+              zone.
+            oldValue: '0'
+            value: '0'
+          movingMeanBegin:
+            zzzEmpty: {}
+            defaultValue: '20'
+            description: int 1-4096. A moving mean is applied to the data stream to
+              make it more steady. This variable defined how many samples are used
+              in the mean. More == smoother, but less responsive. It's currently possible
+              to go up to 4096, although 50 is probably a lot. 1 effectively == disabled.
+              The "begin" portion when your hand enters the zone.
+            oldValue: '20'
+            value: '20'
+    items: {}
+items: {}
