@@ -36,7 +36,7 @@ class TestGesture {
     public void testGestureName() {
         assertEquals("combined-pActive0Open-sNone0Open", this.gesture.gestureName("active", 0, Gesture.open, "none", 0, Gesture.open));
         assertEquals("combined-pNone2Closed-sNone3Open", this.gesture.gestureName("none", 2, Gesture.closed, "none", 3, Gesture.open));
-        assertEquals("combined-pActive0Open-sAbsent", this.gesture.gestureName("active", 0, Gesture.open, "none", 0, Gesture.absent));
+        assertEquals("combined-pActive0Open-sNone0Absent", this.gesture.gestureName("active", 0, Gesture.open, "none", 0, Gesture.absent));
         assertEquals("individual-pActive0Open", this.gesture.gestureName("p", "active", 0, Gesture.open));
         assertEquals("individual-sActive0Open", this.gesture.gestureName("s", "active", 0, Gesture.open));
         assertEquals("sActive0Open", this.gesture.generateSingleHandGestureName("s", "active", 0, Gesture.open));
@@ -67,7 +67,7 @@ class TestGesture {
         assertEquals("", audioEvents.getItem("combined-pActive0Open-sNone0Open-exit").get());
 
         // Use both hands, but one is absent.
-        assertEquals("", actionEvents.getItem("combined-pActive0Open-sAbsent-enter").get());
+        assertEquals("", actionEvents.getItem("combined-pActive0Open-sOOB0Absent-enter").get());
         
         // Full gestures for a single hand.
         assertEquals("", actionEvents.getItem("individual-pActive0Open-enter").get());
