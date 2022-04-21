@@ -1,0 +1,27 @@
+groups: {}
+items:
+  outputMultiplier:
+    zzzEmpty: {}
+    defaultValue: '2'
+    description: Input is pretty small. Make it a bit bigger.
+    oldValue: '2'
+    value: '2'
+  acceleration:
+    zzzEmpty: {}
+    defaultValue: '200'
+    description: Small change in output moves the pointer very precisely. A larger
+      movement moves the pointer much more drastically.
+    oldValue: '200'
+    value: '300'
+  inputMultiplier:
+    zzzEmpty: {}
+    defaultValue: '1'
+    description: Input is pretty small. Make it a bit bigger.
+    oldValue: '1'
+    value: '1.7'
+  maxSpeed:
+    zzzEmpty: {}
+    defaultValue: '25'
+    description: Maximum speed per second.
+    oldValue: '25'
+    value: '25'
