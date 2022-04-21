@@ -273,12 +273,8 @@ public class Gesture {
         String primaryHand = generateSingleHandGestureName("p", primaryZone, primarySegment, primaryHandState);
         String secondaryHand = "";
         
-        if (secondaryHandState == this.absent) {
-            result = primaryHand + "-sAbsent";
-        } else {
-            secondaryHand = generateSingleHandGestureName("s", secondaryZone, secondarySegment, secondaryHandState);
-            result = primaryHand + "-" + secondaryHand;
-        }
+        secondaryHand = generateSingleHandGestureName("s", secondaryZone, secondarySegment, secondaryHandState);
+        result = primaryHand + "-" + secondaryHand;
         
         return result;
     }

@@ -180,7 +180,7 @@ public class HandWaveyConfig {
         ultraMotion.newItem(
             "openThreshold",
             "1.8",
-            "Float: When the last bone of the middle finger is less than this angle, the hand is assumed to be open.");
+            "Float: When the last bone of the openFinger is less than this angle, the hand is assumed to be open.");
         ultraMotion.newItem(
             "openFinger",
             "3",
@@ -295,11 +295,11 @@ public class HandWaveyConfig {
         Group scroll = touchScreen.newGroup("scroll");
         scroll.newItem(
             "movingMeanBegin",
-            "1",
+            "70",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         scroll.newItem(
             "movingMeanEnd",
-            "1",
+            "70",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
 
 

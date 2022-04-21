@@ -1,0 +1,19 @@
+groups:
+  coneOfSilence:
+    groups: {}
+    items: {}
+items:
+  openThreshold:
+    zzzEmpty: {}
+    description: 'Float: When the last bone of the open finger is less than this
+      angle, the hand is assumed to be open.'
+    value: '3'
+  openFinger:
+    zzzEmpty: {}
+    description: 'Int: Which finger to use to determine that the hand is open or closed.
+      If you are having incorrect open/closed state, this is the first thing to check.
+      Have a look at the "Leap Motion Diagnostic Visualizer" to see what every finger
+      is doing when you see the incorrect behavior. On the devices that I''ve tested
+      so far, finger 1 and 2 (pointing and index) are regularly in the incorrect state,
+      while other fingers seem to be fine.'
+    value: '3'

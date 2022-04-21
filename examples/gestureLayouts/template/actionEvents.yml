@@ -35,6 +35,6 @@ items:
   general-zone-sActive-exit:
     value: releaseKeys();
   general-state-pAbsent-enter:
-    value: setButton("left");releaseButtons();releaseKeys();releaseZone();debug("0",
+    value: setButton("left");releaseButtons();releaseKeys();releaseZone();
   general-segment-pAnyChange:
     value: lockCursor();rewindCursorPosition();
