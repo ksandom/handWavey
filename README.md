@@ -15,7 +15,7 @@ If you use it, I'd love to [hear from you](https://github.com/ksandom/handWavey/
 
 ### Softare
 
-* [LeapMotion/UltraLeap SDK](https://github.com/ksandom/installUltraleap).
+* [LeapMotion/UltraLeap SDK 2.3.1](https://github.com/ksandom/installUltraleap).
 * Java. One of:
     * [OpenJDK](https://openjdk.java.net/install/).
     * Or [Oracle's Java](https://www.oracle.com/java/technologies/downloads/).
@@ -43,7 +43,7 @@ If you use it, I'd love to [hear from you](https://github.com/ksandom/handWavey/
 
 ### MacOS
 
-This is theoretically possible, but has not been tested.
+This is theoretically possible, but has not been tested. **There are [known challenges](https://github.com/ksandom/handWavey/issues/1#issuecomment-1092271612)**.
 
 1. Satisfy the [requirements](#Requirements).
 1. Copy libraries from the LeapMotion SDK to lib.
@@ -54,9 +54,9 @@ This is theoretically possible, but has not been tested.
 
 ## Install
 
-* [Linux](blob/main/docs/user/install/installOnLinux.md).
-* [Windows](blob/main/docs/user/install/installOnWindows.md).
-* [MacOS](blob/main/docs/user/install/installOnMacOS.md). (This is theoretically possible, but has not been tested.)
+* [Linux](https://github.com/ksandom/handWavey/blob/main/docs/user/install/installOnLinux.md).
+* [Windows](https://github.com/ksandom/handWavey/blob/main/docs/user/install/installOnWindows.md).
+* [MacOS](https://github.com/ksandom/handWavey/blob/main/docs/user/install/installOnMacOS.md). (This is theoretically possible, but has not been tested. **There are [known challenges](https://github.com/ksandom/handWavey/issues/1#issuecomment-1092271612)**.)
 
 ## Safety
 
