@@ -11,4 +11,4 @@ This document covers where handWavey currently is on the way to working natively
 ## Short-term work-around
 
 1. Set up a VNC server on your Wayland desktop. - You'll need to google this for your specific desktop since under Wayland it is tied to the Window Manager instead of Wayland.
-1. Set up handWavey as a VNC client.
+1. [Set up handWavey as a VNC client](https://github.com/ksandom/handWavey/blob/main/docs/user/howTo/vnc.md).
