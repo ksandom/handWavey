@@ -34,20 +34,4 @@ This is meant to
 
 ## Terminology
 
-### Rotating naturally vs unnaturally
-
-If you hold you hand in front of you so that it's flat with palm facing down. Now rotate it to have the palm facing up. You have rotated your hand naturally.
-
-If you now hold up your hand again with the palm facing down and now rotate your hand in the other direction, there is only a small amount of comfortable movement before you either start straining, or have to raise your elbow.
-
-The segments have been rotated slightly to make it easier to achieve the unnatural turn without hurting yourself.
-
-## Logic
-
-### Segments
-
-There are 8 segments (0-7):
-
-* 0 is slightly more relaxed than normal, so not completely flat. This is the default position.
-* 1 is rotating the hand naturally to make a click.
-* 7 is rotating the hand slightly in the opposite direction to natural to achieve a right click or zoom.
+Something ambiguous? Check the [terminology and concepts](https://github.com/ksandom/handWavey/blob/main/docs/terminologyAndConcepts.md) documentation.

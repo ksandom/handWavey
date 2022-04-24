@@ -23,3 +23,7 @@ This implementation has middle click at the expense of drag.
 ## Target audience
 
 For people who don't have good use of their hands.
+
+## Terminology
+
+Something ambiguous? Check the [terminology and concepts](https://github.com/ksandom/handWavey/blob/main/docs/terminologyAndConcepts.md) documentation.

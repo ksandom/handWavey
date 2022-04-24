@@ -36,3 +36,7 @@ The easiest way to reset to defaults is to delete these files from your [configu
 1. [Reset the changes](#resetting-the-changes) that are not used by other gestureLayouts.
 1. Apply your preferred [gestureLayout](https://github.com/ksandom/handWavey/tree/main/examples/gestureLayouts).
 1. Restart handWavey.
+
+## Terminology
+
+Something ambiguous? Check the [terminology and concepts](https://github.com/ksandom/handWavey/blob/main/docs/terminologyAndConcepts.md) documentation.

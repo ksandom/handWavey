@@ -24,3 +24,7 @@ Eg how to get the best out of this profile.
 
 TODO Optional. Remove this section if it's not relevant.
 Eg What needs are being catered to with this layout.
+
+## Terminology
+
+Something ambiguous? Check the [terminology and concepts](https://github.com/ksandom/handWavey/blob/main/docs/terminologyAndConcepts.md) documentation.
