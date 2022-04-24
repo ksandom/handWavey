@@ -8,6 +8,11 @@ This is the place to share (via a pull request) and find other gesture layouts t
 
 You'll probably find that modifying an existing layout will get you pretty close, but you will likely benefit from understanding [how event naming works](https://github.com/ksandom/handWavey/blob/main/docs/user/configuration/howEventNamingWorks.md) so that you can use events that aren't listed by default.
 
+### Finding information
+
+* How to reference specific keys: Keys are defined in [Pressables.defineKeys()](https://github.com/ksandom/handWavey/blob/main/src/main/java/mouseAndKeyboardOutput/Pressables.java#L26).
+* What macro commands aare available: Commands are defined in [MacroCore.doInstruction()](https://github.com/ksandom/handWavey/blob/main/src/main/java/macro/MacroCore.java#L44).
+
 ### What to include in your gestureLayout
 
 * You should include all of the files that are relevant to your layout.
