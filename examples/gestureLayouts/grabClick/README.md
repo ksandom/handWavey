@@ -28,3 +28,7 @@ As at 2022-08-03, this is the default gestureLayout for handWavey. Simply deleti
 This should be useable by most people.
 
 It's made to be very easy to learn.
+
+## Terminology
+
+Something ambiguous? Check the [terminology and concepts](https://github.com/ksandom/handWavey/blob/main/docs/terminologyAndConcepts.md) documentation.

@@ -84,3 +84,7 @@ NOTE That this still needs a lot of work. Please read the note about it being **
 
 * People who don't have good use of their hands.
 * Gimmick/party trick.
+
+## Terminology
+
+Something ambiguous? Check the [terminology and concepts](https://github.com/ksandom/handWavey/blob/main/docs/terminologyAndConcepts.md) documentation.

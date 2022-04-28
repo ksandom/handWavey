@@ -42,10 +42,17 @@ These define how the pointer will move when you move your hand.
 
 ## Documentation terminology
 
-* Rotating the hand
-    * Natural: Rolling (segment change) the hand so that the top of your hand moves outwards, away from you.
-    * Unnatural: Rolling (segment change) the hand so that the top of your hand moves inwards, towards you.
+### Rotating naturally vs unnaturally
+
+If you hold you hand in front of you so that it's flat with palm facing down. Now rotate it to have the palm facing up. You have rotated your hand naturally.
+
+If you now hold up your hand again with the palm facing down and now rotate your hand in the other direction, there is only a small amount of comfortable movement before you either start straining, or have to raise your elbow.
+
+The segments have been rotated slightly to make it easier to achieve the unnatural turn without hurting yourself.
+
+* Natural: Rolling (segment change) the hand so that the top of your hand moves outwards, away from you.
+* Unnatural: Rolling (segment change) the hand so that the top of your hand moves inwards, towards you.
 
 ## Event types
 
-TODO Link
+See [How event naming works](https://github.com/ksandom/handWavey/blob/main/docs/user/configuration/howEventNamingWorks.md).
