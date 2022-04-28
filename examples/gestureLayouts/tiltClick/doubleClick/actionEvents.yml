@@ -1,7 +1,7 @@
 groups: {}
 items:
   general-zone-pAction-enter:
-    value: lockCursor();rewindCursorPosition();releaseButtons();doubleClick();
+    value: lockCursor();rewindCursorPosition();releaseButtons();setButton("left");doubleClick();
   general-segment-p0-enter:
     value: ""
   general-segment-p2-enter:
@@ -53,7 +53,7 @@ items:
   individual-pNonOOB0Closed-exit:
     value: rewindCursorPosition();releaseZone();unlockCursor();
   individual-pNonOOB5Closed-enter:
-    value: rewindCursorPosition();doubleClick();
+    value: rewindCursorPosition();setButton("left");doubleClick();
   individual-pNonOOB5Closed-exit:
     value: rewindCursorPosition();unlockCursor();
   general-state-pAbsent-enter:

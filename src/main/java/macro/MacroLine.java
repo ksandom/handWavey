@@ -11,25 +11,28 @@ package macro;
 import mouseAndKeyboardOutput.*;
 import handWavey.HandsState;
 import handWavey.HandWaveyManager;
+import handWavey.HandWaveyEvent;
 import bug.ShouldComplete;
 
 public class MacroLine extends MacroCore {
-    private ShouldComplete shouldCompleteLine;
-    
-    public MacroLine(OutputProtection output, HandsState handsState, HandWaveyManager handWaveyManager) {
-        super("MacroLine", output, handsState, handWaveyManager);
-        
-        this.shouldCompleteLine = new ShouldComplete("MacroLine/line");
+    private ShouldComplete[] shouldCompleteLine = new ShouldComplete[100];
+
+    public MacroLine(OutputProtection output, HandsState handsState, HandWaveyManager handWaveyManager, HandWaveyEvent handWaveyEvent) {
+        super("MacroLine", output, handsState, handWaveyManager, handWaveyEvent);
+
+        for (int level = 0;  level <= this.maxNesting; level++) {
+            this.shouldCompleteLine[level] = new ShouldComplete("MacroLine/line-" + String.valueOf(level));
+        }
     }
-    
+
     public void runLine(String line) {
         // TODO This currently will not handle ");" well in parameters. Make sure it doesn't match escaped versions.
-        this.shouldCompleteLine.start(line);
+        this.shouldCompleteLine[this.getLevel()].start(line);
         String[] instructions = line.split("\\);");
-        
+
         for (String instruction : instructions) {
             super.doInstruction(instruction + ");");
         }
-        this.shouldCompleteLine.finish();
+        this.shouldCompleteLine[this.getLevel()].finish();
     }
 }

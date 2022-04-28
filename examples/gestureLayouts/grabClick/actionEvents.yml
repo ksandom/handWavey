@@ -1,7 +1,7 @@
 groups: {}
 items:
   general-zone-pAction-enter:
-    value: lockCursor();rewindCursorPosition();doubleClick();
+    value: lockCursor();rewindCursorPosition();setButton("left");doubleClick();
   general-segment-p0-enter:
     value: setButton("left");
   general-segment-p1-enter:

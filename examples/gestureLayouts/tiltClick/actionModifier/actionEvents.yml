@@ -1,0 +1,84 @@
+groups: {}
+items:
+  general-zone-pAction-enter:
+    value: disableSlots();
+  general-zone-pAction-exit:
+    value: enableSlots();
+  individual-pAction0Open-enter:
+    value: debug("0", "Toolset = Simple (default).");
+  individual-pAction0Closed-enter:
+    value: setAllSlots("");
+  individual-pAction1Open-enter:
+    value: debug("0", "Toolset = Copy/paste.");
+  individual-pAction1Closed-enter:
+    value: setAllSlots("");setSlot("0", "custom-101");setSlot("1", "custom-12");setSlot("3", "custom-11");
+  individual-pAction3Open-enter:
+    value: debug("0", "Toolset = Modified click.");
+  individual-pAction3Closed-enter:
+    value: setAllSlots("");setSlot("0", "custom-30");setSlot("1", "custom-31");setSlot("2", "custom-40");setSlot("3", "custom-41");setSlot("4", "custom-182");
+  individual-pAction8Open-enter:
+    value: debug("0", "Toolset = Web.");
+  individual-pAction8Closed-enter:
+    value: setAllSlots("");setSlot("1", "custom-102");setSlot("2", "custom-103");setSlot("3", "custom-104");
+  individual-pAction9Open-enter:
+    value: debug("0", "Toolset = Multi-click.");
+  individual-pAction9Closed-enter:
+    value: setAllSlots("");setSlot("0", "custom-20");setSlot("1", "custom-21");setSlot("2", "custom-22");setSlot("3", "custom-23");
+  general-segment-p0-enter:
+    value: ""
+  general-segment-p2-enter:
+    value: ""
+  general-segment-p2-exit:
+    value: ""
+  general-segment-s0-enter:
+    value: keyDown("ctrl");
+  general-segment-s0-exit:
+    value: keyUp("ctrl");
+  general-segment-s1-enter:
+    value: keyDown("alt");
+  general-segment-s1-exit:
+    value: keyUp("alt");
+  general-segment-s2-enter:
+    value: keyDown("shift");
+  general-segment-s2-exit:
+    value: keyUp("shift");
+  general-zone-sActive-exit:
+    value: releaseKeys();
+  general-state-pClosed-enter:
+    value: ""
+  general-state-pClosed-exit:
+    value: ""
+  special-newHandUnfreezeEvent:
+    value: ""
+  special-newHandUnfreezeCursor:
+    value: ''
+  special-newHandFreeze:
+    value: ''
+  general-segment-p1-enter:
+    value: ''
+  general-segment-pAnyChange:
+    value: lockCursor();rewindCursorPosition();
+  individual-pNonOOB1Open-enter:
+    value: doSlot("0", "custom-10");
+  individual-pNonOOB1Open-exit:
+    value: doSlot("5", "custom-0");
+  individual-pNonOOB9Open-enter:
+    value: doSlot("1", "custom-11");
+  individual-pNonOOB9Open-exit:
+    value: doSlot("6", "custom-0");
+  individual-pNonOOB0Closed-enter:
+    value: doSlot("4", "custom-181");
+  individual-pNonOOB0Closed-exit:
+    value: doSlot("9", "custom-180");
+  individual-pNonOOB1Closed-enter:
+    value: doSlot("2", "custom-255");
+  individual-pNonOOB1Closed-exit:
+    value: doSlot("7", "custom-0");
+  individual-pNonOOB9Closed-enter:
+    value: doSlot("3", "custom-255");
+  individual-pNonOOB9Closed-exit:
+    value: doSlot("8", "custom-0");
+  general-state-pAbsent-enter:
+    value: setButton("left");releaseButtons();releaseKeys();releaseZone();
+  individual-pOOB0Absent-enter:
+    value: setButton("left");releaseButtons();releaseKeys();releaseZone();

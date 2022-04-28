@@ -30,6 +30,8 @@ The events in handWavey give us a lot of power, and to keep them concise and eas
         * state: absent
 * `special-newHandFreeze`
     * A new hand has been introduced and we are waiting for it to become stable.
+* `custom-3`
+    * A [dynamic gestureLayout](https://github.com/ksandom/handWavey/blob/main/docs/user/howTo/createADynamicGestureLayout.md) has triggered this user-defined event.
 
 ## Event types
 
@@ -39,6 +41,7 @@ The events in handWavey give us a lot of power, and to keep them concise and eas
 * individual - tracks the complete state of the hand. ie all of zone, segment, state. - Useful for one-handed gestures.
 * combined - tracks the complete state of both hands. - Useful for doing powerful gestures with both hands.
 * special - Events that don't fit into the generic descriptions of the state of the hand, but are useful anyway. Eg we've just entered into the newHand freeze where we freeze the cursor and events while the new hand stabilises.
+* custom - A user-defined event to be used in [dynamic gestureLayouts](https://github.com/ksandom/handWavey/blob/main/docs/user/howTo/createADynamicGestureLayout.md).
 
 ### General
 

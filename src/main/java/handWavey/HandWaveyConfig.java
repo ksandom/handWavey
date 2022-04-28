@@ -49,11 +49,11 @@ public class HandWaveyConfig {
             "2021-11-26",
             "This number is incremented by the programmer whenever existing config items get changed (eg new description, default value etc) so that conflicts can be resolved.");
         configFormatVersion.set("2021-11-26"); // Update it here.
+
         Item saveBackConfig = this.config.newItem(
             "saveBackConfig",
             "true",
             "[true, false] Save back config after loading it. This has the effect of cleaning up the configuration files, and reflecting changes with new versions in the config file. The only time you'll want to turn this off while developing a config that you may want to share around. Ie if you make a mistake, it won't get lost. Increase debugging on Persistance to at least 1, and pay attention to the debug output to spot any mistakes that you've made. \"true\" == save back. \"false\" == don't save back.");
-        configFormatVersion.set("2021-11-26"); // Update it here.
 
         Group output = this.config.newGroup("output");
         output.newItem(
@@ -135,14 +135,17 @@ public class HandWaveyConfig {
             "bug.ShouldComplete/figureStuffOut",
             "0",
             "Int: Sensible numbers are 0-2, where 0 will only tell you when a bug has been detected. 1 tells you what has been started, and 2 tells you what has completed as well (this is probably redundant, since level 0 still tells you on the next round when something hasn't finished.) Generally you'll want to keep this at 0. But if want to see that something is even being attempted, this will help. This entry is for the figureStuffOut function in HandWaveyManager.");
-        debug.newItem(
-            "bug.ShouldComplete/MacroCore/instruction",
-            "0",
-            "Int: Sensible numbers are 0-2, where 0 will only tell you when a bug has been detected. 1 tells you what has been started, and 2 tells you what has completed as well (this is probably redundant, since level 0 still tells you on the next round when something hasn't finished.) Generally you'll want to keep this at 0. But if want to see that something is even being attempted, this will help. This entry is for the individual macro instructions.");
-        debug.newItem(
-            "bug.ShouldComplete/MacroLine/line",
-            "0",
-            "Int: Sensible numbers are 0-2, where 0 will only tell you when a bug has been detected. 1 tells you what has been started, and 2 tells you what has completed as well (this is probably redundant, since level 0 still tells you on the next round when something hasn't finished.) Generally you'll want to keep this at 0. But if want to see that something is even being attempted, this will help. This entry is for macro lines.");
+        for (int level = 0; level <= 10; level ++) {
+            String levelString = String.valueOf(level);
+            debug.newItem(
+                "bug.ShouldComplete/MacroCore/instruction-" + levelString,
+                "0",
+                "Int: Sensible numbers are 0-2, where 0 will only tell you when a bug has been detected. 1 tells you what has been started, and 2 tells you what has completed as well (this is probably redundant, since level 0 still tells you on the next round when something hasn't finished.) Generally you'll want to keep this at 0. But if want to see that something is even being attempted, this will help. This entry is for the individual macro instructions at nesting level " + levelString + ".");
+            debug.newItem(
+                "bug.ShouldComplete/MacroLine/line-" + levelString,
+                "0",
+                "Int: Sensible numbers are 0-2, where 0 will only tell you when a bug has been detected. 1 tells you what has been started, and 2 tells you what has completed as well (this is probably redundant, since level 0 still tells you on the next round when something hasn't finished.) Generally you'll want to keep this at 0. But if want to see that something is even being attempted, this will help. This entry is for macro lines " + levelString + ".");
+        }
 
         Group dataCleaning = this.config.newGroup("dataCleaning");
         dataCleaning.newItem(
@@ -483,6 +486,7 @@ public class HandWaveyConfig {
             "special-newHandUnfreezeEvent",
             "",
             "When the time has expired for the Event freeze after a new primary hand is introduced. This event is triggered.");
+        this.generateCustomConfig(actionEvents);
 
         Group audioConfig = this.config.newGroup("audioConfig");
         audioConfig.newItem(
@@ -519,6 +523,14 @@ public class HandWaveyConfig {
             "bug",
             "coocoo1.wav",
             "When a bug is detected, play this sound.");
+        for (int i = 0; i<256; i++) {
+            String customAudioName = "custom-" + String.valueOf(i);
+            audioEvents.newItem(
+                customAudioName,
+                "",
+                "When the custom event " + customAudioName +  " that a user can trigger in a gestureLayout. It is intended to be used with slots, and can be read about in createADynamicGestureLayout.md.",
+                true);
+        }
 
 
         this.config.newItem(
@@ -569,5 +581,45 @@ public class HandWaveyConfig {
             "mergeTo",
             "0",
             "Merge between this value, and mergeTo, into mergeIntoSegment.");
+    }
+
+    private void generateCustomConfig(Group customGroup) {
+        // This is for custom events that are typically triggered by slots.
+
+        // Create the entries.
+        for (int i = 0; i<256; i++) {
+            String customEventName = "custom-" + String.valueOf(i);
+            customGroup.newItem(
+                customEventName,
+                "",
+                "A custom event that a user can trigger in a gestureLayout. It is intended to be used with slots, and can be read about in createADynamicGestureLayout.md.",
+                true);
+        }
+
+        // Set the default values.
+        customGroup.getItem("custom-255").overrideDefault("debug(\"0\", \"No action is currently assigned to this slot.\");");
+        customGroup.getItem("custom-0").overrideDefault("rewindCursorPosition();rewindScroll();releaseButtons();releaseKeys();unlockCursor();");
+        customGroup.getItem("custom-10").overrideDefault("setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();");
+        customGroup.getItem("custom-11").overrideDefault("setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();");
+        customGroup.getItem("custom-12").overrideDefault("setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();");
+        customGroup.getItem("custom-180").overrideDefault("rewindCursorPosition();releaseZone();unlockCursor();");
+        customGroup.getItem("custom-181").overrideDefault("rewindCursorPosition();overrideZone(\"scroll\");releaseKeys();");
+        customGroup.getItem("custom-182").overrideDefault("rewindCursorPosition();keyDown(\"ctrl\");overrideZone(\"scroll\");");
+        customGroup.getItem("custom-20").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");click();mouseDown();");
+        customGroup.getItem("custom-21").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();mouseDown();");
+        customGroup.getItem("custom-22").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();");
+        customGroup.getItem("custom-23").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();click();");
+        customGroup.getItem("custom-30").overrideDefault("keyDown(\"alt\");setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"alt\");");
+        customGroup.getItem("custom-31").overrideDefault("keyDown(\"alt\");setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"alt\");");
+        customGroup.getItem("custom-32").overrideDefault("keyDown(\"alt\");setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"alt\");");
+        customGroup.getItem("custom-40").overrideDefault("keyDown(\"ctrl\");setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"ctrl\");");
+        customGroup.getItem("custom-41").overrideDefault("keyDown(\"ctrl\");setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"ctrl\");");
+        customGroup.getItem("custom-42").overrideDefault("keyDown(\"ctrl\");setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"ctrl\");");
+        customGroup.getItem("custom-101").overrideDefault("keyDown(\"ctrl\");keyDown(\"c\");keyUp(\"c\");keyUp(\"ctrl\");");
+        customGroup.getItem("custom-102").overrideDefault("keyDown(\"ctrl\");keyDown(\"v\");keyUp(\"v\");keyUp(\"ctrl\");");
+        customGroup.getItem("custom-103").overrideDefault("keyDown(\"ctrl\");keyDown(\"x\");keyUp(\"x\");keyUp(\"ctrl\");");
+        customGroup.getItem("custom-104").overrideDefault("keyDown(\"delete\");keyUp(\"delete\");");
+        customGroup.getItem("custom-105").overrideDefault("keyDown(\"ctrl\");keyDown(\"z\");keyUp(\"z\");keyUp(\"ctrl\");");
+        customGroup.getItem("custom-106").overrideDefault("keyDown(\"ctrl\");keyDown(\"shift\");keyDown(\"z\");keyUp(\"z\");keyUp(\"shift\");keyUp(\"ctrl\");");
     }
 }
