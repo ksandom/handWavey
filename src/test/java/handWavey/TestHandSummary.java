@@ -76,4 +76,96 @@ class TestHandSummary {
         this.handSummary.setHandIsLeft(false);
         assertEquals(this.handSummary.handIsLeft(), false);
     }
+
+    @Test
+    public void testReMap() {
+        // Change the config.
+        this.config.getGroup("physicalBoundaries").getGroup("map").getItem("x").set("y");
+        this.config.getGroup("physicalBoundaries").getGroup("map").getItem("y").set("z");
+        this.config.getGroup("physicalBoundaries").getGroup("map").getItem("z").set("x");
+
+        // Create a new object with that new config.
+        this.handSummary = new HandSummary(43);
+
+        // Set some data. We expect this to go to new locations.
+        this.handSummary.setHandPosition(10, 20, 30); // X, Y, Z => Y, Z, X
+
+        assertEquals(this.handSummary.getHandX(), 20);
+        assertEquals(this.handSummary.getHandY(), 30);
+        assertEquals(this.handSummary.getHandZ(), 10);
+    }
+
+    @Test
+    public void testOffsets() {
+        // Change the config.
+        this.config.getGroup("physicalBoundaries").getGroup("inputOffsets").getItem("x").set("1");
+        this.config.getGroup("physicalBoundaries").getGroup("inputOffsets").getItem("y").set("2");
+        this.config.getGroup("physicalBoundaries").getGroup("inputOffsets").getItem("z").set("3");
+
+        // Create a new object with that new config.
+        this.handSummary = new HandSummary(43);
+
+        // Set some data. We expect these to change by the correct offsets.
+        this.handSummary.setHandPosition(110, 120, 130);
+
+        assertEquals(this.handSummary.getHandX(), 111);
+        assertEquals(this.handSummary.getHandY(), 122);
+        assertEquals(this.handSummary.getHandZ(), 133);
+    }
+
+    @Test
+    public void testRotationReMap() {
+        // Change the config.
+        this.config.getGroup("physicalBoundaries").getGroup("rotationMap").getItem("roll").set("pitch");
+        this.config.getGroup("physicalBoundaries").getGroup("rotationMap").getItem("pitch").set("yaw");
+        this.config.getGroup("physicalBoundaries").getGroup("rotationMap").getItem("yaw").set("roll");
+
+        // Create a new object with that new config.
+        this.handSummary = new HandSummary(44);
+
+        // Set some data. We expect this to go to new locations.
+        this.handSummary.setHandAngles(2.10, 2.20, 2.30); // roll, pitch, yaw => pitch, yaw, roll
+
+        assertEquals(this.handSummary.getHandRoll(), 2.20);
+        assertEquals(this.handSummary.getHandPitch(), 2.30);
+        assertEquals(this.handSummary.getHandYaw(), 2.10);
+    }
+
+    @Test
+    public void testRotationOffsets() {
+        // Change the config.
+        this.config.getGroup("physicalBoundaries").getGroup("inputRotationOffsets").getItem("roll").set("0.01");
+        this.config.getGroup("physicalBoundaries").getGroup("inputRotationOffsets").getItem("pitch").set("0.02");
+        this.config.getGroup("physicalBoundaries").getGroup("inputRotationOffsets").getItem("yaw").set("0.03");
+
+        // Create a new object with that new config.
+        this.handSummary = new HandSummary(45);
+
+        // Set some data. We expect this to go to new locations.
+        this.handSummary.setHandAngles(2.10, 2.20, 2.30);
+
+        // TODO There's got to be a better way to round to a specific number of decimal places?!
+        assertEquals((double)Math.round(this.handSummary.getHandRoll() * 100)/100, 2.11);
+        assertEquals((double)Math.round(this.handSummary.getHandPitch() * 100)/100, 2.22);
+        assertEquals((double)Math.round(this.handSummary.getHandYaw() * 100)/100, 2.33);
+    }
+
+    @Test
+    public void testOOBRotationOffsets() {
+        // Change the config.
+        this.config.getGroup("physicalBoundaries").getGroup("inputRotationOffsets").getItem("roll").set("2");
+        this.config.getGroup("physicalBoundaries").getGroup("inputRotationOffsets").getItem("pitch").set("3");
+        this.config.getGroup("physicalBoundaries").getGroup("inputRotationOffsets").getItem("yaw").set("-7");
+
+        // Create a new object with that new config.
+        this.handSummary = new HandSummary(46);
+
+        // Set some data. We expect this to go to new locations.
+        this.handSummary.setHandAngles(3.10, 3.20, 3.30);
+
+        // TODO There's got to be a better way to round to a specific number of decimal places?!
+        assertEquals((double)Math.round(this.handSummary.getHandRoll() * 100)/100, -1.96);
+        assertEquals((double)Math.round(this.handSummary.getHandPitch() * 100)/100, -3.06);
+        assertEquals((double)Math.round(this.handSummary.getHandYaw() * 100)/100, 2.58);
+    }
 }

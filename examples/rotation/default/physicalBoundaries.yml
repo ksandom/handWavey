@@ -1,0 +1,59 @@
+groups:
+  inputOffsets:
+    groups: {}
+    items:
+      x:
+        defaultValue: '0'
+        description: How much to change the device's x axis by. Normally you won't
+          want to change this from 0. But it's useful if you want to want to do something
+          like swapping y with x or z.
+        value: '0'
+      y:
+        defaultValue: '0'
+        description: How much to change the device's y axis by. Normally you won't
+          want to change this from 0. But it's useful if you want to want to do something
+          like swapping y with x or z.
+        value: '0'
+      z:
+        defaultValue: '0'
+        description: How much to change the device's z axis by. Normally you won't
+          want to change this from 0. But it's useful if you want to want to do something
+          like swapping y with x or z.
+        value: '0'
+  map:
+    groups: {}
+    items:
+      x:
+        defaultValue: x
+        description: Which axis from the device the x input is mapped to in software.
+          This is useful when you want to rotate the input by 90 degrees.
+        value: x
+      y:
+        defaultValue: y
+        description: Which axis from the device the y input is mapped to in software.
+          This is useful when you want to rotate the input by 90 degrees.
+        value: y
+      z:
+        defaultValue: z
+        description: Which axis from the device the z input is mapped to in software.
+          This is useful when you want to rotate the input by 90 degrees.
+        value: z
+items:
+  yMin:
+    defaultValue: '200'
+    description: Minimum value of height above the device.
+    value: '200'
+  yMax:
+    defaultValue: '400'
+    description: Maximum value of height above the device.
+    value: '400'
+  x:
+    defaultValue: '200'
+    description: + and - this value horizontally from the center of the visible cone
+      above the device.
+    value: '200'
+  z:
+    defaultValue: '120'
+    description: + and - this value in depth from the center of the visible cone above
+      the device.
+    value: '120'

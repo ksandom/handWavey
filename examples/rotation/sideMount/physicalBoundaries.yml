@@ -1,0 +1,98 @@
+groups:
+  inputOffsets:
+    groups: {}
+    items:
+      x:
+        defaultValue: '0'
+        description: How much to change the device's x axis by. Normally you won't
+          want to change this from 0. But it's useful if you want to want to do something
+          like swapping y with x or z.
+        value: '0'
+      y:
+        defaultValue: '0'
+        description: How much to change the device's y axis by. Normally you won't
+          want to change this from 0. But it's useful if you want to want to do something
+          like swapping y with x or z.
+        value: '0'
+      z:
+        defaultValue: '0'
+        description: How much to c But it's useful if you want to want to do something
+          like swapping y with x or zhange the device's z axis by. Normally you won't
+          want to change this from 0..
+        value: '0'
+  inputRotationOffsets:
+    groups: {}
+    items:
+      roll:
+        defaultValue: '0'
+        description: How much to change the device's roll axis by. Normally you won't
+          want to change this from 0. But it's useful if you want to rotate the device
+          into an unusual position.
+        value: '1.57'
+      pitch:
+        defaultValue: '0'
+        description: How much to change the device's pitch axis by. Normally you won't
+          want to change this from 0. But it's useful if you want to rotate the device
+          into an unusual position.
+        value: '0'
+      yaw:
+        defaultValue: '0'
+        description: How much to change the device's yaw axis by. Normally you won't
+          want to change this from 0. But it's useful if you want to rotate the device
+          into an unusual position.
+        value: '0'
+  map:
+    groups: {}
+    items:
+      x:
+        defaultValue: x
+        description: Which axis from the device the x input is mapped to in software.
+          This is useful when you want to rotate the input by 90 degrees.
+        value: y
+      y:
+        defaultValue: y
+        description: Which axis from the device the y input is mapped to in software.
+          This is useful when you want to rotate the input by 90 degrees.
+        value: x
+      z:
+        defaultValue: z
+        description: Which axis from the device the z input is mapped to in software.
+          This is useful when you want to rotate the input by 90 degrees.
+        value: z
+  rotationMap:
+    groups: {}
+    items:
+      roll:
+        defaultValue: roll
+        description: Which rotation axis from the device the roll input is mapped
+          to in software. This is useful when you want to rotate the input by 90 degrees.
+        value: roll
+      pitch:
+        defaultValue: pitch
+        description: Which rotation axis from the device the pitch input is mapped
+          to in software. This is useful when you want to rotate the input by 90 degrees.
+        value: yaw
+      yaw:
+        defaultValue: yaw
+        description: Which rotation axis from the device the yaw input is mapped to
+          in software. This is useful when you want to rotate the input by 90 degrees.
+        value: pitch
+items:
+  yMin:
+    defaultValue: '200'
+    description: Minimum value of height above the device.
+    value: '200'
+  yMax:
+    defaultValue: '400'
+    description: Maximum value of height above the device.
+    value: '500'
+  x:
+    defaultValue: '200'
+    description: + and - this value horizontally from the center of the visible cone
+      above the device.
+    value: '250'
+  z:
+    defaultValue: '120'
+    description: + and - this value in depth from the center of the visible cone above
+      the device.
+    value: '120'

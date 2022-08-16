@@ -25,16 +25,16 @@ class TestShould {
     public void testRawValues() {
         assertEquals(false, this.should.toFalse());
         assertEquals(false, this.should.toTrue());
-        
+
         this.should.set(true);
-        
+
         assertEquals(false, this.should.toFalse());
         assertEquals(true, this.should.toTrue());
         assertEquals(false, this.should.toFalse());
         assertEquals(false, this.should.toTrue());
-        
+
         this.should.set(false);
-        
+
         assertEquals(true, this.should.toFalse());
         assertEquals(false, this.should.toTrue());
         assertEquals(false, this.should.toFalse());
