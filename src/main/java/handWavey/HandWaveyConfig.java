@@ -14,18 +14,18 @@ public class HandWaveyConfig {
     private Debug debug;
     private Config config;
     private String fileName = "handWavey";
-    
+
     public HandWaveyConfig(String fileName) {
         this.fileName = fileName;
         Config.setSingletonFilename(this.fileName);
         this.config = Config.singleton();
     }
-    
+
     public void destroy() {
         // Remove any files managed by this class. This is intended for unit testing, but may later be useful for things like uninstall.
         // TODO Delete all files for fileName.
     }
-    
+
     public void defineGeneralConfig() {
         // Add groups to separate out into separate files.
         this.config.addGroupToSeparate("debug");
@@ -42,7 +42,7 @@ public class HandWaveyConfig {
         this.config.addGroupToSeparate("audioConfig");
         this.config.addGroupToSeparate("audioEvents");
         this.config.addGroupToSeparate("gestureConfig");
-        
+
         // Build up general config.
         Item configFormatVersion = this.config.newItem(
             "configFormatVersion",
@@ -73,7 +73,7 @@ public class HandWaveyConfig {
             "password",
             "",
             "WARNING: This is currently stored in plain text. Please take that into account when assessing the security of your setup. It's worth having the VNC server only listening where it's needed, and in addition having the firewall configured to block it externally.");
-        
+
         Group debug = this.config.newGroup("debug");
         debug.newItem(
             "HandWaveyManager",
@@ -143,13 +143,13 @@ public class HandWaveyConfig {
             "bug.ShouldComplete/MacroLine/line",
             "0",
             "Int: Sensible numbers are 0-2, where 0 will only tell you when a bug has been detected. 1 tells you what has been started, and 2 tells you what has completed as well (this is probably redundant, since level 0 still tells you on the next round when something hasn't finished.) Generally you'll want to keep this at 0. But if want to see that something is even being attempted, this will help. This entry is for macro lines.");
-        
+
         Group dataCleaning = this.config.newGroup("dataCleaning");
         dataCleaning.newItem(
             "maxChange",
             "30",
             "If the difference between the current input position and the previous input position is larger than this number, ignore it, and reset the state so that subsequent input makes sense. This is usually caused by going OOB on one side of the usable cone, and re-entering on the other side of the cone. When this number is too high, errors can slip through that cause the mouse cursor to jump. When it's too low, the cursor will regularly stop when you move your hand too fast. This symptom should not be confused with a hang due to something like garbage collection.");
-        
+
         Group newHands = dataCleaning.newGroup("newHands");
         newHands.newItem(
             "earlyUnfreeze",
@@ -171,7 +171,7 @@ public class HandWaveyConfig {
             "oldHandsTimeout",
             "400",
             "Int (milliseconds): If we haven't had any update in this amount of time, any new frame that we receive is deemed to be new. Under normal, active operation, we receive 10s of frames per seciond. Ie <100 milliseconds.");
-        
+
         Group ultraMotion = this.config.newGroup("ultraMotion");
         ultraMotion.newItem(
             "maxHands",
@@ -216,7 +216,7 @@ public class HandWaveyConfig {
             "zMultiplier",
             "-1",
             "Set this to -1 when you need to invert Z (how far away from you your hand goes). UltraMotion takes care of this for you. So I can't currently think of a use-case for it, but am including it for completeness.");
-        
+
         Group physicalBoundaries = this.config.newGroup("physicalBoundaries");
         physicalBoundaries.newItem(
             "x",
@@ -234,11 +234,63 @@ public class HandWaveyConfig {
             "z",
             "120",
             "+ and - this value in depth from the center of the visible cone above the device.");
+        Group pbMap = physicalBoundaries.newGroup("map");
+        pbMap.newItem(
+            "x",
+            "x",
+            "Which axis from the device the x input is mapped to in software. This is useful when you want to rotate the input by 90 degrees.");
+        pbMap.newItem(
+            "y",
+            "y",
+            "Which axis from the device the y input is mapped to in software. This is useful when you want to rotate the input by 90 degrees.");
+        pbMap.newItem(
+            "z",
+            "z",
+            "Which axis from the device the z input is mapped to in software. This is useful when you want to rotate the input by 90 degrees.");
+        Group pbOffets = physicalBoundaries.newGroup("inputOffsets");
+        pbOffets.newItem(
+            "x",
+            "0",
+            "How much to change the device's x axis by. Normally you won't want to change this from 0. But it's useful if you want to want to do something like swapping y with x or z.");
+        pbOffets.newItem(
+            "y",
+            "0",
+            "How much to change the device's y axis by. Normally you won't want to change this from 0. But it's useful if you want to want to do something like swapping y with x or z.");
+        pbOffets.newItem(
+            "z",
+            "0",
+            "How much to change the device's z axis by. Normally you won't want to change this from 0. But it's useful if you want to want to do something like swapping y with x or z.");
+        Group pbRotMap = physicalBoundaries.newGroup("rotationMap");
+        pbRotMap.newItem(
+            "roll",
+            "roll",
+            "Which rotation axis from the device the roll input is mapped to in software. This is useful when you want to rotate the input by 90 degrees.");
+        pbRotMap.newItem(
+            "pitch",
+            "pitch",
+            "Which rotation axis from the device the pitch input is mapped to in software. This is useful when you want to rotate the input by 90 degrees.");
+        pbRotMap.newItem(
+            "yaw",
+            "yaw",
+            "Which rotation axis from the device the yaw input is mapped to in software. This is useful when you want to rotate the input by 90 degrees.");
 
         this.config.newItem(
             "zoneMode",
             "touchPad",
             "(touchScreen, touchPad). What type of device the zones approximate. The names are not an exact comparison, but should at least give an idea of how they work.");
+        Group pbRotOffets = physicalBoundaries.newGroup("inputRotationOffsets");
+        pbRotOffets.newItem(
+            "roll",
+            "0",
+            "How much to change the device's roll axis by. Normally you won't want to change this from 0. But it's useful if you want to rotate the device into an unusual position.");
+        pbRotOffets.newItem(
+            "pitch",
+            "0",
+            "How much to change the device's pitch axis by. Normally you won't want to change this from 0. But it's useful if you want to rotate the device into an unusual position.");
+        pbRotOffets.newItem(
+            "yaw",
+            "0",
+            "How much to change the device's yaw axis by. Normally you won't want to change this from 0. But it's useful if you want to rotate the device into an unusual position.");
 
         this.config.newItem(
             "zoneBuffer",
@@ -249,7 +301,7 @@ public class HandWaveyConfig {
         Group touchScreen = zones.newGroup("touchScreen");
         Group zoneNone = touchScreen.newGroup("zoneNone");
         // None currently doesn't require any config. Its group is here solely for completeness.
-        
+
         Group absolute = touchScreen.newGroup("absolute");
         absolute.newItem(
             "threshold",
@@ -263,7 +315,7 @@ public class HandWaveyConfig {
             "movingMeanEnd",
             "20",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
-        
+
         Group relative = touchScreen.newGroup("relative");
         relative.newItem(
             "threshold",
@@ -277,7 +329,7 @@ public class HandWaveyConfig {
             "movingMeanEnd",
             "40",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
-        
+
         Group action = touchScreen.newGroup("action");
         action.newItem(
             "threshold",
@@ -306,13 +358,13 @@ public class HandWaveyConfig {
         Group touchPad = zones.newGroup("touchPad");
         Group zoneTPNone = touchPad.newGroup("zoneNone");
         // None currently doesn't require any config. Its group is here solely for completeness.
-        
+
         Group noMove = touchPad.newGroup("noMove");
         noMove.newItem(
             "threshold",
             "-150",
             "Z greater than this value denotes the beginning of the noMove zone.");
-        
+
         Group active = touchPad.newGroup("active");
         active.newItem(
             "threshold",
@@ -326,7 +378,7 @@ public class HandWaveyConfig {
             "movingMeanEnd",
             "4",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
-        
+
         Group tpAction = touchPad.newGroup("action");
         tpAction.newItem(
             "threshold",
@@ -340,8 +392,8 @@ public class HandWaveyConfig {
             "movingMeanEnd",
             "20",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
-        
-        
+
+
         Group tpScroll = touchPad.newGroup("scroll");
         tpScroll.newItem(
             "movingMeanBegin",
@@ -351,8 +403,8 @@ public class HandWaveyConfig {
             "movingMeanEnd",
             "1",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
-        
-        
+
+
         Group touchPadConfig = this.config.newGroup("touchPad");
         touchPadConfig.newItem(
             "inputMultiplier",
@@ -370,8 +422,8 @@ public class HandWaveyConfig {
             "maxSpeed",
             "25",
             "Maximum speed per second.");
-        
-        
+
+
         Group clickConfig = this.config.newGroup("click");
         clickConfig.newItem(
             "rewindCursorTime",
@@ -416,8 +468,8 @@ public class HandWaveyConfig {
             "historySize",
             "40",
             "int <4096. How many samples to keep. We only need enough to rewind by what ever amount of time is defined in rewindCursorTime. Eg: If we get 5-30 frames per second, 40 should be plenty to cater to rewind times up to 1000 milliseconds.");
-        
-        
+
+
         Group actionEvents = this.config.newGroup("actionEvents"); // Entirely generated in Gesture.
         actionEvents.newItem(
             "special-newHandFreeze",
@@ -431,7 +483,7 @@ public class HandWaveyConfig {
             "special-newHandUnfreezeEvent",
             "",
             "When the time has expired for the Event freeze after a new primary hand is introduced. This event is triggered.");
-        
+
         Group audioConfig = this.config.newGroup("audioConfig");
         audioConfig.newItem(
             "useAudio",
@@ -441,7 +493,7 @@ public class HandWaveyConfig {
             "pathToAudio",
             "audio" + File.separator + "clips",
             "Where are all of the audio clips stored.");
-        
+
         Group audioEvents = this.config.newGroup("audioEvents");
         audioEvents.newItem(
             "special-newHandFreeze",
@@ -467,13 +519,13 @@ public class HandWaveyConfig {
             "bug",
             "coocoo1.wav",
             "When a bug is detected, play this sound.");
-        
-        
+
+
         this.config.newItem(
             "relativeSensitivity",
             "0.15",
             "How sensitive is the relative zone compared to the absolute zone? Decimal between 0 and 1.");
-        
+
         Group gestureConfig = this.config.newGroup("gestureConfig");
         Group primaryHand = gestureConfig.newGroup("primaryHand");
         primaryHand.newItem(

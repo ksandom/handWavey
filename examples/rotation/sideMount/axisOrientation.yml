@@ -1,0 +1,20 @@
+groups: {}
+items:
+  xMultiplier:
+    defaultValue: '1'
+    description: Set this to -1 when you need to invert X (side to side). You'll typicall
+      only need to do this if your device is upside down. On newer LeapSDK versions,
+      this may become obsolete.
+    value: '-1'
+  yMultiplier:
+    defaultValue: '1'
+    description: Set this to -1 when you need to invert Y (up and down). You'll typicall
+      only need to do this if your device is upside down. On newer LeapSDK versions,
+      this may become obsolete.
+    value: '1'
+  zMultiplier:
+    defaultValue: '-1'
+    description: Set this to -1 when you need to invert Z (how far away from you your
+      hand goes). UltraMotion takes care of this for you. So I can't currently think
+      of a use-case for it, but am including it for completeness.
+    value: '-1'

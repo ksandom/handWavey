@@ -41,7 +41,7 @@ class TestGesture {
         assertEquals("individual-sActive0Open", this.gesture.gestureName("s", "active", 0, Gesture.open));
         assertEquals("sActive0Open", this.gesture.generateSingleHandGestureName("s", "active", 0, Gesture.open));
     }
-    
+
     @Test
     public void testGestureDescription() {
         assertEquals("The primary hand is in the active zone, is in segment 0, and is in the open state. And the secondary hand is in the active zone, is in segment 0, and is in the closed state.", this.gesture.gestureDescription("active", 0, Gesture.open, "active", 0, Gesture.closed));
@@ -53,27 +53,27 @@ class TestGesture {
     @Test
     public void testGenerateConfig() {
         this.gesture.generateConfig();
-        
+
         Group actionEvents = Config.singleton().getGroup("actionEvents");
         Group audioEvents = Config.singleton().getGroup("audioEvents");
-        
+
         // All of these should exist, and should not return null.
-        
+
         // Combinations of hands together.
         assertEquals("", actionEvents.getItem("combined-pActive0Open-sNone0Open-enter").get());
         assertEquals("", actionEvents.getItem("combined-pActive0Open-sNone0Open-exit").get());
-        
+
         assertEquals("", audioEvents.getItem("combined-pActive0Open-sNone0Open-enter").get());
         assertEquals("", audioEvents.getItem("combined-pActive0Open-sNone0Open-exit").get());
 
         // Use both hands, but one is absent.
         assertEquals("", actionEvents.getItem("combined-pActive0Open-sOOB0Absent-enter").get());
-        
+
         // Full gestures for a single hand.
         assertEquals("", actionEvents.getItem("individual-pActive0Open-enter").get());
         assertEquals("", actionEvents.getItem("individual-sActive0Open-enter").get());
         assertEquals("", actionEvents.getItem("individual-pNoMove0Open-exit").get());
-        
+
         // A specific change in a single component.
         assertEquals("", actionEvents.getItem("general-zone-pActive-enter").get());
         assertEquals("setButton(\"left\");", actionEvents.getItem("general-segment-p0-enter").get());
@@ -81,7 +81,7 @@ class TestGesture {
         assertEquals("", actionEvents.getItem("general-zone-sActive-enter").get());
         assertEquals("keyDown(\"ctrl\");", actionEvents.getItem("general-segment-s0-enter").get());
         assertEquals("", actionEvents.getItem("general-state-sOpen-enter").get());
-        
+
         // Any change in a single component.
         assertEquals("", actionEvents.getItem("general-zone-pAnyChange").get());
         assertEquals("lockCursor();rewindCursorPosition();", actionEvents.getItem("general-segment-pAnyChange").get());
@@ -90,7 +90,7 @@ class TestGesture {
         assertEquals("", actionEvents.getItem("general-segment-sAnyChange").get());
         assertEquals("", actionEvents.getItem("general-state-sAnyChange").get());
     }
-    
+
     @Test
     public void testHandState() {
         assertEquals("OOB<0", this.gesture.handState(-1));
