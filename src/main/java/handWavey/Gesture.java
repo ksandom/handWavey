@@ -190,17 +190,21 @@ public class Gesture {
 
     private void generateCombinedEventsConfig() {
         // Combined events using state, zone, and segment.
-        for (int primaryState = 0; primaryState < stateCount-1; primaryState++) {
-            for ( String primaryZone :  zones ) {
-                for (int primarySegment = -1; primarySegment < this.maximumSegments; primarySegment++) {
+        // TODO Optimisation: When a primary, or secondary zone is OOB, state and segment are assumed, but at the moment the other possibilities are iterated over anyway.
+        for ( String primaryZone :  zones ) {
+            for (int primaryState = 0; primaryState < stateCount-1; primaryState++) {
+                if (primaryZone.equals("OOB") && primaryState > 0) break;
 
-                    for (int secondaryState = 0; secondaryState < stateCount; secondaryState++) {
-                        if (secondaryState == this.absent) {
+                for (int primarySegment = -1; primarySegment < this.maximumSegments; primarySegment++) {
+                    if (primaryZone.equals("OOB") && primarySegment > -1) break;
+
+                    for ( String secondaryZone :  zones ) {
+                        if (secondaryZone.equals("OOB")) {
                             assembleCombinedEvent(primaryZone, primarySegment, primaryState, "OOB", 0, this.absent);
                             assembleIndividualHandEvent("p", primaryZone, primarySegment, primaryState);
                             assembleIndividualHandEvent("s", primaryZone, primarySegment, primaryState);
                         } else {
-                            for ( String secondaryZone :  zones ) {
+                            for (int secondaryState = 0; secondaryState < stateCount; secondaryState++) {
                                 for (int secondarySegment = -1; secondarySegment < this.maximumSegments; secondarySegment++) {
                                     assembleCombinedEvent(primaryZone, primarySegment, primaryState, secondaryZone, secondarySegment, secondaryState);
                                 }
@@ -270,6 +274,7 @@ public class Gesture {
 
     private String generateGestureName(String primaryZone, int primarySegment, int primaryHandState, String secondaryZone, int secondarySegment, int secondaryHandState) {
         String result = "";
+
         String primaryHand = generateSingleHandGestureName("p", primaryZone, primarySegment, primaryHandState);
         String secondaryHand = "";
 
@@ -279,7 +284,15 @@ public class Gesture {
         return result;
     }
 
-    public String generateSingleHandGestureName(String letter, String zone, int segment, int handState) {
+    public String generateSingleHandGestureName(String letter, String zone, int segmentIn, int handStateIn) {
+        int segment = segmentIn;
+        int handState = handStateIn;
+
+        if (zone == "OOB") {
+            handState = this.absent;
+            segment = 0;
+        }
+
         // eg pActive0Closed
         return letter + capitalise(zone) + String.valueOf(segment) + capitalise(handState(handState));
     }
