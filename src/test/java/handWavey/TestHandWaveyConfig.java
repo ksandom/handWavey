@@ -20,6 +20,7 @@ class TestHandWaveyConfig {
     @AfterEach
     void destroy() {
         this.handWaveyConfig = null;
+        System.gc();
     }
 
     @Test

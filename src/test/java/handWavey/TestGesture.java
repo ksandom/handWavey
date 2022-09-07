@@ -30,6 +30,7 @@ class TestGesture {
         this.gesture = null;
         this.config = null;
         this.handWaveyConfig = null;
+        System.gc();
     }
 
     @Test
