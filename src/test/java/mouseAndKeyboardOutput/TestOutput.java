@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestOutput {
     private Output output;
-    
+
     @BeforeEach
     void setUp() {
         this.output = new NullOutput();
@@ -22,6 +22,7 @@ class TestOutput {
     @AfterEach
     void destroy() {
         this.output = null;
+        System.gc();
     }
 
     @Test
@@ -30,14 +31,14 @@ class TestOutput {
         assertEquals(123, dim.width);
         assertEquals(321, dim.height);
     }
-    
+
     @Test
     public void testSetPosition() {
         this.output.setPosition(456, 654);
         assertEquals(456, this.output.testInt("posX"));
         assertEquals(654, this.output.testInt("posY"));
     }
-    
+
     @Test
     public void testClick() {
         assertEquals(0, this.output.testInt("clicked"));
@@ -45,7 +46,7 @@ class TestOutput {
         assertEquals(InputEvent.BUTTON1_MASK, this.output.testInt("lastMouseButton"));
         assertEquals(1, this.output.testInt("clicked"));
     }
-    
+
     @Test
     public void testDoubleClick() {
         assertEquals(0, this.output.testInt("clicked"));
@@ -53,7 +54,7 @@ class TestOutput {
         assertEquals(InputEvent.BUTTON2_MASK, this.output.testInt("lastMouseButton"));
         assertEquals(1, this.output.testInt("clicked"));
     }
-    
+
     @Test
     public void testMouseDown() {
         this.output.mouseDown("left");
@@ -61,7 +62,7 @@ class TestOutput {
         this.output.mouseDown("right");
         assertEquals(InputEvent.BUTTON3_MASK, this.output.testInt("lastMouseButton"));
     }
-    
+
     @Test
     public void testMouseUp() {
         this.output.mouseUp("left");
@@ -69,7 +70,7 @@ class TestOutput {
         this.output.mouseUp("right");
         assertEquals(InputEvent.BUTTON3_MASK, this.output.testInt("lastMouseButton"));
     }
-    
+
     @Test
     public void testScroll() {
         assertEquals(0, this.output.testInt("scroll"));
@@ -80,7 +81,7 @@ class TestOutput {
         this.output.scroll(-2);
         assertEquals(2, this.output.testInt("scroll"));
     }
-    
+
     @Test
     public void testKeyDown() {
         this.output.keyDown("ctrl");
@@ -88,7 +89,7 @@ class TestOutput {
         this.output.keyDown("alt");
         assertEquals(KeyEvent.VK_ALT, this.output.testInt("lastKey"));
     }
-    
+
     @Test
     public void testKeyUp() {
         this.output.keyUp("ctrl");
@@ -96,7 +97,7 @@ class TestOutput {
         this.output.keyUp("alt");
         assertEquals(KeyEvent.VK_ALT, this.output.testInt("lastKey"));
     }
-    
+
     @Test
     public void testGetKeysIKnow() {
         assertEquals(3, this.output.getKeysIKnow().size());

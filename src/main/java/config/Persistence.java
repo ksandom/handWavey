@@ -19,7 +19,7 @@ import debug.Debug;
 
 public class Persistence {
     Debug debug;
-    
+
     public Persistence() {
         this.debug = Debug.getDebug("Persistence");
     }
@@ -27,30 +27,30 @@ public class Persistence {
     public void save(String fileName, HashMap<String, Group> groups, HashMap<String, Item> items) {
         save(fileName, groups, items, new HashMap<String, Boolean>());
     }
-    
+
     public void save(String fileName, HashMap<String, Group> groups, HashMap<String, Item> items, HashMap<String, Boolean> exclusions) {
         this.debug.out(1, "Save config file: " + fileName);
         Map tree = buildTree(groups, items, exclusions);
-        
+
         try {
             Yaml yaml = new Yaml();
             FileWriter writer = new FileWriter(fileName);
             yaml.dump(tree, writer);
-            
+
         } catch (IOException e) {
             this.debug.out(0, "Failed to save config to " + fileName + ". Here is a stack trace for debugging:");
             e.printStackTrace();
             return ;
         }
     }
-    
+
     private Map buildTree(HashMap<String, Group> groups, HashMap<String, Item> items) {
         return buildTree(groups, items, new HashMap<String, Boolean>());
     }
-    
+
     private Map buildTree(HashMap<String, Group> groups, HashMap<String, Item> items, HashMap<String, Boolean> exclusions) {
         HashMap result = new HashMap();
-        
+
         HashMap itemMap = new HashMap();
         for (String key : items.keySet()) {
             // Work out if we can hide unused entries.
@@ -62,7 +62,7 @@ public class Persistence {
                     }
                 }
             }
-            
+
             // Store the item.
             HashMap item = new HashMap();
             item.put("value", items.get(key).get());
@@ -73,7 +73,7 @@ public class Persistence {
             item.put("zzzEmpty", new HashMap());
         }
         result.put("items", itemMap);
-        
+
         HashMap groupMap = new HashMap();
         for (String key : groups.keySet()) {
             if (!exclusions.containsKey(key)) {
@@ -81,39 +81,47 @@ public class Persistence {
             }
         }
         result.put("groups", groupMap);
-        
+
         return result;
     }
-    
+
     public void load(String fileName, HashMap<String, Group> groups, HashMap<String, Item> items) {
         load(fileName, groups, items, new HashMap<String, Boolean>());
     }
-    
+
     public void load(String fileName, HashMap<String, Group> groups, HashMap<String, Item> items, HashMap<String, Boolean> exclusions) {
+        load(fileName, groups, items, new HashMap<String, Boolean>(), new Group());
+    }
+
+    public void load(String fileName, HashMap<String, Group> groups, HashMap<String, Item> items, HashMap<String, Boolean> exclusions, Group currentGroup) {
         if (!new File(fileName).exists()) {
             this.debug.out(0, "Could not find \"" + fileName + "\". Skipping. If this is your first time running the application, or you've just updated it, this is completely normal.");
             return;
         }
-        
+
         this.debug.out(1, "Load config file: " + fileName);
         try {
             Yaml yaml = new Yaml();
             InputStream inputStream = new FileInputStream(new File(fileName));
             Map<String, Object> obj = yaml.load(inputStream);
-            
-            walkInput(fileName, obj, groups, items, exclusions);
+
+            walkInput(fileName, obj, groups, items, exclusions, currentGroup);
         } catch (IOException e) {
             this.debug.out(0, "Failed to load config from " + fileName + ". Here is a stack trace for debugging:");
             e.printStackTrace();
             return ;
         }
     }
-    
-    private void walkInput(String path, Map obj, HashMap<String, Group> outputGroups, HashMap<String, Item> outputItems) {
-        walkInput(path, obj, outputGroups, outputItems, new HashMap<String, Boolean>());
+
+    private void walkInput(String path, Map obj, HashMap<String, Group> outputGroups, HashMap<String, Item> outputItems, Group currentGroup) {
+        walkInput(path, obj, outputGroups, outputItems, new HashMap<String, Boolean>(), currentGroup);
     }
-    
+
     private void walkInput(String path, Map obj, HashMap<String, Group> outputGroups, HashMap<String, Item> outputItems, HashMap<String, Boolean> exclusions) {
+        walkInput(path, obj, outputGroups, outputItems, exclusions, null);
+    }
+
+    private void walkInput(String path, Map obj, HashMap<String, Group> outputGroups, HashMap<String, Item> outputItems, HashMap<String, Boolean> exclusions, Group currentGroup) {
         Map inputItems = new HashMap();
         if (obj == null) return;
         if (obj.containsKey("items")) inputItems = (Map) obj.get("items");
@@ -123,30 +131,40 @@ public class Persistence {
         for (Object rawKey : inputItems.keySet()) {
             String key = (String) rawKey;
             String fullPath = path + "." + key;
-            
-            if (!outputItems.containsKey(key)) {
+
+            Boolean canSetKey = false;
+            if (currentGroup == null) {
+                canSetKey = (outputItems.containsKey(key));
+            } else {
+                canSetKey = currentGroup.itemCanExist(key);
+
+                // Because we are working with a list of items rather than the group of Items, the fact that it was dynamically created means that we need to reload it.
+                outputItems.put(key, currentGroup.getItem(key));
+            }
+
+            if (!canSetKey) {
                 this.debug.out(0, "Error: " + fullPath + " references a config item that does not exist. You probably won't get the output that you're expecting.");
                 continue;
             }
-            
+
             Map inputItem = (Map) inputItems.get(key);
-            
+
             String inputValue = safeGet(inputItem, fullPath, "value", "");
             String oldInputValue = safeGet(inputItem, fullPath, "oldValue", inputValue);
             String inputDefaultValue = safeGet(inputItem, fullPath, "defaultValue", inputValue);
             String outputDefaultValue = outputItems.get(key).getDefaultValue();
-            
+
             if (!inputDefaultValue.equals(inputValue) || !inputItem.containsKey("defaultValue")) {
                 if (!inputDefaultValue.equals(outputDefaultValue) && inputItem.containsKey("defaultValue")) {
                     this.debug.out(0, "Warning: The defaultValue for " + fullPath + " has been updated from \"" + inputDefaultValue + "\" to \"" + outputDefaultValue + "\". But the value has been changed from the default to \"" + inputValue + "\", so the change in default is not going to take effect. This message will not show again.");
                 }
-                
+
                 outputItems.get(key).set(oldInputValue);
                 outputItems.get(key).set(inputValue);
                 outputItems.get(key).makeClean();
             }
         }
-        
+
         Map inputGroups = new HashMap();
         if (obj.containsKey("groups")) inputGroups = (Map) obj.get("groups");
         else {
@@ -155,26 +173,26 @@ public class Persistence {
         for (Object rawKey : inputGroups.keySet()) {
             String key = (String) rawKey;
             if (exclusions.containsKey(key)) continue;
-            
+
             String fullPath = path + "." + key;
             Map inputGroup = (Map) inputGroups.get(key);
             Group outputGroup = outputGroups.get(key);
-            
+
             if (!outputGroups.containsKey(key)) {
                 this.debug.out(0, "Error: " + fullPath + " references a config group that does not exist. You probably won't get the output that you're expecting.");
                 continue;
             }
-            
-            walkInput(fullPath, inputGroup, outputGroup._getGroups(), outputGroup._getItems());
+
+            walkInput(fullPath, inputGroup, outputGroup._getGroups(), outputGroup._getItems(), outputGroup);
             outputGroup.makeClean();
         }
     }
-    
+
     private String safeGet(Map map, String path, String key, String defaultValue) {
         if (map.containsKey(key)) {
             return (String) map.get(key);
-        } 
-        
+        }
+
         this.debug.out(2, "No " + key + " entry in " + path + ". Assuming value of " + defaultValue + ".");
         return defaultValue;
     }

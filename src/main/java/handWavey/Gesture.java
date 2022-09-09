@@ -11,6 +11,7 @@ package handWavey;
 import config.*;
 import java.util.HashMap;
 import java.sql.Timestamp;
+import com.google.common.base.Joiner;
 
 public class Gesture {
 
@@ -190,6 +191,17 @@ public class Gesture {
 
     private void generateCombinedEventsConfig() {
         // Combined events using state, zone, and segment.
+
+        Joiner joiner = Joiner.on("|").skipNulls();
+        String zonesRegex = "(" + joiner.join(this.zones) + ")";
+
+        // TODO Finish this.
+        String regex = ".*";
+
+        this.actionEvents.addItemTemplate(regex, "", "Action to take when this event is triggered. See https://github.com/ksandom/handWavey/blob/main/docs/user/configuration/howEventNamingWorks.md");
+        this.audioEvents.addItemTemplate(regex, "", "Audio to play when this event is triggered. See https://github.com/ksandom/handWavey/blob/main/docs/user/configuration/howEventNamingWorks.md");
+
+        /*
         // TODO Optimisation: When a primary, or secondary zone is OOB, state and segment are assumed, but at the moment the other possibilities are iterated over anyway.
         for ( String primaryZone :  zones ) {
             for (int primaryState = 0; primaryState < stateCount-1; primaryState++) {
@@ -214,6 +226,7 @@ public class Gesture {
                 }
             }
         }
+        */
     }
 
     private void assembleGeneralEvent(String name, String handLetter, String when) {

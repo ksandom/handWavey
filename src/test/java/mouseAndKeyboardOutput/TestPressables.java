@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestPressables {
     private Pressables pressables;
-    
+
     @BeforeEach
     void setUp() {
         this.pressables = new Pressables();
@@ -22,12 +22,13 @@ class TestPressables {
     @AfterEach
     void destroy() {
         this.pressables = null;
+        System.gc();
     }
 
     @Test
     public void testIsValidPressable() {
         this.pressables.defineKeys();
-        
+
         assertEquals(false, this.pressables.isValidPressable("hgfhgf"));
         assertEquals(true, this.pressables.isValidPressable("ctrl"));
     }
@@ -35,7 +36,7 @@ class TestPressables {
     @Test
     public void testGetPressableID() {
         this.pressables.defineKeys();
-        
+
         assertEquals(Pressables.INVALID, this.pressables.getPressableID("hgfhgf"));
         assertEquals(KeyEvent.VK_CONTROL, this.pressables.getPressableID("ctrl"));
     }
@@ -43,7 +44,7 @@ class TestPressables {
     @Test
     public void testPressablesIKnow() {
         this.pressables.defineKeys();
-        
+
         assertEquals(true, (this.pressables.getPressablesIKnow().size() > 1));
     }
 }

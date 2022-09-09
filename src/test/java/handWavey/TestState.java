@@ -96,6 +96,7 @@ class TestState {
     void destroy() {
         this.handsState = null;
         this.handWaveyConfig = null;
+        System.gc();
     }
 
     @Test

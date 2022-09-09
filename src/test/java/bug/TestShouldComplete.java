@@ -10,41 +10,42 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestShouldComplete {
     private ShouldComplete shouldComplete = null;
-    
+
     @BeforeEach
     void setUp() {
         this.shouldComplete = new ShouldComplete("ATestContext");
     }
-    
+
     @AfterEach
     void destroy() {
         this.shouldComplete = null;
+        System.gc();
     }
-    
+
     @Test
     public void testAValidSequence() {
         this.shouldComplete.start("A successful thing;");
         this.shouldComplete.finish();
-        
+
         assertEquals(true, this.shouldComplete.start("A another thing;"));
     }
-    
+
     @Test
     public void testInvalidSequence() {
         this.shouldComplete.start("An unsuccessful thing;");
-        
+
         assertEquals(false, this.shouldComplete.start("A another thing;"));
     }
-    
+
     @Test
     public void testFailedString() {
         this.shouldComplete.start("A successful thing;");
         this.shouldComplete.finish();
         this.shouldComplete.start("An unsuccessful thing;");
-        
+
         assertEquals(false, this.shouldComplete.start("A another thing;"));
     }
-    
+
     @Test
     public void testSequence() {
         // We start a successful operation. Nothing has failed yet.
@@ -52,18 +53,18 @@ public class TestShouldComplete {
         assertEquals("", this.shouldComplete.getUnfinishedOperation());
         this.shouldComplete.finish();
         assertEquals("", this.shouldComplete.getUnfinishedOperation());
-        
+
         // We start an unsuccessful operation. Nothing has failed yet.
         assertEquals(true, this.shouldComplete.start("An unsuccessful thing;"));
         assertEquals("", this.shouldComplete.getUnfinishedOperation());
-        
+
         // We start a new operation and detect the previous failure.
         assertEquals(false, this.shouldComplete.start("A another thing;"));
         assertEquals("An unsuccessful thing;", this.shouldComplete.getUnfinishedOperation());
-        
+
         // Upon completion, the unfinished operation should clear.
         this.shouldComplete.finish();
         assertEquals("", this.shouldComplete.getUnfinishedOperation());
-        
+
     }
 }

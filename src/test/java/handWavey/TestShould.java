@@ -19,6 +19,7 @@ class TestShould {
     @AfterEach
     void destroy() {
         this.should = null;
+        System.gc();
     }
 
     @Test

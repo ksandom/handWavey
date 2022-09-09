@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ConfigTestGroup {
     private Config config;
     private Group group;
-    
+
     @BeforeEach
     void setUp() {
         this.config = new Config("handWaveyConfigTest.yml");
@@ -22,25 +22,27 @@ public class ConfigTestGroup {
         this.group.newItem("speed", "ludicrous", "Perceived speed.");
         this.group.newItem("shape", "square", "Designed shape");
     }
-    
+
     @AfterEach
     void destroy() {
         this.config = null;
+        this.group = null;
+        System.gc();
     }
-    
+
     @Test
     public void testSetup() {
         assertEquals(this.group.isDirty(), false);
-        
+
         this.group.newItem("colour2", "blue", "Another colour for some reason.");
         this.group.newItem("inverseSpeed", "0.02", "Travel, but inside-out.");
         this.group.finishedStartup();
         assertEquals(this.group.isDirty(), false);
-        
+
         this.group.newItem("size", "huuuuuge", "Like, how big is it?");
         assertEquals(this.group.isDirty(), true);
     }
-    
+
     @Test
     public void testReturnedValues() {
         assertEquals(this.group.getItem("colour").get(), "black");

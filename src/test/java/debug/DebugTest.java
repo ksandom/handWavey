@@ -34,6 +34,7 @@ public class DebugTest {
     @AfterEach
     void destroy() {
         this.debug = null;
+        System.gc();
     }
 
     @Test
@@ -63,9 +64,9 @@ public class DebugTest {
     @Test
     public void testContextBasedSetup() {
         // Optimal: Debugging should be set up as configured.
-        
+
         Config.singleton().newGroup("debug").newItem("aContext3", "2", "A test value.");
-        
+
         Debug debug = Debug.getDebug("aContext3");
         assertEquals("Debug 1 (aContext3): Blah.", debug.getDebugText(1, "Blah."));
         assertNotNull(debug);
@@ -76,7 +77,7 @@ public class DebugTest {
     public void testContextBasedSetupWithoutConfigItem() {
         // Sub-optimal: Config item is missing. Should gracefully return a working object so that debugging can be done.
         Config.singleton().newGroup("debug");
-        
+
         Debug debug = Debug.getDebug("aContext2");
         assertEquals("Debug 1 (aContext2): Blah.", debug.getDebugText(1, "Blah."));
         assertNotNull(debug);
