@@ -60,7 +60,7 @@ public class Config extends config.Group {
         Persistence persistence = new Persistence();
 
         String file = this.directoryName + this.primaryFileName;
-        persistence.load(file, this._getGroups(), this._getItems(), new HashMap(), (Group)this);
+        persistence.load(file, (Group)this);
 
         // Load the sub-groups.
         if (loadEverything) {
@@ -69,7 +69,7 @@ public class Config extends config.Group {
                 if (!separateGroupExists(groupName)) continue;
                 Group group = getGroup(groupName);
                 file = this.directoryName + groupName + ".yml";
-                persistence.load(file, group._getGroups(), group._getItems(), new HashMap(), group);
+                persistence.load(file, group);
             }
         }
 

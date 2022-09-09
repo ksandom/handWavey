@@ -85,15 +85,11 @@ public class Persistence {
         return result;
     }
 
-    public void load(String fileName, HashMap<String, Group> groups, HashMap<String, Item> items) {
-        load(fileName, groups, items, new HashMap<String, Boolean>());
+    public void load(String fileName, Group currentGroup) {
+        load(fileName, currentGroup, new HashMap<String, Boolean>());
     }
 
-    public void load(String fileName, HashMap<String, Group> groups, HashMap<String, Item> items, HashMap<String, Boolean> exclusions) {
-        load(fileName, groups, items, new HashMap<String, Boolean>(), new Group());
-    }
-
-    public void load(String fileName, HashMap<String, Group> groups, HashMap<String, Item> items, HashMap<String, Boolean> exclusions, Group currentGroup) {
+    public void load(String fileName, Group currentGroup, HashMap<String, Boolean> exclusions) {
         if (!new File(fileName).exists()) {
             this.debug.out(0, "Could not find \"" + fileName + "\". Skipping. If this is your first time running the application, or you've just updated it, this is completely normal.");
             return;
@@ -105,7 +101,7 @@ public class Persistence {
             InputStream inputStream = new FileInputStream(new File(fileName));
             Map<String, Object> obj = yaml.load(inputStream);
 
-            walkInput(fileName, obj, groups, items, exclusions, currentGroup);
+            walkInput(fileName, obj, currentGroup, exclusions);
         } catch (IOException e) {
             this.debug.out(0, "Failed to load config from " + fileName + ". Here is a stack trace for debugging:");
             e.printStackTrace();
@@ -113,25 +109,32 @@ public class Persistence {
         }
     }
 
-    private void walkInput(String path, Map obj, HashMap<String, Group> outputGroups, HashMap<String, Item> outputItems, Group currentGroup) {
-        walkInput(path, obj, outputGroups, outputItems, new HashMap<String, Boolean>(), currentGroup);
+    private void walkInput(String path, Map obj, Group currentGroup) {
+        walkInput(path, obj, currentGroup, new HashMap<String, Boolean>());
     }
 
-    private void walkInput(String path, Map obj, HashMap<String, Group> outputGroups, HashMap<String, Item> outputItems, HashMap<String, Boolean> exclusions) {
-        walkInput(path, obj, outputGroups, outputItems, exclusions, null);
-    }
-
-    private void walkInput(String path, Map obj, HashMap<String, Group> outputGroups, HashMap<String, Item> outputItems, HashMap<String, Boolean> exclusions, Group currentGroup) {
+    private void walkInput(String path, Map obj, Group currentGroup, HashMap<String, Boolean> exclusions) {
         Map inputItems = new HashMap();
         if (obj == null) return;
         if (obj.containsKey("items")) inputItems = (Map) obj.get("items");
         else {
             this.debug.out(1, "No items in " + path + ". This will be fixed on save.");
         }
+
+        if (currentGroup == null) {
+            this.debug.out(0, "Error: \"currentGroup\" is null, which shouldn't happen. Stopping at " + path);
+            return;
+        }
+
+        HashMap<String, Group> outputGroups = currentGroup._getGroups();
+        HashMap<String, Item> outputItems = currentGroup._getItems();
+
+
         for (Object rawKey : inputItems.keySet()) {
             String key = (String) rawKey;
             String fullPath = path + "." + key;
 
+            // TODO Remove most of this stuff.
             Boolean canSetKey = false;
             if (currentGroup == null) {
                 canSetKey = (outputItems.containsKey(key));
@@ -183,7 +186,7 @@ public class Persistence {
                 continue;
             }
 
-            walkInput(fullPath, inputGroup, outputGroup._getGroups(), outputGroup._getItems(), outputGroup);
+            walkInput(fullPath, inputGroup, outputGroup);
             outputGroup.makeClean();
         }
     }
