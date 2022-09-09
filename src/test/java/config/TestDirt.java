@@ -13,7 +13,7 @@ class DirtTester extends Dirt {
     public DirtTester(Boolean state) {
         super(state);
     }
-    
+
     public void makeDirty() {
         super.makeDirty();
     }
@@ -22,17 +22,18 @@ class DirtTester extends Dirt {
 public class TestDirt {
     private DirtTester dirt;
     private Config config;
-    
+
     @BeforeEach
     void setUp() {
         this.dirt = new DirtTester(true);
         this.config = new Config("handWaveyConfigTest.yml");
     }
-    
+
     @AfterEach
     void destroy() {
         this.dirt = null;
         this.config = null;
+        System.gc();
     }
 
     @Test
@@ -70,7 +71,7 @@ public class TestDirt {
         assertNotNull(this.dirt.getConfigManager());
 
         this.dirt.makeDirty();
-        
+
         assertEquals(this.dirt.isDirty(), true);
         assertEquals(this.dirt.getConfigManager().isDirty(), true);
         assertEquals(this.config.isDirty(), true);

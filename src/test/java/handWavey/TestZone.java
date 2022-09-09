@@ -24,6 +24,7 @@ class TestZone {
     @AfterEach
     void destroy() {
         this.zone = null;
+        System.gc();
     }
 
     @Test

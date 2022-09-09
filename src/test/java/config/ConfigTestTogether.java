@@ -12,12 +12,12 @@ public class ConfigTestTogether {
     @Test
     public void testSingleton() {
         Config.setSingletonFilename("handWaveyConfigTest2.yml");
-        
+
         // This way is faster when dealing with multiple transactions.
         Group things = Config.singleton().newGroup("things");
         Item thing1 = things.newItem("thing1", "aValue", "A description of that value.");
         assertEquals(thing1.get(), "aValue");
-        
+
         // This way can be done with less code, and may be acceptable when doing rarely executed tasks.
         Config.singleton().getGroup("things").getItem("thing1").set("aNewValue");
         assertEquals(Config.singleton().getGroup("things").getItem("thing1").get(), "aNewValue");

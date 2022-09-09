@@ -35,6 +35,7 @@ class TestHandState {
     void destroy() {
         this.primary = null;
         this.secondary = null;
+        System.gc();
     }
 
     @Test

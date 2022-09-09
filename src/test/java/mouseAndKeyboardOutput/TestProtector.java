@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestProtector {
     private Protector protector;
-    
+
     @BeforeEach
     void setUp() {
         this.protector = new Protector(new Debug(0, "Protector"), new NullOutput());
@@ -24,38 +24,39 @@ class TestProtector {
     @AfterEach
     void destroy() {
         this.protector = null;
+        System.gc();
     }
 
     @Test
     public void testSingleSequence() {
         assertEquals(false, this.protector.isDown("thing"));
         assertEquals(true, this.protector.isUp("thing"));
-        
+
         this.protector.setDown("thing");
         assertEquals(true, this.protector.isDown("thing"));
         assertEquals(false, this.protector.isUp("thing"));
-        
+
         this.protector.setUp("thing");
         assertEquals(false, this.protector.isDown("thing"));
         assertEquals(true, this.protector.isUp("thing"));
     }
-    
+
     @Test
     public void testMultipleSequence() {
         assertEquals(false, this.protector.isDown("thing1"));
         assertEquals(false, this.protector.isDown("thing2"));
         assertEquals(false, this.protector.isDown("thing3"));
-        
+
         this.protector.setDown("thing1");
         assertEquals(true, this.protector.isDown("thing1"));
         assertEquals(false, this.protector.isDown("thing2"));
         assertEquals(false, this.protector.isDown("thing3"));
-        
+
         this.protector.setDown("thing2");
         assertEquals(true, this.protector.isDown("thing1"));
         assertEquals(true, this.protector.isDown("thing2"));
         assertEquals(false, this.protector.isDown("thing3"));
-        
+
         assertEquals(2, this.protector.getDownItems().size());
     }
 }

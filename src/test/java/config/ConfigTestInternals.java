@@ -14,7 +14,7 @@ class ConfigTester extends Config {
     public ConfigTester(String fileName) {
         super(fileName);
     }
-    
+
     public String getBestPath() {
         return super.getBestPath();
     }
@@ -23,34 +23,35 @@ class ConfigTester extends Config {
 public class ConfigTestInternals {
     String directoryName;
     ConfigTester ct;
-    
+
     @BeforeEach
     void setUp() {
         this.directoryName = "handWaveyConfigTest";
         this.ct = new ConfigTester(this.directoryName);
     }
-    
+
     @AfterEach
     void destroy() {
         this.directoryName = null;
         this.ct = null;
+        System.gc();
     }
-    
+
     @Test
     public void testBestPath() {
         assertNotNull(this.ct.getBestPath());
     }
-    
+
     @Test
     public void testFullPath() {
         assertNotNull(this.ct.getFullPath(this.directoryName));
     }
-    
+
     @Test
     public void testFullPathValue() {
         assertEquals(this.ct.getBestPath() + this.directoryName + File.separator, this.ct.getFullPath(this.directoryName));
     }
-    
+
     @Test
     public void testDirty() {
         assertEquals(false, this.ct.isDirty());

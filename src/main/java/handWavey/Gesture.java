@@ -11,6 +11,7 @@ package handWavey;
 import config.*;
 import java.util.HashMap;
 import java.sql.Timestamp;
+import com.google.common.base.Joiner;
 
 public class Gesture {
 
@@ -190,26 +191,33 @@ public class Gesture {
 
     private void generateCombinedEventsConfig() {
         // Combined events using state, zone, and segment.
-        for (int primaryState = 0; primaryState < stateCount-1; primaryState++) {
-            for ( String primaryZone :  zones ) {
-                for (int primarySegment = -1; primarySegment < this.maximumSegments; primarySegment++) {
 
-                    for (int secondaryState = 0; secondaryState < stateCount; secondaryState++) {
-                        if (secondaryState == this.absent) {
-                            assembleCombinedEvent(primaryZone, primarySegment, primaryState, "OOB", 0, this.absent);
-                            assembleIndividualHandEvent("p", primaryZone, primarySegment, primaryState);
-                            assembleIndividualHandEvent("s", primaryZone, primarySegment, primaryState);
-                        } else {
-                            for ( String secondaryZone :  zones ) {
-                                for (int secondarySegment = -1; secondarySegment < this.maximumSegments; secondarySegment++) {
-                                    assembleCombinedEvent(primaryZone, primarySegment, primaryState, secondaryZone, secondarySegment, secondaryState);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        // Examples
+        // individual-pActive0Open-enter
+        // combined-pNoMove1Closed-sOOB0Absent-exit
+
+        String[] upperZones = this.zones;
+
+        for (int i=0; i<upperZones.length; i++) {
+            upperZones[i] = capitalise(upperZones[i]);
         }
+
+        Joiner joiner = Joiner.on("|").skipNulls();
+        String zonesRegex = "(" + joiner.join(upperZones) + ")";
+
+
+        String direction = "-(enter|exit)";
+        String basicHand = zonesRegex + "[0-9]*(Open|Closed|Absent)";
+
+        // individual-sAction11Closed-enter
+        String individual = "individual-(p|s)" + basicHand + direction;
+        String combined = "combined-p" + basicHand + "-s" + basicHand + direction;
+
+        this.actionEvents.addItemTemplate(individual, "", "Action to take when this event is triggered. This event matches what one hand is doing regardless of what the other hand is doing. See https://github.com/ksandom/handWavey/blob/main/docs/user/configuration/howEventNamingWorks.md");
+        this.audioEvents.addItemTemplate(individual, "", "Audio to play when this event is triggered. This event matches what one hand is doing regardless of what the other hand is doing. See https://github.com/ksandom/handWavey/blob/main/docs/user/configuration/howEventNamingWorks.md");
+
+        this.actionEvents.addItemTemplate(combined, "", "Action to take when this event is triggered. This hand matches what both hands are doing together. See https://github.com/ksandom/handWavey/blob/main/docs/user/configuration/howEventNamingWorks.md");
+        this.audioEvents.addItemTemplate(combined, "", "Audio to play when this event is triggered. This hand matches what both hands are doing together. See https://github.com/ksandom/handWavey/blob/main/docs/user/configuration/howEventNamingWorks.md");
     }
 
     private void assembleGeneralEvent(String name, String handLetter, String when) {
@@ -218,24 +226,6 @@ public class Gesture {
         addActionConfig(name, triggerDescription, Gesture.exiting);
         addAudioFeedbackConfig(name, triggerDescription, Gesture.entering);
         addAudioFeedbackConfig(name, triggerDescription, Gesture.exiting);
-    }
-
-    private void assembleCombinedEvent(String primaryZone, int primarySegment, int primaryHandState, String secondaryZone, int secondarySegment, int secondaryHandState) {
-        String name = "combined-" + generateGestureName(primaryZone, primarySegment, primaryHandState, secondaryZone, secondarySegment, secondaryHandState);
-        String identifierExplanation = generateGestureDescription(primaryZone, primarySegment, primaryHandState, secondaryZone, secondarySegment, secondaryHandState);
-
-        String triggerDescription = "When the hands are in the following state: " + identifierExplanation + ".";
-
-        // Full event.
-        addConfigItems(name, triggerDescription);
-    }
-
-    private void assembleIndividualHandEvent(String handLetter, String zone, int segment, int handState) {
-        String name = "individual-" + generateSingleHandGestureName(handLetter, zone, segment, handState);
-        String identifierExplanation = generateSingleHandGestureDescription(handLetter, zone, segment, handState);
-
-        String triggerDescription = "When the " + hand(handLetter) + " hand is in the following state: " + identifierExplanation + ".";
-        addConfigItems(name, triggerDescription);
     }
 
     private void addConfigItems(String name, String triggerDescription) {
@@ -270,6 +260,7 @@ public class Gesture {
 
     private String generateGestureName(String primaryZone, int primarySegment, int primaryHandState, String secondaryZone, int secondarySegment, int secondaryHandState) {
         String result = "";
+
         String primaryHand = generateSingleHandGestureName("p", primaryZone, primarySegment, primaryHandState);
         String secondaryHand = "";
 
@@ -279,7 +270,15 @@ public class Gesture {
         return result;
     }
 
-    public String generateSingleHandGestureName(String letter, String zone, int segment, int handState) {
+    public String generateSingleHandGestureName(String letter, String zone, int segmentIn, int handStateIn) {
+        int segment = segmentIn;
+        int handState = handStateIn;
+
+        if (zone == "OOB") {
+            handState = this.absent;
+            segment = 0;
+        }
+
         // eg pActive0Closed
         return letter + capitalise(zone) + String.valueOf(segment) + capitalise(handState(handState));
     }

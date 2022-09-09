@@ -33,6 +33,7 @@ class TestHandSummary {
         this.handSummary = null;
         this.config = null;
         this.handWaveyConfig = null;
+        System.gc();
     }
 
     @Test

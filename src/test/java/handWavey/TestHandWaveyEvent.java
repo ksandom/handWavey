@@ -46,6 +46,8 @@ class TestHandWaveyEvent {
         this.handWaveyEvent = null;
         this.output = null;
         this.handsState = null;
+        this.handWaveyManager = null;
+        System.gc();
     }
 
     @Test

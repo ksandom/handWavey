@@ -14,11 +14,11 @@ class HistoryTester extends History {
     public HistoryTester(int size, double seedValue) {
         super(size, seedValue);
     }
-    
+
     public void overrideTimestamp(int offset, long newTimestamp) {
         super.overrideTimestamp(offset, newTimestamp);
     }
-    
+
     public int getIndexForTimestamp(long timestamp) {
         return super.getIndexForTimestamp(timestamp);
     }
@@ -38,7 +38,7 @@ class TestHistory {
     @BeforeEach
     void setUp() {
         this.history = new HistoryTester(this.size, 1);
-        
+
         // Add some data. It should wrap around, and we should be left with values from 0-9.
         int dataCount = this.size + 2;
         for (int dataPoint = dataCount; dataPoint>-1; dataPoint--) {
@@ -60,6 +60,7 @@ class TestHistory {
     @AfterEach
     void destroy() {
         this.history = null;
+        System.gc();
     }
 
     @Test
@@ -83,7 +84,7 @@ class TestHistory {
          assertEquals(this.index[8], this.history.getIndexForTimestamp(this.nowMillis - 760));
          assertEquals(this.index[8], this.history.getIndexForTimestamp(this.nowMillis - 780));
     }
-    
+
     @Test
     public void testGet() {
          assertEquals(0, this.history.get(this.nowMillis - 0));

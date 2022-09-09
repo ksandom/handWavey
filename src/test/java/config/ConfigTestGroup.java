@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ConfigTestGroup {
     private Config config;
     private Group group;
-    
+
     @BeforeEach
     void setUp() {
         this.config = new Config("handWaveyConfigTest.yml");
@@ -22,25 +22,27 @@ public class ConfigTestGroup {
         this.group.newItem("speed", "ludicrous", "Perceived speed.");
         this.group.newItem("shape", "square", "Designed shape");
     }
-    
+
     @AfterEach
     void destroy() {
         this.config = null;
+        this.group = null;
+        System.gc();
     }
-    
+
     @Test
     public void testSetup() {
         assertEquals(this.group.isDirty(), false);
-        
+
         this.group.newItem("colour2", "blue", "Another colour for some reason.");
         this.group.newItem("inverseSpeed", "0.02", "Travel, but inside-out.");
         this.group.finishedStartup();
         assertEquals(this.group.isDirty(), false);
-        
+
         this.group.newItem("size", "huuuuuge", "Like, how big is it?");
         assertEquals(this.group.isDirty(), true);
     }
-    
+
     @Test
     public void testReturnedValues() {
         assertEquals(this.group.getItem("colour").get(), "black");
@@ -75,5 +77,39 @@ public class ConfigTestGroup {
 
         assertEquals(this.group.getItem("colour").get(), "square");
         assertEquals(this.group.getItem("speed").get(), "ludicrous");
+    }
+
+    @Test
+    public void testTemplate() {
+        // Items don't exist, and we haven't created a template for them.
+        assertEquals(this.group.getItem("notYet"), null);
+        assertEquals(this.group.itemCanExist("notYet"), false);
+
+        // Create templates.
+        this.group.addItemTemplate("^.*Now$", "a balloon", "A lovely description of the config item.");
+        this.group.addItemTemplate("^then.*$", "a giraffe", "Another lovely description of the config item.");
+
+        // This should still not exist because it doesn't match the regex.
+        assertEquals(this.group.getItem("notYet"), null);
+        assertEquals(this.group.itemCanExist("notYet"), false);
+        assertEquals(this.group.itemCanExist("notYet"), false); // This should still be false.
+
+
+        // This should match the first template only.
+        assertEquals(this.group.getItem("untilNow").get(), "a balloon");
+        assertEquals(this.group.getItem("untilNow").getDescription(), "A lovely description of the config item.");
+
+        // A separate match, because the previous test will have created an item, and we want to know that it works on a non-existant item.
+        assertEquals(this.group.itemCanExist("justNow"), true);
+        assertEquals(this.group.itemCanExist("justNow"), true); // And on an item that should exist now.
+
+
+        // This should match the second template only.
+        assertEquals(this.group.getItem("thenItWillWork").get(), "a giraffe");
+        assertEquals(this.group.getItem("thenItWillWork").getDescription(), "Another lovely description of the config item.");
+
+        // A separate match, because the previous test will have created an item, and we want to know that it works on a non-existant item.
+        assertEquals(this.group.itemCanExist("thenAnother"), true);
+        assertEquals(this.group.itemCanExist("thenAnother"), true); // And on an item that should exist now.
     }
 }

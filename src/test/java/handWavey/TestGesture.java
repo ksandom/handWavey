@@ -30,6 +30,7 @@ class TestGesture {
         this.gesture = null;
         this.config = null;
         this.handWaveyConfig = null;
+        System.gc();
     }
 
     @Test
@@ -89,6 +90,13 @@ class TestGesture {
         assertEquals("", actionEvents.getItem("general-zone-sAnyChange").get());
         assertEquals("", actionEvents.getItem("general-segment-sAnyChange").get());
         assertEquals("", actionEvents.getItem("general-state-sAnyChange").get());
+
+        // OOB and NonOOB.
+        assertEquals("", actionEvents.getItem("combined-pOOB0Absent-sOOB0Absent-exit").get());
+        assertEquals("", actionEvents.getItem("individual-pOOB0Absent-exit").get());
+
+        // Special events.
+        //assertEquals("", actionEvents.getItem("newHandFreeze").get());
     }
 
     @Test
