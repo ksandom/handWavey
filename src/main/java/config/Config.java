@@ -81,14 +81,14 @@ public class Config extends config.Group {
         Persistence persistence = new Persistence();
 
         String file = this.directoryName + this.primaryFileName;
-        persistence.save(file, this._getGroups(), this._getItems(), this.groupsToSaveSeparately);
+        persistence.save(file, (Group)this, this.groupsToSaveSeparately);
 
         for (Object rawGroupName : this.groupsToSaveSeparately.keySet()) {
             String groupName = (String) rawGroupName;
             if (!separateGroupExists(groupName)) continue;
             Group group = getGroup(groupName);
             file = this.directoryName + groupName + ".yml";
-            persistence.save(file, group._getGroups(), group._getItems(), new HashMap());
+            persistence.save(file, group);
         }
     }
 

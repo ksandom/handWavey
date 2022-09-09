@@ -24,13 +24,13 @@ public class Persistence {
         this.debug = Debug.getDebug("Persistence");
     }
 
-    public void save(String fileName, HashMap<String, Group> groups, HashMap<String, Item> items) {
-        save(fileName, groups, items, new HashMap<String, Boolean>());
+    public void save(String fileName, Group group) {
+        save(fileName, group, new HashMap<String, Boolean>());
     }
 
-    public void save(String fileName, HashMap<String, Group> groups, HashMap<String, Item> items, HashMap<String, Boolean> exclusions) {
+    public void save(String fileName, Group group, HashMap<String, Boolean> exclusions) {
         this.debug.out(1, "Save config file: " + fileName);
-        Map tree = buildTree(groups, items, exclusions);
+        Map tree = buildTree(group._getGroups(), group._getItems(), exclusions);
 
         try {
             Yaml yaml = new Yaml();
