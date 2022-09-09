@@ -56,6 +56,11 @@ class TestMacro {
     }
 
     @Test
+    public void testConfigExists() {
+        assertNotNull(Config.singleton().getGroup("actionEvents").itemCanExist("custom-1"));
+    }
+
+    @Test
     public void testSlots() {
         Group actionEvents = Config.singleton().getGroup("actionEvents");
         actionEvents.getItem("custom-1").set("moveMouse(\"101\", \"201\");");

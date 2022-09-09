@@ -60,7 +60,10 @@ public class Group extends Dirt { // A collection of related configuration Items
         for (String key : this.itemTemplates.keySet()) {
             if (Pattern.matches(key, requestedKey)) {
                 Item itemTemplate = this.itemTemplates.get(key);
-                result = newItem(key, itemTemplate.getDefaultValue(), itemTemplate.getDescription());
+                result = newItem(
+                    requestedKey,
+                    itemTemplate.getDefaultValue(),
+                    itemTemplate.getDescription());
                 break;
             }
         }

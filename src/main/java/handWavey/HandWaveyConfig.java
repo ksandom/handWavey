@@ -135,17 +135,14 @@ public class HandWaveyConfig {
             "bug.ShouldComplete/figureStuffOut",
             "0",
             "Int: Sensible numbers are 0-2, where 0 will only tell you when a bug has been detected. 1 tells you what has been started, and 2 tells you what has completed as well (this is probably redundant, since level 0 still tells you on the next round when something hasn't finished.) Generally you'll want to keep this at 0. But if want to see that something is even being attempted, this will help. This entry is for the figureStuffOut function in HandWaveyManager.");
-        for (int level = 0; level <= 10; level ++) {
-            String levelString = String.valueOf(level);
-            debug.newItem(
-                "bug.ShouldComplete/MacroCore/instruction-" + levelString,
-                "0",
-                "Int: Sensible numbers are 0-2, where 0 will only tell you when a bug has been detected. 1 tells you what has been started, and 2 tells you what has completed as well (this is probably redundant, since level 0 still tells you on the next round when something hasn't finished.) Generally you'll want to keep this at 0. But if want to see that something is even being attempted, this will help. This entry is for the individual macro instructions at nesting level " + levelString + ".");
-            debug.newItem(
-                "bug.ShouldComplete/MacroLine/line-" + levelString,
-                "0",
-                "Int: Sensible numbers are 0-2, where 0 will only tell you when a bug has been detected. 1 tells you what has been started, and 2 tells you what has completed as well (this is probably redundant, since level 0 still tells you on the next round when something hasn't finished.) Generally you'll want to keep this at 0. But if want to see that something is even being attempted, this will help. This entry is for macro lines " + levelString + ".");
-        }
+        debug.addItemTemplate(
+            "bug.ShouldComplete.MacroCore.instruction-.*",
+            "0",
+            "Int: Sensible numbers are 0-2, where 0 will only tell you when a bug has been detected. 1 tells you what has been started, and 2 tells you what has completed as well (this is probably redundant, since level 0 still tells you on the next round when something hasn't finished.) Generally you'll want to keep this at 0. But if want to see that something is even being attempted, this will help. This entry is for the individual macro instructions at nesting level denoted at the end of this setting name.");
+        debug.addItemTemplate(
+            "bug.ShouldComplete.MacroLine.line-.*",
+            "0",
+            "Int: Sensible numbers are 0-2, where 0 will only tell you when a bug has been detected. 1 tells you what has been started, and 2 tells you what has completed as well (this is probably redundant, since level 0 still tells you on the next round when something hasn't finished.) Generally you'll want to keep this at 0. But if want to see that something is even being attempted, this will help. This entry is for the individual macro instructions at nesting level denoted at the end of this setting name.");
 
         Group dataCleaning = this.config.newGroup("dataCleaning");
         dataCleaning.newItem(
@@ -523,14 +520,7 @@ public class HandWaveyConfig {
             "bug",
             "coocoo1.wav",
             "When a bug is detected, play this sound.");
-        for (int i = 0; i<256; i++) {
-            String customAudioName = "custom-" + String.valueOf(i);
-            audioEvents.newItem(
-                customAudioName,
-                "",
-                "When the custom event " + customAudioName +  " that a user can trigger in a gestureLayout. It is intended to be used with slots, and can be read about in createADynamicGestureLayout.md.",
-                true);
-        }
+        audioEvents.addItemTemplate("^custom-[0-9]+", "", "When this custom event that a user can trigger in a gestureLayout. It is intended to be used with slots, and can be read about in createADynamicGestureLayout.md.");
 
 
         this.config.newItem(
@@ -586,15 +576,8 @@ public class HandWaveyConfig {
     private void generateCustomConfig(Group customGroup) {
         // This is for custom events that are typically triggered by slots.
 
-        // Create the entries.
-        for (int i = 0; i<256; i++) {
-            String customEventName = "custom-" + String.valueOf(i);
-            customGroup.newItem(
-                customEventName,
-                "",
-                "A custom event that a user can trigger in a gestureLayout. It is intended to be used with slots, and can be read about in createADynamicGestureLayout.md.",
-                true);
-        }
+        // Create the template.
+        customGroup.addItemTemplate("custom-.*", "", "A custom event that a user can trigger in a gestureLayout. It is intended to be used with slots, and can be read about in createADynamicGestureLayout.md.");
 
         // Set the default values.
         customGroup.getItem("custom-255").overrideDefault("debug(\"0\", \"No action is currently assigned to this slot.\");");
