@@ -114,8 +114,14 @@ public class Persistence {
     }
 
     private void walkInput(String path, Map obj, Group currentGroup, HashMap<String, Boolean> exclusions) {
+        // input.* == from YAML.
+        // output.* == to Config in memory.
+
         Map inputItems = new HashMap();
+        HashMap<String, Item> outputItems = currentGroup._getItems();
+
         if (obj == null) return;
+
         if (obj.containsKey("items")) inputItems = (Map) obj.get("items");
         else {
             this.debug.out(1, "No items in " + path + ". This will be fixed on save.");
@@ -126,49 +132,43 @@ public class Persistence {
             return;
         }
 
-        HashMap<String, Group> outputGroups = currentGroup._getGroups();
-        HashMap<String, Item> outputItems = currentGroup._getItems();
-
-
+        // Load items into the current group.
         for (Object rawKey : inputItems.keySet()) {
             String key = (String) rawKey;
             String fullPath = path + "." + key;
 
-            // TODO Remove most of this stuff.
-            Boolean canSetKey = false;
-            if (currentGroup == null) {
-                canSetKey = (outputItems.containsKey(key));
-            } else {
-                canSetKey = currentGroup.itemCanExist(key);
-
-                // Because we are working with a list of items rather than the group of Items, the fact that it was dynamically created means that we need to reload it.
-                outputItems.put(key, currentGroup.getItem(key));
-            }
-
-            if (!canSetKey) {
+            if (!currentGroup.itemCanExist(key)) {
                 this.debug.out(0, "Error: " + fullPath + " references a config item that does not exist. You probably won't get the output that you're expecting.");
                 continue;
             }
 
+            // The item may have just got created. Let's put it back in.
+            outputItems.put(key, currentGroup.getItem(key));
+
             Map inputItem = (Map) inputItems.get(key);
+
+            Item currentItem = currentGroup.getItem(key);
 
             String inputValue = safeGet(inputItem, fullPath, "value", "");
             String oldInputValue = safeGet(inputItem, fullPath, "oldValue", inputValue);
             String inputDefaultValue = safeGet(inputItem, fullPath, "defaultValue", inputValue);
-            String outputDefaultValue = outputItems.get(key).getDefaultValue();
+            String outputDefaultValue = currentItem.getDefaultValue();
 
             if (!inputDefaultValue.equals(inputValue) || !inputItem.containsKey("defaultValue")) {
                 if (!inputDefaultValue.equals(outputDefaultValue) && inputItem.containsKey("defaultValue")) {
                     this.debug.out(0, "Warning: The defaultValue for " + fullPath + " has been updated from \"" + inputDefaultValue + "\" to \"" + outputDefaultValue + "\". But the value has been changed from the default to \"" + inputValue + "\", so the change in default is not going to take effect. This message will not show again.");
                 }
 
-                outputItems.get(key).set(oldInputValue);
-                outputItems.get(key).set(inputValue);
-                outputItems.get(key).makeClean();
+                currentItem.set(oldInputValue);
+                currentItem.set(inputValue);
+                currentItem.makeClean();
             }
         }
 
+        // Load sub-groups into the current group.
         Map inputGroups = new HashMap();
+        HashMap<String, Group> outputGroups = currentGroup._getGroups();
+
         if (obj.containsKey("groups")) inputGroups = (Map) obj.get("groups");
         else {
             this.debug.out(1, "No groups in " + path + ". This will be fixed on save.");
