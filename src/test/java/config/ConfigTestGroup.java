@@ -78,4 +78,38 @@ public class ConfigTestGroup {
         assertEquals(this.group.getItem("colour").get(), "square");
         assertEquals(this.group.getItem("speed").get(), "ludicrous");
     }
+
+    @Test
+    public void testTemplate() {
+        // Items don't exist, and we haven't created a template for them.
+        assertEquals(this.group.getItem("notYet"), null);
+        assertEquals(this.group.itemCanExist("notYet"), false);
+
+        // Create templates.
+        this.group.addItemTemplate("^.*Now$", "a balloon", "A lovely description of the config item.");
+        this.group.addItemTemplate("^then.*$", "a giraffe", "Another lovely description of the config item.");
+
+        // This should still not exist because it doesn't match the regex.
+        assertEquals(this.group.getItem("notYet"), null);
+        assertEquals(this.group.itemCanExist("notYet"), false);
+        assertEquals(this.group.itemCanExist("notYet"), false); // This should still be false.
+
+
+        // This should match the first template only.
+        assertEquals(this.group.getItem("untilNow").get(), "a balloon");
+        assertEquals(this.group.getItem("untilNow").getDescription(), "A lovely description of the config item.");
+
+        // A separate match, because the previous test will have created an item, and we want to know that it works on a non-existant item.
+        assertEquals(this.group.itemCanExist("justNow"), true);
+        assertEquals(this.group.itemCanExist("justNow"), true); // And on an item that should exist now.
+
+
+        // This should match the second template only.
+        assertEquals(this.group.getItem("thenItWillWork").get(), "a giraffe");
+        assertEquals(this.group.getItem("thenItWillWork").getDescription(), "Another lovely description of the config item.");
+
+        // A separate match, because the previous test will have created an item, and we want to know that it works on a non-existant item.
+        assertEquals(this.group.itemCanExist("thenAnother"), true);
+        assertEquals(this.group.itemCanExist("thenAnother"), true); // And on an item that should exist now.
+    }
 }
