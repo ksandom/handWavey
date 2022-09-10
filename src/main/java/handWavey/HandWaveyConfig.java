@@ -580,29 +580,29 @@ public class HandWaveyConfig {
         customGroup.addItemTemplate("custom-.*", "", "A custom event that a user can trigger in a gestureLayout. It is intended to be used with slots, and can be read about in createADynamicGestureLayout.md.");
 
         // Set the default values.
-        customGroup.getItem("custom-255").overrideDefault("debug(\"0\", \"No action is currently assigned to this slot.\");");
-        customGroup.getItem("custom-0").overrideDefault("rewindCursorPosition();rewindScroll();releaseButtons();releaseKeys();unlockCursor();");
-        customGroup.getItem("custom-10").overrideDefault("setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();");
-        customGroup.getItem("custom-11").overrideDefault("setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();");
-        customGroup.getItem("custom-12").overrideDefault("setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();");
-        customGroup.getItem("custom-180").overrideDefault("rewindCursorPosition();releaseZone();unlockCursor();");
-        customGroup.getItem("custom-181").overrideDefault("rewindCursorPosition();overrideZone(\"scroll\");releaseKeys();");
-        customGroup.getItem("custom-182").overrideDefault("rewindCursorPosition();keyDown(\"ctrl\");overrideZone(\"scroll\");");
-        customGroup.getItem("custom-20").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");click();mouseDown();");
-        customGroup.getItem("custom-21").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();mouseDown();");
-        customGroup.getItem("custom-22").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();");
-        customGroup.getItem("custom-23").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();click();");
-        customGroup.getItem("custom-30").overrideDefault("keyDown(\"alt\");setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"alt\");");
-        customGroup.getItem("custom-31").overrideDefault("keyDown(\"alt\");setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"alt\");");
-        customGroup.getItem("custom-32").overrideDefault("keyDown(\"alt\");setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"alt\");");
-        customGroup.getItem("custom-40").overrideDefault("keyDown(\"ctrl\");setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"ctrl\");");
-        customGroup.getItem("custom-41").overrideDefault("keyDown(\"ctrl\");setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"ctrl\");");
-        customGroup.getItem("custom-42").overrideDefault("keyDown(\"ctrl\");setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"ctrl\");");
-        customGroup.getItem("custom-101").overrideDefault("keyDown(\"ctrl\");keyDown(\"c\");keyUp(\"c\");keyUp(\"ctrl\");");
-        customGroup.getItem("custom-102").overrideDefault("keyDown(\"ctrl\");keyDown(\"v\");keyUp(\"v\");keyUp(\"ctrl\");");
-        customGroup.getItem("custom-103").overrideDefault("keyDown(\"ctrl\");keyDown(\"x\");keyUp(\"x\");keyUp(\"ctrl\");");
-        customGroup.getItem("custom-104").overrideDefault("keyDown(\"delete\");keyUp(\"delete\");");
-        customGroup.getItem("custom-105").overrideDefault("keyDown(\"ctrl\");keyDown(\"z\");keyUp(\"z\");keyUp(\"ctrl\");");
-        customGroup.getItem("custom-106").overrideDefault("keyDown(\"ctrl\");keyDown(\"shift\");keyDown(\"z\");keyUp(\"z\");keyUp(\"shift\");keyUp(\"ctrl\");");
+        customGroup.getItem("custom-noOp").overrideDefault("debug(\"0\", \"No action is currently assigned to this slot.\");");
+        customGroup.getItem("custom-releaseAll").overrideDefault("rewindCursorPosition();rewindScroll();releaseButtons();releaseKeys();unlockCursor();");
+        customGroup.getItem("custom-mouseDown-left").overrideDefault("setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();");
+        customGroup.getItem("custom-mouseDown-right").overrideDefault("setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();");
+        customGroup.getItem("custom-mouseDown-middle").overrideDefault("setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();");
+        customGroup.getItem("custom-releaseZone").overrideDefault("rewindCursorPosition();releaseZone();unlockCursor();");
+        customGroup.getItem("custom-override-scroll").overrideDefault("rewindCursorPosition();overrideZone(\"scroll\");releaseKeys();");
+        customGroup.getItem("custom-override-ctrl+scroll").overrideDefault("rewindCursorPosition();keyDown(\"ctrl\");overrideZone(\"scroll\");");
+        customGroup.getItem("custom-doubleClick-hold").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");click();mouseDown();");
+        customGroup.getItem("custom-trippleClick-hold").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();mouseDown();");
+        customGroup.getItem("custom-doubleClick").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();");
+        customGroup.getItem("custom-trippleClick").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();click();");
+        customGroup.getItem("custom-alt+mouseDown-left").overrideDefault("keyDown(\"alt\");setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"alt\");");
+        customGroup.getItem("custom-alt+mouseDown-right").overrideDefault("keyDown(\"alt\");setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"alt\");");
+        customGroup.getItem("custom-alt+mouseDown-middle").overrideDefault("keyDown(\"alt\");setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"alt\");");
+        customGroup.getItem("custom-ctrl+mouseDown-left").overrideDefault("keyDown(\"ctrl\");setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"ctrl\");");
+        customGroup.getItem("custom-ctrl+mouseDown-right").overrideDefault("keyDown(\"ctrl\");setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"ctrl\");");
+        customGroup.getItem("custom-ctrl+mouseDown-middle").overrideDefault("keyDown(\"ctrl\");setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"ctrl\");");
+        customGroup.getItem("custom-ctrl+c").overrideDefault("keyDown(\"ctrl\");keyDown(\"c\");keyUp(\"c\");keyUp(\"ctrl\");");
+        customGroup.getItem("custom-ctrl+v").overrideDefault("keyDown(\"ctrl\");keyDown(\"v\");keyUp(\"v\");keyUp(\"ctrl\");");
+        customGroup.getItem("custom-ctrl+x").overrideDefault("keyDown(\"ctrl\");keyDown(\"x\");keyUp(\"x\");keyUp(\"ctrl\");");
+        customGroup.getItem("custom-delete").overrideDefault("keyDown(\"delete\");keyUp(\"delete\");");
+        customGroup.getItem("custom-ctrl+z").overrideDefault("keyDown(\"ctrl\");keyDown(\"z\");keyUp(\"z\");keyUp(\"ctrl\");");
+        customGroup.getItem("custom-ctrl+shift+z").overrideDefault("keyDown(\"ctrl\");keyDown(\"shift\");keyDown(\"z\");keyUp(\"z\");keyUp(\"shift\");keyUp(\"ctrl\");");
     }
 }
