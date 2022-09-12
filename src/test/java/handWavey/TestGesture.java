@@ -96,7 +96,7 @@ class TestGesture {
         assertEquals("", actionEvents.getItem("individual-pOOB0Absent-exit").get());
 
         // Special events.
-        //assertEquals("", actionEvents.getItem("newHandFreeze").get());
+        assertEquals("", actionEvents.getItem("special-newHandFreeze").get());
     }
 
     @Test
