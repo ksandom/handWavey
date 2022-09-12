@@ -574,7 +574,13 @@ public class HandWaveyConfig {
     }
 
     private void generateCustomConfig(Group customGroup) {
-        // This is for custom events that are typically triggered by slots.
+        /*
+        This is for custom events that are typically triggered by slots.
+
+        When updating the defaults, be sure to run ./generateCustomTable.sh in docs/user/howTo to update https://github.com/ksandom/handWavey/blob/main/docs/user/howTo/createADynamicGestureLayout.md#custom-events .
+        Also make sure that you get the expected results.
+        */
+
 
         // Create the template.
         customGroup.addItemTemplate("custom-.*", "", "A custom event that a user can trigger in a gestureLayout. It is intended to be used with slots, and can be read about in createADynamicGestureLayout.md.");

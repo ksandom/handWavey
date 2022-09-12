@@ -79,7 +79,7 @@ These are the default actions for the custom events:
 | custom-ctrl+mouseDown-left | Press the CTRL key, then hold down the left button. |
 | custom-ctrl+mouseDown-right | Press the CTRL key, then hold down the right button. |
 | custom-ctrl+mouseDown-middle | Press the CTRL key, then hold down the middle button. |
-| custom-ctrl+c | CTRL + C. Typically used for copying a selection. |
+| custom-ctrl+c | CTRL + c. Typically used for copying a selection. |
 | custom-ctrl+v | CTRL + v. Typically used for pasting. |
 | custom-ctrl+x | CTRL + x. Typically used for cutting a selection. |
 | custom-delete | Press and release the delete key. |

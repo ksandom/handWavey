@@ -13,7 +13,7 @@ groups:
       rotationOffset:
         description: In radians. Adjust where the segments are slightly to cater
           to your hand's natural bias.
-        value: '0.3'
+        value: '0.2'
       mergeIntoSegment:
         description: Merge unused segments into this segment. This has the effect
           of not causing an unnecessary segment change event when accidentally moving
@@ -39,7 +39,7 @@ groups:
       rotationOffset:
         description: In radians. Adjust where the segments are slightly to cater
           to your hand's natural bias.
-        value: '0.3'
+        value: '0.2'
       mergeIntoSegment:
         description: Merge unused segments into this segment. This has the effect
           of not causing an unnecessary segment change event when accidentally moving
