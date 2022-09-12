@@ -268,10 +268,10 @@ public class HandsState {
                 Boolean sNonOOBEnter = secondaryState.nonOOBEnter();
 
                 String pNonOOBStateEnter = primaryState.getNonOOBEnterEvent();
-                String sNonOOBStateEnter = primaryState.getNonOOBEnterEvent();
+                String sNonOOBStateEnter = secondaryState.getNonOOBEnterEvent();
 
                 if (pNonOOBEnter) {
-                    this.handWaveyEvent.triggerEvent("combined-" + pNonOOBStateEnter + "-" + sNonOOBEnter + "-enter");
+                    this.handWaveyEvent.triggerEvent("combined-" + pNonOOBStateEnter + "-" + sNonOOBStateEnter + "-enter");
                 }
 
                 if (sNonOOBEnter) {
