@@ -13,7 +13,7 @@ Each of these stages are fully self-contained [configuration examples](https://g
 1. [Basics](00-basics). - Learn how to confidently activate and deactivate movement of the mouse. And while you're there, you can get a feel for how to move the mouse.
 1. [Accuracy and healthy usage](01-accuracy). - Learn how to confidently and **comfortably** be more accurate.
 1. [Segments](02-segments). - Learn how to trigger the segments that you want. These form part of the gestures that you will perform.
-1. [Grabbing](03-grabing). - Learn how to trigger the open and closed states by grabbing with your hand. These form the other major part of performing gestures.
+1. [Grabbing](03-grabbing). - Learn how to trigger the open and closed states by grabbing with your hand. These form the other major part of performing gestures.
 1. [Putting it together](04-allTogether). - Let's start making some gestures.
 1. [2 hands](05-2Hands). (optional, but quick and easy) - Learn how to use both hands to unlock more power, or accessibility possibilities.
 1. Now you're ready to
