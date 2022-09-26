@@ -2,13 +2,13 @@
 
 A more intuitive/usable desktop control using leapmotion/ultramotion.
 
-You can [see it in action](https://youtu.be/kCbar8w3Pws) and learn [how to get the most out of handWavey](https://www.patreon.com/posts/64861611).
+You can [see it in action](https://youtu.be/kCbar8w3Pws) and learn [how to get the most out of handWavey](https://github.com/ksandom/handWavey/blob/main/docs/user/gettingStarted.md).
 
 If you use it, I'd love to [hear from you](https://github.com/ksandom/handWavey/issues/4).
 
 ## Requirements
 
-### Hardware 
+### Hardware
 
 * [LeapMotion controller](https://www.ultraleap.com/product/leap-motion-controller/#pricingandlicensing).
    * [Getting the device set up well](https://support.leapmotion.com/hc/en-us/articles/360004322638-Taking-care-of-your-Leap-Motion-Controller).

@@ -1,0 +1,60 @@
+groups: {}
+items:
+  general-zone-pAction-enter:
+    value: ""
+  general-segment-p0-enter:
+    value: ""
+  general-segment-p2-enter:
+    value: ""
+  general-segment-p2-exit:
+    value: ""
+  general-segment-s0-enter:
+    value: ""
+  general-segment-s0-exit:
+    value: ""
+  general-segment-s1-enter:
+    value: ""
+  general-segment-s1-exit:
+    value: ""
+  general-segment-s2-enter:
+    value: ""
+  general-segment-s2-exit:
+    value: ""
+  general-zone-sActive-exit:
+    value: ""
+  general-state-pClosed-enter:
+    value: ""
+  general-state-pClosed-exit:
+    value: ""
+  special-newHandUnfreezeEvent:
+    value: ""
+  special-newHandUnfreezeCursor:
+    value: ''
+  special-newHandFreeze:
+    value: ''
+  general-segment-p1-enter:
+    value: ''
+  general-segment-pAnyChange:
+    value: lockCursor();rewindCursorPosition();
+  individual-pNonOOB1Open-enter:
+    value: ""
+  individual-pNonOOB1Open-exit:
+    value: ""
+  individual-pNonOOB5Open-enter:
+    value: ""
+  individual-pNonOOB5Open-exit:
+    value: ""
+  individual-pNonOOB1Closed-enter:
+    value: ""
+  individual-pNonOOB1Closed-exit:
+    value: ""
+  individual-pNonOOB0Closed-enter:
+    value: ""
+  individual-pNonOOB0Closed-exit:
+    value: ""
+  individual-pNonOOB5Closed-enter:
+    value: ""
+  individual-pNonOOB5Closed-exit:
+    value: ""
+  general-state-pAbsent-enter:
+    value: ""
