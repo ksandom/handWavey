@@ -15,7 +15,7 @@ Each of these stages are fully self-contained [configuration examples](https://g
 1. [Segments](02-segments). - Learn how to trigger the segments that you want. These form part of the gestures that you will perform.
 1. [Grabbing](03-grabing). - Learn how to trigger the open and closed states by grabbing with your hand. These form the other major part of performing gestures.
 1. [Putting it together](04-allTogether). - Let's start making some gestures.
-1. TODO 05-2Hands. - Learn how to use both hands to unlock more power, or accessibility possibilities.
+1. [2 hands](05-2Hands). (optional, but quick and easy) - Learn how to use both hands to unlock more power, or accessibility possibilities.
 1. Now you're ready to
     * apply a [gestureLayout](https://github.com/ksandom/handWavey/tree/main/examples/gestureLayouts) that suits you. I recommend [tiltClick/actionModifier](https://github.com/ksandom/handWavey/tree/main/examples/gestureLayouts/tiltClick/actionModifier).
     * change the [audio notifications](https://github.com/ksandom/handWavey/tree/main/examples/audio) to suit your preferences. Although I recommend keeping them on while you get comfortable with it.

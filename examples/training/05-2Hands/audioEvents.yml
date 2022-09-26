@@ -1,0 +1,214 @@
+groups: {}
+items:
+  general-state-pClosed-enter:
+    value: metalDing07.wav
+  special-newHandFreeze:
+    value: ''
+  general-segment-sAnyChange:
+    value: ""
+  general-zone-pAction-enter:
+    value: ""
+  general-zone-pAnyChange:
+    value: ""
+  general-state-pClosed-exit:
+    value: metalDing08.wav
+  general-zone-sAnyChange:
+    value: ""
+  general-segment-pAnyChange:
+    value: ""
+  special-newHandUnfreezeEvent:
+    value: ''
+  special-newHandUnfreezeCursor:
+    value: ''
+  individual-pNoMove0Open-enter:
+    value: piano-short-C1.wav
+  individual-pNoMove1Open-enter:
+    value: piano-short-E1.wav
+  individual-pNoMove2Open-enter:
+    value: piano-short-G1.wav
+  individual-pNoMove3Open-enter:
+    value: piano-short-C2.wav
+  individual-pNoMove4Open-enter:
+    value: piano-short-E2.wav
+  individual-pNoMove5Open-enter:
+    value: piano-short-G2.wav
+  individual-pNoMove6Open-enter:
+    value: piano-short-C3.wav
+  individual-pNoMove7Open-enter:
+    value: piano-short-E3.wav
+  individual-pActive0Open-enter:
+    value: piano-short-C2.wav
+  individual-pActive1Open-enter:
+    value: piano-short-E2.wav
+  individual-pActive2Open-enter:
+    value: piano-short-G2.wav
+  individual-pActive3Open-enter:
+    value: piano-short-C3.wav
+  individual-pActive4Open-enter:
+    value: piano-short-E3.wav
+  individual-pActive5Open-enter:
+    value: piano-short-G3.wav
+  individual-pActive6Open-enter:
+    value: piano-short-C4.wav
+  individual-pActive7Open-enter:
+    value: piano-short-E4.wav
+  individual-pAction0Open-enter:
+    value: piano-short-C3.wav
+  individual-pAction1Open-enter:
+    value: piano-short-E3.wav
+  individual-pAction2Open-enter:
+    value: piano-short-G3.wav
+  individual-pAction3Open-enter:
+    value: piano-short-C4.wav
+  individual-pAction4Open-enter:
+    value: piano-short-E4.wav
+  individual-pAction5Open-enter:
+    value: piano-short-G4.wav
+  individual-pAction6Open-enter:
+    value: piano-short-C5.wav
+  individual-pAction7Open-enter:
+    value: piano-short-E5.wav
+  individual-sNoMove0Open-enter:
+    value: piano-short-C1.wav
+  individual-sNoMove1Open-enter:
+    value: piano-short-E1.wav
+  individual-sNoMove2Open-enter:
+    value: piano-short-G1.wav
+  individual-sNoMove3Open-enter:
+    value: piano-short-C2.wav
+  individual-sNoMove4Open-enter:
+    value: piano-short-E2.wav
+  individual-sNoMove5Open-enter:
+    value: piano-short-G2.wav
+  individual-sNoMove6Open-enter:
+    value: piano-short-C3.wav
+  individual-sNoMove7Open-enter:
+    value: piano-short-E3.wav
+  individual-sActive0Open-enter:
+    value: piano-short-C2.wav
+  individual-sActive1Open-enter:
+    value: piano-short-E2.wav
+  individual-sActive2Open-enter:
+    value: piano-short-G2.wav
+  individual-sActive3Open-enter:
+    value: piano-short-C3.wav
+  individual-sActive4Open-enter:
+    value: piano-short-E3.wav
+  individual-sActive5Open-enter:
+    value: piano-short-G3.wav
+  individual-sActive6Open-enter:
+    value: piano-short-C4.wav
+  individual-sActive7Open-enter:
+    value: piano-short-E4.wav
+  individual-sAction0Open-enter:
+    value: piano-short-C3.wav
+  individual-sAction1Open-enter:
+    value: piano-short-E3.wav
+  individual-sAction2Open-enter:
+    value: piano-short-G3.wav
+  individual-sAction3Open-enter:
+    value: piano-short-C4.wav
+  individual-sAction4Open-enter:
+    value: piano-short-E4.wav
+  individual-sAction5Open-enter:
+    value: piano-short-G4.wav
+  individual-sAction6Open-enter:
+    value: piano-short-C5.wav
+  individual-sAction7Open-enter:
+    value: piano-short-E5.wav
+  individual-pNoMove0Closed-enter:
+    value: piano-short-C1.wav
+  individual-pNoMove1Closed-enter:
+    value: piano-short-E1.wav
+  individual-pNoMove2Closed-enter:
+    value: piano-short-G1.wav
+  individual-pNoMove3Closed-enter:
+    value: piano-short-C2.wav
+  individual-pNoMove4Closed-enter:
+    value: piano-short-E2.wav
+  individual-pNoMove5Closed-enter:
+    value: piano-short-G2.wav
+  individual-pNoMove6Closed-enter:
+    value: piano-short-C3.wav
+  individual-pNoMove7Closed-enter:
+    value: piano-short-E3.wav
+  individual-pActive0Closed-enter:
+    value: piano-short-C2.wav
+  individual-pActive1Closed-enter:
+    value: piano-short-E2.wav
+  individual-pActive2Closed-enter:
+    value: piano-short-G2.wav
+  individual-pActive3Closed-enter:
+    value: piano-short-C3.wav
+  individual-pActive4Closed-enter:
+    value: piano-short-E3.wav
+  individual-pActive5Closed-enter:
+    value: piano-short-G3.wav
+  individual-pActive6Closed-enter:
+    value: piano-short-C4.wav
+  individual-pActive7Closed-enter:
+    value: piano-short-E4.wav
+  individual-pAction0Closed-enter:
+    value: piano-short-C3.wav
+  individual-pAction1Closed-enter:
+    value: piano-short-E3.wav
+  individual-pAction2Closed-enter:
+    value: piano-short-G3.wav
+  individual-pAction3Closed-enter:
+    value: piano-short-C4.wav
+  individual-pAction4Closed-enter:
+    value: piano-short-E4.wav
+  individual-pAction5Closed-enter:
+    value: piano-short-G4.wav
+  individual-pAction6Closed-enter:
+    value: piano-short-C5.wav
+  individual-pAction7Closed-enter:
+    value: piano-short-E5.wav
+  individual-sNoMove0Closed-enter:
+    value: piano-short-C1.wav
+  individual-sNoMove1Closed-enter:
+    value: piano-short-E1.wav
+  individual-sNoMove2Closed-enter:
+    value: piano-short-G1.wav
+  individual-sNoMove3Closed-enter:
+    value: piano-short-C2.wav
+  individual-sNoMove4Closed-enter:
+    value: piano-short-E2.wav
+  individual-sNoMove5Closed-enter:
+    value: piano-short-G2.wav
+  individual-sNoMove6Closed-enter:
+    value: piano-short-C3.wav
+  individual-sNoMove7Closed-enter:
+    value: piano-short-E3.wav
+  individual-sActive0Closed-enter:
+    value: piano-short-C2.wav
+  individual-sActive1Closed-enter:
+    value: piano-short-E2.wav
+  individual-sActive2Closed-enter:
+    value: piano-short-G2.wav
+  individual-sActive3Closed-enter:
+    value: piano-short-C3.wav
+  individual-sActive4Closed-enter:
+    value: piano-short-E3.wav
+  individual-sActive5Closed-enter:
+    value: piano-short-G3.wav
+  individual-sActive6Closed-enter:
+    value: piano-short-C4.wav
+  individual-sActive7Closed-enter:
+    value: piano-short-E4.wav
+  individual-sAction0Closed-enter:
+    value: piano-short-C3.wav
+  individual-sAction1Closed-enter:
+    value: piano-short-E3.wav
+  individual-sAction2Closed-enter:
+    value: piano-short-G3.wav
+  individual-sAction3Closed-enter:
+    value: piano-short-C4.wav
+  individual-sAction4Closed-enter:
+    value: piano-short-E4.wav
+  individual-sAction5Closed-enter:
+    value: piano-short-G4.wav
+  individual-sAction6Closed-enter:
+    value: piano-short-C5.wav
+  individual-sAction7Closed-enter:
+    value: piano-short-E5.wav
