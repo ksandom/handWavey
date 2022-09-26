@@ -6,7 +6,7 @@ Enter segments.
 
 This training is in the format of an [example configuration](https://github.com/ksandom/handWavey/blob/main/docs/user/exampleConfigurations.md) that you can apply. It intentionally does not perform any actions like mouse clicks, or key presses. This way you can experiment freely and get comfortable with it in a relaxed setting.
 
-## Playing with segments
+## Exercise - Playing with segments
 
 1. Start by placing your hand about 30cm above the sensor. The mouse cursor should be moving with your hand.
 1. Slowly rotate your wrist in one direction. Things to notice:

@@ -4,7 +4,7 @@ While the previous lesson was about getting confident with handWavey; this lesso
 
 This training is in the format of an [example configuration](https://github.com/ksandom/handWavey/blob/main/docs/user/exampleConfigurations.md) that you can apply. It intentionally does not perform any actions like mouse clicks, or key presses. This way you can experiment freely and get comfortable with it in a relaxed setting.
 
-## Posture vs accuracy
+## Exercise - Posture vs accuracy
 
 1. Start by placing your hand about 30cm above the sensor. The mouse cursor should be moving with your hand now.
 1. Try twisting your hand slowly as far as you can. Things to notice:
@@ -22,7 +22,7 @@ The leapmotion device detects your hand visually. Quite frankly, it's amazing at
 
 For comfort though, your hand should be relaxed, so I tried to configure all examples with this in mind. I recommend holding your hand in a relaxed, flat-ish position (open, but not paper-flat).
 
-## Fast hand movements
+## Exercise - Fast hand movements
 
 1. Start with your hand at rest beside you, or on your keyboard.
 1. Without delay, move your hand across the usable area. Things to notice:
@@ -61,7 +61,7 @@ Mouse cursor acceleration is a common trick used in various pointing devices to 
 
 With a little practice, you can get very accurate at this. If at any point it starts to get erratic; just slow down and try again. I have found that as I get more comfortable with it, I start to move my hand in ways that just aren't fair for the sensor to try to accurately measure.
 
-## Yo' face!
+## Exercise - Yo' face!
 
 1. Rest your face on your hand.
 1. Lean in close to the sensor. Things to notice:
