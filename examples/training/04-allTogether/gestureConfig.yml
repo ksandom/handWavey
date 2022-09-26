@@ -1,0 +1,54 @@
+groups:
+  primaryHand:
+    groups: {}
+    items:
+      rotationSegments:
+        description: When you rotate your hand; it enters different segments. Increasing
+          the number of segments increases the number of things you can do with your
+          hand. Decreasing the number of segments makes it easier to be precise. Remember
+          that some segments are hard for a human hand to reach, so you need to keep
+          that in mind when choosing this number. It is expected that some segments
+          will be unused for this reason. Don't hurt yourself.
+        value: '8'
+      rotationOffset:
+        description: In radians. Adjust where the segments are slightly to cater
+          to your hand's natural bias.
+        value: '0.3'
+      mergeIntoSegment:
+        description: Merge unused segments into this segment. This has the effect
+          of not causing an unnecessary segment change event when accidentally moving
+          into an unused segment.
+        value: '1'
+      mergeFrom:
+        description: Merge between this value, and mergeTo, into mergeIntoSegment.
+        value: '2'
+      mergeTo:
+        description: Merge between this value, and mergeTo, into mergeIntoSegment.
+        value: '2'
+  secondaryHand:
+    groups: {}
+    items:
+      rotationSegments:
+        description: When you rotate your hand; it enters different segments. Increasing
+          the number of segments increases the number of things you can do with your
+          hand. Decreasing the number of segments makes it easier to be precise. Remember
+          that some segments are hard for a human hand to reach, so you need to keep
+          that in mind when choosing this number. It is expected that some segments
+          will be unused for this reason. Don't hurt yourself.
+        value: '1'
+      rotationOffset:
+        description: In radians. Adjust where the segments are slightly to cater
+          to your hand's natural bias.
+        value: '0.3'
+      mergeIntoSegment:
+        description: Merge unused segments into this segment. This has the effect
+          of not causing an unnecessary segment change event when accidentally moving
+          into an unused segment.
+        value: '0'
+      mergeFrom:
+        description: Merge between this value, and mergeTo, into mergeIntoSegment.
+        value: '0'
+      mergeTo:
+        description: Merge between this value, and mergeTo, into mergeIntoSegment.
+        value: '0'
+items: {}
