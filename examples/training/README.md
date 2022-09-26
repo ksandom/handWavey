@@ -1,0 +1,22 @@
+# Training
+
+Over the time that I've been testing handWavey with different audiences; there has been a consistent problem where there are simply a few too many things to learn at once, which has ended up in the person getting discouraged and giving up. Fortunately, this is really easy to solve.
+
+This training splits up the concepts you need to master so that you can easily learn them one by one, and work up at your own pace.
+
+## Stages
+
+Each of these stages are fully self-contained [configuration examples](https://github.com/ksandom/handWavey/blob/main/docs/user/exampleConfigurations.md) so you can return to them in any order, at any time. Although I recommend going through them in order on your first time around.
+
+1. [Basics](00-basics). - Learn how to confidently activate and deactivate movement of the mouse. And while you're there, you can get a feel for how to move the mouse.
+1. [Accuracy and healthy usage](01-accuracy). - Learn how to confidently and **comfortably** be more accurate.
+1. TODO 02-segments. - Learn how to trigger the segments that you want.
+1. TODO 03-grab. - Learn how to trigger the open and closed states by grabbing with your hand.
+1. TODO 04-2Hands. - Learn how to use both hands to unlock more power, or accessibility possibilities.
+1. Now you're ready to
+    * apply a [gestureLayout](https://github.com/ksandom/handWavey/tree/main/examples/gestureLayouts) that suits you. I recommend [tiltClick/actionModifier](https://github.com/ksandom/handWavey/tree/main/examples/gestureLayouts/tiltClick/actionModifier).
+    * change the [audio notifications](https://github.com/ksandom/handWavey/tree/main/examples/audio) to suit your preferences. Although I recommend keeping them on while you get comfortable with it.
+
+## Other needs
+
+There are various accessibility related configurations that may be of interest to you. You can read more about those in the [accessibility documentation](https://github.com/ksandom/handWavey/blob/main/docs/user/accessibility.md).
