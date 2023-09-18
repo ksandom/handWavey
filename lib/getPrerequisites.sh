@@ -35,11 +35,18 @@ fi
 
 if [ "$2" != '' ]; then
   showRequiredParameters
-  fail "Unexpected second parameter. Do you have a space in your path, and not quote it?"
+  fail "Unexpected second parameter. Do you have a space in your path, and didn't quote it?"
 fi
 
 if [ ! -e "$SDKPath" ]; then
   fail "\"$SDKPath\" does not appear to exist."
+fi
+
+if [ -e "$SDKPath/LeapSDK" ]; then
+  old="$SDKPath"
+  SDKPath="$SDKPath/LeapSDK"
+
+  echo "Corrected SDKPath to $SDKPath." >&2
 fi
 
 if [ ! -e "$SDKPath/version.txt" ]; then
@@ -50,10 +57,11 @@ fi
 echo "$SDKPath" > .sdkPath
 
 version="$(cat "$SDKPath/version.txt")"
+echo "SDK Version: $version"
 
 
 # Copy prerequisites
-
-for file in lib/x64/{libLeap.so,libLeapJava.so} lib/LeapJava.jar; do
+echo
+for file in lib/x64/{libLeap.so,libLeapJava.so} lib/LeapJava.jar version.txt; do
   cp -v "$SDKPath/$file" .
 done

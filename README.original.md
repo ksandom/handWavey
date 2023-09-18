@@ -10,20 +10,7 @@ If you use it, I'd love to [hear from you](https://github.com/ksandom/handWavey/
 
 ## Table of contents
 
-* [handWavey](#handwavey)
-    * [Table of contents](#table-of-contents)
-    * [Requirements](#requirements)
-        * [Hardware](#hardware)
-        * [Softare](#softare)
-    * [Run](#run)
-        * [Linux](#linux)
-        * [Windows](#windows)
-        * [MacOS](#macos)
-    * [Install](#install)
-    * [Safety](#safety)
-    * [Contributing](#contributing)
-
-<!-- table of contents created by Adrian Bonnet, see https://Relex12.github.io/Markdown-Table-of-Contents for more -->
+[TOC]
 
 ## Requirements
 

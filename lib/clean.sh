@@ -4,5 +4,5 @@
 while read in; do
   echo "Cleaning $in."
   rm -f $in
-done < <(cat ../.gitignore | grep -v '^\(#\|$\)')
+done < <(cat ../.gitignore | grep -v '^\(#\|$\)' | sed 's#lib/##g')
 
