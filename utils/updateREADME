@@ -1,0 +1,5 @@
+#!/bin/bash
+# Updates README.md with a table of contents.
+# Using: https://github.com/Relex12/Markdown-Table-of-Contents
+
+toc README.original.md -o README.md

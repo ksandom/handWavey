@@ -2,9 +2,15 @@
 LeapJava.jar
 libLeap.so
 libLeapJava.so
+Leap.dll
+LeapJava.dll
+Leap.lib
+libLeap.dylib
+libLeapJava.dylib
 Sample.java
 .sdkPath
 *.log
+lib/version.txt
 
 # Ignore Gradle project-specific cache directory
 .gradle
