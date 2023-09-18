@@ -31,7 +31,7 @@ This will copy everything that is relevant in one easy step.
 where `/path/to/LeapSDK` is where you extracted the LeapSDK. Eg:
 
 ```bash
-./getPrerequisites.sh '~/Downloads/LeapDeveloperKit_2.3.1+31549_linux
+./getPrerequisites.sh ~/Downloads/LeapDeveloperKit_2.3.1+31549_linux
 ```
 
 #### clean.sh
