@@ -4,8 +4,8 @@ TODO: This can be made a lot better. Eg this should be pretty easy to automate u
 
 ## Steps
 
-1. Satisfy the requirements listed in [the README.md](https://github.com/ksandom/handWavey).
-1. Satisfy the steps to be able to run it listed in [the README.md](https://github.com/ksandom/handWavey).
+1. Satisfy the requirements listed in [the README.md](https://github.com/ksandom/handWavey#requirements).
+1. Satisfy the steps to be able to run it listed in [the README.md](https://github.com/ksandom/handWavey#linux).
 1. Browse to where you ran `./gradlew run`.
 1. Run `echo "$(pwd)/bin/run/runHandWavey-linux.sh"`
     You'll use the output of this in the next step.

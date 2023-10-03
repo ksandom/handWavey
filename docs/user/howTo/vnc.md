@@ -2,6 +2,33 @@
 
 If you are using an environment that is not yet supported by handWavey, you can use VNC from a working machine to control it. This document describes how to set it up.
 
+## When you would use this
+
+### On a system that only has difficulty controlling the mouse and keyboard
+
+Thinking Wayland.
+
+You can run handWavey on the same machine, and only use VNC as the mechanism to talk to the display. This will give you the best results possible.
+
+### On a system that is not compatible with the LeapMotion controller and SDK 2.3.1
+
+Thinking MacOS.
+
+You'll need a another computer that can use the LeapMotion controller. handWavey can then talk via VNC directly (no need for you to have a VNC client visible).
+
+This setup will be vulnerable to any congestion on your network, and the quality of your connection. It works well on Wifi, but it is likely to work a lot better over Ethernet.
+
+## The experience of using VNC
+
+It works, and it's usable.
+
+As of this writing, there are a couple of issues that affect the fun of the experience:
+
+| What | How bad? | The future |
+| --- | --- | --- |
+| VNC latency | It's slight, but noticeable. | This is expected, and will probably never change. |
+| Control frame rate | Noticeable. | _Might_ be possible to improve. The current implementation gets many captures of the display per second that we simply don't need. If that can be stopped, this would reduce the network usage, and leave more capacity for sending more regular inputs. |
+
 ## Security considerations
 
 ### Problems
@@ -25,7 +52,7 @@ It must be:
 * Accessible by the machine running handWavey.
 * Able to be authenticated to using a username and password.
 
-You'll need to google got a VNC server that works with your OS/Window manager. But here are some suggestions:
+You'll need to google for a VNC server that works with your OS/Window manager. But here are some suggestions:
 
 * Linux
   * X: x11vnc
@@ -68,3 +95,7 @@ items:
 ```
 
 You need to fill in the `value: ''` entry for the `host`, `password`, and `port`. Your VNC server should tell you these values. If you don't know the `host` value, and you are running handWavey on the same machine that you want to control, then `127.0.0.1` is very likely fine.
+
+## Optimisations
+
+It's worth messing with the [sensitivity](https://github.com/ksandom/handWavey/tree/main/examples/sensitivity) to get the behaviour that you want. The default experience will almost certainly not be what you want.

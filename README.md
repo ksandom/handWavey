@@ -12,6 +12,7 @@ If you use it, I'd love to [hear from you](https://github.com/ksandom/handWavey/
 
 * [handWavey](#handwavey)
     * [Table of contents](#table-of-contents)
+    * [Where does handWavey Work?](#where-does-handwavey-work)
     * [Requirements](#requirements)
         * [Hardware](#hardware)
         * [Softare](#softare)
@@ -24,6 +25,18 @@ If you use it, I'd love to [hear from you](https://github.com/ksandom/handWavey/
     * [Contributing](#contributing)
 
 <!-- table of contents created by Adrian Bonnet, see https://Relex12.github.io/Markdown-Table-of-Contents for more -->
+
+## Where does handWavey Work?
+
+| Platform | Experience | Support |
+| --- | --- | --- |
+| Linux - X | Excellent | Native |
+| Linux - Wayland | Poor | Only [VNC](https://github.com/ksandom/handWavey/blob/main/docs/user/howTo/vnc.md), so far. Hopefully native soon. Note that it works well enough that you can run it locally, and connect to VNC locally without needing to expose VNC to the rest of the network. |
+| Windows 10 | Excellent | Native |
+| Windows 11 | _Unknown_ | _Unknown_ - Probably native. Definitely via [VNC](https://github.com/ksandom/handWavey/blob/main/docs/user/howTo/vnc.md). |
+| MacOS | Poor | May be possible to get it working with [a hack](https://github.com/ksandom/handWavey/issues/1#issuecomment-1092271612). Otherwise via [VNC](https://github.com/ksandom/handWavey/blob/main/docs/user/howTo/vnc.md). |
+
+[More context](https://github.com/ksandom/handWavey/blob/main/docs/user/whereDoesHandWaveyWork.md).
 
 ## Requirements
 
@@ -43,7 +56,7 @@ If you use it, I'd love to [hear from you](https://github.com/ksandom/handWavey/
 
 ### Linux
 
-1. Satisfy the [requirements](#Requirements).
+1. Satisfy the [requirements](#requirements).
 1. [Copy libraries](https://github.com/ksandom/handWavey/blob/main/docs/user/install/libraries.md) from the LeapMotion SDK to lib.
 1. Test that you have everything installed correctly:
    `./gradlew test`
@@ -52,7 +65,7 @@ If you use it, I'd love to [hear from you](https://github.com/ksandom/handWavey/
 
 ### Windows
 
-1. Satisfy the [requirements](#Requirements).
+1. Satisfy the [requirements](#requirements).
 1. `copy build.gradle.windows build.gradle`
 1. [Copy libraries](https://github.com/ksandom/handWavey/blob/main/docs/user/install/libraries.md) from the LeapMotion SDK to lib.
 1. Test that you have everything installed correctly:
@@ -64,7 +77,7 @@ If you use it, I'd love to [hear from you](https://github.com/ksandom/handWavey/
 
 This is theoretically possible, but has not been tested. **There are [known challenges](https://github.com/ksandom/handWavey/issues/1#issuecomment-1092271612)**.
 
-1. Satisfy the [requirements](#Requirements).
+1. Satisfy the [requirements](#requirements).
 1. [Copy libraries](https://github.com/ksandom/handWavey/blob/main/docs/user/install/libraries.md) from the LeapMotion SDK to lib.
 1. Test that you have everything installed correctly:
    `./gradlew test`
