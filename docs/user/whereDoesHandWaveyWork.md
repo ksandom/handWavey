@@ -9,6 +9,7 @@ Now let's refine it:
 * As of this writing, the latest Linux and MacOS support is in 2.3.1 of the SDK. So I've targeted 2.3.1 on all platforms.
     * The latest version is 5.6, so Linux and MacOS have been neglected for a long time.
     * There was word that updated Linux and MacOS support was coming. But nothing has eventuated, yet.
+        * UPDATE: MacOS has just been updated. The download is not listed in the same place, so I'm not sure if it will still be compatible. Once Linux gets the update as well, I'll dive into updating it. So for now, [MacOS remains in the same state](https://github.com/ksandom/handWavey/issues/1#issuecomment-1744668679).
 * Last year's release of MacOS broke compatibility with 2.3.1 of the SDK. There is [a hack to get it going](https://github.com/ksandom/handWavey/issues/1#issuecomment-1092271612) that **some** people have manged to get working.
 * Wayland support is not available yet, but [is likely to happen](https://github.com/ksandom/handWavey/issues/14).
 * X is known to work.
