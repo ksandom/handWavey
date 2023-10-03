@@ -6,8 +6,8 @@ TODO: Installation on Windows needs to be improved to make it easier, and cleane
 
 ## Steps to install
 
-1. Satisfy the requirements listed in [the README.md](https://github.com/ksandom/handWavey).
-1. Satisfy the steps to be able to run it listed in [the README.md](https://github.com/ksandom/handWavey).
+1. Satisfy the requirements listed in [the README.md](https://github.com/ksandom/handWavey#requirements).
+1. Satisfy the steps to be able to run it listed in [the README.md](https://github.com/ksandom/handWavey#windows).
 1. Browse to where you ran `gradlew.bat run`.
 1. Browse to `bin` then `run`.
 1. Right-click-and-hold on `runHandWavey-windows.bat`.
