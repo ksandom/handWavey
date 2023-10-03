@@ -397,11 +397,11 @@ public class HandWaveyConfig {
         Group tpScroll = touchPad.newGroup("scroll");
         tpScroll.newItem(
             "movingMeanBegin",
-            "1",
+            "70",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         tpScroll.newItem(
             "movingMeanEnd",
-            "1",
+            "70",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
 
 
