@@ -120,6 +120,10 @@ public class HandWaveyConfig {
             "1",
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. HandsState tracks what gesture the hands are currently making, and triggers events based on changes.");
         debug.newItem(
+            "Motion",
+            "1",
+            "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. Motion takes hand movements and converts them into output movements like moving the mouse cursor, or scrolling.");
+        debug.newItem(
             "HandStateEvents",
             "0",
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. If you want information about events, you should first check out HandWaveyEvent. If you're not sure why those events are being triggered, then this class will tell you about the state changes that are generating those events. Normally users won't need this information.");
