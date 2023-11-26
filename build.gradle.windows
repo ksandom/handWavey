@@ -22,7 +22,8 @@ dependencies {
     runtimeOnly files('lib/LeapJava.jar')
     implementation 'com.shinyhut:vernacular:1.14'
     implementation "org.yaml:snakeyaml:1.21"
-
+    implementation "com.google.guava:guava:31.1-jre"
+    
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
     testImplementation 'org.hamcrest:hamcrest:2.2'
 }
