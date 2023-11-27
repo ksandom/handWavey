@@ -16,49 +16,49 @@ import java.util.*;
 public class NullOutput implements Output {
     private int x = 0;
     private int y = 0;
-    
+
     private Boolean clicked = false;
-    
+
     private int lastButton = 0;
     private int lastKey = 0;
-    
+
     private int scroll = 0;
-    
+
     public void info() {
         System.out.println("Null output device. Intended for unit testing.");
     }
-    
+
     public Dimension getDesktopResolution() {
         return new Dimension(123, 321);
     }
-    
+
     public void setPosition(int x, int y) {
         this.x = x;
         this.y = y;
     }
-    
+
     public void click(String button) {
         this.clicked = true;
         this.lastButton = getMouseButtonID(button);
     }
-    
+
     public void doubleClick(String button) {
         this.clicked = true;
         this.lastButton = getMouseButtonID(button);
     }
-    
+
     public void mouseDown(String button) {
         this.lastButton = getMouseButtonID(button);
     }
-    
+
     public void mouseUp(String button) {
         this.lastButton = getMouseButtonID(button);
     }
-    
+
     private int getLastMouseButton() {
         return this.lastButton;
     }
-    
+
     private int getMouseButtonID(String buttonName) {
         int result = 0;
         switch (buttonName) {
@@ -71,25 +71,27 @@ public class NullOutput implements Output {
             case "right":
                 result = InputEvent.BUTTON3_MASK;
                 break;
+            default:
+                break;
         }
-        
+
         return result;
     }
-    
-    
+
+
     public void scroll(int amount) {
         this.scroll += amount;
     }
-    
-    
+
+
     public void keyDown(String key) {
         this.lastKey = getKeyID(key);
     }
-    
+
     public void keyUp(String key) {
         this.lastKey = getKeyID(key);
     }
-    
+
     private int getKeyID(String keyName) {
         int result = 0;
         switch (keyName) {
@@ -103,23 +105,23 @@ public class NullOutput implements Output {
                 result = KeyEvent.VK_SHIFT;
                 break;
         }
-        
+
         return result;
     }
-    
+
     public Set<String> getKeysIKnow() {
         Set<String> keys = new HashSet<String>();
         keys.add("a");
         keys.add("b");
         keys.add("c");
-        
+
         return keys;
     }
-    
-    
+
+
     public int testInt(String testName) {
         int result = 0;
-        
+
         switch (testName) {
             case "posX":
                 result = this.x;
@@ -140,7 +142,7 @@ public class NullOutput implements Output {
                 result = this.lastButton;
                 break;
         }
-        
+
         return result;
     }
 }
