@@ -123,8 +123,10 @@ public class Motion {
         double desktopAspectRatio = this.desktopWidth/this.desktopHeight;
 
         // Set initial locaiton for touchPad based zoning.
-        this.touchPadX = (int) Math.round(this.desktopWidth /3);
-        this.touchPadY = (int) Math.round(this.desktopHeight /3);
+        float defaultX = this.desktopWidth /3;
+        float defaultY = this.desktopHeight /3;
+        this.touchPadX = (int) Math.round(defaultX);
+        this.touchPadY = (int) Math.round(defaultY);
 
         // Figure out how to best fit the desktop into the physical space.
         // TODO This could be abstracted out into testable code.
@@ -507,8 +509,10 @@ public class Motion {
         double xDiff = xCoord - this.lastAbsoluteX;
         double yDiff = yCoord - this.lastAbsoluteY;
 
-        int calculatedX = (int) Math.round(coordToDesktopIntX(this.lastAbsoluteX + (xDiff * this.relativeSensitivity)));
-        int calculatedY = (int) Math.round(coordToDesktopIntY(this.lastAbsoluteY + (yDiff * this.relativeSensitivity)));
+        double changeX = this.lastAbsoluteX + (xDiff * this.relativeSensitivity);
+        double changeY = this.lastAbsoluteY + (yDiff * this.relativeSensitivity);
+        int calculatedX = coordToDesktopIntX(changeX);
+        int calculatedY = coordToDesktopIntY(changeY);
 
         moveMouse(calculatedX, calculatedY);
     }
