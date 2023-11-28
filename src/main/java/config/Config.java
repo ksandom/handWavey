@@ -147,7 +147,9 @@ public class Config extends config.Group {
     private void assertDirectory(String path) {
         File directory = new File(path);
         if (!directory.exists()) {
-            directory.mkdir();
+            if (!directory.mkdir()) {
+                this.debug.out(0, "Unable to create directory \"" + path + "\".");
+            }
         }
     }
 }

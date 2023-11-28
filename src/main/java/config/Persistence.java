@@ -118,7 +118,6 @@ public class Persistence {
         // output.* == to Config in memory.
 
         Map inputItems = new HashMap();
-        HashMap<String, Item> outputItems = currentGroup._getItems();
 
         if (obj == null) return;
 
@@ -131,6 +130,8 @@ public class Persistence {
             this.debug.out(0, "Error: \"currentGroup\" is null, which shouldn't happen. Stopping at " + path);
             return;
         }
+
+        HashMap<String, Item> outputItems = currentGroup._getItems();
 
         // Load items into the current group.
         for (Object rawKey : inputItems.keySet()) {

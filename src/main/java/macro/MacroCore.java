@@ -24,7 +24,7 @@ public class MacroCore {
     private HandWaveyEvent handWaveyEvent;
     private String[] slot = new String[256];
     private int nestingLevel = 0;
-    protected static int maxNesting = 10;
+    protected static final int maxNesting = 10;
     private Boolean slotsEnabled = true;
 
     private ShouldComplete[] shouldCompleteInstruction = new ShouldComplete[100];

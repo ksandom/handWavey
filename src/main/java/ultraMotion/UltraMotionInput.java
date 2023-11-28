@@ -24,7 +24,7 @@ public class UltraMotionInput extends Listener {
     private int maxHands = 2;
     private float openThreshold = 0;
     private float pi = (float)3.1415926536;
-    
+
     private double maxHeight = 500;
     private double minHeight = 150;
     private double maxCAtMaxHeight = 210;
@@ -32,56 +32,56 @@ public class UltraMotionInput extends Listener {
     private double heightRatio = 1;
     private double heightDiff = 350;
     private double cDiff = 80;
-    
+
     private Boolean activeHandsExist = false;
-    
+
     private int fingerToUse = 3;
     private Bone.Type boneToUse = null;
 
     public UltraMotionInput () {
         this.boneToUse = Bone.Type.values()[Bone.Type.values().length-1];
-        
+
         this.debug = Debug.getDebug("UltraMotionInput");
-        
+
         Group ultraMotionConfig = Config.singleton().getGroup("ultraMotion");
         this.openThreshold = Float.parseFloat(ultraMotionConfig.getItem("openThreshold").get());
         this.maxHands = Integer.parseInt(ultraMotionConfig.getItem("maxHands").get());
         this.fingerToUse = Integer.parseInt(ultraMotionConfig.getItem("openFinger").get());
-        
+
         this.debug.out(1, "Finger to use for open/closed state: " + String.valueOf(this.fingerToUse));
         this.debug.out(1, "Open/closed threshold: " + String.valueOf(this.openThreshold));
-        
+
         // Configure the cone of silence for ignoring input from outside the reliable cone.
         Group conOfSilence = ultraMotionConfig.getGroup("coneOfSilence");
         this.maxHeight = Double.parseDouble(conOfSilence.getItem("maxHeight").get());
         this.minHeight = Double.parseDouble(conOfSilence.getItem("minHeight").get());
         this.maxCAtMaxHeight = Double.parseDouble(conOfSilence.getItem("maxCAtMaxHeight").get());
         this.maxCAtMinHeight = Double.parseDouble(conOfSilence.getItem("maxCAtMinHeight").get());
-        
+
         // Pre-calculate some of the isInRange calculations to reduce work later on.
         this.heightDiff = this.maxHeight - this.minHeight;
         this.cDiff = this.maxCAtMaxHeight - this.maxCAtMinHeight;
         this.heightRatio = this.heightDiff / this.cDiff;
     }
-    
+
     public Boolean isInRange(double x, double y, double z) {
         Boolean result = false;
-        
+
         if (y < this.minHeight || y > this.maxHeight  ) {
             result = false;
         } else {
             // Get radius from the center of the cone at the current height.
             double c = Math.pow(Math.pow(x, 2) + Math.pow(z, 2), 0.5);
-            
+
             // Get the useable height.
             double height = y - this.minHeight;
-            
+
             // Find the maximum allowable radius at the current height.
             double maxC = height / this.heightRatio + this.maxCAtMinHeight;
-            
+
             result = (c <= maxC);
         }
-        
+
         return result;
     }
 
@@ -94,7 +94,7 @@ public class UltraMotionInput extends Listener {
         this.maxHands = maxHands;
         emptyHands();
     }
-    
+
     public void setOpenThreshold(float openThreshold) {
         this.openThreshold = openThreshold;
     }
@@ -104,14 +104,14 @@ public class UltraMotionInput extends Listener {
         for (int i = 0; i<this.maxHands; i++) {
             this.handSummaries[i] = null;
         }
-        
+
         this.activeHandsExist = false;
     }
-    
+
     public void setUltraMotionManager(UltraMotionManager ultraMotionManager) {
         this.ultraMotionManager = ultraMotionManager;
     }
-    
+
     public void onInit(Controller controller) {
         this.debug.out(0, "Initialised.");
     }
@@ -122,7 +122,7 @@ public class UltraMotionInput extends Listener {
 
     public void onDisconnect(Controller controller) {
         this.debug.out(0, "Disconnected.");
-        
+
         if (this.ultraMotionManager != null) {
             this.ultraMotionManager.exit();
         }
@@ -160,23 +160,23 @@ public class UltraMotionInput extends Listener {
         for(Hand hand : frame.hands()) {
             if (handNumber < this.maxHands) {
                 Vector handPosition = hand.palmPosition();
-                
+
                 if (isInRange(handPosition.getX(), handPosition.getY(), handPosition.getZ())) {
                     // If we aren't tracking this hand yet. Let's do so.
                     if (this.handSummaries[handNumber] == null) {
                         assignNewHand(handNumber, hand.id());
                     }
-                    
+
                     this.handSummaries[handNumber].setOOB(false);
                 } else {
                     if (this.handSummaries[handNumber] == null || !this.handSummaries[handNumber].isValid()) {
                         continue;
                     }
-                    
+
                     this.debug.out(1, "Hand " + String.valueOf(handNumber) + " is OOB.");
                     this.handSummaries[handNumber].setOOB(true);
                 }
-                
+
                 if (this.handSummaries[handNumber].getID() != hand.id()) {
                     if (handCount == 1) {
                         // If this is the only hand, we can simply substitute it, and get on with it.
@@ -193,13 +193,13 @@ public class UltraMotionInput extends Listener {
                         // * A hand gets replaced with the wrong hand.
                         // * Hand ordering gets stuffed up when a hand dissapears and reappears.
                         // TODO Revisit this to make it more durable.
-                        
+
                         this.handSummaries[handNumber].markInvalid();
                         this.debug.out(0, "Discarding hand " + String.valueOf(this.handSummaries[handNumber].getID()) + " != " + String.valueOf(hand.id()) + " in position " + String.valueOf(handNumber));
                         this.ultraMotionManager.getHandWaveyManager().triggerEvent("imposterHand-discard");
                     }
                 }
-                
+
                 this.handSummaries[handNumber].setHandPosition(
                     handPosition.getX(),
                     handPosition.getY(),
@@ -220,51 +220,51 @@ public class UltraMotionInput extends Listener {
                     armDirection.pitch(),
                     armDirection.yaw()
                     );
-                
+
                 this.handSummaries[handNumber].setHandIsLeft(hand.isLeft());
 
                 Float middleDistalBonePitch = hand.fingers().get(this.fingerToUse).bone(this.boneToUse).direction().pitch();
                 Float relativeFingerPitch = mangleAngle(middleDistalBonePitch) + handDirection.pitch();
                 Float fingerDifference = Math.abs(relativeFingerPitch);
                 Boolean handOpen = (fingerDifference < openThreshold);
-                
+
                 this.handSummaries[handNumber].setHandOpen(handOpen);
             } else {
                 // If we have more hands than we are configured to handle, let's just stop processing the extra hands.
                 break;
             }
-            
+
             handNumber++;
         }
-        
+
         if (this.handSummaries[0].isValid()) {
             sendHandSummaries();
         } else {
             this.ultraMotionManager.getHandWaveyManager().discardOldPosition();
         }
-        
+
         this.lastHandCount = handCount;
     }
-    
+
     private void sendHandSummaries() {
         this.ultraMotionManager.getHandWaveyManager().sendHandSummaries(this.handSummaries);
     }
-    
+
     private void imposterReplace(int handPosition, int handID, String why) {
         this.debug.out(0, "Hand " + String.valueOf(this.handSummaries[handPosition].getID()) + " != " + String.valueOf(handID) + " in position " + String.valueOf(handPosition) + ". " + why + " So simply replacing it.");
         assignNewHand(handPosition, handID);
         this.ultraMotionManager.getHandWaveyManager().triggerEvent("imposterHand-replace");
     }
-    
+
     private void assignNewHand(int handPosition, int handID) {
         this.debug.out(1, "New hand: " + String.valueOf(handID) + " assigned to position " + String.valueOf(handPosition));
         this.handSummaries[handPosition] = new HandSummary(handID);
         this.activeHandsExist = true;
     }
-    
+
     private Boolean allHandsAreInvalid() {
         Boolean result = true;
-        
+
         for (int handPosition = 0; handPosition < this.handSummaries.length; handPosition++ ) {
             if (this.handSummaries[handPosition] != null) {
                 if (this.handSummaries[handPosition].isValid() == true) {
@@ -273,31 +273,31 @@ public class UltraMotionInput extends Listener {
                 }
             } else break;
         }
-        
+
         return result;
     }
-    
+
     private float mangleAngle(float angle) {
         // Moves the center by 180 degrees. I didn't get rotation working reliably.
         // TODO Revisit whether getting rotation working reliably would be a better solution. There must be no jump when rotating past the boundary where an individual angle loops.
-        
+
         int sign = (angle < 0)?-1:1;
         float invertedValue = this.pi - Math.abs(angle);
-        
+
         return invertedValue * (float)sign;
     }
-    
+
     private float fixCenter(float value) {
         return combineAngles(value, this.pi);
     }
-    
+
     private float combineAngles(float value, float rotateAmount) {
         // TODO There must be a better way to do this, but it will do for now.
-        
+
         float combined = value + rotateAmount + this.pi;
         combined = combined % (this.pi * 2);
         combined = combined - this.pi;
-        
+
         return combined;
     }
 }

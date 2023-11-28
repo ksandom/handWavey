@@ -24,7 +24,6 @@ class TestProtector {
     @AfterEach
     void destroy() {
         this.protector = null;
-        System.gc();
     }
 
     @Test
