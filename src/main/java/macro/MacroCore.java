@@ -235,7 +235,7 @@ public class MacroCore {
         String[] parameters = parametersString.split("\", \"");
 
         // Remove remaining fluff from the parameters that didn't get picked up from the initial split.
-        if (parametersString != "") {
+        if (parametersString.equals("") != true) {
             parameters[0] = parameters[0].substring(1);
             int lastEntry = parameters.length-1;
             parameters[lastEntry] = parameters[lastEntry].substring(0, parameters[lastEntry].length()-1);

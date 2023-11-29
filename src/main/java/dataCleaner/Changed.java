@@ -14,24 +14,24 @@ package dataCleaner;
 public class Changed {
     private String strCurrent = "";
     private int intCurrent = 0;
-    
+
     private String strPrevious = "";
     private int intPrevious = 0;
-    
+
     private Boolean changed = false;
-    
+
     public Changed(String value) {
         set(value);
         set(value); // Set a secont time to remove the changed state.
     }
-    
+
     public Changed(int value) {
         set(value);
         set(value); // Set a secont time to remove the changed state.
     }
-    
+
     public void set(String value) {
-        if (value != this.strCurrent) {
+        if (value.equals(this.strCurrent) != true) {
             this.strPrevious = this.strCurrent;
             this.strCurrent = value;
             this.changed = true;
@@ -40,7 +40,7 @@ public class Changed {
             this.changed = false;
         }
     }
-    
+
     public void set(int value) {
         if (value != this.intCurrent) {
             this.intPrevious = this.intCurrent;
@@ -51,23 +51,23 @@ public class Changed {
             this.changed = false;
         }
     }
-    
+
     public Boolean hasChanged() {
         return this.changed;
     }
-    
+
     public String fromStr() {
         return this.strPrevious;
     }
-    
+
     public int fromInt() {
         return this.intPrevious;
     }
-    
+
     public String toStr() {
         return this.strCurrent;
     }
-    
+
     public int toInt() {
         return this.intCurrent;
     }

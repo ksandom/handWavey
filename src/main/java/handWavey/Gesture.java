@@ -255,7 +255,7 @@ public class Gesture {
     }
 
     private String hand(String handLetter) {
-        return (handLetter == "p")?"primary":"secondary";
+        return (handLetter.equals("p"))?"primary":"secondary";
     }
 
     private String generateGestureName(String primaryZone, int primarySegment, int primaryHandState, String secondaryZone, int secondarySegment, int secondaryHandState) {
@@ -274,7 +274,7 @@ public class Gesture {
         int segment = segmentIn;
         int handState = handStateIn;
 
-        if (zone == "OOB") {
+        if (zone.equals("OOB")) {
             handState = this.absent;
             segment = 0;
         }

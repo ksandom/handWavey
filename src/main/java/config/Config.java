@@ -48,7 +48,7 @@ public class Config extends config.Group {
     }
 
     public void addGroupToSeparate(String groupName) {
-        if (groupName == "") return;
+        if (groupName.equals("")) return;
         this.groupsToSaveSeparately.put(groupName, true);
     }
 
