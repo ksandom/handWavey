@@ -53,21 +53,21 @@ public class ConfigTestGroup {
     @Test
     public void testSubGroup() {
         Group things = this.group.newGroup("things");
-        assertTrue(things instanceof Group);
+        assertNotNull(things);
     }
 
     @Test
-    public void testNewGroup() {
+    public void testGetSubGroup() {
         this.group.newGroup("things");
         Group things = this.group.getGroup("things");
-        assertTrue(things instanceof Group);
+        assertNotNull(things);
     }
 
     @Test
     public void testNewItem() {
         this.group.newItem("thing1", "aValue", "Description of thing1");
         Item thing1 = this.group.getItem("thing1");
-        assertTrue(thing1 instanceof Item);
+        assertNotNull(thing1);
         assertEquals(thing1.get(), "aValue");
     }
 
