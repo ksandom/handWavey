@@ -32,15 +32,24 @@ public class Persistence {
         this.debug.out(1, "Save config file: " + fileName);
         Map tree = buildTree(group._getGroups(), group._getItems(), exclusions);
 
+        FileWriter writer = null;
         try {
             Yaml yaml = new Yaml();
-            FileWriter writer = new FileWriter(fileName);
+            writer = new FileWriter(fileName);
             yaml.dump(tree, writer);
 
         } catch (IOException e) {
             this.debug.out(0, "Failed to save config to " + fileName + ". Here is a stack trace for debugging:");
             e.printStackTrace();
             return ;
+        } finally {
+            if (writer != null) {
+                try {
+                writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -96,9 +105,10 @@ public class Persistence {
         }
 
         this.debug.out(1, "Load config file: " + fileName);
+        InputStream inputStream = null;
         try {
             Yaml yaml = new Yaml();
-            InputStream inputStream = new FileInputStream(new File(fileName));
+            inputStream = new FileInputStream(new File(fileName));
             Map<String, Object> obj = yaml.load(inputStream);
 
             walkInput(fileName, obj, currentGroup, exclusions);
@@ -106,6 +116,14 @@ public class Persistence {
             this.debug.out(0, "Failed to load config from " + fileName + ". Here is a stack trace for debugging:");
             e.printStackTrace();
             return ;
+        } finally {
+            if (inputStream != null) {
+                try {
+                inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
