@@ -27,8 +27,8 @@ public class HandSummary {
     private double armPitch;
     private double armYaw;
 
-    private Boolean handOpen;
-    private Boolean isLeft;
+    private Boolean handOpen = true;
+    private Boolean isLeft = true;
 
     private Boolean valid = true;
     private Boolean oob = false;
@@ -210,7 +210,7 @@ public class HandSummary {
     }
 
     public void setHandOpen(Boolean state) {
-        if (this.handOpen != state) markUpdated();
+        if (!this.handOpen.equals(state)) markUpdated();
         this.handOpen = state;
     }
 
@@ -231,7 +231,7 @@ public class HandSummary {
     }
 
     public void setOOB(Boolean value) {
-        if (this.oob != value) markUpdated();
+        if (!this.oob.equals(value)) markUpdated();
         this.oob = value;
     }
 
