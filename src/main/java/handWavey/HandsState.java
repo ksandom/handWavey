@@ -175,7 +175,7 @@ public class HandsState {
             if (!shouldUpdatePrimary && this.earlyUnfreeze) {
                 // Check if the hand is already in the active area. If so, let's just enable it.
                 primaryHandZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
-                if (this.handsState.getZone(primaryHandZ) == this.earlyUnfreezeZone) {
+                if (this.handsState.getZone(primaryHandZ).equals(this.earlyUnfreezeZone)) {
                     shouldUpdatePrimary = true;
                     this.handSummaries[0].clearNewHand();
                     this.debug.out(1, "The hand seems ready. Skipping the rest of the cursorFreezeFirstMillis timeout.");
@@ -188,7 +188,7 @@ public class HandsState {
             primaryHandZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
 
             String zone = this.handsState.getZone(primaryHandZ);
-            if (zone != this.zoneOverride) {
+            if (zone.equals(this.zoneOverride) == false) {
                 this.primaryState.setZone(zone);
             }
 
@@ -389,11 +389,11 @@ public class HandsState {
         String newZone = deriveZone(handZ);
         String bufferZone = deriveZone(handZ + this.zoneBuffer);
 
-        if ((bufferZone == newZone) && (newZone != this.zone)) {
+        if ((bufferZone.equals(newZone)) && (newZone.equals(this.zone) == false)) {
             this.zone = newZone;
         }
 
-        if ((allowOverride && this.zoneOverride != "")) {
+        if ((allowOverride && this.zoneOverride.equals("") == false)) {
             return this.zoneOverride;
         }
 

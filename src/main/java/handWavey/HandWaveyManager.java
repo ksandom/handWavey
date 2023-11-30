@@ -203,7 +203,7 @@ public class HandWaveyManager {
         for (String outerKey: this.zones.keySet()) {
             Zone outerZone = this.zones.get(outerKey);
             for (String innerKey: this.zones.keySet()) {
-                if (outerKey != innerKey) {
+                if (outerKey.equals(innerKey) == false) {
                     Zone innerZone = this.zones.get(innerKey);
 
                     double diff = Math.abs(innerZone.getBegin() - outerZone.getBegin());
@@ -285,7 +285,7 @@ public class HandWaveyManager {
         // Move the mouse cursor.
         if (!motion.cusorIsLocked()) {
             if ((zone.equals("none")) || (zone.equals("noMove")) || this.handsState.newHandsCursorFreeze() == true) {
-                if (this.zoneMode == "touchPad") {
+                if (this.zoneMode.equals("touchPad")) {
                     motion.updateMovingMeans(zone, handZ, this.handSummaries, this.zones);
                     motion.touchPadNone();
                 }
@@ -309,7 +309,7 @@ public class HandWaveyManager {
             }
         } else {
             // Stop the cursor from jumping around during the beginning of a mouse-down event.
-            if (this.zoneMode == "touchPad") {
+            if (this.zoneMode.equals("touchPad")) {
                 motion.updateMovingMeans(zone, handZ, this.handSummaries, this.zones);
                 motion.touchPadNone();
             }

@@ -142,7 +142,7 @@ public class Motion {
         this.yOffset = pYMin * -1;
 
         this.zoneMode = Config.singleton().getItem("zoneMode").get();
-        if (this.zoneMode == "touchPad") {
+        if (this.zoneMode.equals("touchPad")) {
             this.debug.out(1, "touchPad zone mode only needs simple multipliers.");
             this.xMultiplier = configuredXMultiplier;
             this.yMultiplier = configuredYMultiplier;

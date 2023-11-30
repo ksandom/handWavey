@@ -100,7 +100,7 @@ public class HandStateEvents {
                 this.stateChanged.fromInt()) + "-exit");
 
             if (somethingWithOOBStateChanged()) {
-                if (this.OOBChanged.fromStr() != "OOB") {
+                if (this.OOBChanged.fromStr().equals("OOB") == false ) {
                     this.exitEvents.add(this.gesture.gestureName(
                         this.handLetter,
                         this.OOBChanged.fromStr(),
@@ -116,7 +116,7 @@ public class HandStateEvents {
                 this.stateChanged.toInt()) + "-enter");
 
             if (somethingWithOOBStateChanged()) {
-                if (this.OOBChanged.toStr() != "OOB") {
+                if (this.OOBChanged.toStr().equals("OOB") == false) {
                     this.enterEvents.add(this.gesture.gestureName(
                         this.handLetter,
                         this.OOBChanged.toStr(),
@@ -151,11 +151,11 @@ public class HandStateEvents {
     }
 
     public Boolean nonOOBEnter() {
-        return (this.zoneChanged.hasChanged() && this.zoneChanged.fromStr() == "OOB");
+        return (this.zoneChanged.hasChanged() && this.zoneChanged.fromStr().equals("OOB"));
     }
 
     public Boolean nonOOBExit() {
-        return (this.zoneChanged.hasChanged() && this.zoneChanged.toStr() == "OOB");
+        return (this.zoneChanged.hasChanged() && this.zoneChanged.toStr().equals("OOB"));
     }
 
     private Boolean reIntroduced() {

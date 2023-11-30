@@ -165,7 +165,7 @@ public class MacroCore {
 
     private void doSlot(int slot, String eventName) {
         String previousValue = this.slot[slot];
-        String eventToRun = (this.slot[slot] != "")?this.slot[slot]:eventName;
+        String eventToRun = (this.slot[slot].equals("") == false)?this.slot[slot]:eventName;
         if (slotsEnabled) {
             this.debug.out(1, "Run slot " + String.valueOf(slot) + " == " + eventToRun + ". Previous value: " + previousValue);
 
@@ -208,7 +208,7 @@ public class MacroCore {
             return defaultValue;
 
         } else {
-            if (parameters[position] == "") {
+            if (parameters[position].equals("")) {
                 return defaultValue;
             } else {
                 return parameters[position];
