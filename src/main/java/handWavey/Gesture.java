@@ -9,6 +9,7 @@ Also generates the config for those events.
 package handWavey;
 
 import config.*;
+import java.util.Locale;
 import java.util.HashMap;
 import java.sql.Timestamp;
 import com.google.common.base.Joiner;
@@ -251,7 +252,7 @@ public class Gesture {
 
     public String capitalise(String value) {
         // TODO Gracefully handle 0 length strings.
-        return value.substring(0, 1).toUpperCase() + value.substring(1);
+        return value.substring(0, 1).toUpperCase(Locale.getDefault()) + value.substring(1);
     }
 
     private String hand(String handLetter) {
