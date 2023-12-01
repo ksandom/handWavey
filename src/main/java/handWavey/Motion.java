@@ -16,7 +16,7 @@ import java.awt.Dimension;
 import java.sql.Timestamp;
 import java.util.HashMap;
 
-public class Motion {
+public final class Motion {
 
     private static Motion motion = null;
 

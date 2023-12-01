@@ -26,7 +26,6 @@ public class Config extends config.Group {
     private Debug debug = new Debug(0, "Config");
 
     public Config(String fileName) {
-        this.makeClean();
         this.directoryName = getFullPath(fileName);
         this.fileExists = new File(this.directoryName).exists();
 

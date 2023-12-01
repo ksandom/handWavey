@@ -12,25 +12,25 @@ public class Dirt { // Manages whether configuration has changed since a known s
     private Boolean dirty = false;
     private Config config = null;
     private Boolean startup = true;
-    
+
     public Dirt(Boolean startup) {
         this.startup = startup;
     }
-    
+
     protected void makeDirty() {
         if (this.startup == false) {
             this.dirty = true;
-            
+
             if (this.config != null) {
                 this.config.makeDirty();
             }
         }
     }
-    
+
     public void makeClean() {
         this.dirty = false;
     }
-    
+
     public Boolean isDirty() {
         return this.dirty;
     }
@@ -38,7 +38,7 @@ public class Dirt { // Manages whether configuration has changed since a known s
     public Boolean isStartingUp() {
         return this.startup;
     }
-    
+
     public void setConfigManager(Config config) {
         this.config = config;
     }
@@ -46,7 +46,7 @@ public class Dirt { // Manages whether configuration has changed since a known s
     public Config getConfigManager() {
         return this.config;
     }
-    
+
     public void finishedStartup() {
         this.startup = false;
     }

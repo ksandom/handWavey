@@ -15,14 +15,14 @@ import com.leapmotion.leap.*;
 import com.leapmotion.leap.Controller.PolicyFlag;
 import handWavey.HandWaveyManager;
 
-public class UltraMotionManager {
+public final class UltraMotionManager {
     private UltraMotionInput ultraMotionInput = new UltraMotionInput();
     private Controller controller = new Controller();
     private config.Config config;
     private HandWaveyManager handWaveyManager;
-    
+
     private Boolean active = false;
-    
+
     public UltraMotionManager (HandWaveyManager hwm) {
         this.handWaveyManager = hwm;
         this.config = Config.singleton();
@@ -31,39 +31,39 @@ public class UltraMotionManager {
         if (!this.controller.isPolicySet(Controller.PolicyFlag.POLICY_BACKGROUND_FRAMES)) {
             this.controller.setPolicy(Controller.PolicyFlag.POLICY_BACKGROUND_FRAMES);
         }
-        
+
         this.controller.addListener(ultraMotionInput);
-        
+
         this.active = true;
-        
+
         this.ultraMotionInput.setUltraMotionManager(this);
     }
-    
+
     public HandWaveyManager getHandWaveyManager() {
         return this.handWaveyManager;
     }
-    
+
     public void keepAlive() {
         this.active = true;
-        
+
         while (this.active) {
             sleep(500);
         }
-        
+
         cleanup();
     }
-    
+
     public void keepAliveUntilBreak() {
         while (true) {
             sleep(500);
             // TODO I don't think that the cleanup() is being called at the moment. I'm not sure what the consequences of that are, but as a general rule, we should run cleanup when exiting. It would be great to determine if it's happening, and fix it if it needs to be fixed.
         }
     }
-    
+
     public void exit() {
         this.active = false;
     }
-    
+
     public void cleanup () {
         this.controller.removeListener(this.ultraMotionInput);
     }

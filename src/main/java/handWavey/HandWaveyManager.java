@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.io.File;
 
 /* HandWaveyManager is the glue that brings everything together. */
-public class HandWaveyManager {
+public final class HandWaveyManager {
     private Debug debug;
     private Config config;
     private Motion motion;
