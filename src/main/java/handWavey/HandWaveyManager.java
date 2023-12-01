@@ -203,7 +203,7 @@ public class HandWaveyManager {
         for (String outerKey: this.zones.keySet()) {
             Zone outerZone = this.zones.get(outerKey);
             for (String innerKey: this.zones.keySet()) {
-                if (outerKey.equals(innerKey) == false) {
+                if (!outerKey.equals(innerKey)) {
                     Zone innerZone = this.zones.get(innerKey);
 
                     double diff = Math.abs(innerZone.getBegin() - outerZone.getBegin());

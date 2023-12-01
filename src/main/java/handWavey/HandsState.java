@@ -188,7 +188,7 @@ public class HandsState {
             primaryHandZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
 
             String zone = this.handsState.getZone(primaryHandZ);
-            if (zone.equals(this.zoneOverride) == false) {
+            if (!zone.equals(this.zoneOverride)) {
                 this.primaryState.setZone(zone);
             }
 
@@ -389,11 +389,11 @@ public class HandsState {
         String newZone = deriveZone(handZ);
         String bufferZone = deriveZone(handZ + this.zoneBuffer);
 
-        if ((bufferZone.equals(newZone)) && (newZone.equals(this.zone) == false)) {
+        if ((bufferZone.equals(newZone)) && !newZone.equals(this.zone)) {
             this.zone = newZone;
         }
 
-        if ((allowOverride && this.zoneOverride.equals("") == false)) {
+        if ((allowOverride && !this.zoneOverride.equals(""))) {
             return this.zoneOverride;
         }
 

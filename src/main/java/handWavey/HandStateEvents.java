@@ -100,7 +100,7 @@ public class HandStateEvents {
                 this.stateChanged.fromInt()) + "-exit");
 
             if (somethingWithOOBStateChanged()) {
-                if (this.OOBChanged.fromStr().equals("OOB") == false ) {
+                if (!this.OOBChanged.fromStr().equals("OOB")) {
                     this.exitEvents.add(this.gesture.gestureName(
                         this.handLetter,
                         this.OOBChanged.fromStr(),
@@ -116,7 +116,7 @@ public class HandStateEvents {
                 this.stateChanged.toInt()) + "-enter");
 
             if (somethingWithOOBStateChanged()) {
-                if (this.OOBChanged.toStr().equals("OOB") == false) {
+                if (!this.OOBChanged.toStr().equals("OOB")) {
                     this.enterEvents.add(this.gesture.gestureName(
                         this.handLetter,
                         this.OOBChanged.toStr(),

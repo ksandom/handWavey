@@ -31,7 +31,7 @@ public class Changed {
     }
 
     public void set(String value) {
-        if (value.equals(this.strCurrent) != true) {
+        if (!value.equals(this.strCurrent)) {
             this.strPrevious = this.strCurrent;
             this.strCurrent = value;
             this.changed = true;

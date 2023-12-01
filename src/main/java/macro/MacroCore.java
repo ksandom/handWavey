@@ -165,7 +165,7 @@ public class MacroCore {
 
     private void doSlot(int slot, String eventName) {
         String previousValue = this.slot[slot];
-        String eventToRun = (this.slot[slot].equals("") == false)?this.slot[slot]:eventName;
+        String eventToRun = (!this.slot[slot].equals(""))?this.slot[slot]:eventName;
         if (slotsEnabled) {
             this.debug.out(1, "Run slot " + String.valueOf(slot) + " == " + eventToRun + ". Previous value: " + previousValue);
 
@@ -235,7 +235,7 @@ public class MacroCore {
         String[] parameters = parametersString.split("\", \"");
 
         // Remove remaining fluff from the parameters that didn't get picked up from the initial split.
-        if (parametersString.equals("") != true) {
+        if (!parametersString.equals("")) {
             parameters[0] = parameters[0].substring(1);
             int lastEntry = parameters.length-1;
             parameters[lastEntry] = parameters[lastEntry].substring(0, parameters[lastEntry].length()-1);
