@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.OutputStreamWriter;
+import java.io.FileOutputStream;
 
 import debug.Debug;
 
@@ -32,10 +34,13 @@ public class Persistence {
         this.debug.out(1, "Save config file: " + fileName);
         Map tree = buildTree(group._getGroups(), group._getItems(), exclusions);
 
-        FileWriter writer = null;
+        OutputStreamWriter writer = null;
         try {
             Yaml yaml = new Yaml();
-            writer = new FileWriter(fileName);
+
+            FileOutputStream fileStream = new FileOutputStream(fileName);
+            writer = new OutputStreamWriter(fileStream, "UTF-8");
+
             yaml.dump(tree, writer);
 
         } catch (IOException e) {
