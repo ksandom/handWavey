@@ -120,11 +120,11 @@ public final class Motion {
         Dimension desktopResolution = this.getOutput().getDesktopResolution();
         this.desktopWidth = desktopResolution.width;
         this.desktopHeight = desktopResolution.height;
-        double desktopAspectRatio = this.desktopWidth/this.desktopHeight;
+        double desktopAspectRatio = (double)this.desktopWidth/(double)this.desktopHeight;
 
         // Set initial locaiton for touchPad based zoning.
-        float defaultX = this.desktopWidth /3;
-        float defaultY = this.desktopHeight /3;
+        float defaultX = (float)this.desktopWidth / (float)3;
+        float defaultY = (float)this.desktopHeight / (float)3;
         this.touchPadX = (int) Math.round(defaultX);
         this.touchPadY = (int) Math.round(defaultY);
 
@@ -136,7 +136,7 @@ public final class Motion {
         int pYMin = Integer.parseInt(physicalBoundaries.getItem("yMin").get());
         int pYMax = Integer.parseInt(physicalBoundaries.getItem("yMax").get());
         int pYDiff = pYMax - pYMin;
-        double physicalAspectRatio = pXDiff / pYDiff;
+        double physicalAspectRatio = (double)pXDiff / (double)pYDiff;
 
         this.xOffset = pX;
         this.yOffset = pYMin * -1;

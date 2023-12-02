@@ -333,7 +333,7 @@ public class HandsState {
         double offsetRoll = handedRoll + this.pi + (segmentWidth/2) - userOffset;
 
         // Work out which segment we are in, then rotate it back because we rotated to make the entire range positive.
-        int segmentNumber = (int) Math.floor((offsetRoll / segmentWidth) - (segmentCount / 2));
+        int segmentNumber = (int) Math.floor(((double)offsetRoll / (double)segmentWidth) - ((double)segmentCount / 2));
         while (segmentNumber < 0) {
             segmentNumber += segmentCount;
         }
