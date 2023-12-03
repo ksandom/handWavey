@@ -56,9 +56,9 @@ public class HandSummary {
     private double pitchRotationOffset = 0;
     private double yawRotationOffset = 0;
 
-    private final double upper = Math.PI;
-    private final double lower = Math.PI * -1;
-    private final double oneRotation = Math.PI * 2;
+    private final static double UPPER = Math.PI;
+    private final static double LOWER = Math.PI * -1;
+    private final static double ONE_ROTATION = Math.PI * 2;
 
 
     public HandSummary(int id){
@@ -171,12 +171,12 @@ public class HandSummary {
     private double protectAngle(double angle) {
         double result = angle;
 
-        while (result > this.upper) {
-            result = this.lower - (result - this.oneRotation);
+        while (result > HandSummary.UPPER) {
+            result = HandSummary.LOWER - (result - HandSummary.ONE_ROTATION);
         }
 
-        while (result < this.lower) {
-            result += this.oneRotation;
+        while (result < HandSummary.LOWER) {
+            result += HandSummary.ONE_ROTATION;
         }
 
         return result;

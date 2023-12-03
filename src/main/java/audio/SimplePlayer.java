@@ -18,7 +18,7 @@ import javax.sound.sampled.SourceDataLine;
 
 class SimplePlayer {
 
-        private final int BUFFER_SIZE = 128000;
+        private final static int BUFFER_SIZE = 128000;
         private File soundFile;
         private AudioInputStream audioStream;
         private AudioFormat audioFormat;
@@ -64,7 +64,7 @@ class SimplePlayer {
             sourceLine.start();
 
             int nBytesRead = 0;
-            byte[] abData = new byte[BUFFER_SIZE];
+            byte[] abData = new byte[SimplePlayer.BUFFER_SIZE];
             while (nBytesRead != -1) {
                 try {
                     nBytesRead = audioStream.read(abData, 0, abData.length);
