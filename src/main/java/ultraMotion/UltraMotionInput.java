@@ -64,10 +64,14 @@ public class UltraMotionInput extends Listener {
         this.heightRatio = this.heightDiff / this.cDiff;
     }
 
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value="DLS_DEAD_LOCAL_STORE",
+        justification="result is definitely used. I suspect the spotbugs is not understanding result = (c <= maxC);.")
+
     public Boolean isInRange(double x, double y, double z) {
         Boolean result = false;
 
-        if (y < this.minHeight || y > this.maxHeight  ) {
+        if (y < this.minHeight || y > this.maxHeight ) {
             result = false;
         } else {
             // Get radius from the center of the cone at the current height.

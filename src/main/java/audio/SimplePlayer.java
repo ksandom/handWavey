@@ -24,6 +24,10 @@ class SimplePlayer {
         private AudioFormat audioFormat;
         private SourceDataLine sourceLine;
 
+        @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+            value="DLS_DEAD_LOCAL_STORE",
+            justification="nBytesWritten is not needed. Yet the absense of it causes several syntax errors.")
+
         /**
          * @param filename the name of the file that is going to be played
          */
