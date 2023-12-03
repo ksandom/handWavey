@@ -50,7 +50,7 @@ public class HandWaveyConfig {
             "This number is incremented by the programmer whenever existing config items get changed (eg new description, default value etc) so that conflicts can be resolved.");
         configFormatVersion.set("2021-11-26"); // Update it here.
 
-        Item saveBackConfig = this.config.newItem(
+        this.config.newItem(
             "saveBackConfig",
             "true",
             "[true, false] Save back config after loading it. This has the effect of cleaning up the configuration files, and reflecting changes with new versions in the config file. The only time you'll want to turn this off while developing a config that you may want to share around. Ie if you make a mistake, it won't get lost. Increase debugging on Persistance to at least 1, and pay attention to the debug output to spot any mistakes that you've made. \"true\" == save back. \"false\" == don't save back.");
@@ -303,7 +303,7 @@ public class HandWaveyConfig {
 
         Group zones = this.config.newGroup("zones");
         Group touchScreen = zones.newGroup("touchScreen");
-        Group zoneNone = touchScreen.newGroup("zoneNone");
+        touchScreen.newGroup("zoneNone");
         // None currently doesn't require any config. Its group is here solely for completeness.
 
         Group absolute = touchScreen.newGroup("absolute");
@@ -360,7 +360,7 @@ public class HandWaveyConfig {
 
 
         Group touchPad = zones.newGroup("touchPad");
-        Group zoneTPNone = touchPad.newGroup("zoneNone");
+        touchPad.newGroup("zoneNone");
         // None currently doesn't require any config. Its group is here solely for completeness.
 
         Group noMove = touchPad.newGroup("noMove");

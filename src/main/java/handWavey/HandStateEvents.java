@@ -177,7 +177,7 @@ public class HandStateEvents {
         result.add("general-segment-" + this.handLetter + "AnyChange");
         result.add("general-segment-" + this.handLetter + this.segmentChanged.toInt() + "-enter");
 
-        String fromState = this.gesture.capitalise(this.gesture.handState(this.stateChanged.fromInt()));
+        // String fromState = this.gesture.capitalise(this.gesture.handState(this.stateChanged.fromInt()));
         String toState = this.gesture.capitalise(this.gesture.handState(this.stateChanged.toInt()));
 
         result.add("general-state-" + this.handLetter + "AnyChange");
