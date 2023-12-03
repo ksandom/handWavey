@@ -8,10 +8,8 @@ package handWavey;
 
 import java.io.File;
 import config.*;
-import debug.Debug;
 
 public class HandWaveyConfig {
-    private Debug debug;
     private Config config;
     private String fileName = "handWavey";
 

@@ -23,7 +23,6 @@ public class HandWaveyEvent {
     public static final Boolean audioDisabled = false;
     public static final Boolean audioEnabled = true;
 
-    private HandWaveyManager handWaveyManager;
     private OutputProtection output;
     private Boolean useAudio;
     private String audioPath;
