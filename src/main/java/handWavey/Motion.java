@@ -210,6 +210,8 @@ public final class Motion {
             case "VNC":
                 setOutput(new OutputProtection(new VNCOutput(chosenOutput)));
                 break;
+            default:
+                break;
         }
     }
 

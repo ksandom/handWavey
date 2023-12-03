@@ -104,6 +104,8 @@ public class NullOutput implements Output {
             case "shift":
                 result = KeyEvent.VK_SHIFT;
                 break;
+            default:
+                break;
         }
 
         return result;
@@ -140,6 +142,8 @@ public class NullOutput implements Output {
                 break;
             case "lastMouseButton":
                 result = this.lastButton;
+                break;
+            default:
                 break;
         }
 
