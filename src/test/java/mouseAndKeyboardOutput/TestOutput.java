@@ -12,7 +12,7 @@ import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestOutput {
-    private Output output;
+    private Output output = null;
 
     @BeforeEach
     void setUp() {
@@ -22,7 +22,6 @@ class TestOutput {
     @AfterEach
     void destroy() {
         this.output = null;
-        System.gc();
     }
 
     @Test

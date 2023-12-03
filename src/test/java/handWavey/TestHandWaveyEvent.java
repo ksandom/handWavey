@@ -15,13 +15,13 @@ import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestHandWaveyEvent {
-    private Gesture gesture;
-    private Config config;
-    private HandWaveyConfig handWaveyConfig;
-    private HandWaveyEvent handWaveyEvent;
-    private OutputProtection output;
-    private HandsState handsState;
-    private HandWaveyManager handWaveyManager;
+    private Gesture gesture = null;
+    private Config config = null;
+    private HandWaveyConfig handWaveyConfig = null;
+    private HandWaveyEvent handWaveyEvent = null;
+    private OutputProtection output = null;
+    private HandsState handsState = null;
+    private HandWaveyManager handWaveyManager = null;
 
     @BeforeEach
     void setUp() {
@@ -47,7 +47,6 @@ class TestHandWaveyEvent {
         this.output = null;
         this.handsState = null;
         this.handWaveyManager = null;
-        System.gc();
     }
 
     @Test

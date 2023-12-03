@@ -24,7 +24,7 @@ class DebugTester extends Debug {
 }
 
 public class DebugTest {
-    private DebugTester debug;
+    private DebugTester debug = null;
 
     @BeforeEach
     void setUp() {

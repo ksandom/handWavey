@@ -12,9 +12,9 @@ import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestGesture {
-    private Gesture gesture;
-    private Config config;
-    private HandWaveyConfig handWaveyConfig;
+    private Gesture gesture = null;
+    private Config config = null;
+    private HandWaveyConfig handWaveyConfig = null;
 
     @BeforeEach
     void setUp() {
@@ -30,7 +30,6 @@ class TestGesture {
         this.gesture = null;
         this.config = null;
         this.handWaveyConfig = null;
-        System.gc();
     }
 
     @Test

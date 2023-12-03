@@ -11,8 +11,8 @@ import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ConfigTestGroup {
-    private Config config;
-    private Group group;
+    private Config config = null;
+    private Group group = null;
 
     @BeforeEach
     void setUp() {

@@ -16,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 class TestState {
-    HandsState handsState;
-    private HandWaveyConfig handWaveyConfig;
+    HandsState handsState = null;
+    private HandWaveyConfig handWaveyConfig = null;
     private float pi = (float)3.1415926536;
 
     @BeforeEach
@@ -96,7 +96,6 @@ class TestState {
     void destroy() {
         this.handsState = null;
         this.handWaveyConfig = null;
-        System.gc();
     }
 
     @Test

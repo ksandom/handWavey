@@ -38,7 +38,6 @@ public class TestPersistence {
     @AfterEach
     void destroy() {
         this.config = null;
-        System.gc();
     }
 
     @Test

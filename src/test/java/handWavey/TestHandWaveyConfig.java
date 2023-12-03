@@ -11,7 +11,7 @@ import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestHandWaveyConfig {
-    private HandWaveyConfig handWaveyConfig;
+    private HandWaveyConfig handWaveyConfig = null;
 
     @BeforeEach
     void setUp() {
@@ -21,7 +21,6 @@ class TestHandWaveyConfig {
     @AfterEach
     void destroy() {
         this.handWaveyConfig = null;
-        System.gc();
     }
 
     @Test

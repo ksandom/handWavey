@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 All of the same tests from TestOutput should pass with the same when using OutputProtection.
 */
 class TestOutputProtection {
-    private OutputProtection output;
+    private OutputProtection output = null;
 
     @BeforeEach
     void setUp() {
@@ -25,7 +25,6 @@ class TestOutputProtection {
     @AfterEach
     void destroy() {
         this.output = null;
-        System.gc();
     }
 
     // TODO Find a better way of testing this.

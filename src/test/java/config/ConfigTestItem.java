@@ -10,10 +10,10 @@ import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ConfigTestItem {
-    private String defaultValue;
-    private String value;
-    private String description;
-    private Item item;
+    private String defaultValue = "";
+    private String value = "";
+    private String description = "";
+    private Item item = null;
 
     @BeforeEach
     void setUp() {
@@ -27,7 +27,6 @@ public class ConfigTestItem {
     @AfterEach
     void destroy() {
         this.item = null;
-        System.gc();
     }
 
     @Test
