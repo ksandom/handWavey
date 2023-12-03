@@ -108,6 +108,10 @@ public class HandSummary {
         return this.id;
     }
 
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value="FE_FLOATING_POINT_EQUALITY",
+        justification="The if line is to save resources when nothing has changed. A few misses is fine. But the overhead that comes with more thorough testing would negate the value of the line.")
+
     public void setHandPosition(double x, double y, double z) {
         double mappedX = getMapped(this.xMap, x, y, z);
         double mappedY = getMapped(this.yMap, x, y, z);
@@ -141,6 +145,10 @@ public class HandSummary {
     public double getHandZ() {
         return this.handZ;
     }
+
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value="FE_FLOATING_POINT_EQUALITY",
+        justification="The if line is to save resources when nothing has changed. A few misses is fine. But the overhead that comes with more thorough testing would negate the value of the line.")
 
     public void setHandAngles(double roll, double pitch, double yaw) {
         if (this.handRoll != roll || this.handPitch != pitch || this.handYaw != yaw) markUpdated();
@@ -189,6 +197,10 @@ public class HandSummary {
     public double getHandYaw() {
         return this.handYaw;
     }
+
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value="FE_FLOATING_POINT_EQUALITY",
+        justification="The if line is to save resources when nothing has changed. A few misses is fine. But the overhead that comes with more thorough testing would negate the value of the line.")
 
     public void setArmAngles(double roll, double pitch, double yaw) {
         if (this.armRoll != roll ||  this.armPitch != pitch || this.armYaw != yaw) markUpdated();
