@@ -288,10 +288,6 @@ public class UltraMotionInput extends Listener {
         return invertedValue * (float)sign;
     }
 
-    private float fixCenter(float value) {
-        return combineAngles(value, this.pi);
-    }
-
     private float combineAngles(float value, float rotateAmount) {
         // TODO There must be a better way to do this, but it will do for now.
 
