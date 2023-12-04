@@ -20,7 +20,6 @@ public class UltraMotionInput extends Listener {
     private UltraMotionManager ultraMotionManager = null;
     private Debug debug;
     private HandSummary[] handSummaries = {null, null, null, null, null, null, null, null, null, null};
-    private int lastHandCount = 0;
     private int maxHands = 2;
     private float openThreshold = 0;
     private float pi = (float)3.1415926536;
@@ -246,8 +245,6 @@ public class UltraMotionInput extends Listener {
         } else {
             this.ultraMotionManager.getHandWaveyManager().discardOldPosition();
         }
-
-        this.lastHandCount = handCount;
     }
 
     private void sendHandSummaries() {

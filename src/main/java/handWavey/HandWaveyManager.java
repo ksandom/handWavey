@@ -45,8 +45,6 @@ public final class HandWaveyManager {
     private HandsState handsState;
     private ShouldComplete shouldCompleteSFO;
 
-    private HashMap<String, String> eventSounds = new HashMap<String, String>();
-
     private String zoneMode = "touchScreen";
 
     private double zNoMoveBegin = 0;

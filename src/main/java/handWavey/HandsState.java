@@ -35,7 +35,6 @@ public class HandsState {
     private String zoneMode = "touchScreen";
 
     private String zone = "none";
-    private String oldZone = "none";
     private String zoneOverride = "";
     private String chosenButton = "left";
 
@@ -54,29 +53,21 @@ public class HandsState {
     private int secondaryMergeFrom = 0;
     private int secondaryMergeTo = 0;
 
-    private int primarySegment = 0;
-    private int secondarySegment = 0;
-
     private long currentFrameTime = 0;
     private long previousFrameAge = 0;
     private long sillyFrameAge = 10 * 1000; // Longer than this many milliseconds is well and truly meaningless, and could lead to interesting bugs.
-
-    private long segmentChangeTime = 0;
 
     private long newHands = 0;
     private Boolean newHandsHandled = false;
     private int oldHandsTimeout = 800;
     private int cursorFreezeFirstMillis = 200;
     private Boolean newHandsCursorFreeze = false;
-    private int eventFreezeFirstMillis = 500;
     private Boolean earlyUnfreeze = true;
     private String earlyUnfreezeZone = "active";
 
     // TODO Migrate other dimensions.
     private double zMultiplier = -1;
 
-
-    private Boolean isNew = false;
 
     public HandsState() {
         Config config = Config.singleton();
@@ -135,7 +126,6 @@ public class HandsState {
         Group newHands = config.getGroup("dataCleaning").getGroup("newHands");
         this.oldHandsTimeout = Integer.parseInt(newHands.getItem("oldHandsTimeout").get());
         this.cursorFreezeFirstMillis = Integer.parseInt(newHands.getItem("cursorFreezeFirstMillis").get());
-        this.eventFreezeFirstMillis = Integer.parseInt(newHands.getItem("eventFreezeFirstMillis").get());
 
         this.earlyUnfreeze = Boolean.parseBoolean(newHands.getItem("earlyUnfreeze").get());
         this.earlyUnfreezeZone = newHands.getItem("earlyUnfreezeZone").get();
@@ -347,10 +337,6 @@ public class HandsState {
         }
 
         return segmentNumber;
-    }
-
-    public void noSecondaryHand() {
-        this.secondarySegment = -1;
     }
 
     private String deriveZone(double handZ) {

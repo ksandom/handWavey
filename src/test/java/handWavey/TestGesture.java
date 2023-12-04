@@ -13,13 +13,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestGesture {
     private Gesture gesture = null;
-    private Config config = null;
     private HandWaveyConfig handWaveyConfig = null;
 
     @BeforeEach
     void setUp() {
         Config.setSingletonFilename("handWaveyConfigTest");
-        this.config = Config.singleton();
         this.handWaveyConfig = new HandWaveyConfig("unitTest");
         this.handWaveyConfig.defineGeneralConfig();
         this.gesture = new Gesture();
@@ -28,7 +26,6 @@ class TestGesture {
     @AfterEach
     void destroy() {
         this.gesture = null;
-        this.config = null;
         this.handWaveyConfig = null;
     }
 

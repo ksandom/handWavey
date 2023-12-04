@@ -18,7 +18,7 @@ class TestProtector {
 
     @BeforeEach
     void setUp() {
-        this.protector = new Protector(new Debug(0, "Protector"), new NullOutput());
+        this.protector = new Protector();
     }
 
     @AfterEach

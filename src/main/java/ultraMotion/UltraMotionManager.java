@@ -8,8 +8,6 @@ This is used for receiving data from the UltraMotion/LeapMotion device for track
 
 package handWavey;
 
-import config.Config;
-import config.*;
 import ultraMotion.*;
 import com.leapmotion.leap.*;
 import com.leapmotion.leap.Controller.PolicyFlag;
@@ -18,14 +16,12 @@ import handWavey.HandWaveyManager;
 public final class UltraMotionManager {
     private UltraMotionInput ultraMotionInput = new UltraMotionInput();
     private Controller controller = new Controller();
-    private config.Config config;
     private HandWaveyManager handWaveyManager;
 
     private Boolean active = false;
 
     public UltraMotionManager (HandWaveyManager hwm) {
         this.handWaveyManager = hwm;
-        this.config = Config.singleton();
 
         // Make sure that we can run in the background on windows.
         if (!this.controller.isPolicySet(Controller.PolicyFlag.POLICY_BACKGROUND_FRAMES)) {

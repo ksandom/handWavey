@@ -2,7 +2,6 @@
 
 package config;
 
-import config.Config;
 import config.Item;
 import config.Group;
 import org.junit.jupiter.api.Test;
@@ -11,12 +10,10 @@ import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ConfigTestGroup {
-    private Config config = null;
     private Group group = null;
 
     @BeforeEach
     void setUp() {
-        this.config = new Config("handWaveyConfigTest.yml");
         this.group = new Group();
         this.group.newItem("colour", "black", "Chosen colour.");
         this.group.newItem("speed", "ludicrous", "Perceived speed.");
@@ -25,9 +22,7 @@ public class ConfigTestGroup {
 
     @AfterEach
     void destroy() {
-        this.config = null;
         this.group = null;
-        System.gc();
     }
 
     @Test
