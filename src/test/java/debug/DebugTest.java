@@ -34,7 +34,6 @@ public class DebugTest {
     @AfterEach
     void destroy() {
         this.debug = null;
-        System.gc();
     }
 
     @Test

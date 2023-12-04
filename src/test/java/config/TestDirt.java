@@ -33,7 +33,6 @@ public class TestDirt {
     void destroy() {
         this.dirt = null;
         this.config = null;
-        System.gc();
     }
 
     @Test

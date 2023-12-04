@@ -34,7 +34,6 @@ public class ConfigTestInternals {
     void destroy() {
         this.directoryName = null;
         this.ct = null;
-        System.gc();
     }
 
     @Test

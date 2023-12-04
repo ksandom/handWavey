@@ -60,7 +60,6 @@ class TestHistory {
     @AfterEach
     void destroy() {
         this.history = null;
-        System.gc();
     }
 
     @Test
