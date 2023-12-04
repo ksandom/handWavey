@@ -76,7 +76,7 @@ public final class Motion {
     private Boolean shouldDiscardOldPosition = true;
 
 
-    public static Motion singleton() {
+    public synchronized static Motion singleton() {
         if (Motion.motion == null) {
             Motion.motion = new Motion();
         }

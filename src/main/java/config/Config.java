@@ -34,11 +34,11 @@ public class Config extends config.Group {
         System.out.println("Load config from: " + this.directoryName + " (" + fileState + ")");
     }
 
-    public static void setSingletonFilename(String fileName) {
+    public synchronized static void setSingletonFilename(String fileName) {
         Config.singletonFileName = fileName;
     }
 
-    public static Config singleton() {
+    public synchronized static Config singleton() {
         if (Config.singletonConfig == null) {
             Config.singletonConfig = new Config(Config.singletonFileName);
         }

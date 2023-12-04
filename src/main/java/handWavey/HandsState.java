@@ -131,7 +131,7 @@ public class HandsState {
         this.earlyUnfreezeZone = newHands.getItem("earlyUnfreezeZone").get();
     }
 
-    public static HandsState singleton() {
+    public synchronized static HandsState singleton() {
         if (HandsState.handsState == null) {
             HandsState.handsState = new HandsState();
         }
