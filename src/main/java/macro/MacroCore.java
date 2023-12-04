@@ -129,10 +129,10 @@ public class MacroCore {
 
             // Dynamic instructions.
             case "setSlot":
-                setSlot(Integer.valueOf(parm(parameters, 0, "")), parm(parameters, 1, ""));
+                setSlot(Integer.parseInt(parm(parameters, 0, "")), parm(parameters, 1, ""));
                 break;
             case "doSlot":
-                doSlot(Integer.valueOf(parm(parameters, 0, "")), parm(parameters, 1, ""));
+                doSlot(Integer.parseInt(parm(parameters, 0, "")), parm(parameters, 1, ""));
                 break;
             case "setAllSlots":
                 setAllSlots(parm(parameters, 0, ""));
