@@ -168,6 +168,10 @@ public class HandSummary {
         }
     }
 
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value="FL_FLOATS_AS_LOOP_COUNTERS",
+        justification="While these loops technically meet the definition of a counter, that's not the intention of the code, and the rationale does not apply. They are essentially a floating-point modulus to make sure that the value is within range.")
+
     private double protectAngle(double angle) {
         double result = angle;
 
