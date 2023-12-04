@@ -64,6 +64,10 @@ public class History {
         return this.timeStamp[this.getIndexForOffset(offset)];
     }
 
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value="UPM_UNCALLED_PRIVATE_METHOD",
+        justification="False positive. This is called by the over-loaded method above.")
+
     private int getIndexForTimeOffset(long timeOffset) {
         long timestamp = new Timestamp(System.currentTimeMillis()).getTime() - timeOffset;
         return getIndexForTimestamp(timestamp);
