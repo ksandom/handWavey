@@ -16,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 class TestState {
-    HandsState handsState;
-    private HandWaveyConfig handWaveyConfig;
+    HandsState handsState = null;
+    private HandWaveyConfig handWaveyConfig = null;
     private float pi = (float)3.1415926536;
 
     @BeforeEach
@@ -46,7 +46,7 @@ class TestState {
 
         Group zones = config.getGroup("zones");
         Group touchScreen = zones.getGroup("touchScreen");
-        Group zoneNone = touchScreen.getGroup("zoneNone");
+        // Group zoneNone = touchScreen.getGroup("zoneNone");
 
         Group absolute = touchScreen.getGroup("absolute");
         absolute.getItem("threshold").set("-150");
@@ -65,7 +65,7 @@ class TestState {
 
 
         Group touchPad = zones.getGroup("touchPad");
-        Group zoneTPNone = touchPad.getGroup("zoneNone");
+        // Group zoneTPNone = touchPad.getGroup("zoneNone");
 
         Group active = touchPad.getGroup("active");
         active.getItem("threshold").set("-120");
@@ -96,7 +96,6 @@ class TestState {
     void destroy() {
         this.handsState = null;
         this.handWaveyConfig = null;
-        System.gc();
     }
 
     @Test
@@ -179,7 +178,7 @@ class TestState {
     @Test
     public void testHandSegments() {
         Boolean primary = true;
-        Boolean secondary = false;
+        // Boolean secondary = false;
         Boolean left = true;
         Boolean right = false;
 
@@ -204,7 +203,7 @@ class TestState {
     @Test
     public void testHandSegmentMerge() {
         Boolean primary = true;
-        Boolean secondary = false;
+        // Boolean secondary = false;
         Boolean left = true;
         Boolean right = false;
 
@@ -236,7 +235,7 @@ class TestState {
     @Test
     public void testHandSegmentOffset() {
         Boolean primary = true;
-        Boolean secondary = false;
+        // Boolean secondary = false;
         Boolean left = true;
         Boolean right = false;
 

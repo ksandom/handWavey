@@ -9,7 +9,7 @@ import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestShould {
-    private Should should;
+    private Should should = null;
 
     @BeforeEach
     void setUp() {
@@ -19,7 +19,6 @@ class TestShould {
     @AfterEach
     void destroy() {
         this.should = null;
-        System.gc();
     }
 
     @Test

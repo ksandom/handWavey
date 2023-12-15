@@ -18,11 +18,15 @@ import javax.sound.sampled.SourceDataLine;
 
 class SimplePlayer {
 
-        private final int BUFFER_SIZE = 128000;
+        private final static int BUFFER_SIZE = 128000;
         private File soundFile;
         private AudioInputStream audioStream;
         private AudioFormat audioFormat;
         private SourceDataLine sourceLine;
+
+        @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+            value="DLS_DEAD_LOCAL_STORE",
+            justification="nBytesWritten is not needed. Yet the absense of it causes several syntax errors.")
 
         /**
          * @param filename the name of the file that is going to be played
@@ -53,16 +57,14 @@ class SimplePlayer {
                 sourceLine.open(audioFormat);
             } catch (LineUnavailableException e) {
                 e.printStackTrace();
-                System.exit(1);
             } catch (Exception e) {
                 e.printStackTrace();
-                System.exit(1);
             }
 
             sourceLine.start();
 
             int nBytesRead = 0;
-            byte[] abData = new byte[BUFFER_SIZE];
+            byte[] abData = new byte[SimplePlayer.BUFFER_SIZE];
             while (nBytesRead != -1) {
                 try {
                     nBytesRead = audioStream.read(abData, 0, abData.length);

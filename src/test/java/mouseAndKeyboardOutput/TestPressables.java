@@ -12,7 +12,7 @@ import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestPressables {
-    private Pressables pressables;
+    private Pressables pressables = null;
 
     @BeforeEach
     void setUp() {
@@ -22,7 +22,6 @@ class TestPressables {
     @AfterEach
     void destroy() {
         this.pressables = null;
-        System.gc();
     }
 
     @Test

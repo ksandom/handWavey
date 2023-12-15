@@ -14,7 +14,7 @@ public class Item extends Dirt{ // An individual piece of configuration. A.K.A a
     private String value;
     private String oldValue; // Memory only.
     private Boolean canHideIfUnchanged = false;
-    
+
     public Item(String defaultValue, String description) {
         super(false);
         this.description = description;
@@ -22,7 +22,7 @@ public class Item extends Dirt{ // An individual piece of configuration. A.K.A a
         this.value = defaultValue;
         this.oldValue = defaultValue;
     }
-    
+
     public String get() {
         return this.value;
     }
@@ -30,35 +30,35 @@ public class Item extends Dirt{ // An individual piece of configuration. A.K.A a
     public String getOldValue() {
         return this.oldValue;
     }
-    
+
     public void set(String value) {
         this.oldValue = this.value;
         this.value = value;
-        
+
         makeDirty();
     }
-    
+
     public String getDescription() {
         return this.description;
     }
-    
+
     public String getDefaultValue() {
         return this.defaultValue;
     }
-    
+
     public void overrideDefault(String newValue) {
-        if (this.value == this.defaultValue) {
+        if (this.value.equals(this.defaultValue)) {
             this.value = newValue;
             this.oldValue = newValue;
         }
-        
+
         this.defaultValue = newValue;
     }
-    
+
     public void setCanHideIfUnchanged(Boolean value) {
         this.canHideIfUnchanged = value;
     }
-    
+
     public Boolean canHideIfUnchanged() {
         return this.canHideIfUnchanged;
     }

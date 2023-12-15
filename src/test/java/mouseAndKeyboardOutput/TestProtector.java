@@ -14,11 +14,11 @@ import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestProtector {
-    private Protector protector;
+    private Protector protector = null;
 
     @BeforeEach
     void setUp() {
-        this.protector = new Protector(new Debug(0, "Protector"), new NullOutput());
+        this.protector = new Protector();
     }
 
     @AfterEach

@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import dataCleaner.Changed;
 
 class TestChanged {
-    Changed changedStr;
-    Changed changedInt;
+    Changed changedStr = null;
+    Changed changedInt = null;
 
     @BeforeEach
     void setUp() {
@@ -23,7 +23,6 @@ class TestChanged {
     void destroy() {
         this.changedStr = null;
         this.changedInt = null;
-        System.gc();
     }
 
     @Test

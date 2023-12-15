@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 class TestZone {
-    Zone zone;
+    Zone zone = null;
 
     @BeforeEach
     void setUp() {
@@ -24,7 +24,6 @@ class TestZone {
     @AfterEach
     void destroy() {
         this.zone = null;
-        System.gc();
     }
 
     @Test

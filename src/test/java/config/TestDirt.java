@@ -20,8 +20,8 @@ class DirtTester extends Dirt {
 }
 
 public class TestDirt {
-    private DirtTester dirt;
-    private Config config;
+    private DirtTester dirt = null;
+    private Config config = null;
 
     @BeforeEach
     void setUp() {
@@ -33,7 +33,6 @@ public class TestDirt {
     void destroy() {
         this.dirt = null;
         this.config = null;
-        System.gc();
     }
 
     @Test

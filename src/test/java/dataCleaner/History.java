@@ -53,14 +53,13 @@ class TestHistory {
 
         // Override the timestamps to simulate a longer period of time.
         for (int offset = 0; offset<this.size; offset++) {
-            this.history.overrideTimestamp(offset, this.nowMillis - (offset * 100));
+            this.history.overrideTimestamp(offset, this.nowMillis - ((long)offset * 100));
         }
     }
 
     @AfterEach
     void destroy() {
         this.history = null;
-        System.gc();
     }
 
     @Test

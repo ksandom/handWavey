@@ -19,7 +19,6 @@ public class TestShouldComplete {
     @AfterEach
     void destroy() {
         this.shouldComplete = null;
-        System.gc();
     }
 
     @Test

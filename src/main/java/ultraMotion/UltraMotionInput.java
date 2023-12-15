@@ -20,7 +20,6 @@ public class UltraMotionInput extends Listener {
     private UltraMotionManager ultraMotionManager = null;
     private Debug debug;
     private HandSummary[] handSummaries = {null, null, null, null, null, null, null, null, null, null};
-    private int lastHandCount = 0;
     private int maxHands = 2;
     private float openThreshold = 0;
     private float pi = (float)3.1415926536;
@@ -64,10 +63,14 @@ public class UltraMotionInput extends Listener {
         this.heightRatio = this.heightDiff / this.cDiff;
     }
 
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value="DLS_DEAD_LOCAL_STORE",
+        justification="result is definitely used. I suspect the spotbugs is not understanding result = (c <= maxC);.")
+
     public Boolean isInRange(double x, double y, double z) {
         Boolean result = false;
 
-        if (y < this.minHeight || y > this.maxHeight  ) {
+        if (y < this.minHeight || y > this.maxHeight ) {
             result = false;
         } else {
             // Get radius from the center of the cone at the current height.
@@ -242,8 +245,6 @@ public class UltraMotionInput extends Listener {
         } else {
             this.ultraMotionManager.getHandWaveyManager().discardOldPosition();
         }
-
-        this.lastHandCount = handCount;
     }
 
     private void sendHandSummaries() {
@@ -285,19 +286,5 @@ public class UltraMotionInput extends Listener {
         float invertedValue = this.pi - Math.abs(angle);
 
         return invertedValue * (float)sign;
-    }
-
-    private float fixCenter(float value) {
-        return combineAngles(value, this.pi);
-    }
-
-    private float combineAngles(float value, float rotateAmount) {
-        // TODO There must be a better way to do this, but it will do for now.
-
-        float combined = value + rotateAmount + this.pi;
-        combined = combined % (this.pi * 2);
-        combined = combined - this.pi;
-
-        return combined;
     }
 }

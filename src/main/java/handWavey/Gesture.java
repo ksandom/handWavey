@@ -9,6 +9,7 @@ Also generates the config for those events.
 package handWavey;
 
 import config.*;
+import java.util.Locale;
 import java.util.HashMap;
 import java.sql.Timestamp;
 import com.google.common.base.Joiner;
@@ -228,13 +229,6 @@ public class Gesture {
         addAudioFeedbackConfig(name, triggerDescription, Gesture.exiting);
     }
 
-    private void addConfigItems(String name, String triggerDescription) {
-        addActionConfig(name, triggerDescription, Gesture.entering);
-        addActionConfig(name, triggerDescription, Gesture.exiting);
-        addAudioFeedbackConfig(name, triggerDescription, Gesture.entering);
-        addAudioFeedbackConfig(name, triggerDescription, Gesture.exiting);
-    }
-
     public String handState(int handState) {
         String result = "";
 
@@ -251,11 +245,11 @@ public class Gesture {
 
     public String capitalise(String value) {
         // TODO Gracefully handle 0 length strings.
-        return value.substring(0, 1).toUpperCase() + value.substring(1);
+        return value.substring(0, 1).toUpperCase(Locale.getDefault()) + value.substring(1);
     }
 
     private String hand(String handLetter) {
-        return (handLetter == "p")?"primary":"secondary";
+        return (handLetter.equals("p"))?"primary":"secondary";
     }
 
     private String generateGestureName(String primaryZone, int primarySegment, int primaryHandState, String secondaryZone, int secondarySegment, int secondaryHandState) {
@@ -274,7 +268,7 @@ public class Gesture {
         int segment = segmentIn;
         int handState = handStateIn;
 
-        if (zone == "OOB") {
+        if (zone.equals("OOB")) {
             handState = this.absent;
             segment = 0;
         }

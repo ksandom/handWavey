@@ -27,8 +27,8 @@ public class HandSummary {
     private double armPitch;
     private double armYaw;
 
-    private Boolean handOpen;
-    private Boolean isLeft;
+    private Boolean handOpen = true;
+    private Boolean isLeft = true;
 
     private Boolean valid = true;
     private Boolean oob = false;
@@ -56,9 +56,9 @@ public class HandSummary {
     private double pitchRotationOffset = 0;
     private double yawRotationOffset = 0;
 
-    private final double upper = Math.PI;
-    private final double lower = Math.PI * -1;
-    private final double oneRotation = Math.PI * 2;
+    private final static double UPPER = Math.PI;
+    private final static double LOWER = Math.PI * -1;
+    private final static double ONE_ROTATION = Math.PI * 2;
 
 
     public HandSummary(int id){
@@ -108,6 +108,10 @@ public class HandSummary {
         return this.id;
     }
 
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value="FE_FLOATING_POINT_EQUALITY",
+        justification="The if line is to save resources when nothing has changed. A few misses is fine. But the overhead that comes with more thorough testing would negate the value of the line.")
+
     public void setHandPosition(double x, double y, double z) {
         double mappedX = getMapped(this.xMap, x, y, z);
         double mappedY = getMapped(this.yMap, x, y, z);
@@ -142,6 +146,10 @@ public class HandSummary {
         return this.handZ;
     }
 
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value="FE_FLOATING_POINT_EQUALITY",
+        justification="The if line is to save resources when nothing has changed. A few misses is fine. But the overhead that comes with more thorough testing would negate the value of the line.")
+
     public void setHandAngles(double roll, double pitch, double yaw) {
         if (this.handRoll != roll || this.handPitch != pitch || this.handYaw != yaw) markUpdated();
 
@@ -160,15 +168,19 @@ public class HandSummary {
         }
     }
 
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value="FL_FLOATS_AS_LOOP_COUNTERS",
+        justification="While these loops technically meet the definition of a counter, that's not the intention of the code, and the rationale does not apply. They are essentially a floating-point modulus to make sure that the value is within range.")
+
     private double protectAngle(double angle) {
         double result = angle;
 
-        while (result > this.upper) {
-            result = this.lower - (result - this.oneRotation);
+        while (result > HandSummary.UPPER) {
+            result = HandSummary.LOWER - (result - HandSummary.ONE_ROTATION);
         }
 
-        while (result < this.lower) {
-            result += this.oneRotation;
+        while (result < HandSummary.LOWER) {
+            result += HandSummary.ONE_ROTATION;
         }
 
         return result;
@@ -190,6 +202,10 @@ public class HandSummary {
         return this.handYaw;
     }
 
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value="FE_FLOATING_POINT_EQUALITY",
+        justification="The if line is to save resources when nothing has changed. A few misses is fine. But the overhead that comes with more thorough testing would negate the value of the line.")
+
     public void setArmAngles(double roll, double pitch, double yaw) {
         if (this.armRoll != roll ||  this.armPitch != pitch || this.armYaw != yaw) markUpdated();
         this.armRoll = roll;
@@ -210,7 +226,7 @@ public class HandSummary {
     }
 
     public void setHandOpen(Boolean state) {
-        if (this.handOpen != state) markUpdated();
+        if (!this.handOpen.equals(state)) markUpdated();
         this.handOpen = state;
     }
 
@@ -231,7 +247,7 @@ public class HandSummary {
     }
 
     public void setOOB(Boolean value) {
-        if (this.oob != value) markUpdated();
+        if (!this.oob.equals(value)) markUpdated();
         this.oob = value;
     }
 

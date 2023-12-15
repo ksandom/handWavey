@@ -1,5 +1,0 @@
-#!/bin/bash
-# What made it work
-
-java -Djava.library.path=. MouseMover
-

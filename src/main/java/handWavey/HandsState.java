@@ -35,7 +35,6 @@ public class HandsState {
     private String zoneMode = "touchScreen";
 
     private String zone = "none";
-    private String oldZone = "none";
     private String zoneOverride = "";
     private String chosenButton = "left";
 
@@ -54,29 +53,21 @@ public class HandsState {
     private int secondaryMergeFrom = 0;
     private int secondaryMergeTo = 0;
 
-    private int primarySegment = 0;
-    private int secondarySegment = 0;
-
     private long currentFrameTime = 0;
     private long previousFrameAge = 0;
     private long sillyFrameAge = 10 * 1000; // Longer than this many milliseconds is well and truly meaningless, and could lead to interesting bugs.
-
-    private long segmentChangeTime = 0;
 
     private long newHands = 0;
     private Boolean newHandsHandled = false;
     private int oldHandsTimeout = 800;
     private int cursorFreezeFirstMillis = 200;
     private Boolean newHandsCursorFreeze = false;
-    private int eventFreezeFirstMillis = 500;
     private Boolean earlyUnfreeze = true;
     private String earlyUnfreezeZone = "active";
 
     // TODO Migrate other dimensions.
     private double zMultiplier = -1;
 
-
-    private Boolean isNew = false;
 
     public HandsState() {
         Config config = Config.singleton();
@@ -135,13 +126,12 @@ public class HandsState {
         Group newHands = config.getGroup("dataCleaning").getGroup("newHands");
         this.oldHandsTimeout = Integer.parseInt(newHands.getItem("oldHandsTimeout").get());
         this.cursorFreezeFirstMillis = Integer.parseInt(newHands.getItem("cursorFreezeFirstMillis").get());
-        this.eventFreezeFirstMillis = Integer.parseInt(newHands.getItem("eventFreezeFirstMillis").get());
 
         this.earlyUnfreeze = Boolean.parseBoolean(newHands.getItem("earlyUnfreeze").get());
         this.earlyUnfreezeZone = newHands.getItem("earlyUnfreezeZone").get();
     }
 
-    public static HandsState singleton() {
+    public synchronized static HandsState singleton() {
         if (HandsState.handsState == null) {
             HandsState.handsState = new HandsState();
         }
@@ -175,7 +165,7 @@ public class HandsState {
             if (!shouldUpdatePrimary && this.earlyUnfreeze) {
                 // Check if the hand is already in the active area. If so, let's just enable it.
                 primaryHandZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
-                if (this.handsState.getZone(primaryHandZ) == this.earlyUnfreezeZone) {
+                if (this.handsState.getZone(primaryHandZ).equals(this.earlyUnfreezeZone)) {
                     shouldUpdatePrimary = true;
                     this.handSummaries[0].clearNewHand();
                     this.debug.out(1, "The hand seems ready. Skipping the rest of the cursorFreezeFirstMillis timeout.");
@@ -188,7 +178,7 @@ public class HandsState {
             primaryHandZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
 
             String zone = this.handsState.getZone(primaryHandZ);
-            if (zone != this.zoneOverride) {
+            if (!zone.equals(this.zoneOverride)) {
                 this.primaryState.setZone(zone);
             }
 
@@ -333,7 +323,7 @@ public class HandsState {
         double offsetRoll = handedRoll + this.pi + (segmentWidth/2) - userOffset;
 
         // Work out which segment we are in, then rotate it back because we rotated to make the entire range positive.
-        int segmentNumber = (int) Math.floor((offsetRoll / segmentWidth) - (segmentCount / 2));
+        int segmentNumber = (int) Math.floor(((double)offsetRoll / (double)segmentWidth) - ((double)segmentCount / 2));
         while (segmentNumber < 0) {
             segmentNumber += segmentCount;
         }
@@ -347,10 +337,6 @@ public class HandsState {
         }
 
         return segmentNumber;
-    }
-
-    public void noSecondaryHand() {
-        this.secondarySegment = -1;
     }
 
     private String deriveZone(double handZ) {
@@ -389,11 +375,11 @@ public class HandsState {
         String newZone = deriveZone(handZ);
         String bufferZone = deriveZone(handZ + this.zoneBuffer);
 
-        if ((bufferZone == newZone) && (newZone != this.zone)) {
+        if ((bufferZone.equals(newZone)) && !newZone.equals(this.zone)) {
             this.zone = newZone;
         }
 
-        if ((allowOverride && this.zoneOverride != "")) {
+        if ((allowOverride && !this.zoneOverride.equals(""))) {
             return this.zoneOverride;
         }
 

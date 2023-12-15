@@ -20,8 +20,8 @@ import static org.hamcrest.Matchers.hasItemInArray;
 
 
 class TestHandState {
-    private HandStateEvents primary;
-    private HandStateEvents secondary;
+    private HandStateEvents primary = null;
+    private HandStateEvents secondary = null;
 
     @BeforeEach
     void setUp() {
@@ -35,7 +35,6 @@ class TestHandState {
     void destroy() {
         this.primary = null;
         this.secondary = null;
-        System.gc();
     }
 
     @Test

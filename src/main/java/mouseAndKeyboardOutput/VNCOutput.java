@@ -23,96 +23,96 @@ import com.shinyhut.vernacular.client.rendering.ColorDepth;
 
 public class VNCOutput implements Output {
     private Debug debug;
-    
+
     private Pressables keys = new Pressables();
-    
+
     private VernacularConfig config;
     private VernacularClient client;
-    
+
     private String host;
     private int port;
     private String password;
-    
+
     private int width = 0;
     private int height = 0;
     private Boolean connected = false;
-    
+
     public VNCOutput(String outputDevice) {
         this.debug = Debug.getDebug("VNCOutput");
-        
+
         this.keys.defineKeys();
-        
+
         this.config = new VernacularConfig();
         this.client = new VernacularClient(config);
-        
+
         Group deviceConfig = Config.singleton().getGroup("output").getGroup(outputDevice);
         this.host = deviceConfig.getItem("host").get();
         this.port = Integer.parseInt(deviceConfig.getItem("port").get());
-        
+
         // TODO Find a better way of doing this. This VNC library does provide a mechanism for abstracting this. So it may be easy.
         this.password = deviceConfig.getItem("password").get();
-        
+
         connect();
     }
-    
+
     private void connect() {
         //config.setColorDepth(ColorDepth.BPP_24_TRUE);
         config.setColorDepth(ColorDepth.BPP_8_INDEXED);
         config.setErrorListener(Throwable::printStackTrace); // TODO Is this the best solution for this project?
         config.setPasswordSupplier(() -> this.password);
-        
+
         config.setBellListener(v -> System.out.println("DING!")); // TODO Change this to debug.
         config.setRemoteClipboardListener(text -> this.debug.out(1, String.format("Received copied text.", text))); // TODO Change this to debug.
-        
+
         config.setScreenUpdateListener(image -> {
             this.width = image.getWidth(null);
             this.height = image.getHeight(null);
             this.connected = true;
             this.debug.out(1, String.format("Received a %dx%d screen update", this.width, this.height));
         });
-        
+
         client.start(this.host, this.port);
-        
+
         this.debug.out(0, "Connected to " + this.host);
     }
-    
+
     public void info() {
         System.out.println("VNC output.");
     }
-    
+
     public Dimension getDesktopResolution() {
         while (this.connected == false) {
             sleep(100);
         }
-        
+
         return new Dimension(this.width, this.height);
     }
-    
+
     public void setPosition(int x, int y) {
         this.client.moveMouse(x, y);
     }
-    
+
     public void click(String button) {
         mouseDown(button);
         mouseUp(button);
     }
-    
+
     public void doubleClick(String button) {
         click(button);
         click(button);
     }
-    
+
     public void mouseDown(String button) {
         this.client.updateMouseButton(getButtonID(button), true);
     }
-    
+
     public void mouseUp(String button) {
         this.client.updateMouseButton(getButtonID(button), false);
     }
-    
+
     private int getButtonID(String button) {
         int result = 0;
-        
+
         switch (button) {
             case "left":
                 result = 1;
@@ -123,14 +123,16 @@ public class VNCOutput implements Output {
             case "right":
                 result = 3;
                 break;
+            default:
+                break;
         }
-        
+
         return result;
     }
-    
+
     public void scroll(int amount) {
         int absoluteAmount = Math.abs(amount);
-        
+
         for (int i = 0; i < absoluteAmount; i ++) {
             if (amount > 0) {
                 this.client.scrollDown();
@@ -139,28 +141,28 @@ public class VNCOutput implements Output {
             }
         }
     }
-    
-    
+
+
     private int getKeyID(String key) {
         return KeySyms.forKeyCode(this.keys.getPressableID(key)).get();
     }
-    
+
     public void keyDown(String key) {
         this.client.updateKey(getKeyID(key), true);
     }
-    
+
     public void keyUp(String key) {
         this.client.updateKey(getKeyID(key), false);
     }
-    
+
     public Set<String> getKeysIKnow() {
         return this.keys.getPressablesIKnow();
     }
-    
-    
+
+
     public int testInt(String testName) {
         int result = 0;
-        
+
 //         switch (testName) {
 //             case "posX":
 //                 result = this.x;
@@ -181,10 +183,10 @@ public class VNCOutput implements Output {
 //                 result = this.lastButton;
 //                 break;
 //         }
-        
+
         return result;
     }
-    
+
     private void sleep(int microseconds) {
         try {
             Thread.sleep(microseconds);

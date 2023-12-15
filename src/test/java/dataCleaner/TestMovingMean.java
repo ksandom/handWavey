@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import dataCleaner.MovingMean;
 
 class TestMovingMean {
-    MovingMean movingMean;
+    MovingMean movingMean = null;
 
     @BeforeEach
     void setUp() {
@@ -20,7 +20,6 @@ class TestMovingMean {
     @AfterEach
     void destroy() {
         this.movingMean = null;
-        System.gc();
     }
 
     @Test

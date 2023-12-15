@@ -15,11 +15,11 @@ public class TestPersistence {
         config.newItem("blah", "niet", "A description of nothing.");
 
         Group things = config.newGroup("things");
-        Item thing1 = things.newItem("thing1", "aValue", "A description of that value.");
+        things.newItem("thing1", "aValue", "A description of that value.");
         things.getItem("thing1").set("aNewValue");
         Group specificThings = things.newGroup("specific");
         Group moreSpecificThings = specificThings.newGroup("moreSpecific");
-        Item thing2 = moreSpecificThings.newItem("thing2", "anotherValue", "A description of that other value.");
+        moreSpecificThings.newItem("thing2", "anotherValue", "A description of that other value.");
 
         Group debug = config.newGroup("debug");
         debug.newItem("Persistence", "3", "Debug level for Persistence.");
@@ -38,7 +38,6 @@ public class TestPersistence {
     @AfterEach
     void destroy() {
         this.config = null;
-        System.gc();
     }
 
     @Test

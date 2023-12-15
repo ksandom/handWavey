@@ -26,7 +26,6 @@ public class Config extends config.Group {
     private Debug debug = new Debug(0, "Config");
 
     public Config(String fileName) {
-        this.makeClean();
         this.directoryName = getFullPath(fileName);
         this.fileExists = new File(this.directoryName).exists();
 
@@ -35,11 +34,11 @@ public class Config extends config.Group {
         System.out.println("Load config from: " + this.directoryName + " (" + fileState + ")");
     }
 
-    public static void setSingletonFilename(String fileName) {
+    public synchronized static void setSingletonFilename(String fileName) {
         Config.singletonFileName = fileName;
     }
 
-    public static Config singleton() {
+    public synchronized static Config singleton() {
         if (Config.singletonConfig == null) {
             Config.singletonConfig = new Config(Config.singletonFileName);
         }
@@ -48,7 +47,7 @@ public class Config extends config.Group {
     }
 
     public void addGroupToSeparate(String groupName) {
-        if (groupName == "") return;
+        if (groupName.equals("")) return;
         this.groupsToSaveSeparately.put(groupName, true);
     }
 

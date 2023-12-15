@@ -21,8 +21,8 @@ class ConfigTester extends Config {
 }
 
 public class ConfigTestInternals {
-    String directoryName;
-    ConfigTester ct;
+    String directoryName= "";
+    ConfigTester ct = null;
 
     @BeforeEach
     void setUp() {
@@ -34,7 +34,6 @@ public class ConfigTestInternals {
     void destroy() {
         this.directoryName = null;
         this.ct = null;
-        System.gc();
     }
 
     @Test

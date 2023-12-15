@@ -14,11 +14,11 @@ import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestMacro {
-    private MacroLine macroLine;
-    private OutputProtection output;
-    private HandsState handsState;
-    private HandWaveyManager handWaveyManager;
-    private HandWaveyEvent handWaveyEvent;
+    private MacroLine macroLine = null;
+    private OutputProtection output = null;
+    private HandsState handsState = null;
+    private HandWaveyManager handWaveyManager = null;
+    private HandWaveyEvent handWaveyEvent = null;
 
     @BeforeEach
     void setUp() {
@@ -39,7 +39,6 @@ class TestMacro {
         this.handsState = null;
         this.handWaveyEvent = null;
         this.handWaveyManager = null;
-        System.gc();
     }
 
     @Test

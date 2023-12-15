@@ -18,7 +18,7 @@ public class MovingMean {
     public MovingMean(int size, double seedValue) {
         this.size = size;
         this.position = 0;
-        
+
         seed(seedValue);
     }
 

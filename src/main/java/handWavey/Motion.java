@@ -16,7 +16,7 @@ import java.awt.Dimension;
 import java.sql.Timestamp;
 import java.util.HashMap;
 
-public class Motion {
+public final class Motion {
 
     private static Motion motion = null;
 
@@ -76,7 +76,7 @@ public class Motion {
     private Boolean shouldDiscardOldPosition = true;
 
 
-    public static Motion singleton() {
+    public synchronized static Motion singleton() {
         if (Motion.motion == null) {
             Motion.motion = new Motion();
         }
@@ -120,11 +120,13 @@ public class Motion {
         Dimension desktopResolution = this.getOutput().getDesktopResolution();
         this.desktopWidth = desktopResolution.width;
         this.desktopHeight = desktopResolution.height;
-        double desktopAspectRatio = this.desktopWidth/this.desktopHeight;
+        double desktopAspectRatio = (double)this.desktopWidth/(double)this.desktopHeight;
 
         // Set initial locaiton for touchPad based zoning.
-        this.touchPadX = (int) Math.round(this.desktopWidth /3);
-        this.touchPadY = (int) Math.round(this.desktopHeight /3);
+        float defaultX = (float)this.desktopWidth / (float)3;
+        float defaultY = (float)this.desktopHeight / (float)3;
+        this.touchPadX = (int) Math.round(defaultX);
+        this.touchPadY = (int) Math.round(defaultY);
 
         // Figure out how to best fit the desktop into the physical space.
         // TODO This could be abstracted out into testable code.
@@ -134,13 +136,13 @@ public class Motion {
         int pYMin = Integer.parseInt(physicalBoundaries.getItem("yMin").get());
         int pYMax = Integer.parseInt(physicalBoundaries.getItem("yMax").get());
         int pYDiff = pYMax - pYMin;
-        double physicalAspectRatio = pXDiff / pYDiff;
+        double physicalAspectRatio = (double)pXDiff / (double)pYDiff;
 
         this.xOffset = pX;
         this.yOffset = pYMin * -1;
 
         this.zoneMode = Config.singleton().getItem("zoneMode").get();
-        if (this.zoneMode == "touchPad") {
+        if (this.zoneMode.equals("touchPad")) {
             this.debug.out(1, "touchPad zone mode only needs simple multipliers.");
             this.xMultiplier = configuredXMultiplier;
             this.yMultiplier = configuredYMultiplier;
@@ -207,6 +209,8 @@ public class Motion {
                 break;
             case "VNC":
                 setOutput(new OutputProtection(new VNCOutput(chosenOutput)));
+                break;
+            default:
                 break;
         }
     }
@@ -507,8 +511,10 @@ public class Motion {
         double xDiff = xCoord - this.lastAbsoluteX;
         double yDiff = yCoord - this.lastAbsoluteY;
 
-        int calculatedX = (int) Math.round(coordToDesktopIntX(this.lastAbsoluteX + (xDiff * this.relativeSensitivity)));
-        int calculatedY = (int) Math.round(coordToDesktopIntY(this.lastAbsoluteY + (yDiff * this.relativeSensitivity)));
+        double changeX = this.lastAbsoluteX + (xDiff * this.relativeSensitivity);
+        double changeY = this.lastAbsoluteY + (yDiff * this.relativeSensitivity);
+        int calculatedX = coordToDesktopIntX(changeX);
+        int calculatedY = coordToDesktopIntY(changeY);
 
         moveMouse(calculatedX, calculatedY);
     }

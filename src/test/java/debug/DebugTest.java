@@ -24,7 +24,7 @@ class DebugTester extends Debug {
 }
 
 public class DebugTest {
-    private DebugTester debug;
+    private DebugTester debug = null;
 
     @BeforeEach
     void setUp() {
@@ -34,7 +34,6 @@ public class DebugTest {
     @AfterEach
     void destroy() {
         this.debug = null;
-        System.gc();
     }
 
     @Test

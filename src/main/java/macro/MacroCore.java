@@ -129,10 +129,10 @@ public class MacroCore {
 
             // Dynamic instructions.
             case "setSlot":
-                setSlot(Integer.valueOf(parm(parameters, 0, "")), parm(parameters, 1, ""));
+                setSlot(Integer.parseInt(parm(parameters, 0, "")), parm(parameters, 1, ""));
                 break;
             case "doSlot":
-                doSlot(Integer.valueOf(parm(parameters, 0, "")), parm(parameters, 1, ""));
+                doSlot(Integer.parseInt(parm(parameters, 0, "")), parm(parameters, 1, ""));
                 break;
             case "setAllSlots":
                 setAllSlots(parm(parameters, 0, ""));
@@ -165,7 +165,7 @@ public class MacroCore {
 
     private void doSlot(int slot, String eventName) {
         String previousValue = this.slot[slot];
-        String eventToRun = (this.slot[slot] != "")?this.slot[slot]:eventName;
+        String eventToRun = (!this.slot[slot].equals(""))?this.slot[slot]:eventName;
         if (slotsEnabled) {
             this.debug.out(1, "Run slot " + String.valueOf(slot) + " == " + eventToRun + ". Previous value: " + previousValue);
 
@@ -208,7 +208,7 @@ public class MacroCore {
             return defaultValue;
 
         } else {
-            if (parameters[position] == "") {
+            if (parameters[position].equals("")) {
                 return defaultValue;
             } else {
                 return parameters[position];
@@ -235,7 +235,7 @@ public class MacroCore {
         String[] parameters = parametersString.split("\", \"");
 
         // Remove remaining fluff from the parameters that didn't get picked up from the initial split.
-        if (parametersString != "") {
+        if (!parametersString.equals("")) {
             parameters[0] = parameters[0].substring(1);
             int lastEntry = parameters.length-1;
             parameters[lastEntry] = parameters[lastEntry].substring(0, parameters[lastEntry].length()-1);
