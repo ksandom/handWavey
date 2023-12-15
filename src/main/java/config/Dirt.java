@@ -39,9 +39,17 @@ public class Dirt { // Manages whether configuration has changed since a known s
         return this.startup;
     }
 
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value="EI_EXPOSE_REP2",
+        justification="This is just used for unit testing.")
+
     public void setConfigManager(Config config) {
         this.config = config;
     }
+
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value="EI_EXPOSE_REP",
+        justification="This is just used for unit testing.")
 
     public Config getConfigManager() {
         return this.config;
