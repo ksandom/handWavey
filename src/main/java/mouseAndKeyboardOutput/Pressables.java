@@ -18,16 +18,16 @@ public class Pressables {
     public static final int INVALID = -1;
     private HashMap<String, Integer> pressables = new HashMap<String, Integer>();
     private Debug debug;
-    
+
     public Pressables() {
         this.debug = Debug.getDebug("Pressables");
     }
-    
+
     public void defineKeys() {
         //
         // Add keys here:
         //
-        
+
         // From: https://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyEvent.html
         definePressable("ctrl", KeyEvent.VK_CONTROL);
         definePressable("alt", KeyEvent.VK_ALT);
@@ -35,19 +35,19 @@ public class Pressables {
         definePressable("delete", KeyEvent. VK_DELETE);
         definePressable("tab", KeyEvent. VK_TAB);
         definePressable("escape", KeyEvent. VK_ESCAPE);
-        
+
         definePressable("home", KeyEvent. VK_HOME);
         definePressable("end", KeyEvent. VK_END);
         definePressable("pageUp", KeyEvent. VK_PAGE_UP);
         definePressable("pageDown", KeyEvent. VK_PAGE_DOWN);
-        
+
         definePressable("up", KeyEvent.VK_UP);
         definePressable("down", KeyEvent.VK_DOWN);
         definePressable("left", KeyEvent.VK_LEFT);
         definePressable("right", KeyEvent.VK_RIGHT);
-        
+
         definePressable("printscreen", KeyEvent.VK_PRINTSCREEN);
-        
+
         definePressable("f1", KeyEvent.VK_F1);
         definePressable("f2", KeyEvent.VK_F2);
         definePressable("f3", KeyEvent.VK_F3);
@@ -72,13 +72,13 @@ public class Pressables {
         definePressable("f22", KeyEvent.VK_F22);
         definePressable("f23", KeyEvent.VK_F23);
         definePressable("f24", KeyEvent.VK_F24);
-        
+
         definePressable("=", KeyEvent. VK_EQUALS);
         definePressable("+", KeyEvent. VK_PLUS);
         definePressable("-", KeyEvent. VK_MINUS);
         definePressable(";", KeyEvent. VK_SEMICOLON);
         definePressable(";", KeyEvent. VK_SEMICOLON);
-        
+
         definePressable("0", KeyEvent.VK_0);
         definePressable("1", KeyEvent.VK_1);
         definePressable("2", KeyEvent.VK_2);
@@ -89,7 +89,7 @@ public class Pressables {
         definePressable("7", KeyEvent.VK_7);
         definePressable("8", KeyEvent.VK_8);
         definePressable("9", KeyEvent.VK_9);
-        
+
         definePressable("a", KeyEvent.VK_A);
         definePressable("b", KeyEvent.VK_B);
         definePressable("c", KeyEvent.VK_C);
@@ -116,40 +116,40 @@ public class Pressables {
         definePressable("x", KeyEvent.VK_X);
         definePressable("y", KeyEvent.VK_Y);
         definePressable("z", KeyEvent.VK_Z);
-        
+
         this.debug.out(1, "Defined keyboard keys: " + this.pressables.keySet().toString());
     }
-    
+
     public void defineButtons() {
         //
         // Add mouse buttons here:
         //
-        
+
         // From: https://docs.oracle.com/javase/7/docs/api/java/awt/event/MouseEvent.html
         definePressable("left", InputEvent.BUTTON1_MASK);
         definePressable("middle", InputEvent.BUTTON2_MASK);
         definePressable("right", InputEvent.BUTTON3_MASK);
-        
+
         this.debug.out(1, "Defined mouse buttons: " + this.pressables.keySet().toString());
     }
-    
+
     private void definePressable(String pressableName, int pressableCode) {
         this.pressables.put(pressableName, pressableCode);
     }
-    
+
     public Boolean isValidPressable(String value) {
         return this.pressables.containsKey(value);
     }
-    
+
     public int getPressableID(String keyName) {
         int result = Pressables.INVALID;
-        
+
         if (this.pressables.containsKey(keyName)) {
             result = this.pressables.get(keyName);
         }
         return result;
     }
-    
+
     public Set<String> getPressablesIKnow() {
         return this.pressables.keySet();
     }
