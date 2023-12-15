@@ -229,13 +229,6 @@ public class Gesture {
         addAudioFeedbackConfig(name, triggerDescription, Gesture.exiting);
     }
 
-    private void addConfigItems(String name, String triggerDescription) {
-        addActionConfig(name, triggerDescription, Gesture.entering);
-        addActionConfig(name, triggerDescription, Gesture.exiting);
-        addAudioFeedbackConfig(name, triggerDescription, Gesture.entering);
-        addAudioFeedbackConfig(name, triggerDescription, Gesture.exiting);
-    }
-
     public String handState(int handState) {
         String result = "";
 

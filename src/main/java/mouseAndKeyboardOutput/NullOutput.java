@@ -55,10 +55,6 @@ public class NullOutput implements Output {
         this.lastButton = getMouseButtonID(button);
     }
 
-    private int getLastMouseButton() {
-        return this.lastButton;
-    }
-
     private int getMouseButtonID(String buttonName) {
         int result = 0;
         switch (buttonName) {
