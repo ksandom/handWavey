@@ -6,9 +6,13 @@ For figuring out what events should be triggered when something changes.
 
 package handWavey;
 
+import dataCleaner.MovingMean;
 import dataCleaner.Changed;
 import java.util.List;
 import java.util.ArrayList;
+
+import config.Config;
+import config.*;
 
 import debug.Debug;
 
@@ -22,6 +26,7 @@ public class HandStateEvents {
     private List<String> anyChangeEvents = new ArrayList<String>();
     private List<String> enterEvents = new ArrayList<String>();
     private List<String> exitEvents = new ArrayList<String>();
+
 
     private Gesture gesture;
 

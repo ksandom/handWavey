@@ -40,6 +40,7 @@ public class HandWaveyConfig {
         this.config.addGroupToSeparate("audioConfig");
         this.config.addGroupToSeparate("audioEvents");
         this.config.addGroupToSeparate("gestureConfig");
+        this.config.addGroupToSeparate("handCleaner");
 
         // Build up general config.
         Item configFormatVersion = this.config.newItem(
@@ -573,6 +574,36 @@ public class HandWaveyConfig {
             "mergeTo",
             "0",
             "Merge between this value, and mergeTo, into mergeIntoSegment.");
+
+        Group handCleaner = this.config.newGroup("handCleaner");
+        handCleaner.newItem(
+            "movingMeanX",
+            "4",
+            "The moving mean length for the X axis. >0. 1 effectively disables the moving mean. A larger number is more effective at removing noise, at the expense of responsiveness.");
+        handCleaner.newItem(
+            "movingMeanY",
+            "4",
+            "The moving mean length for the Y axis. >0. 1 effectively disables the moving mean. A larger number is more effective at removing noise, at the expense of responsiveness.");
+        handCleaner.newItem(
+            "movingMeanZ",
+            "4",
+            "The moving mean length for the Z axis. >0. 1 effectively disables the moving mean. A larger number is more effective at removing noise, at the expense of responsiveness.");
+        handCleaner.newItem(
+            "movingMeanRoll",
+            "4",
+            "The moving mean length for the roll axis. >0. 1 effectively disables the moving mean. A larger number is more effective at removing noise, at the expense of responsiveness.");
+        handCleaner.newItem(
+            "movingMeanPitch",
+            "4",
+            "The moving mean length for the pitch axis. >0. 1 effectively disables the moving mean. A larger number is more effective at removing noise, at the expense of responsiveness.");
+        handCleaner.newItem(
+            "movingMeanYaw",
+            "4",
+            "The moving mean length for the yaw axis. >0. 1 effectively disables the moving mean. A larger number is more effective at removing noise, at the expense of responsiveness.");
+        handCleaner.newItem(
+            "movingMeanFinger",
+            "4",
+            "The moving mean length for the finger (used for whether the hand is open or closed). >0. 1 effectively disables the moving mean. A larger number is more effective at removing noise, at the expense of responsiveness.");
     }
 
     private void generateCustomConfig(Group customGroup) {
