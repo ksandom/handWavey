@@ -21,8 +21,6 @@ public class UltraMotionInput extends Listener {
     private Debug debug;
     private HandSummary[] handSummaries = {null, null, null, null, null, null, null, null, null, null};
     private int maxHands = 2;
-    private float openThreshold = 0;
-    private float pi = (float)3.1415926536;
 
     private double maxHeight = 500;
     private double minHeight = 150;
@@ -43,12 +41,10 @@ public class UltraMotionInput extends Listener {
         this.debug = Debug.getDebug("UltraMotionInput");
 
         Group ultraMotionConfig = Config.singleton().getGroup("ultraMotion");
-        this.openThreshold = Float.parseFloat(ultraMotionConfig.getItem("openThreshold").get());
         this.maxHands = Integer.parseInt(ultraMotionConfig.getItem("maxHands").get());
         this.fingerToUse = Integer.parseInt(ultraMotionConfig.getItem("openFinger").get());
 
         this.debug.out(1, "Finger to use for open/closed state: " + String.valueOf(this.fingerToUse));
-        this.debug.out(1, "Open/closed threshold: " + String.valueOf(this.openThreshold));
 
         // Configure the cone of silence for ignoring input from outside the reliable cone.
         Group conOfSilence = ultraMotionConfig.getGroup("coneOfSilence");
@@ -96,10 +92,6 @@ public class UltraMotionInput extends Listener {
 
         this.maxHands = maxHands;
         emptyHands();
-    }
-
-    public void setOpenThreshold(float openThreshold) {
-        this.openThreshold = openThreshold;
     }
 
     private void emptyHands() {
@@ -227,11 +219,8 @@ public class UltraMotionInput extends Listener {
                 this.handSummaries[handNumber].setHandIsLeft(hand.isLeft());
 
                 Float middleDistalBonePitch = hand.fingers().get(this.fingerToUse).bone(this.boneToUse).direction().pitch();
-                Float relativeFingerPitch = mangleAngle(middleDistalBonePitch) + handDirection.pitch();
-                Float fingerDifference = Math.abs(relativeFingerPitch);
-                Boolean handOpen = (fingerDifference < openThreshold);
 
-                this.handSummaries[handNumber].setHandOpen(handOpen);
+                this.handSummaries[handNumber].setFingerAngle(middleDistalBonePitch);
             } else {
                 // If we have more hands than we are configured to handle, let's just stop processing the extra hands.
                 break;
@@ -276,15 +265,5 @@ public class UltraMotionInput extends Listener {
         }
 
         return result;
-    }
-
-    private float mangleAngle(float angle) {
-        // Moves the center by 180 degrees. I didn't get rotation working reliably.
-        // TODO Revisit whether getting rotation working reliably would be a better solution. There must be no jump when rotating past the boundary where an individual angle loops.
-
-        int sign = (angle < 0)?-1:1;
-        float invertedValue = this.pi - Math.abs(angle);
-
-        return invertedValue * (float)sign;
     }
 }

@@ -27,7 +27,8 @@ public class HandSummary {
     private double armPitch;
     private double armYaw;
 
-    private Boolean handOpen = true;
+    private double fingerAngle;
+
     private Boolean isLeft = true;
 
     private Boolean valid = true;
@@ -98,8 +99,8 @@ public class HandSummary {
             String.valueOf(this.armRoll) + ", " +
             String.valueOf(this.armPitch) + ", " +
             String.valueOf(this.armYaw) + ".  " +
-            "handOpen: " +
-            String.valueOf(this.handOpen) + ". " +
+            "Other angles: " +
+            String.valueOf(this.fingerAngle) + ", " +
             "valid: " +
             String.valueOf(this.valid) + ". ";
     }
@@ -225,13 +226,14 @@ public class HandSummary {
         return this.armYaw;
     }
 
-    public void setHandOpen(Boolean state) {
-        if (!this.handOpen.equals(state)) markUpdated();
-        this.handOpen = state;
+    public void setFingerAngle(double fingerAngle) {
+        if (this.fingerAngle != fingerAngle) markUpdated();
+
+        this.fingerAngle = fingerAngle;
     }
 
-    public Boolean handIsOpen() {
-        return this.handOpen;
+    public double getFingerAngle() {
+        return this.fingerAngle;
     }
 
     public Boolean handIsLeft() {

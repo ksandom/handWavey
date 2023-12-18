@@ -25,6 +25,9 @@ public class HandsState {
     private HandStateEvents primaryState = new HandStateEvents(true);
     private HandStateEvents secondaryState = new HandStateEvents(false);
 
+    private HandCleaner cleanPrimary = new HandCleaner();
+    private HandCleaner cleanSecondary = new HandCleaner();
+
     private double zNoMoveBegin = 0;
     private double zActiveBegin = 0;
     private double zAbsoluteBegin = 0;
@@ -159,12 +162,15 @@ public class HandsState {
             this.primaryState.setState(Gesture.absent);
             this.primaryState.setZone("OOB");
             this.primaryState.setSegment(0);
+
+            this.cleanPrimary.setAbsent();
         } else {
             shouldUpdatePrimary = (!this.handSummaries[0].handIsNew());
+            this.cleanPrimary.updateHand(this.handSummaries[0]);
 
             if (!shouldUpdatePrimary && this.earlyUnfreeze) {
                 // Check if the hand is already in the active area. If so, let's just enable it.
-                primaryHandZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
+                primaryHandZ = this.cleanPrimary.getHandZ() * this.zMultiplier;
                 if (this.handsState.getZone(primaryHandZ).equals(this.earlyUnfreezeZone)) {
                     shouldUpdatePrimary = true;
                     this.handSummaries[0].clearNewHand();
@@ -175,27 +181,32 @@ public class HandsState {
         }
 
         if (shouldUpdatePrimary) {
-            primaryHandZ = this.handSummaries[0].getHandZ() * this.zMultiplier;
+            primaryHandZ = this.cleanPrimary.getHandZ() * this.zMultiplier;
 
             String zone = this.handsState.getZone(primaryHandZ);
             if (!zone.equals(this.zoneOverride)) {
                 this.primaryState.setZone(zone);
             }
 
-            this.primaryState.setSegment(getHandSegment(true, this.handSummaries[0]));
-            this.primaryState.setState(getHandState(this.handSummaries[0]));
+            this.primaryState.setSegment(getHandSegment(true, this.handSummaries[0], this.cleanPrimary));
+            this.primaryState.setState(this.cleanPrimary.getState());
         }
 
         if (this.handSummaries[1] == null || !this.handSummaries[1].isValid()) {
             this.secondaryState.setState(Gesture.absent);
             this.secondaryState.setZone("OOB");
             this.secondaryState.setSegment(0);
+
+            this.cleanSecondary.setAbsent();
         } else if (shouldUpdateSecondary) {
-            Double secondaryHandZ = this.handSummaries[1].getHandZ() * this.zMultiplier;
+            this.cleanSecondary.updateHand(this.handSummaries[1]);
+
+            Double secondaryHandZ = this.cleanSecondary.getHandZ() * this.zMultiplier;
             this.secondaryState.setZone(this.handsState.getZone(secondaryHandZ, false));
-            this.secondaryState.setSegment(getHandSegment(false, this.handSummaries[1]));
+            this.secondaryState.setSegment(getHandSegment(false, this.handSummaries[1], this.cleanSecondary));
         } else if (this.handSummaries[1] != null) {
-            this.secondaryState.setState(getHandState(this.handSummaries[1]));
+            // TODO Is this branch needed?
+            this.secondaryState.setState(this.cleanSecondary.getState());
         }
 
 
@@ -275,17 +286,6 @@ public class HandsState {
         }
     }
 
-    private int getHandState(HandSummary handSummary) {
-        if (handSummary.isValid() == false) {
-            return Gesture.absent;
-        }
-        if (handSummary.handIsOpen()) {
-            return Gesture.open;
-        }
-
-        return Gesture.closed;
-    }
-
     public Boolean secondaryHandIsActive() {
         if (this.handSummaries.length < 2) return false;
         if (this.handSummaries[1] == null) return false;
@@ -302,8 +302,8 @@ public class HandsState {
         return result;
     }
 
-    public int getHandSegment(Boolean isPrimary, HandSummary handSummary) {
-        return getHandSegment(handSummary.getHandRoll(), isPrimary, handSummary.handIsLeft());
+    public int getHandSegment(Boolean isPrimary, HandSummary handSummary, HandCleaner cleanHand) {
+        return getHandSegment(cleanHand.getHandRoll(), isPrimary, handSummary.handIsLeft());
     }
 
     public int getHandSegment(double handRoll, Boolean isPrimary, Boolean isLeft) {
