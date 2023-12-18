@@ -226,6 +226,10 @@ public class HandSummary {
         return this.armYaw;
     }
 
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+        value="FE_FLOATING_POINT_EQUALITY",
+        justification="The if line is to save resources when nothing has changed. A few misses is fine. But the overhead that comes with more thorough testing would negate the value of the line.")
+
     public void setFingerAngle(double fingerAngle) {
         if (this.fingerAngle != fingerAngle) markUpdated();
 
