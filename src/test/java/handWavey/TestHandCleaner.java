@@ -14,13 +14,11 @@ class TestHandCleaner {
     private HandCleaner handCleaner = null;
     private HandSummary handSummary = null;
     private HandWaveyConfig handWaveyConfig = null;
-    private Config config = null;
 
     @BeforeEach
     void setUp() {
         this.handWaveyConfig = new HandWaveyConfig("unitTest");
         this.handWaveyConfig.defineGeneralConfig();
-        this.config = Config.singleton();
 
         this.handCleaner = new HandCleaner();
 
@@ -36,7 +34,6 @@ class TestHandCleaner {
     void destroy() {
         this.handCleaner = null;
         this.handSummary = null;
-        this.config = null;
         this.handWaveyConfig = null;
     }
 
