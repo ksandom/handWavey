@@ -146,6 +146,10 @@ public class HandWaveyConfig {
             "bug.ShouldComplete.MacroLine.line-.*",
             "0",
             "Int: Sensible numbers are 0-2, where 0 will only tell you when a bug has been detected. 1 tells you what has been started, and 2 tells you what has completed as well (this is probably redundant, since level 0 still tells you on the next round when something hasn't finished.) Generally you'll want to keep this at 0. But if want to see that something is even being attempted, this will help. This entry is for the individual macro instructions at nesting level denoted at the end of this setting name.");
+        debug.addItemTemplate(
+            "BackgroundSound",
+            "1",
+            "Int: Sensible numbers are 0-1, where 0 will not tell anything. And 1 tells you when ever the maxCount has been exceeded.");
 
         Group dataCleaning = this.config.newGroup("dataCleaning");
         dataCleaning.newItem(
@@ -497,6 +501,10 @@ public class HandWaveyConfig {
             "pathToAudio",
             "audio" + File.separator + "clips",
             "Where are all of the audio clips stored.");
+        audioConfig.newItem(
+            "maxCount",
+            "8",
+            "How many audio clips can play concurrently.");
 
         Group audioEvents = this.config.newGroup("audioEvents");
         audioEvents.newItem(

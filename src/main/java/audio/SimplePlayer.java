@@ -32,7 +32,6 @@ class SimplePlayer {
          * @param filename the name of the file that is going to be played
          */
         public void playSound(String filename){
-
             String strFilename = filename;
 
             try {
@@ -79,5 +78,7 @@ class SimplePlayer {
 
             sourceLine.drain();
             sourceLine.close();
+
+            BackgroundSound.end();
         }
 }
