@@ -9,11 +9,7 @@ groups:
           that some segments are hard for a human hand to reach, so you need to keep
           that in mind when choosing this number. It is expected that some segments
           will be unused for this reason. Don't hurt yourself.
-        value: '6'
-      rotationOffset:
-        description: In radians. Adjust where the segments are slightly to cater
-          to your hand's natural bias.
-        value: '0.3'
+        value: '8'
       mergeIntoSegment:
         description: Merge unused segments into this segment. This has the effect
           of not causing an unnecessary segment change event when accidentally moving
@@ -35,11 +31,7 @@ groups:
           that some segments are hard for a human hand to reach, so you need to keep
           that in mind when choosing this number. It is expected that some segments
           will be unused for this reason. Don't hurt yourself.
-        value: '6'
-      rotationOffset:
-        description: In radians. Adjust where the segments are slightly to cater
-          to your hand's natural bias.
-        value: '0.3'
+        value: '8'
       mergeIntoSegment:
         description: Merge unused segments into this segment. This has the effect
           of not causing an unnecessary segment change event when accidentally moving

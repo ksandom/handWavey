@@ -547,36 +547,36 @@ public class HandWaveyConfig {
         Group primaryHand = gestureConfig.newGroup("primaryHand");
         primaryHand.newItem(
             "rotationSegments",
-            "4",
+            "8",
             "When you rotate your hand; it enters different segments. Increasing the number of segments increases the number of things you can do with your hand. Decreasing the number of segments makes it easier to be precise. Remember that some segments are hard for a human hand to reach, so you need to keep that in mind when choosing this number. It is expected that some segments will be unused for this reason. Don't hurt yourself.");
         primaryHand.newItem(
             "mergeIntoSegment",
-            "0",
+            "1",
             "Merge unused segments into this segment. This has the effect of not causing an unnecessary segment change event when accidentally moving into an unused segment.");
         primaryHand.newItem(
             "mergeFrom",
-            "0",
+            "2",
             "Merge between this value, and mergeTo, into mergeIntoSegment.");
         primaryHand.newItem(
             "mergeTo",
-            "0",
+            "3",
             "Merge between this value, and mergeTo, into mergeIntoSegment.");
         Group secondaryHand = gestureConfig.newGroup("secondaryHand");
         secondaryHand.newItem(
             "rotationSegments",
-            "4",
+            "8",
             "When you rotate your hand; it enters different segments. Increasing the number of segments increases the number of things you can do with your hand. Decreasing the number of segments makes it easier to be precise. Remember that some segments are hard for a human hand to reach, so you need to keep that in mind when choosing this number. It is expected that some segments will be unused for this reason. Don't hurt yourself.");
         secondaryHand.newItem(
             "mergeIntoSegment",
-            "0",
+            "1",
             "Merge unused segments into this segment. This has the effect of not causing an unnecessary segment change event when accidentally moving into an unused segment.");
         secondaryHand.newItem(
             "mergeFrom",
-            "0",
+            "2",
             "Merge between this value, and mergeTo, into mergeIntoSegment.");
         secondaryHand.newItem(
             "mergeTo",
-            "0",
+            "3",
             "Merge between this value, and mergeTo, into mergeIntoSegment.");
 
         Group handCleaner = this.config.newGroup("handCleaner");
