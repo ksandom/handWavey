@@ -190,7 +190,7 @@ public class HandWaveyConfig {
             "Maximum number of hands to track. Anything more than this setting will be discarded, and assumptions can be made faster, so it will run faster. The most recent hands above the threshold are the ones to be discarded.");
         ultraMotion.newItem(
             "openThreshold",
-            "1.8",
+            "2",
             "Float: When the last bone of the openFinger is less than this angle, the hand is assumed to be open.");
         ultraMotion.newItem(
             "openFinger",
@@ -598,7 +598,7 @@ public class HandWaveyConfig {
             "The moving mean length for the roll axis. >0. 1 effectively disables the moving mean. A larger number is more effective at removing noise, at the expense of responsiveness.");
         handCleaner.newItem(
             "movingMeanPitch",
-            "4",
+            "20",
             "The moving mean length for the pitch axis. >0. 1 effectively disables the moving mean. A larger number is more effective at removing noise, at the expense of responsiveness.");
         handCleaner.newItem(
             "movingMeanYaw",
@@ -606,7 +606,7 @@ public class HandWaveyConfig {
             "The moving mean length for the yaw axis. >0. 1 effectively disables the moving mean. A larger number is more effective at removing noise, at the expense of responsiveness.");
         handCleaner.newItem(
             "movingMeanFinger",
-            "4",
+            "20",
             "The moving mean length for the finger (used for whether the hand is open or closed). >0. 1 effectively disables the moving mean. A larger number is more effective at removing noise, at the expense of responsiveness.");
     }
 
