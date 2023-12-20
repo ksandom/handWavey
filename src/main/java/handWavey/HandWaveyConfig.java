@@ -150,6 +150,10 @@ public class HandWaveyConfig {
             "BackgroundSound",
             "1",
             "Int: Sensible numbers are 0-1, where 0 will not tell anything. And 1 tells you when ever the maxCount has been exceeded.");
+        debug.addItemTemplate(
+            "Changed",
+            "1",
+            "Int: Sensible numbers are 0-1, where 0 will not tell anything. And 1 tells you when a data type has changed from what it was initialised as.");
 
         Group dataCleaning = this.config.newGroup("dataCleaning");
         dataCleaning.newItem(
