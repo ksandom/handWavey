@@ -29,7 +29,7 @@ items:
   special-newHandUnfreezeEvent:
     value: ""
   special-newHandUnfreezeCursor:
-    value: ''
+    value: 'recalibrateSegments();'
   special-newHandFreeze:
     value: ''
   general-segment-p1-enter:
@@ -40,9 +40,9 @@ items:
     value: setButton("left");lockCursor();rewindCursorPosition();mouseDown();
   individual-pNonOOB1Open-exit:
     value: rewindCursorPosition();releaseButtons();unlockCursor();
-  individual-pNonOOB5Open-enter:
+  individual-pNonOOB7Open-enter:
     value: setButton("right");lockCursor();rewindCursorPosition();mouseDown();
-  individual-pNonOOB5Open-exit:
+  individual-pNonOOB7Open-exit:
     value: rewindCursorPosition();releaseButtons();unlockCursor();
   individual-pNonOOB1Closed-enter:
     value: setButton("middle");lockCursor();rewindCursorPosition();mouseDown();
@@ -52,9 +52,9 @@ items:
     value: rewindCursorPosition();overrideZone("scroll");
   individual-pNonOOB0Closed-exit:
     value: rewindCursorPosition();releaseZone();unlockCursor();
-  individual-pNonOOB5Closed-enter:
+  individual-pNonOOB7Closed-enter:
     value: rewindCursorPosition();setButton("left");doubleClick();
-  individual-pNonOOB5Closed-exit:
+  individual-pNonOOB7Closed-exit:
     value: rewindCursorPosition();unlockCursor();
   general-state-pAbsent-enter:
     value: setButton("left");releaseButtons();releaseKeys();releaseZone();

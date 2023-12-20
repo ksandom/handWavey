@@ -488,7 +488,7 @@ public class HandWaveyConfig {
             "When a new primary hand is introduced, the cursor and the ability to click the mouse or press keys, is disabled while the device stabilises.");
         actionEvents.newItem(
             "special-newHandUnfreezeCursor",
-            "",
+            "recalibrateSegments();",
             "When the time has expired for the Cursor freeze after a new primary hand is introduced.");
         actionEvents.newItem(
             "special-newHandUnfreezeEvent",

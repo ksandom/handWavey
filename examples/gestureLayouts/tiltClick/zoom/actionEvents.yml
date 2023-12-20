@@ -29,7 +29,7 @@ items:
   special-newHandUnfreezeEvent:
     value: ""
   special-newHandUnfreezeCursor:
-    value: ''
+    value: 'recalibrateSegments();'
   special-newHandFreeze:
     value: ''
   general-segment-p1-enter:
@@ -40,9 +40,9 @@ items:
     value: setButton("left");lockCursor();rewindCursorPosition();mouseDown();
   individual-pNonOOB1Open-exit:
     value: rewindCursorPosition();releaseButtons();unlockCursor();
-  individual-pNonOOB5Open-enter:
+  individual-pNonOOB7Open-enter:
     value: setButton("right");lockCursor();rewindCursorPosition();mouseDown();
-  individual-pNonOOB5Open-exit:
+  individual-pNonOOB7Open-exit:
     value: rewindCursorPosition();releaseButtons();unlockCursor();
   individual-pNonOOB1Closed-enter:
     value: setButton("middle");lockCursor();rewindCursorPosition();mouseDown();
