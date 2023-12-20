@@ -15,8 +15,8 @@ class TestChanged {
 
     @BeforeEach
     void setUp() {
-        this.changedStr = new Changed("");
-        this.changedInt = new Changed(0);
+        this.changedStr = new Changed("", "changedStr");
+        this.changedInt = new Changed(0, "changedInt");
     }
 
     @AfterEach
@@ -82,5 +82,21 @@ class TestChanged {
          assertEquals(0, this.changedInt.toInt());
          assertEquals("another value", this.changedStr.fromStr());
          assertEquals(-1, this.changedInt.fromInt());
+    }
+    @Test
+    public void testTypes() {
+         // A new change.
+         this.changedStr.set("another value");
+         this.changedInt.set(-1);
+
+         assertEquals(false, this.changedStr.getMissmatch());
+         assertEquals(false, this.changedInt.getMissmatch());
+
+         // Incorrect values.
+         this.changedStr.set(1);
+         this.changedInt.set("a string");
+
+         assertEquals(true, this.changedStr.getMissmatch());
+         assertEquals(true, this.changedInt.getMissmatch());
     }
 }

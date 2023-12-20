@@ -11,7 +11,13 @@ It can provide:
 
 package dataCleaner;
 
+import debug.Debug;
+
 public class Changed {
+    private Debug debug;
+
+    private String name = "Unnamed";
+
     private String strCurrent = "";
     private int intCurrent = 0;
 
@@ -20,17 +26,31 @@ public class Changed {
 
     private Boolean changed = false;
 
-    public Changed(String value) {
+    private Boolean isInt = false;
+    private Boolean missmatch = false;
+
+    public Changed(String value, String name) {
+        isInt = false;
         set(value);
-        set(value); // Set a secont time to remove the changed state.
+        set(value); // Set a second time to remove the changed state.
+        this.name = name;
+        debug = Debug.getDebug("Changed");
     }
 
-    public Changed(int value) {
+    public Changed(int value, String name) {
+        isInt = true;
         set(value);
-        set(value); // Set a secont time to remove the changed state.
+        set(value); // Set a second time to remove the changed state.
+        this.name = name;
+        debug = Debug.getDebug("Changed");
     }
 
     public void set(String value) {
+        if (isInt) {
+            this.debug.out(1, "Was initialised as an int, but just received a string. This is a bug in " + name);
+            missmatch = true;
+        }
+
         if (!value.equals(this.strCurrent)) {
             this.strPrevious = this.strCurrent;
             this.strCurrent = value;
@@ -42,6 +62,11 @@ public class Changed {
     }
 
     public void set(int value) {
+        if (!isInt) {
+            this.debug.out(1, "Was initialised as a string, but just received an int. This is a bug in " + name);
+            missmatch = true;
+        }
+
         if (value != this.intCurrent) {
             this.intPrevious = this.intCurrent;
             this.intCurrent = value;
@@ -70,5 +95,9 @@ public class Changed {
 
     public int toInt() {
         return this.intCurrent;
+    }
+
+    public Boolean getMissmatch() {
+        return missmatch;
     }
 }

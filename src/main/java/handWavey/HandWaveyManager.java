@@ -234,6 +234,10 @@ public final class HandWaveyManager {
         motion.discardOldPosition();
     }
 
+    public void recalibrateSegments() {
+        handsState.recalibrateSegments();
+    }
+
 
 
     public void triggerEvent(String eventID) {

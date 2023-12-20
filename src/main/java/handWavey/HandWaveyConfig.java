@@ -150,6 +150,10 @@ public class HandWaveyConfig {
             "BackgroundSound",
             "1",
             "Int: Sensible numbers are 0-1, where 0 will not tell anything. And 1 tells you when ever the maxCount has been exceeded.");
+        debug.addItemTemplate(
+            "Changed",
+            "1",
+            "Int: Sensible numbers are 0-1, where 0 will not tell anything. And 1 tells you when a data type has changed from what it was initialised as.");
 
         Group dataCleaning = this.config.newGroup("dataCleaning");
         dataCleaning.newItem(
@@ -186,7 +190,7 @@ public class HandWaveyConfig {
             "Maximum number of hands to track. Anything more than this setting will be discarded, and assumptions can be made faster, so it will run faster. The most recent hands above the threshold are the ones to be discarded.");
         ultraMotion.newItem(
             "openThreshold",
-            "1.8",
+            "2",
             "Float: When the last bone of the openFinger is less than this angle, the hand is assumed to be open.");
         ultraMotion.newItem(
             "openFinger",
@@ -480,7 +484,7 @@ public class HandWaveyConfig {
         Group actionEvents = this.config.newGroup("actionEvents"); // Entirely generated in Gesture.
         actionEvents.newItem(
             "special-newHandFreeze",
-            "",
+            "recalibrateSegments();",
             "When a new primary hand is introduced, the cursor and the ability to click the mouse or press keys, is disabled while the device stabilises.");
         actionEvents.newItem(
             "special-newHandUnfreezeCursor",
@@ -543,44 +547,36 @@ public class HandWaveyConfig {
         Group primaryHand = gestureConfig.newGroup("primaryHand");
         primaryHand.newItem(
             "rotationSegments",
-            "4",
+            "8",
             "When you rotate your hand; it enters different segments. Increasing the number of segments increases the number of things you can do with your hand. Decreasing the number of segments makes it easier to be precise. Remember that some segments are hard for a human hand to reach, so you need to keep that in mind when choosing this number. It is expected that some segments will be unused for this reason. Don't hurt yourself.");
         primaryHand.newItem(
-            "rotationOffset",
-            "0",
-            "In radians. Adjust where the segments are slightly to cater to your hand's natural bias.");
-        primaryHand.newItem(
             "mergeIntoSegment",
-            "0",
+            "1",
             "Merge unused segments into this segment. This has the effect of not causing an unnecessary segment change event when accidentally moving into an unused segment.");
         primaryHand.newItem(
             "mergeFrom",
-            "0",
+            "2",
             "Merge between this value, and mergeTo, into mergeIntoSegment.");
         primaryHand.newItem(
             "mergeTo",
-            "0",
+            "3",
             "Merge between this value, and mergeTo, into mergeIntoSegment.");
         Group secondaryHand = gestureConfig.newGroup("secondaryHand");
         secondaryHand.newItem(
             "rotationSegments",
-            "4",
+            "8",
             "When you rotate your hand; it enters different segments. Increasing the number of segments increases the number of things you can do with your hand. Decreasing the number of segments makes it easier to be precise. Remember that some segments are hard for a human hand to reach, so you need to keep that in mind when choosing this number. It is expected that some segments will be unused for this reason. Don't hurt yourself.");
         secondaryHand.newItem(
-            "rotationOffset",
-            "0",
-            "In radians. Adjust where the segments are slightly to cater to your hand's natural bias.");
-        secondaryHand.newItem(
             "mergeIntoSegment",
-            "0",
+            "1",
             "Merge unused segments into this segment. This has the effect of not causing an unnecessary segment change event when accidentally moving into an unused segment.");
         secondaryHand.newItem(
             "mergeFrom",
-            "0",
+            "2",
             "Merge between this value, and mergeTo, into mergeIntoSegment.");
         secondaryHand.newItem(
             "mergeTo",
-            "0",
+            "3",
             "Merge between this value, and mergeTo, into mergeIntoSegment.");
 
         Group handCleaner = this.config.newGroup("handCleaner");
@@ -610,7 +606,7 @@ public class HandWaveyConfig {
             "The moving mean length for the yaw axis. >0. 1 effectively disables the moving mean. A larger number is more effective at removing noise, at the expense of responsiveness.");
         handCleaner.newItem(
             "movingMeanFinger",
-            "4",
+            "20",
             "The moving mean length for the finger (used for whether the hand is open or closed). >0. 1 effectively disables the moving mean. A larger number is more effective at removing noise, at the expense of responsiveness.");
     }
 

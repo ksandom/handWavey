@@ -9,13 +9,7 @@ groups:
           that some segments are hard for a human hand to reach, so you need to keep
           that in mind when choosing this number. It is expected that some segments
           will be unused for this reason. Don't hurt yourself.
-        zzzEmpty: {}
         value: '1'
-      rotationOffset:
-        description: In radians. Adjust where the segments are slightly to cater
-          to your hand's natural bias.
-        zzzEmpty: {}
-        value: '0'
   secondaryHand:
     groups: {}
     items:
@@ -26,11 +20,5 @@ groups:
           that some segments are hard for a human hand to reach, so you need to keep
           that in mind when choosing this number. It is expected that some segments
           will be unused for this reason. Don't hurt yourself.
-        zzzEmpty: {}
         value: '1'
-      rotationOffset:
-        description: In radians. Adjust where the segments are slightly to cater
-          to your hand's natural bias.
-        zzzEmpty: {}
-        value: '0'
 items: {}

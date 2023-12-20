@@ -18,10 +18,10 @@ import debug.Debug;
 
 public class HandStateEvents {
     private Debug debug;
-    private Changed zoneChanged = new Changed("OOB");
-    private Changed OOBChanged = new Changed("OOB");
-    private Changed segmentChanged = new Changed(0);
-    private Changed stateChanged = new Changed(Gesture.absent);
+    private Changed zoneChanged = new Changed("OOB", "zoneChanged");
+    private Changed OOBChanged = new Changed("OOB", "OOBChanged");
+    private Changed segmentChanged = new Changed(0, "segmentChanged");
+    private Changed stateChanged = new Changed(Gesture.absent, "stateChanged");
 
     private List<String> anyChangeEvents = new ArrayList<String>();
     private List<String> enterEvents = new ArrayList<String>();

@@ -55,6 +55,9 @@ public class HandCleaner {
     }
 
     public void updateHand(HandSummary handSummary) {
+        double relativeFingerPitch = mangleAngle(handSummary.getFingerAngle()) + handSummary.getHandPitch();
+        double fingerDifference = Math.abs(relativeFingerPitch);
+
         if (!absent) {
             // Normal flow.
             movingMeanX.set(handSummary.getHandX());
@@ -65,7 +68,7 @@ public class HandCleaner {
             movingMeanPitch.set(handSummary.getHandPitch());
             movingMeanYaw.set(handSummary.getHandYaw());
 
-            movingMeanFinger.set(handSummary.getFingerAngle());
+            movingMeanFinger.set(fingerDifference);
         } else {
             // No longer absent. Let's reset the means.
             absent = false;
@@ -77,13 +80,11 @@ public class HandCleaner {
             movingMeanPitch.seed(handSummary.getHandPitch());
             movingMeanYaw.seed(handSummary.getHandYaw());
 
-            movingMeanFinger.seed(handSummary.getFingerAngle());
+            movingMeanFinger.seed(fingerDifference);
         }
 
         // Figure out whether the hand is open or closed.
-        double relativeFingerPitch = mangleAngle(movingMeanFinger.get()) + movingMeanPitch.get();
-        double fingerDifference = Math.abs(relativeFingerPitch);
-        Boolean handOpen = (fingerDifference < openThreshold);
+        Boolean handOpen = (movingMeanFinger.get() < openThreshold);
         this.handState = (handOpen)?Gesture.open:Gesture.closed;
     }
 

@@ -144,6 +144,12 @@ public class MacroCore {
                 this.useSlots(true);
                 break;
 
+            // Calibration.
+            case "recalibrateSegments":
+                this.handWaveyManager.recalibrateSegments();
+                break;
+
+
             // Oh ohhhhhhhh.
             default:
                 this.debug.out(0, "Unknown command: " + command);

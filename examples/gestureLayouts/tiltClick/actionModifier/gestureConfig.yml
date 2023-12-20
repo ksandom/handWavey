@@ -10,10 +10,6 @@ groups:
           that in mind when choosing this number. It is expected that some segments
           will be unused for this reason. Don't hurt yourself.
         value: '10'
-      rotationOffset:
-        description: In radians. Adjust where the segments are slightly to cater
-          to your hand's natural bias.
-        value: '0.2'
       mergeIntoSegment:
         description: Merge unused segments into this segment. This has the effect
           of not causing an unnecessary segment change event when accidentally moving
@@ -36,10 +32,6 @@ groups:
           that in mind when choosing this number. It is expected that some segments
           will be unused for this reason. Don't hurt yourself.
         value: '6'
-      rotationOffset:
-        description: In radians. Adjust where the segments are slightly to cater
-          to your hand's natural bias.
-        value: '0.2'
       mergeIntoSegment:
         description: Merge unused segments into this segment. This has the effect
           of not causing an unnecessary segment change event when accidentally moving

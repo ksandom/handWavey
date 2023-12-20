@@ -111,7 +111,7 @@ public class HandsState {
         Group primaryHand = config.getGroup("gestureConfig").getGroup("primaryHand");
         this.primarySegments = Integer.parseInt(primaryHand.getItem("rotationSegments").get());
         this.primarySegmentWidth = (this.pi * 2) / this.primarySegments;
-        this.primaryOffset = Double.parseDouble(primaryHand.getItem("rotationOffset").get());
+        this.primaryOffset = 0;
         this.primaryMergeIntoSegment = Integer.parseInt(primaryHand.getItem("mergeIntoSegment").get());
         this.primaryMergeFrom = Integer.parseInt(primaryHand.getItem("mergeFrom").get());
         this.primaryMergeTo = Integer.parseInt(primaryHand.getItem("mergeTo").get());
@@ -119,7 +119,7 @@ public class HandsState {
         Group secondaryHand = config.getGroup("gestureConfig").getGroup("secondaryHand");
         this.secondarySegments = Integer.parseInt(secondaryHand.getItem("rotationSegments").get());
         this.secondarySegmentWidth = (this.pi * 2) / this.secondarySegments;
-        this.secondaryOffset = Double.parseDouble(secondaryHand.getItem("rotationOffset").get());
+        this.secondaryOffset = 0;
         this.secondaryMergeIntoSegment = Integer.parseInt(secondaryHand.getItem("mergeIntoSegment").get());
         this.secondaryMergeFrom = Integer.parseInt(secondaryHand.getItem("mergeFrom").get());
         this.secondaryMergeTo = Integer.parseInt(secondaryHand.getItem("mergeTo").get());
@@ -215,8 +215,10 @@ public class HandsState {
             if (anythingChanged) {
                 String pStateEnter = this.primaryState.getIndividualEnterEvent();
                 String sStateEnter = this.secondaryState.getIndividualEnterEvent();
+                String pStateExit = this.primaryState.getIndividualExitEvent();
+                String sStateExit = this.secondaryState.getIndividualExitEvent();
 
-                this.debug.out(1, "Current state: " + pStateEnter + ", " + sStateEnter);
+                this.debug.out(1, "Current state: " + pStateExit + " -> " + pStateEnter + ", " + sStateExit + " -> " + sStateEnter);
 
                 // Derive events to be triggered.
                 this.primaryState.deriveEvents();
@@ -453,6 +455,18 @@ public class HandsState {
 
     public long getPreviousFrameAge() {
         return this.previousFrameAge;
+    }
+
+    public void recalibrateSegments() {
+        if (this.handSummaries[0] != null && this.handSummaries[0].isValid()) {
+            this.primaryOffset = this.cleanPrimary.getHandRoll();
+            this.debug.out(0, "recalibrateSegments: primary = " + String.valueOf(this.primaryOffset));
+        }
+
+        if (this.handSummaries[1] != null && this.handSummaries[1].isValid()) {
+            this.secondaryOffset = this.cleanSecondary.getHandRoll();
+            this.debug.out(0, "recalibrateSegments: secondary = " + String.valueOf(this.secondaryOffset));
+        }
     }
 }
 
