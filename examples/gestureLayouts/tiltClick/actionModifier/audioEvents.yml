@@ -19,7 +19,7 @@ items:
   special-newHandUnfreezeEvent:
     value: ''
   special-newHandUnfreezeCursor:
-    value: ''
+    value: 'recalibrateSegments();'
   individual-pAction0Open-enter:
     value: piano-short-C1.wav
   individual-pAction1Open-enter:

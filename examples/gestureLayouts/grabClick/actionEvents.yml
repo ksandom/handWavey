@@ -29,7 +29,7 @@ items:
   special-newHandUnfreezeEvent:
     value: ""
   special-newHandUnfreezeCursor:
-    value: ''
+    value: 'recalibrateSegments();'
   special-newHandFreeze:
     value: ''
   general-zone-sActive-exit:
