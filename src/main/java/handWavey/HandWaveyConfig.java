@@ -598,7 +598,7 @@ public class HandWaveyConfig {
             "The moving mean length for the roll axis. >0. 1 effectively disables the moving mean. A larger number is more effective at removing noise, at the expense of responsiveness.");
         handCleaner.newItem(
             "movingMeanPitch",
-            "20",
+            "4",
             "The moving mean length for the pitch axis. >0. 1 effectively disables the moving mean. A larger number is more effective at removing noise, at the expense of responsiveness.");
         handCleaner.newItem(
             "movingMeanYaw",
