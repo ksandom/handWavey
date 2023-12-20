@@ -215,8 +215,10 @@ public class HandsState {
             if (anythingChanged) {
                 String pStateEnter = this.primaryState.getIndividualEnterEvent();
                 String sStateEnter = this.secondaryState.getIndividualEnterEvent();
+                String pStateExit = this.primaryState.getIndividualExitEvent();
+                String sStateExit = this.secondaryState.getIndividualExitEvent();
 
-                this.debug.out(1, "Current state: " + pStateEnter + ", " + sStateEnter);
+                this.debug.out(1, "Current state: " + pStateExit + " -> " + pStateEnter + ", " + sStateExit + " -> " + sStateEnter);
 
                 // Derive events to be triggered.
                 this.primaryState.deriveEvents();
