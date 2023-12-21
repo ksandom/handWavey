@@ -83,9 +83,15 @@ class TestState {
         Group gestureConfig = config.getGroup("gestureConfig");
         Group primaryHand = gestureConfig.getGroup("primaryHand");
         primaryHand.getItem("rotationSegments").set("4");
+        primaryHand.getItem("mergeIntoSegment").set("0");
+        primaryHand.getItem("mergeFrom").set("0");
+        primaryHand.getItem("mergeTo").set("0");
 
         Group secondaryHand = gestureConfig.getGroup("secondaryHand");
         secondaryHand.getItem("rotationSegments").set("4");
+        secondaryHand.getItem("mergeIntoSegment").set("0");
+        secondaryHand.getItem("mergeFrom").set("0");
+        secondaryHand.getItem("mergeTo").set("0");
 
         this.handsState = new HandsState();
     }
