@@ -484,7 +484,7 @@ public class HandWaveyConfig {
         Group actionEvents = this.config.newGroup("actionEvents"); // Entirely generated in Gesture.
         actionEvents.newItem(
             "special-newHandFreeze",
-            "recalibrateSegments();",
+            "",
             "When a new primary hand is introduced, the cursor and the ability to click the mouse or press keys, is disabled while the device stabilises.");
         actionEvents.newItem(
             "special-newHandUnfreezeCursor",
@@ -608,6 +608,14 @@ public class HandWaveyConfig {
             "movingMeanFinger",
             "20",
             "The moving mean length for the finger (used for whether the hand is open or closed). >0. 1 effectively disables the moving mean. A larger number is more effective at removing noise, at the expense of responsiveness.");
+        handCleaner.newItem(
+            "autoTrimMaxChangePerSecond",
+            "0.3",
+            "The maximum change (in radians) that the auto-trim can apply per second. It is applied proportionally based on the duration since the last sample. The goal of auto-trim is to adjust to changes in the resting position of the hand so that segments still feel intuitive to the user despite the user not being consistent. Setting this to 0 disables autoTrim.");
+        handCleaner.newItem(
+            "autoTrimMaxChange",
+            "1.57",
+            "The maximum change (in radians) that the auto-trim can apply in total. Setting this too small will limit how much auto-trim can help you. Setting it too large could lead to confusing behavior. The goal of auto-trim is to adjust to changes in the resting position of the hand so that segments still feel intuitive to the user despite the user not being consistent.");
     }
 
     private void generateCustomConfig(Group customGroup) {

@@ -188,8 +188,15 @@ public class HandsState {
                 this.primaryState.setZone(zone);
             }
 
-            this.primaryState.setSegment(getHandSegment(true, this.handSummaries[0], this.cleanPrimary));
+            int segment = getHandSegment(true, this.handSummaries[0], this.cleanPrimary);
+            this.primaryState.setSegment(segment);
             this.primaryState.setState(this.cleanPrimary.getState());
+
+            double distanceFromCenter = this.getSegmentDistanceFromCenter(segment, true, this.handSummaries[0], this.cleanPrimary);
+
+            this.cleanPrimary.autoTrim(distanceFromCenter);
+
+            //this.debug.out(0, "Distance from center: " + String.valueOf(distanceFromCenter));
         }
 
         if (this.handSummaries[1] == null || !this.handSummaries[1].isValid()) {
@@ -339,6 +346,29 @@ public class HandsState {
         }
 
         return segmentNumber;
+    }
+
+    public double getSegmentDistanceFromCenter(int segment, Boolean isPrimary, HandSummary handSummary, HandCleaner cleanHand) {
+        return  getSegmentDistanceFromCenter(cleanHand.getHandRoll(), segment, isPrimary, handSummary.handIsLeft());
+    }
+
+    public double getSegmentDistanceFromCenter(double handRoll, int segment, Boolean isPrimary, Boolean isLeft) {
+        // Flip the direction depending on the hand.
+        int directionalMultiplier = (isLeft)?1:-1;
+        double handedRoll = handRoll * directionalMultiplier;
+
+        // Get the current segmentWidth.
+        double segmentWidth = (isPrimary)?this.primarySegmentWidth:this.secondarySegmentWidth;
+
+        // Take care of, moving the range into the positive, move 0 into the center of segment 0, and add the user-specified offset.
+        double userOffset = (isPrimary)?this.primaryOffset:this.secondaryOffset;
+        double offsetRoll = handedRoll - userOffset;
+
+        double segmentPosition = (segmentWidth * segment);
+
+        double distanceFromSegmentCenter = segmentPosition - offsetRoll;
+
+        return distanceFromSegmentCenter;
     }
 
     private String deriveZone(double handZ) {

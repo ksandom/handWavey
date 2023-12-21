@@ -8,6 +8,7 @@ package handWavey;
 
 import config.*;
 import dataCleaner.MovingMean;
+import java.util.Date;
 
 public class HandCleaner {
     private MovingMean movingMeanX = null;
@@ -23,10 +24,16 @@ public class HandCleaner {
     private int handState = Gesture.absent;
 
     private Boolean absent = true;
+    private Boolean isLeft = true;
 
     private float pi = (float)3.1415926536;
 
     private float openThreshold = 0;
+
+    private double trimRoll = 0;
+    private double maxChangePerSecond = 0;
+    private double maxChange = 0;
+    private long lastNow = 0;
 
     public HandCleaner() {
         Group ultraMotionConfig = Config.singleton().getGroup("ultraMotion");
@@ -43,6 +50,11 @@ public class HandCleaner {
 
         int movingMeanLengthFinger = Integer.parseInt(handCleaner.getItem("movingMeanFinger").get());
 
+        maxChangePerSecond = Double.parseDouble(handCleaner.getItem("autoTrimMaxChangePerSecond").get());
+        maxChange = Double.parseDouble(handCleaner.getItem("autoTrimMaxChange").get());
+
+        lastNow = timeInMilliseconds();
+
         movingMeanX = new MovingMean(movingMeanLengthX, 0);
         movingMeanY = new MovingMean(movingMeanLengthY, 0);
         movingMeanZ = new MovingMean(movingMeanLengthZ, 0);
@@ -55,6 +67,14 @@ public class HandCleaner {
     }
 
     public void updateHand(HandSummary handSummary) {
+        // Check we hand we have.
+        Boolean isLeftNow = handSummary.handIsLeft();
+        if (isLeftNow.equals(isLeft)) {
+            resetAutoTrim();
+        }
+        isLeft = isLeftNow;
+
+        // Calculate relative finger to hand positions.
         double relativeFingerPitch = mangleAngle(handSummary.getFingerAngle()) + handSummary.getHandPitch();
         double fingerDifference = Math.abs(relativeFingerPitch);
 
@@ -81,6 +101,8 @@ public class HandCleaner {
             movingMeanYaw.seed(handSummary.getHandYaw());
 
             movingMeanFinger.seed(fingerDifference);
+
+            resetAutoTrim();
         }
 
         // Figure out whether the hand is open or closed.
@@ -119,7 +141,7 @@ public class HandCleaner {
     }
 
     public double getHandRoll() {
-        return movingMeanRoll.get();
+        return movingMeanRoll.get() + trimRoll;
     }
 
     public double getHandPitch() {
@@ -132,5 +154,49 @@ public class HandCleaner {
 
     public double getFingerAngle() {
         return movingMeanFinger.get();
+    }
+
+    private long timeInMilliseconds() {
+        Date date = new Date();
+        return date.getTime();
+    }
+
+    public void autoTrim(double distance) {
+        if (maxChangePerSecond == 0) return;
+
+        long now = this.timeInMilliseconds();
+        long elapsed = now - lastNow;
+        lastNow = timeInMilliseconds();
+        double seconds = elapsed / 1000F;
+
+        double distancePerSecond = distance / seconds;
+
+        // Check that it's not happening too fast.
+        if (Math.abs(distancePerSecond) > maxChangePerSecond) {
+            if (distance >= 0) {
+                distance = maxChangePerSecond * seconds;
+            } else {
+                distance = maxChangePerSecond * seconds * -1;
+            }
+        }
+
+        // Are we using the right hand?
+        if (!isLeft) distance *= -1;
+
+        // Apply the change.
+        trimRoll += distance;
+
+        // Check for OOB.
+        if (trimRoll > maxChange) {
+            trimRoll = maxChange;
+        }
+        if (trimRoll * -1 > maxChange) {
+            trimRoll = maxChange * -1;
+        }
+    }
+
+    private void resetAutoTrim() {
+        trimRoll = 0;
+        lastNow = timeInMilliseconds();
     }
 }
