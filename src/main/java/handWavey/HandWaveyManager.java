@@ -238,6 +238,13 @@ public final class HandWaveyManager {
         handsState.recalibrateSegments();
     }
 
+    public void lockGestures(String hand) {
+        handsState.lockGestures(hand);
+    }
+
+    public void unlockGestures(String hand) {
+        handsState.unlockGestures(hand);
+    }
 
 
     public void triggerEvent(String eventID) {
