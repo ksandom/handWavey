@@ -92,7 +92,7 @@ class TestGesture {
         assertEquals("", actionEvents.getItem("individual-pOOB0Absent-exit").get());
 
         // Special events.
-        assertEquals("recalibrateSegments();", actionEvents.getItem("special-newHandFreeze").get());
+        assertEquals("recalibrateSegments();", actionEvents.getItem("special-newHandUnfreezeCursor").get());
     }
 
     @Test
