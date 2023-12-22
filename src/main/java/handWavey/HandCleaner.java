@@ -33,7 +33,13 @@ public class HandCleaner {
     private double trimRoll = 0;
     private double maxChangePerSecond = 0;
     private double maxChange = 0;
-    private long lastNow = 0;
+    private long lastChangeTime = 0;
+
+    private double speed = 0;
+    private long lastSubmissionTime = 0;
+    private double stationarySpeed = 0;
+
+    private Boolean gesturesLocked = false;
 
     public HandCleaner() {
         Group ultraMotionConfig = Config.singleton().getGroup("ultraMotion");
@@ -53,7 +59,9 @@ public class HandCleaner {
         maxChangePerSecond = Double.parseDouble(handCleaner.getItem("autoTrimMaxChangePerSecond").get());
         maxChange = Double.parseDouble(handCleaner.getItem("autoTrimMaxChange").get());
 
-        lastNow = timeInMilliseconds();
+        stationarySpeed = Double.parseDouble(handCleaner.getItem("stationarySpeed").get());
+
+        lastChangeTime = timeInMilliseconds();
 
         movingMeanX = new MovingMean(movingMeanLengthX, 0);
         movingMeanY = new MovingMean(movingMeanLengthY, 0);
@@ -67,7 +75,7 @@ public class HandCleaner {
     }
 
     public void updateHand(HandSummary handSummary) {
-        // Check we hand we have.
+        // Check which hand we have.
         Boolean isLeftNow = handSummary.handIsLeft();
         if (isLeftNow.equals(isLeft)) {
             resetAutoTrim();
@@ -80,17 +88,38 @@ public class HandCleaner {
 
         if (!absent) {
             // Normal flow.
+
+            // Collect initial state for later distance calculations.
+            double xStart = movingMeanX.get();
+            double yStart = movingMeanY.get();
+
+            // Update the values.
             movingMeanX.set(handSummary.getHandX());
             movingMeanY.set(handSummary.getHandY());
             movingMeanZ.set(handSummary.getHandZ());
 
-            movingMeanRoll.set(handSummary.getHandRoll());
-            movingMeanPitch.set(handSummary.getHandPitch());
-            movingMeanYaw.set(handSummary.getHandYaw());
+            if (!this.gesturesLocked) {
+                movingMeanRoll.set(handSummary.getHandRoll());
+                movingMeanPitch.set(handSummary.getHandPitch());
+                movingMeanYaw.set(handSummary.getHandYaw());
 
-            movingMeanFinger.set(fingerDifference);
+                movingMeanFinger.set(fingerDifference);
+            }
+
+            // Do the speed calculations.
+            long now = timeInMilliseconds();
+            long elapsed = now - lastSubmissionTime;
+            lastSubmissionTime = now;
+
+            double xChange = movingMeanX.get() - xStart;
+            double yChange = movingMeanY.get() - yStart;
+            double cChange = Math.pow((Math.pow(xChange, 2) + Math.pow(yChange, 2)), 0.5);
+
+            speed = cChange / elapsed * 100F;
         } else {
             // No longer absent. Let's reset the means.
+
+            // Reset all values to the current ones. We don't want old data.
             absent = false;
             movingMeanX.seed(handSummary.getHandX());
             movingMeanY.seed(handSummary.getHandY());
@@ -103,6 +132,12 @@ public class HandCleaner {
             movingMeanFinger.seed(fingerDifference);
 
             resetAutoTrim();
+
+            // Prepare for the speed calculations in the next iteration.
+            lastSubmissionTime = timeInMilliseconds();
+            speed = 0;
+
+            gesturesLocked = false;
         }
 
         // Figure out whether the hand is open or closed.
@@ -165,8 +200,8 @@ public class HandCleaner {
         if (maxChangePerSecond == 0) return;
 
         long now = this.timeInMilliseconds();
-        long elapsed = now - lastNow;
-        lastNow = timeInMilliseconds();
+        long elapsed = now - lastChangeTime;
+        lastChangeTime = timeInMilliseconds();
         double seconds = elapsed / 1000F;
 
         double distancePerSecond = distance / seconds;
@@ -197,6 +232,19 @@ public class HandCleaner {
 
     private void resetAutoTrim() {
         trimRoll = 0;
-        lastNow = timeInMilliseconds();
+        lastChangeTime = timeInMilliseconds();
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public Boolean isStationary() {
+        if (stationarySpeed < 0) return true; // Setting stationarySpeed to -1 effectively disables this feature.
+        return (speed < stationarySpeed);
+    }
+
+    public void setGestureLock(Boolean desiredState) {
+        this.gesturesLocked = desiredState;
     }
 }

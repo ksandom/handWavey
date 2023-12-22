@@ -188,15 +188,15 @@ public class HandsState {
                 this.primaryState.setZone(zone);
             }
 
-            int segment = getHandSegment(true, this.handSummaries[0], this.cleanPrimary);
-            this.primaryState.setSegment(segment);
+            int primarySegment = getHandSegment(true, this.handSummaries[0], this.cleanPrimary);
+            this.primaryState.setSegment(primarySegment);
             this.primaryState.setState(this.cleanPrimary.getState());
 
-            double distanceFromCenter = this.getSegmentDistanceFromCenter(segment, true, this.handSummaries[0], this.cleanPrimary);
+            double primaryDistanceFromCenter = this.getSegmentDistanceFromCenter(primarySegment, true, this.handSummaries[0], this.cleanPrimary);
 
-            this.cleanPrimary.autoTrim(distanceFromCenter);
+            this.cleanPrimary.autoTrim(primaryDistanceFromCenter);
 
-            //this.debug.out(0, "Distance from center: " + String.valueOf(distanceFromCenter));
+            this.primaryState.setStationary(this.cleanPrimary.isStationary());
         }
 
         if (this.handSummaries[1] == null || !this.handSummaries[1].isValid()) {
@@ -210,7 +210,14 @@ public class HandsState {
 
             Double secondaryHandZ = this.cleanSecondary.getHandZ() * this.zMultiplier;
             this.secondaryState.setZone(this.handsState.getZone(secondaryHandZ, false));
-            this.secondaryState.setSegment(getHandSegment(false, this.handSummaries[1], this.cleanSecondary));
+
+            int secondarySegment = getHandSegment(false, this.handSummaries[1], this.cleanSecondary);
+            this.secondaryState.setSegment(secondarySegment);
+
+            double secondaryDistanceFromCenter = this.getSegmentDistanceFromCenter(secondarySegment, true, this.handSummaries[1], this.cleanSecondary);
+            this.cleanSecondary.autoTrim(secondaryDistanceFromCenter);
+
+            this.secondaryState.setStationary(this.cleanSecondary.isStationary());
         } else if (this.handSummaries[1] != null) {
             // TODO Is this branch needed?
             this.secondaryState.setState(this.cleanSecondary.getState());
@@ -218,6 +225,29 @@ public class HandsState {
 
 
         if ((shouldUpdatePrimary || primaryAbsent) || shouldUpdateSecondary) {
+            if (this.primaryState.specialChanged()) {
+                if (this.primaryState.stationaryChanged()) {
+                    String stationaryState = this.primaryState.getStationaryString();
+                    double speed = this.cleanPrimary.getSpeed();
+
+                    this.debug.out(2, "Primary is \"" + stationaryState + "\" at speed " + String.valueOf(speed));
+
+                    this.handWaveyEvent.triggerEvent("special-primary" + stationaryState);
+                }
+            }
+
+            if (this.secondaryState.specialChanged()) {
+                if (this.secondaryState.stationaryChanged()) {
+                    String stationaryState = this.secondaryState.getStationaryString();
+                    double speed = this.cleanSecondary.getSpeed();
+
+                    this.debug.out(2, "Secondary is \"" + stationaryState + "\" at speed " + String.valueOf(speed));
+
+                    this.handWaveyEvent.triggerEvent("special-secondary" + stationaryState);
+                }
+            }
+
+
             Boolean anythingChanged = (this.primaryState.somethingChanged() || this.secondaryState.somethingChanged());
             if (anythingChanged) {
                 String pStateEnter = this.primaryState.getIndividualEnterEvent();
@@ -498,6 +528,22 @@ public class HandsState {
             this.secondaryOffset = this.cleanSecondary.getHandRoll();
             if (!this.handSummaries[1].handIsLeft()) this.secondaryOffset *= -1;
             this.debug.out(0, "recalibrateSegments: secondary = " + String.valueOf(this.secondaryOffset));
+        }
+    }
+
+    public void lockGestures(String hand) {
+        if (hand.equals("primary")) {
+            this.cleanPrimary.setGestureLock(true);
+        } else {
+            this.cleanSecondary.setGestureLock(true);
+        }
+    }
+
+    public void unlockGestures(String hand) {
+        if (hand.equals("primary")) {
+            this.cleanPrimary.setGestureLock(false);
+        } else {
+            this.cleanSecondary.setGestureLock(false);
         }
     }
 }

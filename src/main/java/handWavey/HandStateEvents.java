@@ -22,6 +22,7 @@ public class HandStateEvents {
     private Changed OOBChanged = new Changed("OOB", "OOBChanged");
     private Changed segmentChanged = new Changed(0, "segmentChanged");
     private Changed stateChanged = new Changed(Gesture.absent, "stateChanged");
+    private Changed stationaryChanged = new Changed(1, "stationaryChanged");
 
     private List<String> anyChangeEvents = new ArrayList<String>();
     private List<String> enterEvents = new ArrayList<String>();
@@ -68,6 +69,19 @@ public class HandStateEvents {
         }
     }
 
+    public void setStationary(Boolean stationary) {
+        int value = (stationary)?1:0;
+        this.stationaryChanged.set(value);
+    }
+
+    public Boolean stationaryChanged() {
+        return this.stationaryChanged.hasChanged();
+    }
+
+    public String getStationaryString() {
+        return (this.stationaryChanged.toInt() == 1)?"Stationary":"Moving";
+    }
+
     public Boolean freshlyAbsent() {
         return (this.stateChanged.toInt() == Gesture.absent && this.stateChanged.hasChanged());
     }
@@ -78,6 +92,10 @@ public class HandStateEvents {
 
     public Boolean somethingWithOOBStateChanged() {
         return (this.OOBChanged.hasChanged() || this.segmentChanged.hasChanged() || this.stateChanged.hasChanged());
+    }
+
+    public Boolean specialChanged() {
+        return this.stationaryChanged.hasChanged();
     }
 
     public List<String> getAnyChangeEvents() {

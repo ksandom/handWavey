@@ -149,6 +149,14 @@ public class MacroCore {
                 this.handWaveyManager.recalibrateSegments();
                 break;
 
+            // Gesture control.
+            case "lockGestures":
+                this.handWaveyManager.lockGestures(parm(parameters, 0, ""));
+                break;
+            case "unlockGestures":
+                this.handWaveyManager.unlockGestures(parm(parameters, 0, ""));
+                break;
+
 
             // Oh ohhhhhhhh.
             default:

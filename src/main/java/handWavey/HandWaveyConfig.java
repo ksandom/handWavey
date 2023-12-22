@@ -494,6 +494,22 @@ public class HandWaveyConfig {
             "special-newHandUnfreezeEvent",
             "",
             "When the time has expired for the Event freeze after a new primary hand is introduced. This event is triggered.");
+        actionEvents.newItem(
+            "special-primaryMoving",
+            "lockGestures(\"primary\");",
+            "When the primary hand starts moving.");
+        actionEvents.newItem(
+            "special-primaryStationary",
+            "unlockGestures(\"primary\");",
+            "When the primary hand starts moving.");
+        actionEvents.newItem(
+            "special-secondaryMoving",
+            "lockGestures(\"secondary\");",
+            "When the secondary hand starts moving.");
+        actionEvents.newItem(
+            "special-secondaryStationary",
+            "unlockGestures(\"secondary\");",
+            "When the secondary hand starts moving.");
         this.generateCustomConfig(actionEvents);
 
         Group audioConfig = this.config.newGroup("audioConfig");
@@ -536,6 +552,22 @@ public class HandWaveyConfig {
             "coocoo1.wav",
             "When a bug is detected, play this sound.");
         audioEvents.addItemTemplate("^custom-[0-9]+", "", "When this custom event that a user can trigger in a gestureLayout. It is intended to be used with slots, and can be read about in createADynamicGestureLayout.md.");
+        audioEvents.newItem(
+            "special-primaryMoving",
+            "",
+            "When the primary hand starts moving.");
+        audioEvents.newItem(
+            "special-primaryStationary",
+            "",
+            "When the primary hand starts moving.");
+        audioEvents.newItem(
+            "special-secondaryMoving",
+            "",
+            "When the secondary hand starts moving.");
+        audioEvents.newItem(
+            "special-secondaryStationary",
+            "",
+            "When the secondary hand starts moving.");
 
 
         this.config.newItem(
@@ -616,6 +648,10 @@ public class HandWaveyConfig {
             "autoTrimMaxChange",
             "1.57",
             "The maximum change (in radians) that the auto-trim can apply in total. Setting this too small will limit how much auto-trim can help you. Setting it too large could lead to confusing behavior. The goal of auto-trim is to adjust to changes in the resting position of the hand so that segments still feel intuitive to the user despite the user not being consistent.");
+        handCleaner.newItem(
+            "stationarySpeed",
+            "15",
+            "The speed, below which, the hand is considered stationary, and segment/state changes will be allowed. This is called speedLock. Setting this to -1 disables the speedLock. Change the debug level for HandsState to at least 2 to see the live speeds when the lock engages and disengages. You'll need stationarySpeed to be set to something positive for this to work. I suggest starting around 5-10.");
     }
 
     private void generateCustomConfig(Group customGroup) {
