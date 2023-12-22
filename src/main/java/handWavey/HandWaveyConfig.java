@@ -579,7 +579,7 @@ public class HandWaveyConfig {
         Group primaryHand = gestureConfig.newGroup("primaryHand");
         primaryHand.newItem(
             "rotationSegments",
-            "8",
+            "4",
             "When you rotate your hand; it enters different segments. Increasing the number of segments increases the number of things you can do with your hand. Decreasing the number of segments makes it easier to be precise. Remember that some segments are hard for a human hand to reach, so you need to keep that in mind when choosing this number. It is expected that some segments will be unused for this reason. Don't hurt yourself.");
         primaryHand.newItem(
             "mergeIntoSegment",
@@ -596,7 +596,7 @@ public class HandWaveyConfig {
         Group secondaryHand = gestureConfig.newGroup("secondaryHand");
         secondaryHand.newItem(
             "rotationSegments",
-            "8",
+            "4",
             "When you rotate your hand; it enters different segments. Increasing the number of segments increases the number of things you can do with your hand. Decreasing the number of segments makes it easier to be precise. Remember that some segments are hard for a human hand to reach, so you need to keep that in mind when choosing this number. It is expected that some segments will be unused for this reason. Don't hurt yourself.");
         secondaryHand.newItem(
             "mergeIntoSegment",
