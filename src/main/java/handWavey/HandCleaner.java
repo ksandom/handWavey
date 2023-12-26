@@ -36,8 +36,14 @@ public class HandCleaner {
     private long lastChangeTime = 0;
 
     private double speed = 0;
+    private double zSpeed = 0;
     private long lastSubmissionTime = 0;
     private double stationarySpeed = 0;
+
+    private Boolean tapArmed = false;
+    private double tapSpeed = 0;
+    private long tapNegativeCount = -1;
+    private long tapSamplesToWait = 5;
 
     private Boolean gesturesLocked = false;
 
@@ -60,6 +66,10 @@ public class HandCleaner {
         maxChange = Double.parseDouble(handCleaner.getItem("autoTrimMaxChange").get());
 
         stationarySpeed = Double.parseDouble(handCleaner.getItem("stationarySpeed").get());
+
+        Group tap = Config.singleton().getGroup("tap");
+        tapSpeed = Double.parseDouble(tap.getItem("tapSpeed").get());
+        tapSamplesToWait = Integer.parseInt(tap.getItem("samplesToWait").get());
 
         lastChangeTime = timeInMilliseconds();
 
@@ -92,6 +102,7 @@ public class HandCleaner {
             // Collect initial state for later distance calculations.
             double xStart = movingMeanX.get();
             double yStart = movingMeanY.get();
+            double zStart = movingMeanZ.get();
 
             // Update the values.
             movingMeanX.set(handSummary.getHandX());
@@ -113,9 +124,11 @@ public class HandCleaner {
 
             double xChange = movingMeanX.get() - xStart;
             double yChange = movingMeanY.get() - yStart;
+            double zChange = movingMeanZ.get() - zStart;
             double cChange = Math.pow((Math.pow(xChange, 2) + Math.pow(yChange, 2)), 0.5);
 
             speed = cChange / elapsed * 100F;
+            zSpeed = zChange / elapsed * 100F;
         } else {
             // No longer absent. Let's reset the means.
 
@@ -136,6 +149,7 @@ public class HandCleaner {
             // Prepare for the speed calculations in the next iteration.
             lastSubmissionTime = timeInMilliseconds();
             speed = 0;
+            zSpeed = 0;
 
             gesturesLocked = false;
         }
@@ -241,10 +255,72 @@ public class HandCleaner {
 
     public Boolean isStationary() {
         if (stationarySpeed < 0) return true; // Setting stationarySpeed to -1 effectively disables this feature.
+
         return (speed < stationarySpeed);
     }
 
     public void setGestureLock(Boolean desiredState) {
         this.gesturesLocked = desiredState;
     }
+
+    private Boolean isRetracting() {
+        return (zSpeed > 0);
+    }
+
+    public Boolean isDoingATap(String zone) {
+        // Taps are disabled. Don't spend any more time on it.
+        if (tapSpeed < 0) return false;
+
+        // Hand is absent.
+        if (absent) {
+            tapArmed = false;
+            return false;
+        }
+
+        // We're not in the active zone.
+        if (!zone.equals("active")) {
+            tapArmed = false;
+            return false;
+        }
+
+        /*
+            There are a couple of related things going on here.
+
+            * We only want a tap when the hand is pushing away from you.
+            * We don't want the tap to trigger when entering the active zone. Therefore we need to make sure that we don't arm the taps until the hand has started to retreat after entering the active zone.
+        */
+        if (isRetracting()) {
+            tapArmed = true;
+            tapNegativeCount ++;
+            return false;
+        }
+
+        // If the hand is moving, we are busy doing something else.
+        if (!isStationary()) {
+            tapArmed = false;
+            return false;
+        }
+
+        //System.out.println(zSpeed);
+
+        // We haven't yet met the contitions to perform a tap. Don't do anything further.
+        if (!tapArmed) {
+            return false;
+        }
+
+        // If the state is fluctuating, we don't want to trigger multiple events.
+        if (tapNegativeCount > -1 && tapNegativeCount < tapSamplesToWait) {
+            return false;
+        }
+
+        // Have we met the speed threshold for a tap?
+        if (Math.abs(zSpeed) < tapSpeed) {
+            return false;
+        }
+
+        // Phew! We're ready to perform the tap.
+        tapNegativeCount = 0;
+        return true;
+    }
+
 }

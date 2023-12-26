@@ -41,6 +41,7 @@ public class HandWaveyConfig {
         this.config.addGroupToSeparate("audioEvents");
         this.config.addGroupToSeparate("gestureConfig");
         this.config.addGroupToSeparate("handCleaner");
+        this.config.addGroupToSeparate("tap");
 
         // Build up general config.
         Item configFormatVersion = this.config.newItem(
@@ -438,7 +439,7 @@ public class HandWaveyConfig {
         Group clickConfig = this.config.newGroup("click");
         clickConfig.newItem(
             "rewindCursorTime",
-            "300",
+            "200",
             "int milliseconds. When we do a clicking motion, we move in a way that disrupts the cursor. The idea of this setting is to get a position that is just before we started doing the gesture. The default should be pretty close for most people, but if you find that the cursor is still disrupted by the gesture, increase this number. If it rewinds to a time well before you began the gesture, then decrease this number.");
         clickConfig.newItem(
             "repeatRewindCursorTime",
@@ -652,6 +653,17 @@ public class HandWaveyConfig {
             "stationarySpeed",
             "15",
             "The speed, below which, the hand is considered stationary, and segment/state changes will be allowed. This is called speedLock. Setting this to -1 disables the speedLock. Change the debug level for HandsState to at least 2 to see the live speeds when the lock engages and disengages. You'll need stationarySpeed to be set to something positive for this to work. I suggest starting around 5-10.");
+
+        Group tap = this.config.newGroup("tap");
+        tap.newItem(
+            "tapSpeed",
+            "15",
+            "The speed of the Z axis (away from you), above which, the hand is considered to be performing a tap. Setting this to -1 disables the tap gesture. You'll need tapSpeed to be set to something positive for this to work. I suggest starting around 5-10.");
+        tap.newItem(
+            "samplesToWait",
+            "5",
+            "Number of samples to wait until allowing another tap.");
+
     }
 
     private void generateCustomConfig(Group customGroup) {
@@ -669,12 +681,19 @@ public class HandWaveyConfig {
         // Set the default values.
         customGroup.getItem("custom-noOp").overrideDefault("debug(\"0\", \"No action is currently assigned to this slot.\");"); // Do nothing. Useful to have a blank slot that can sometimes be used for other things.
         customGroup.getItem("custom-releaseAll").overrideDefault("rewindCursorPosition();rewindScroll();releaseButtons();releaseKeys();unlockCursor();"); // Release all buttons and keys. Useful for getting the keyboard and mouse into a known state.
+
         customGroup.getItem("custom-mouseDown-left").overrideDefault("setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();"); // Press down the left mouse button.
         customGroup.getItem("custom-mouseDown-right").overrideDefault("setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();"); // Press down the right mouse button.
         customGroup.getItem("custom-mouseDown-middle").overrideDefault("setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();"); // Press down the middle mouse button.
+
+        customGroup.getItem("custom-click-left").overrideDefault("setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Press down the left mouse button.
+        customGroup.getItem("custom-click-right").overrideDefault("setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Press down the right mouse button.
+        customGroup.getItem("custom-click-middle").overrideDefault("setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Press down the middle mouse button.
+
         customGroup.getItem("custom-releaseZone").overrideDefault("rewindCursorPosition();releaseZone();unlockCursor();"); // Release and zone overrides. This is typically used at the end of overriding the zone for something like scrolling.
         customGroup.getItem("custom-override-scroll").overrideDefault("rewindCursorPosition();overrideZone(\"scroll\");releaseKeys();"); // Override the zone to scroll. This has the effect that any movement of the hand causes scroll movement instead of mouse cursor movement.
         customGroup.getItem("custom-override-ctrl+scroll").overrideDefault("rewindCursorPosition();keyDown(\"ctrl\");overrideZone(\"scroll\");"); // Press the CTRL key down, and override the zone to scroll. Often this is used for zooming.
+
         customGroup.getItem("custom-doubleClick-hold").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");click();mouseDown();"); // Double click the left button, without lifting the finger at the end of the second click. This is useful for doing things like drag-selecting by word rather than by character.
         customGroup.getItem("custom-trippleClick-hold").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();mouseDown();"); // Tripple click the left button, without lifting the finger at the end of the second click. This is useful for doing things like drag-selecting by line rather than by character.
         customGroup.getItem("custom-doubleClick").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();"); // Double click the left button.

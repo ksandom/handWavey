@@ -196,6 +196,8 @@ public class HandsState {
 
             this.cleanPrimary.autoTrim(primaryDistanceFromCenter);
 
+            this.primaryState.setTap(this.cleanPrimary.isDoingATap(zone));
+
             this.primaryState.setStationary(this.cleanPrimary.isStationary());
         }
 
@@ -217,6 +219,8 @@ public class HandsState {
             double secondaryDistanceFromCenter = this.getSegmentDistanceFromCenter(secondarySegment, true, this.handSummaries[1], this.cleanSecondary);
             this.cleanSecondary.autoTrim(secondaryDistanceFromCenter);
 
+            this.secondaryState.setTap(this.cleanSecondary.isDoingATap(zone));
+
             this.secondaryState.setStationary(this.cleanSecondary.isStationary());
         } else if (this.handSummaries[1] != null) {
             // TODO Is this branch needed?
@@ -234,6 +238,14 @@ public class HandsState {
 
                     this.handWaveyEvent.triggerEvent("special-primary" + stationaryState);
                 }
+
+                if (this.primaryState.tapChanged()) {
+                    if (this.primaryState.didTap()) {
+                        String tapName = "tap-" + this.primaryState.getTapName();
+                        this.debug.out(1, "Primary tapped " + tapName);
+                        this.handWaveyEvent.triggerEvent(tapName);
+                    }
+                }
             }
 
             if (this.secondaryState.specialChanged()) {
@@ -244,6 +256,14 @@ public class HandsState {
                     this.debug.out(2, "Secondary is \"" + stationaryState + "\" at speed " + String.valueOf(speed));
 
                     this.handWaveyEvent.triggerEvent("special-secondary" + stationaryState);
+                }
+
+                if (this.secondaryState.tapChanged()) {
+                    if (this.secondaryState.didTap()) {
+                        String tapName = "tap-" + this.secondaryState.getTapName();
+                        this.debug.out(1, "Secondary tapped " + tapName);
+                        this.handWaveyEvent.triggerEvent(tapName);
+                    }
                 }
             }
 

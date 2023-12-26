@@ -23,6 +23,7 @@ public class HandStateEvents {
     private Changed segmentChanged = new Changed(0, "segmentChanged");
     private Changed stateChanged = new Changed(Gesture.absent, "stateChanged");
     private Changed stationaryChanged = new Changed(1, "stationaryChanged");
+    private Changed tapChanged = new Changed(0, "tapChanged");
 
     private List<String> anyChangeEvents = new ArrayList<String>();
     private List<String> enterEvents = new ArrayList<String>();
@@ -74,12 +75,25 @@ public class HandStateEvents {
         this.stationaryChanged.set(value);
     }
 
+    public void setTap(Boolean isTapping) {
+        int value = (isTapping)?1:0;
+        this.tapChanged.set(value);
+    }
+
     public Boolean stationaryChanged() {
         return this.stationaryChanged.hasChanged();
     }
 
+    public Boolean tapChanged() {
+        return this.tapChanged.hasChanged();
+    }
+
     public String getStationaryString() {
         return (this.stationaryChanged.toInt() == 1)?"Stationary":"Moving";
+    }
+
+    public Boolean didTap() {
+        return (this.tapChanged.toInt() == 1);
     }
 
     public Boolean freshlyAbsent() {
@@ -95,7 +109,7 @@ public class HandStateEvents {
     }
 
     public Boolean specialChanged() {
-        return this.stationaryChanged.hasChanged();
+        return (this.stationaryChanged.hasChanged() || this.tapChanged.hasChanged());
     }
 
     public List<String> getAnyChangeEvents() {
@@ -237,6 +251,13 @@ public class HandStateEvents {
         return this.gesture.generateSingleHandGestureName(
             this.handLetter,
             "nonOOB",
+            this.segmentChanged.toInt(),
+            this.stateChanged.toInt());
+    }
+
+    public String getTapName() {
+        return this.gesture.generateSingleHandTapName(
+            this.handLetter,
             this.segmentChanged.toInt(),
             this.stateChanged.toInt());
     }
