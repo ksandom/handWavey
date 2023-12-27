@@ -276,13 +276,13 @@ public class HandCleaner {
 
         // Hand is absent.
         if (absent) {
-            tapArmed = false;
+            resetTap();
             return false;
         }
 
         // We're not in the active zone.
         if (!zone.equals("active")) {
-            tapArmed = false;
+            resetTap();
             return false;
         }
 
@@ -303,7 +303,7 @@ public class HandCleaner {
 
         // If the hand is moving, we are busy doing something else.
         if (!isStationary()) {
-            tapArmed = false;
+            resetTap();
             return false;
         }
 
@@ -311,6 +311,7 @@ public class HandCleaner {
 
         // We haven't yet met the contitions to perform a tap. Don't do anything further.
         if (!tapArmed) {
+            resetTap();
             return false;
         }
 
@@ -334,4 +335,9 @@ public class HandCleaner {
         return true;
     }
 
+    private void resetTap() {
+        tapNegativeCount = 0;
+        tapPositiveCount = 0;
+        tapArmed = false;
+    }
 }
