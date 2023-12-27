@@ -24,7 +24,10 @@ The motivation for this is to
     * `tapSpeed` - How fast your hand needs to move to trigger the tap event.
         * Setting this too low leads to unwanted tap events.
         * Setting this too high makes it very hard to trigger a tap event.
-    * `samplesToWait` - How many samples to wait until you can trigger another tap event after the last successful one completed.
+    * `samplesToWaitNegative` - How many retraction samples to wait until you can trigger another tap event after the last successful one completed.
+        * Setting this too small leads to unwanted tap events.
+        * Setting this too large restricts your ability to tap multiple things in a short space of time.
+    * `samplesToWaitPositive` - After `samplesToWaitNegative` has succeeded, How many samples going deeper to wait until you can trigger another tap event after the last successful one completed.
         * Setting this too small leads to unwanted tap events.
         * Setting this too large restricts your ability to tap multiple things in a short space of time.
 * click.yaml

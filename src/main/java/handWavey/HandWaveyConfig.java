@@ -660,9 +660,13 @@ public class HandWaveyConfig {
             "15",
             "The speed of the Z axis (away from you), above which, the hand is considered to be performing a tap. Setting this to -1 disables the tap gesture. You'll need tapSpeed to be set to something positive for this to work. I suggest starting around 5-10.");
         tap.newItem(
-            "samplesToWait",
+            "samplesToWaitNegative",
             "5",
-            "Number of samples to wait until allowing another tap.");
+            "Number of samples in the negative direction to wait until allowing another tap.");
+        tap.newItem(
+            "samplesToWaitPositive",
+            "5",
+            "Number of samples in the positive direction to wait until allowing a tap.");
 
     }
 
