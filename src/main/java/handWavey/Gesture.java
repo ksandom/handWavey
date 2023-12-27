@@ -411,7 +411,7 @@ public class Gesture {
     private void addActionConfig(String name, String whenDescription, int direction) {
         String directionName = directionName(direction);
         String directionString = directionAction(direction);
-        String fullName = fullName = fullName(name, directionName, direction);
+        String fullName = fullName(name, directionName, direction);
         String description = "Action to take when " + directionString + " this state: " + whenDescription;
 
         this.actionEvents.newItem(fullName, "", description, true);
@@ -420,7 +420,7 @@ public class Gesture {
     private void addAudioFeedbackConfig(String name, String whenDescription, int direction) {
         String directionName = directionName(direction);
         String directionString = directionAction(direction);
-        String fullName = fullName = fullName(name, directionName, direction);
+        String fullName = fullName(name, directionName, direction);
         String description = "Sound to play when " + directionString + " this state: " + whenDescription;
 
         this.audioEvents.newItem(fullName, "", description, true);
