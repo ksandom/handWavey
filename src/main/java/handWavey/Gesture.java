@@ -26,6 +26,8 @@ public class Gesture {
     public static final int absent = 2;
     public static final int entering = 4;
     public static final int exiting = 5;
+    public static final int triggering = 6;
+    public static final int na = 7;
 
     // Segments.
     private int maximumSegments = 20;
@@ -48,6 +50,7 @@ public class Gesture {
         generateChangeEventsConfig();
         generateGeneralEventsConfig();
         generateCombinedEventsConfig();
+        generateTapsConfig();
 
         setDefaults();
     }
@@ -68,6 +71,20 @@ public class Gesture {
             "general-state-pClosed-exit",
             "rewindCursorPosition();rewindScroll();releaseButtons();unlockCursor();",
             "metalDing08.wav");
+
+        // Set taps.
+        overrideDefault(
+            "tap-p0Open",
+            "setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();",
+            "metalDing08.wav");
+        overrideDefault(
+            "tap-s0Open",
+            "setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();",
+            "metalDing05.wav");
+        overrideDefault(
+            "tap-s0Closed",
+            "setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();",
+            "metalDing04.wav");
 
         // Set buttons.
         overrideDefault(
@@ -190,6 +207,31 @@ public class Gesture {
         }
     }
 
+    private void generateTapsConfig() {
+        String[] handLetters = new String[] {"p", "s"};
+
+        // Hands.
+        for (String handLetter : handLetters) {
+            // Segments.
+            for (int segment=0; segment< this.maximumSegments; segment ++) {
+                String segmentString = String.valueOf(segment);
+
+                // States.
+                for (int state=0; state< this.states.length; state ++) {
+                    String stateString = handState(state);
+
+                    String name = "tap-" + generateSingleHandTapName(handLetter, segment, state);
+                    String when = "in the " + segmentString+ " segment and " + stateString+ " state.";
+
+                    String triggerDescription = "General event: When the " + hand(handLetter) + " hand is " + when;
+                    addActionConfig(name, triggerDescription, Gesture.triggering);
+                    addAudioFeedbackConfig(name, triggerDescription, Gesture.triggering);
+                }
+            }
+
+        }
+    }
+
     private void generateCombinedEventsConfig() {
         // Combined events using state, zone, and segment.
 
@@ -264,6 +306,14 @@ public class Gesture {
         return result;
     }
 
+    public String generateSingleHandTapName(String letter, int segmentIn, int handStateIn) {
+        int segment = segmentIn;
+        int handState = handStateIn;
+
+        // eg p0Closed
+        return letter + String.valueOf(segment) + capitalise(handState(handState));
+    }
+
     public String generateSingleHandGestureName(String letter, String zone, int segmentIn, int handStateIn) {
         int segment = segmentIn;
         int handState = handStateIn;
@@ -300,19 +350,77 @@ public class Gesture {
         return "the " + whichHand + " hand is in the " + zone + " zone, is in segment " + segment + ", and is in the " + state + " state.";
     }
 
+    private String directionName(int direction) {
+        String result = "";
+
+        switch (direction) {
+            case Gesture.entering:
+                result = "enter";
+                break;
+            case Gesture.exiting:
+                result = "exit";
+                break;
+            case Gesture.triggering:
+                result = "trigger";
+                break;
+            case Gesture.na:
+                result = "na";
+                break;
+            default:
+                result = "Unknown";
+        }
+
+        return result;
+    }
+
+    private String directionAction(int direction) {
+        String result = "";
+
+        switch (direction) {
+            case Gesture.entering:
+                result = "enterint";
+                break;
+            case Gesture.exiting:
+                result = "exiting";
+                break;
+            case Gesture.triggering:
+                result = "triggering";
+                break;
+            case Gesture.na:
+                result = "na";
+                break;
+            default:
+                result = "Unknown";
+        }
+
+        return result;
+    }
+
+    private String fullName (String name, String directionName, int direction) {
+        String result = "";
+
+        if (direction != Gesture.triggering) {
+            result = name + "-" + directionName;
+        } else {
+            result = name;
+        }
+
+        return result;
+    }
+
     private void addActionConfig(String name, String whenDescription, int direction) {
-        String directionName = (direction == Gesture.entering)?"enter":"exit";
-        String directionString = (direction == Gesture.entering)?"entering":"exiting";
-        String fullName = name + "-" + directionName;
+        String directionName = directionName(direction);
+        String directionString = directionAction(direction);
+        String fullName = fullName = fullName(name, directionName, direction);
         String description = "Action to take when " + directionString + " this state: " + whenDescription;
 
         this.actionEvents.newItem(fullName, "", description, true);
     }
 
     private void addAudioFeedbackConfig(String name, String whenDescription, int direction) {
-        String directionName = (direction == Gesture.entering)?"enter":"exit";
-        String directionString = (direction == Gesture.entering)?"entering":"exiting";
-        String fullName = name + "-" + directionName;
+        String directionName = directionName(direction);
+        String directionString = directionAction(direction);
+        String fullName = fullName = fullName(name, directionName, direction);
         String description = "Sound to play when " + directionString + " this state: " + whenDescription;
 
         this.audioEvents.newItem(fullName, "", description, true);
