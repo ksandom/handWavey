@@ -309,7 +309,7 @@ public class HandCleaner {
 
         //System.out.println(zSpeed);
 
-        // We haven't yet met the contitions to perform a tap. Don't do anything further.
+        // We haven't yet met the conditions to perform a tap. Don't do anything further.
         if (!tapArmed) {
             resetTap();
             return false;
