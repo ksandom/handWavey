@@ -43,7 +43,9 @@ public class HandCleaner {
     private Boolean tapArmed = false;
     private double tapSpeed = 0;
     private long tapNegativeCount = -1;
-    private long tapSamplesToWait = 5;
+    private long tapPositiveCount = -1;
+    private long samplesToWaitNegative = 5;
+    private long samplesToWaitPositive = 5;
 
     private Boolean gesturesLocked = false;
 
@@ -69,7 +71,8 @@ public class HandCleaner {
 
         Group tap = Config.singleton().getGroup("tap");
         tapSpeed = Double.parseDouble(tap.getItem("tapSpeed").get());
-        tapSamplesToWait = Integer.parseInt(tap.getItem("samplesToWait").get());
+        samplesToWaitNegative = Integer.parseInt(tap.getItem("samplesToWaitNegative").get());
+        samplesToWaitPositive = Integer.parseInt(tap.getItem("samplesToWaitPositive").get());
 
         lastChangeTime = timeInMilliseconds();
 
@@ -273,13 +276,13 @@ public class HandCleaner {
 
         // Hand is absent.
         if (absent) {
-            tapArmed = false;
+            resetTap();
             return false;
         }
 
         // We're not in the active zone.
         if (!zone.equals("active")) {
-            tapArmed = false;
+            resetTap();
             return false;
         }
 
@@ -292,12 +295,15 @@ public class HandCleaner {
         if (isRetracting()) {
             tapArmed = true;
             tapNegativeCount ++;
+            tapPositiveCount = 0;
             return false;
+        } else {
+            tapPositiveCount ++;
         }
 
         // If the hand is moving, we are busy doing something else.
         if (!isStationary()) {
-            tapArmed = false;
+            resetTap();
             return false;
         }
 
@@ -305,11 +311,16 @@ public class HandCleaner {
 
         // We haven't yet met the contitions to perform a tap. Don't do anything further.
         if (!tapArmed) {
+            resetTap();
             return false;
         }
 
         // If the state is fluctuating, we don't want to trigger multiple events.
-        if (tapNegativeCount > -1 && tapNegativeCount < tapSamplesToWait) {
+        if (tapNegativeCount > -1 && tapNegativeCount < samplesToWaitNegative) {
+            return false;
+        }
+
+        if (tapPositiveCount < samplesToWaitPositive) {
             return false;
         }
 
@@ -320,7 +331,13 @@ public class HandCleaner {
 
         // Phew! We're ready to perform the tap.
         tapNegativeCount = 0;
+        tapPositiveCount = 0;
         return true;
     }
 
+    private void resetTap() {
+        tapNegativeCount = 0;
+        tapPositiveCount = 0;
+        tapArmed = false;
+    }
 }
