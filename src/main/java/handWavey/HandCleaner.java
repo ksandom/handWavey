@@ -344,8 +344,7 @@ public class HandCleaner {
         }
 
         // Phew! We're ready to perform the tap.
-        tapNegativeCount = 0;
-        tapPositiveCount = 0;
+        resetTap();
         return true;
     }
 
