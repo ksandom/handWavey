@@ -552,7 +552,7 @@ public class HandsState {
     }
 
     public void lockGestures(String hand) {
-        if (hand.equals("primary")) {
+        if (!hand.equals("secondary")) {
             this.cleanPrimary.setGestureLock(true);
         } else {
             this.cleanSecondary.setGestureLock(true);
@@ -560,10 +560,26 @@ public class HandsState {
     }
 
     public void unlockGestures(String hand) {
-        if (hand.equals("primary")) {
+        if (!hand.equals("secondary")) {
             this.cleanPrimary.setGestureLock(false);
         } else {
             this.cleanSecondary.setGestureLock(false);
+        }
+    }
+
+    public void lockTaps(String hand) {
+        if (!hand.equals("secondary")) {
+            this.cleanPrimary.setTapLock(true);
+        } else {
+            this.cleanSecondary.setTapLock(true);
+        }
+    }
+
+    public void unlockTaps(String hand) {
+        if (!hand.equals("secondary")) {
+            this.cleanPrimary.setTapLock(false);
+        } else {
+            this.cleanSecondary.setTapLock(false);
         }
     }
 }

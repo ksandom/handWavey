@@ -51,10 +51,10 @@ items:
   individual-pNonOOB0Closed-enter:
     value: rewindCursorPosition();overrideZone("scroll");
   individual-pNonOOB0Closed-exit:
-    value: rewindCursorPosition();releaseZone();unlockCursor();
-  individual-pNonOOB7Closed-enter:
-    value: keyDown("ctrl");rewindCursorPosition();overrideZone("scroll");
-  individual-pNonOOB7Closed-exit:
+    value: rewindCursorPosition();releaseZone();unlockCursor();unlockTaps("primary");
+  individual-pNonOOB6Closed-enter:
+    value: keyDown("ctrl");rewindCursorPosition();overrideZone("scroll");lockTaps("primary");
+  individual-pNonOOB6Closed-exit:
     value: keyUp("ctrl");rewindCursorPosition();rewindScroll();releaseZone();unlockCursor();
   general-state-pAbsent-enter:
-    value: setButton("left");releaseButtons();releaseKeys();releaseZone();
+    value: setButton("left");releaseButtons();releaseKeys();releaseZone();unlockTaps("primary");

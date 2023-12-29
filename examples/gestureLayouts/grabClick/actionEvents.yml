@@ -7,9 +7,9 @@ items:
   general-segment-p1-enter:
     value: setButton("right");
   general-segment-p2-enter:
-    value: setButton("middle");overrideZone("scroll");
+    value: setButton("middle");overrideZone("scroll");lockTaps("primary");
   general-segment-p2-exit:
-    value: releaseZone();
+    value: releaseZone();unlockTaps("primary");
   general-segment-s0-enter:
     value: keyDown("ctrl");
   general-segment-s0-exit:
@@ -38,3 +38,5 @@ items:
     value: setButton("left");releaseButtons();releaseKeys();releaseZone();
   general-segment-pAnyChange:
     value: lockCursor();rewindCursorPosition();
+  general-state-pAbsent-enter:
+    value: setButton("left");releaseButtons();releaseKeys();releaseZone();unlockTaps("primary");

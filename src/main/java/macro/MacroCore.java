@@ -156,6 +156,12 @@ public class MacroCore {
             case "unlockGestures":
                 this.handWaveyManager.unlockGestures(parm(parameters, 0, ""));
                 break;
+            case "lockTaps":
+                this.handWaveyManager.lockTaps(parm(parameters, 0, ""));
+                break;
+            case "unlockTaps":
+                this.handWaveyManager.unlockTaps(parm(parameters, 0, ""));
+                break;
 
 
             // Oh ohhhhhhhh.

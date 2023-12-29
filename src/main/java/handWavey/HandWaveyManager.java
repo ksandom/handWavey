@@ -246,6 +246,14 @@ public final class HandWaveyManager {
         handsState.unlockGestures(hand);
     }
 
+    public void lockTaps(String hand) {
+        handsState.lockTaps(hand);
+    }
+
+    public void unlockTaps(String hand) {
+        handsState.unlockTaps(hand);
+    }
+
 
     public void triggerEvent(String eventID) {
         this.handWaveyEvent.triggerEvent(eventID);

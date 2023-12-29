@@ -48,6 +48,7 @@ public class HandCleaner {
     private long samplesToWaitPositive = 5;
 
     private Boolean gesturesLocked = false;
+    private Boolean tapsLocked = false;
 
     public HandCleaner() {
         Group ultraMotionConfig = Config.singleton().getGroup("ultraMotion");
@@ -266,6 +267,14 @@ public class HandCleaner {
         this.gesturesLocked = desiredState;
     }
 
+    public void setTapLock(Boolean desiredState) {
+        this.tapsLocked = desiredState;
+
+        if (this.tapsLocked) {
+            resetTap();
+        }
+    }
+
     private Boolean isRetracting() {
         return (zSpeed > 0);
     }
@@ -277,6 +286,11 @@ public class HandCleaner {
         // Hand is absent.
         if (absent) {
             resetTap();
+            return false;
+        }
+
+        // Tap lock.
+        if (tapsLocked) {
             return false;
         }
 
