@@ -40,9 +40,9 @@ items:
     value: setButton("left");lockCursor();rewindCursorPosition();mouseDown();
   individual-pNonOOB1Open-exit:
     value: rewindCursorPosition();releaseButtons();unlockCursor();
-  individual-pNonOOB7Open-enter:
+  individual-pNonOOB6Open-enter:
     value: setButton("right");lockCursor();rewindCursorPosition();mouseDown();
-  individual-pNonOOB7Open-exit:
+  individual-pNonOOB6Open-exit:
     value: rewindCursorPosition();releaseButtons();unlockCursor();
   individual-pNonOOB1Closed-enter:
     value: setButton("middle");lockCursor();rewindCursorPosition();mouseDown();
