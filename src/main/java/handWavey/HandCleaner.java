@@ -134,7 +134,7 @@ public class HandCleaner {
             speed = cChange / elapsed * 100F;
             zSpeed = zChange / elapsed * 100F;
         } else {
-            // No longer absent. Let's reset the means.
+            // No longer absent. Let's reset everything.
 
             // Reset all values to the current ones. We don't want old data.
             absent = false;
@@ -149,6 +149,7 @@ public class HandCleaner {
             movingMeanFinger.seed(fingerDifference);
 
             resetAutoTrim();
+            resetTap();
 
             // Prepare for the speed calculations in the next iteration.
             lastSubmissionTime = timeInMilliseconds();
