@@ -53,3 +53,67 @@ The event naming will evolve as the tap functionality matures, so it's worth che
 * `Open` - `Open`, `Closed`, `Absent`. Absent won't happen under the current design, but might in the future.
 
 You might have noticed that both the primary, and secondary hands can do taps.
+
+### Commands for use in events
+
+#### lockTaps
+
+Syntax
+
+```
+lockTaps(hand, unlockAfter);
+```
+
+* hand - Which hand to lock taps on:
+    * `"primary"` - default
+    * `"secondary"`
+* unlockAfter - milliseconds to automatically unlock after:
+    * `"0"` - Don't automatically unlock. - default
+    * _A number greater than 0._ - Unlock after that many milliseconds.
+
+Example 1
+
+```
+lockTaps("primary");
+```
+
+Will lock taps on the primary hand until further notice.
+
+Example 2
+
+```
+lockTaps("secondary", "300");
+```
+
+Will lock taps on the secondary hand for 300 milliseconds.
+
+#### unlockTaps
+
+Syntax
+
+```
+unlockTaps(hand, unlockAfter);
+```
+
+* hand - Which hand to lock taps on:
+    * `"primary"` - default
+    * `"secondary"`
+* unlockAfter - milliseconds to automatically unlock after:
+    * `"0"` - Immediately unlock. - default
+    * _A number greater than 0._ - Unlock after that many milliseconds.
+
+Example 1
+
+```
+unlockTaps("primary");
+```
+
+Will unlock taps on the primary hand immediately.
+
+Example 2
+
+```
+unlockTaps("secondary", "300");
+```
+
+Will unlock taps on the secondary hand after 300 milliseconds from now.
