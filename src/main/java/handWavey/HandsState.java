@@ -567,19 +567,19 @@ public class HandsState {
         }
     }
 
-    public void lockTaps(String hand) {
+    public void lockTaps(String hand, long time) {
         if (!hand.equals("secondary")) {
-            this.cleanPrimary.setTapLock(true);
+            this.cleanPrimary.setTapLock(true, time);
         } else {
-            this.cleanSecondary.setTapLock(true);
+            this.cleanSecondary.setTapLock(true, time);
         }
     }
 
-    public void unlockTaps(String hand) {
+    public void unlockTaps(String hand, long time) {
         if (!hand.equals("secondary")) {
-            this.cleanPrimary.setTapLock(false);
+            this.cleanPrimary.setTapLock(false, time);
         } else {
-            this.cleanSecondary.setTapLock(false);
+            this.cleanSecondary.setTapLock(false, time);
         }
     }
 }

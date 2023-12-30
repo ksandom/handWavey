@@ -51,7 +51,7 @@ items:
   individual-pNonOOB0Closed-enter:
     value: rewindCursorPosition();overrideZone("scroll");lockTaps("primary");
   individual-pNonOOB0Closed-exit:
-    value: rewindCursorPosition();releaseZone();unlockCursor();unlockTaps("primary");
+    value: rewindCursorPosition();releaseZone();unlockCursor();unlockTaps("primary", "300");
   individual-pNonOOB6Closed-enter:
     value: rewindCursorPosition();setButton("left");doubleClick();
   individual-pNonOOB6Closed-exit:

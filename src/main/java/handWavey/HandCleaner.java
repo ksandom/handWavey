@@ -49,6 +49,7 @@ public class HandCleaner {
 
     private Boolean gesturesLocked = false;
     private Boolean tapsLocked = false;
+    private long tapUnlockTime = 0;
 
     public HandCleaner() {
         Group ultraMotionConfig = Config.singleton().getGroup("ultraMotion");
@@ -268,12 +269,29 @@ public class HandCleaner {
         this.gesturesLocked = desiredState;
     }
 
-    public void setTapLock(Boolean desiredState) {
-        this.tapsLocked = desiredState;
+    public void setTapLock(Boolean desiredState, long time) {
+        if (time == 0) {
+            this.tapsLocked = desiredState;
+            this.tapUnlockTime = 0;
+        } else {
+            this.tapUnlockTime = timeInMilliseconds() + time;
+            this.tapsLocked = true;
+        }
 
         if (this.tapsLocked) {
             resetTap();
         }
+    }
+
+    private Boolean tapsAreLocked() {
+        if (tapUnlockTime != 0) {
+            if (timeInMilliseconds() > this.tapUnlockTime) {
+                this.tapsLocked = false;
+                this.tapUnlockTime = 0;
+            }
+        }
+
+        return this.tapsLocked;
     }
 
     private Boolean isRetracting() {
@@ -291,7 +309,7 @@ public class HandCleaner {
         }
 
         // Tap lock.
-        if (tapsLocked) {
+        if (tapsAreLocked()) {
             return false;
         }
 

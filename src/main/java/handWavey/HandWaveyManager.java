@@ -246,12 +246,12 @@ public final class HandWaveyManager {
         handsState.unlockGestures(hand);
     }
 
-    public void lockTaps(String hand) {
-        handsState.lockTaps(hand);
+    public void lockTaps(String hand, long time) {
+        handsState.lockTaps(hand, time);
     }
 
-    public void unlockTaps(String hand) {
-        handsState.unlockTaps(hand);
+    public void unlockTaps(String hand, long time) {
+        handsState.unlockTaps(hand, time);
     }
 
 

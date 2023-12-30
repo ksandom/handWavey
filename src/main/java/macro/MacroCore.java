@@ -151,16 +151,16 @@ public class MacroCore {
 
             // Gesture control.
             case "lockGestures":
-                this.handWaveyManager.lockGestures(parm(parameters, 0, ""));
+                this.handWaveyManager.lockGestures(parm(parameters, 0, "primary"));
                 break;
             case "unlockGestures":
-                this.handWaveyManager.unlockGestures(parm(parameters, 0, ""));
+                this.handWaveyManager.unlockGestures(parm(parameters, 0, "primary"));
                 break;
             case "lockTaps":
-                this.handWaveyManager.lockTaps(parm(parameters, 0, ""));
+                this.handWaveyManager.lockTaps(parm(parameters, 0, "primary"), Long.parseLong(parm(parameters, 1, "0")));
                 break;
             case "unlockTaps":
-                this.handWaveyManager.unlockTaps(parm(parameters, 0, ""));
+                this.handWaveyManager.unlockTaps(parm(parameters, 0, "primary"), Long.parseLong(parm(parameters, 1, "0")));
                 break;
 
 
