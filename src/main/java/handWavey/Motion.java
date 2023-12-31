@@ -236,7 +236,7 @@ public final class Motion {
         this.output.setPosition(x, y);
     }
 
-    public void rewindCursorPosition() {
+    public void rewindCursorPosition(long additionalTime) {
         Timestamp now = new Timestamp(System.currentTimeMillis());
         long nowMillis = now.getTime();
         long rewindTime = 0;
@@ -245,7 +245,7 @@ public final class Motion {
         if (timeSinceLastRewind < this.repeatRewindCursorTime) {
             rewindTime = this.lastCursorRewind;
         } else {
-            rewindTime = nowMillis - this.rewindCursorTime;
+            rewindTime = nowMillis - this.rewindCursorTime - additionalTime;
         }
 
         int earlierX = (int) Math.round(this.historyX.get(rewindTime));
@@ -270,10 +270,10 @@ public final class Motion {
         }
     }
 
-    public void rewindScroll() {
+    public void rewindScroll(long additionalTime) {
         Timestamp now = new Timestamp(System.currentTimeMillis());
         long nowMillis = now.getTime();
-        long rewindTime = nowMillis - this.rewindScrollTime;
+        long rewindTime = nowMillis - this.rewindScrollTime - additionalTime;
 
         int earlierScroll = (int) Math.round(this.historyScroll.getSumFrom(rewindTime));
 

@@ -690,6 +690,11 @@ public class HandWaveyConfig {
         customGroup.getItem("custom-mouseDown-right").overrideDefault("setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();"); // Press down the right mouse button.
         customGroup.getItem("custom-mouseDown-middle").overrideDefault("setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();"); // Press down the middle mouse button.
 
+        // Tap-specific clicks.
+        customGroup.getItem("custom-tap-left").overrideDefault("setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Tap: Click left mouse button.
+        customGroup.getItem("custom-tap-right").overrideDefault("setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Tap: Click right mouse button.
+        customGroup.getItem("custom-tap-middle").overrideDefault("setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Tap: Click middle mouse button.
+
         customGroup.getItem("custom-click-left").overrideDefault("setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Press down the left mouse button.
         customGroup.getItem("custom-click-right").overrideDefault("setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Press down the right mouse button.
         customGroup.getItem("custom-click-middle").overrideDefault("setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Press down the middle mouse button.

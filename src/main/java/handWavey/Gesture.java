@@ -75,15 +75,15 @@ public class Gesture {
         // Set taps.
         overrideDefault(
             "tap-p0Open",
-            "setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();",
+            "do(\"custom-tap-left\");",
             "metalDing08.wav");
         overrideDefault(
             "tap-s0Open",
-            "setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();",
+            "do(\"custom-tap-right\");",
             "metalDing05.wav");
         overrideDefault(
             "tap-s0Closed",
-            "setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();",
+            "do(\"custom-tap-middle\");",
             "metalDing04.wav");
 
         // Set buttons.

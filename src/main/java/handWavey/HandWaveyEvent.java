@@ -18,6 +18,7 @@ import bug.ShouldComplete;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Date;
 
 public class HandWaveyEvent {
     public static final Boolean audioDisabled = false;
@@ -29,6 +30,8 @@ public class HandWaveyEvent {
 
     private Group actionEvents;
     private Group audioEvents;
+
+    private HashMap<String, Long> delayedEvents = new HashMap<String, Long>();
 
     private ShouldComplete shouldCompleteEvent;
 
@@ -100,6 +103,43 @@ public class HandWaveyEvent {
         if (doAudio) {
             this.debug.out(2, indent + "  fileToPlay: \"" + fileToPlay + "\"");
             BackgroundSound.play(fileToPlay);
+        }
+    }
+
+    private long timeInMilliseconds() {
+        Date date = new Date();
+        return date.getTime();
+    }
+
+    public void triggerLaterSubEvent(String eventName, long delay) {
+        long dueTime = timeInMilliseconds() + delay;
+
+        this.debug.out(1, "triggerLaterSubEvent(\"" + eventName + "\", " + String.valueOf(delay) + ") due at " + String.valueOf(dueTime));
+        this.delayedEvents.put(eventName, dueTime);
+    }
+
+    public void cancelLaterSubEvent(String eventName) {
+        if (this.delayedEvents.containsKey(eventName)) {
+            this.debug.out(1, "cancelLaterSubEvent(\"" + eventName + "\")");            this.delayedEvents.remove(eventName);
+        }
+    }
+
+    public void triggerDelayedEvents() {
+        if (this.delayedEvents.size() == 0) {
+            return;
+        }
+
+        long now = timeInMilliseconds();
+
+
+        for (String eventName : this.delayedEvents.keySet()) {
+            long delay = this.delayedEvents.get(eventName);
+
+            if (delay < now) {
+                this.debug.out(1, "triggerDelayedEvents: " + eventName);
+                cancelLaterSubEvent(eventName);
+                triggerEvent(eventName);
+            }
         }
     }
 
