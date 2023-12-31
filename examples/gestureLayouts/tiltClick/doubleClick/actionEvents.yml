@@ -57,7 +57,7 @@ items:
   individual-pNonOOB6Closed-exit:
     value: rewindCursorPosition();unlockCursor();
   general-state-pAbsent-enter:
-    value: setButton("left");releaseButtons();releaseKeys();releaseZone();unlockTaps("primary");
+    value: setButton("left");releaseButtons();releaseKeys();releaseZone();unlockTaps("primary");cancelDelayedDo("custom-tap-left");
   tap-p0Open:
     value: delayedDo("custom-tap-left", "150");
   custom-tap-left:
