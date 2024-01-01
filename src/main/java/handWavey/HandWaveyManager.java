@@ -214,12 +214,12 @@ public final class HandWaveyManager {
     }
 
     // Make available to other classes.
-    public void rewindScroll() {
-        motion.rewindScroll();
+    public void rewindScroll(long additionalDelay) {
+        motion.rewindScroll(additionalDelay);
     }
 
-    public void rewindCursorPosition() {
-        motion.rewindCursorPosition();
+    public void rewindCursorPosition(long additionalDelay) {
+        motion.rewindCursorPosition(additionalDelay);
     }
 
     public void setCursorLock() {
@@ -244,6 +244,14 @@ public final class HandWaveyManager {
 
     public void unlockGestures(String hand) {
         handsState.unlockGestures(hand);
+    }
+
+    public void lockTaps(String hand, long time) {
+        handsState.lockTaps(hand, time);
+    }
+
+    public void unlockTaps(String hand, long time) {
+        handsState.unlockTaps(hand, time);
     }
 
 
@@ -281,6 +289,8 @@ public final class HandWaveyManager {
         this.handSummaries = handSummaries;
 
         this.handsState.figureOutStuff();
+
+        this.handWaveyEvent.triggerDelayedEvents();
 
         this.shouldCompleteSFO.finish();
 

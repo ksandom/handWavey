@@ -37,24 +37,28 @@ items:
   general-segment-pAnyChange:
     value: lockCursor();rewindCursorPosition();
   individual-pNonOOB1Open-enter:
-    value: setButton("left");lockCursor();rewindCursorPosition();mouseDown();
+    value: setButton("left");lockCursor();rewindCursorPosition();mouseDown();cancelDelayedDo("custom-tap-left");
   individual-pNonOOB1Open-exit:
     value: rewindCursorPosition();releaseButtons();unlockCursor();
-  individual-pNonOOB7Open-enter:
-    value: setButton("right");lockCursor();rewindCursorPosition();mouseDown();
-  individual-pNonOOB7Open-exit:
+  individual-pNonOOB6Open-enter:
+    value: setButton("right");lockCursor();rewindCursorPosition();mouseDown();cancelDelayedDo("custom-tap-left");
+  individual-pNonOOB6Open-exit:
     value: rewindCursorPosition();releaseButtons();unlockCursor();
   individual-pNonOOB1Closed-enter:
     value: lockCursor();rewindCursorPosition();releaseButtons();setButton("left");doubleClick();
   individual-pNonOOB1Closed-exit:
     value: unlockCursor();
   individual-pNonOOB0Closed-enter:
-    value: rewindCursorPosition();overrideZone("scroll");
+    value: rewindCursorPosition();overrideZone("scroll");lockTaps("primary");cancelDelayedDo("custom-tap-left");
   individual-pNonOOB0Closed-exit:
-    value: rewindCursorPosition();releaseZone();unlockCursor();
-  individual-pNonOOB7Closed-enter:
+    value: rewindCursorPosition();releaseZone();unlockCursor();unlockTaps("primary", "300");
+  individual-pNonOOB6Closed-enter:
     value: setButton("middle");lockCursor();rewindCursorPosition();mouseDown();
-  individual-pNonOOB7Closed-exit:
+  individual-pNonOOB6Closed-exit:
     value: rewindCursorPosition();rewindScroll();releaseButtons();unlockCursor();
   general-state-pAbsent-enter:
-    value: setButton("left");releaseButtons();releaseKeys();releaseZone();
+    value: setButton("left");releaseButtons();releaseKeys();releaseZone();unlockTaps("primary");cancelDelayedDo("custom-tap-left");
+  tap-p0Open:
+    value: delayedDo("custom-tap-left", "150");
+  custom-tap-left:
+    value: setButton("left");lockCursor();rewindCursorPosition("150");mouseDown();mouseUp();unlockCursor();

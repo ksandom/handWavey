@@ -59,26 +59,30 @@ items:
   general-segment-pAnyChange:
     value: lockCursor();rewindCursorPosition();
   individual-pNonOOB1Open-enter:
-    value: doSlot("0", "custom-mouseDown-left");
+    value: doSlot("0", "custom-mouseDown-left");cancelDelayedDo("custom-tap-left");
   individual-pNonOOB1Open-exit:
     value: doSlot("5", "custom-releaseAll");
   individual-pNonOOB9Open-enter:
-    value: doSlot("1", "custom-mouseDown-right");
+    value: doSlot("1", "custom-mouseDown-right");cancelDelayedDo("custom-tap-left");
   individual-pNonOOB9Open-exit:
     value: doSlot("6", "custom-releaseAll");
   individual-pNonOOB0Closed-enter:
-    value: doSlot("4", "custom-override-scroll");
+    value: doSlot("4", "custom-override-scroll");cancelDelayedDo("custom-tap-left");
   individual-pNonOOB0Closed-exit:
     value: doSlot("9", "custom-releaseZone");
   individual-pNonOOB1Closed-enter:
-    value: doSlot("2", "custom-noOp");
+    value: doSlot("2", "custom-noOp");cancelDelayedDo("custom-tap-left");
   individual-pNonOOB1Closed-exit:
     value: doSlot("7", "custom-releaseAll");
   individual-pNonOOB9Closed-enter:
-    value: doSlot("3", "custom-noOp");
+    value: doSlot("3", "custom-noOp");cancelDelayedDo("custom-tap-left");
   individual-pNonOOB9Closed-exit:
     value: doSlot("8", "custom-releaseAll");
   general-state-pAbsent-enter:
-    value: setButton("left");releaseButtons();releaseKeys();releaseZone();
+    value: setButton("left");releaseButtons();releaseKeys();releaseZone();cancelDelayedDo("custom-tap-left");
   individual-pOOB0Absent-enter:
-    value: setButton("left");releaseButtons();releaseKeys();releaseZone();
+    value: setButton("left");releaseButtons();releaseKeys();releaseZone();cancelDelayedDo("custom-tap-left");
+  tap-p0Open:
+    value: delayedDo("custom-tap-left", "150");
+  custom-tap-left:
+    value: setButton("left");lockCursor();rewindCursorPosition("150");mouseDown();mouseUp();unlockCursor();

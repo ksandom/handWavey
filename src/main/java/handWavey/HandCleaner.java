@@ -48,6 +48,8 @@ public class HandCleaner {
     private long samplesToWaitPositive = 5;
 
     private Boolean gesturesLocked = false;
+    private Boolean tapsLocked = false;
+    private long tapUnlockTime = 0;
 
     public HandCleaner() {
         Group ultraMotionConfig = Config.singleton().getGroup("ultraMotion");
@@ -133,7 +135,7 @@ public class HandCleaner {
             speed = cChange / elapsed * 100F;
             zSpeed = zChange / elapsed * 100F;
         } else {
-            // No longer absent. Let's reset the means.
+            // No longer absent. Let's reset everything.
 
             // Reset all values to the current ones. We don't want old data.
             absent = false;
@@ -148,6 +150,7 @@ public class HandCleaner {
             movingMeanFinger.seed(fingerDifference);
 
             resetAutoTrim();
+            resetTap();
 
             // Prepare for the speed calculations in the next iteration.
             lastSubmissionTime = timeInMilliseconds();
@@ -266,6 +269,31 @@ public class HandCleaner {
         this.gesturesLocked = desiredState;
     }
 
+    public void setTapLock(Boolean desiredState, long time) {
+        if (time == 0) {
+            this.tapsLocked = desiredState;
+            this.tapUnlockTime = 0;
+        } else {
+            this.tapUnlockTime = timeInMilliseconds() + time;
+            this.tapsLocked = true;
+        }
+
+        if (this.tapsLocked) {
+            resetTap();
+        }
+    }
+
+    private Boolean tapsAreLocked() {
+        if (tapUnlockTime != 0) {
+            if (timeInMilliseconds() > this.tapUnlockTime) {
+                this.tapsLocked = false;
+                this.tapUnlockTime = 0;
+            }
+        }
+
+        return this.tapsLocked;
+    }
+
     private Boolean isRetracting() {
         return (zSpeed > 0);
     }
@@ -277,6 +305,11 @@ public class HandCleaner {
         // Hand is absent.
         if (absent) {
             resetTap();
+            return false;
+        }
+
+        // Tap lock.
+        if (tapsAreLocked()) {
             return false;
         }
 
@@ -309,7 +342,7 @@ public class HandCleaner {
 
         //System.out.println(zSpeed);
 
-        // We haven't yet met the contitions to perform a tap. Don't do anything further.
+        // We haven't yet met the conditions to perform a tap. Don't do anything further.
         if (!tapArmed) {
             resetTap();
             return false;
@@ -330,8 +363,7 @@ public class HandCleaner {
         }
 
         // Phew! We're ready to perform the tap.
-        tapNegativeCount = 0;
-        tapPositiveCount = 0;
+        resetTap();
         return true;
     }
 

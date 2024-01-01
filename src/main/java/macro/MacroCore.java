@@ -90,10 +90,10 @@ public class MacroCore {
                 this.output.releaseButtons();
                 break;
             case "rewindScroll":
-                this.handWaveyManager.rewindScroll();
+                this.handWaveyManager.rewindScroll(Long.parseLong(parm(parameters, 1, "0")));
                 break;
             case "rewindCursorPosition":
-                this.handWaveyManager.rewindCursorPosition();
+                this.handWaveyManager.rewindCursorPosition(Long.parseLong(parm(parameters, 1, "0")));
                 break;
             case "lockCursor":
                 this.handWaveyManager.setCursorLock();
@@ -143,6 +143,18 @@ public class MacroCore {
             case "enableSlots":
                 this.useSlots(true);
                 break;
+            case "do":
+                this.debug.out(0, "do: " + parm(parameters, 0, ""));
+                this.increaseNesting();
+                this.handWaveyEvent.triggerSubEvent(parm(parameters, 0, ""), "----");
+                this.decreaseNesting();
+                break;
+            case "delayedDo":
+                this.handWaveyEvent.triggerLaterSubEvent(parm(parameters, 0, ""), Long.parseLong(parm(parameters, 1, "")));
+                break;
+            case "cancelDelayedDo":
+                this.handWaveyEvent.cancelLaterSubEvent(parm(parameters, 0, ""));
+                break;
 
             // Calibration.
             case "recalibrateSegments":
@@ -151,10 +163,16 @@ public class MacroCore {
 
             // Gesture control.
             case "lockGestures":
-                this.handWaveyManager.lockGestures(parm(parameters, 0, ""));
+                this.handWaveyManager.lockGestures(parm(parameters, 0, "primary"));
                 break;
             case "unlockGestures":
-                this.handWaveyManager.unlockGestures(parm(parameters, 0, ""));
+                this.handWaveyManager.unlockGestures(parm(parameters, 0, "primary"));
+                break;
+            case "lockTaps":
+                this.handWaveyManager.lockTaps(parm(parameters, 0, "primary"), Long.parseLong(parm(parameters, 1, "0")));
+                break;
+            case "unlockTaps":
+                this.handWaveyManager.unlockTaps(parm(parameters, 0, "primary"), Long.parseLong(parm(parameters, 1, "0")));
                 break;
 
 
