@@ -183,10 +183,9 @@ public class HandsState {
         if (shouldUpdatePrimary) {
             primaryHandZ = this.cleanPrimary.getHandZ() * this.zMultiplier;
 
+            String rawZone = this.handsState.getZone(primaryHandZ, false);
+            this.primaryState.setZone(rawZone);
             String zone = this.handsState.getZone(primaryHandZ);
-            if (!zone.equals(this.zoneOverride)) {
-                this.primaryState.setZone(zone);
-            }
 
             int primarySegment = getHandSegment(true, this.handSummaries[0], this.cleanPrimary);
             this.primaryState.setSegment(primarySegment);
