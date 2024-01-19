@@ -19,6 +19,8 @@ The custom events can be configured without your gestureLayout just like you wou
 * `enableSlots()` - Re-enables the doSlot() function. Useful when the user has finished changing the toolset.
 * `setAllSlots("")` - Sets all slots to the specified value. Setting this to `""` is particularly useful to go back to the gestureLayout's default assignments for all slots. Ie to return to the default state.
 
+The [Command documentation](https://github.com/ksandom/handWavey/blob/main/docs/user/reference/macroCommands.md) will likely be useful for you.
+
 ## Parameters
 
 * `slotNumber` is an integery from 0 to 255.

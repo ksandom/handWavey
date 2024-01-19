@@ -13,7 +13,7 @@ You'll probably find that modifying an existing layout will get you pretty close
 ### Finding information
 
 * How to reference specific keys: Keys are defined in [Pressables.defineKeys()](https://github.com/ksandom/handWavey/blob/main/src/main/java/mouseAndKeyboardOutput/Pressables.java#L26).
-* What macro commands are available: Commands are defined in [MacroCore.doInstruction()](https://github.com/ksandom/handWavey/blob/main/src/main/java/macro/MacroCore.java#L44).
+* What macro commands are available: [Command documentation](https://github.com/ksandom/handWavey/blob/main/docs/user/reference/macroCommands.md).
 
 ### What to include in your gestureLayout
 

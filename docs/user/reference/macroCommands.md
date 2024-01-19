@@ -1,5 +1,7 @@
 # Macro commands
 
+This is documentation of the commands that are defined in [MacroCore.doInstruction()](https://github.com/ksandom/handWavey/blob/main/src/main/java/macro/MacroCore.java#L56).
+
 ## Mouse instructions
 
 ### mouseMove
