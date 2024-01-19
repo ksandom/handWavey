@@ -2,7 +2,7 @@
 
 ## What is a dynamic gestureLayout?
 
-It's just like a [normal gestureLayout](createAGestureLayout.md), except that you can make some actions can change in a predictable way. Eg you can have a smaller number of easy-trigger gestures, but then be able to change the actions behind them like you'd change tools in a photo editor.
+It's just like a [normal gestureLayout](createAGestureLayout.md), except that you can make some actions change in a predictable way. Eg you can have a smaller number of easy-to-trigger gestures, but then be able to change the actions behind them like you'd change tools in a photo editor.
 
 ## How it works
 
