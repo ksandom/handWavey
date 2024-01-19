@@ -2,7 +2,7 @@
 
 ## What is a dynamic gestureLayout?
 
-It's just like a [normal gestureLayout](createAGestureLayout.md), except that you can make some actions can change in a predictable way. Eg you can have a smaller number of easy-trigger gestures, but then be able to change the actions behind them like you'd change tools in a photo editor.
+It's just like a [normal gestureLayout](createAGestureLayout.md), except that you can make some actions change in a predictable way. Eg you can have a smaller number of easy-to-trigger gestures, but then be able to change the actions behind them like you'd change tools in a photo editor.
 
 ## How it works
 
@@ -18,6 +18,8 @@ The custom events can be configured without your gestureLayout just like you wou
 * `disableSlots()` - Disables the doSlot() function. Useful while the user is choosing a new toolset, and doesn't want to be taking action.
 * `enableSlots()` - Re-enables the doSlot() function. Useful when the user has finished changing the toolset.
 * `setAllSlots("")` - Sets all slots to the specified value. Setting this to `""` is particularly useful to go back to the gestureLayout's default assignments for all slots. Ie to return to the default state.
+
+The [Command documentation](https://github.com/ksandom/handWavey/blob/main/docs/user/reference/macroCommands.md) will likely be useful for you.
 
 ## Parameters
 
