@@ -45,17 +45,17 @@ items:
   individual-pNonOOB6Open-exit:
     value: rewindCursorPosition();releaseButtons();unlockCursor();unlockTaps("primary");
   individual-pNonOOB1Closed-enter:
-    value: setButton("middle");lockCursor();rewindCursorPosition();mouseDown();
+    value: setButton("middle");lockCursor();rewindCursorPosition();mouseDown();lockTaps("primary");cancelDelayedDo("custom-tap-left");
   individual-pNonOOB1Closed-exit:
-    value: rewindCursorPosition();rewindScroll();releaseButtons();unlockCursor();
+    value: rewindCursorPosition();rewindScroll();releaseButtons();unlockCursor();unlockTaps("primary", "600");
   individual-pNonOOB0Closed-enter:
     value: rewindCursorPosition();overrideZone("scroll");lockTaps("primary");cancelDelayedDo("custom-tap-left");
   individual-pNonOOB0Closed-exit:
     value: rewindCursorPosition();releaseZone();unlockCursor();unlockTaps("primary", "600");
   individual-pNonOOB6Closed-enter:
-    value: rewindCursorPosition();setButton("left");doubleClick();
+    value: rewindCursorPosition();setButton("left");doubleClick();lockTaps("primary");cancelDelayedDo("custom-tap-left");
   individual-pNonOOB6Closed-exit:
-    value: rewindCursorPosition();unlockCursor();
+    value: rewindCursorPosition();unlockCursor();unlockTaps("primary", "600");
   general-state-pAbsent-enter:
     value: setButton("left");releaseButtons();releaseKeys();releaseZone();unlockTaps("primary");cancelDelayedDo("custom-tap-left");
   tap-p0Open:
