@@ -41,6 +41,15 @@ public class HandStateEvents {
         this.gesture = new Gesture();
     }
 
+    public void setTimeouts(long zoneTimeout, long OOBTimeout, long segmentTimeout, long stateTimeout, long stationaryTimeout) {
+        this.zoneChanged.setTimeout(zoneTimeout);
+        this.OOBChanged.setTimeout(OOBTimeout);
+        this.segmentChanged.setTimeout(segmentTimeout);
+        this.stateChanged.setTimeout(stateTimeout);
+        this.stationaryChanged.setTimeout(stationaryTimeout);
+        // this.tapChanged.setTimeout(tapTimeout);
+    }
+
     public void setZone(String zone) {
         this.zoneChanged.set(zone);
         String OOBState = (zone.equals("OOB"))?"OOB":"nonOOB";

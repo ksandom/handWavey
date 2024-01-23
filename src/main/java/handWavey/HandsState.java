@@ -132,6 +132,25 @@ public class HandsState {
 
         this.earlyUnfreeze = Boolean.parseBoolean(newHands.getItem("earlyUnfreeze").get());
         this.earlyUnfreezeZone = newHands.getItem("earlyUnfreezeZone").get();
+
+
+        // Configure state change timeouts.
+        Group changeTimeouts = config.getGroup("dataCleaning").getGroup("changeTimeouts");
+        Group changeTimeoutsPrimary = changeTimeouts.getGroup("primaryHand");
+        this.setupTimeouts(this.primaryState, changeTimeoutsPrimary);
+
+        Group changeTimeoutsSecondary = changeTimeouts.getGroup("secondaryHand");
+        this.setupTimeouts(this.secondaryState, changeTimeoutsSecondary);
+    }
+
+    private void setupTimeouts(HandStateEvents handStateEvents, Group configGroupToLoad) {
+        handStateEvents.setTimeouts(
+            Integer.parseInt(configGroupToLoad.getItem("zoneChanged").get()),
+            Integer.parseInt(configGroupToLoad.getItem("OOBChanged").get()),
+            Integer.parseInt(configGroupToLoad.getItem("segmentChanged").get()),
+            Integer.parseInt(configGroupToLoad.getItem("stateChanged").get()),
+            Integer.parseInt(configGroupToLoad.getItem("stationaryChanged").get())
+            );
     }
 
     public synchronized static HandsState singleton() {

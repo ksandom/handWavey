@@ -12,11 +12,15 @@ It can provide:
 package dataCleaner;
 
 import debug.Debug;
+import java.util.Date;
 
 public class Changed {
     private Debug debug;
 
     private String name = "Unnamed";
+
+    private String strNext = "";
+    private int intNext = 0;
 
     private String strCurrent = "";
     private int intCurrent = 0;
@@ -28,6 +32,10 @@ public class Changed {
 
     private Boolean isInt = false;
     private Boolean missmatch = false;
+
+    private Boolean useChangeTimeout = false;
+    private long changeTimeout = 0;
+    private long timeoutWhen = 0;
 
     public Changed(String value, String name) {
         isInt = false;
@@ -45,6 +53,11 @@ public class Changed {
         debug = Debug.getDebug("Changed");
     }
 
+    public void setTimeout(long timeout) {
+        this.useChangeTimeout = true;
+        this.changeTimeout = timeout;
+    }
+
     public void set(String value) {
         if (isInt) {
             this.debug.out(1, "Was initialised as an int, but just received a string. This is a bug in " + name);
@@ -52,10 +65,29 @@ public class Changed {
         }
 
         if (!value.equals(this.strCurrent)) {
-            this.strPrevious = this.strCurrent;
-            this.strCurrent = value;
-            this.changed = true;
+            if (this.timeoutPassed()) {
+                // Change. And we're ready to pass it on.
+                this.strPrevious = this.strCurrent;
+                this.strCurrent = value;
+                this.changed = true;
+                this.strNext = "";
+            } else {
+                if (this.strNext.equals("")) {
+                    // Time to set up the time out tracking.
+                    this.strNext = value;
+                } else {
+                    if (!this.strNext.equals(value)) {
+                        // We got a new value before the timeout expired. So we reset the timer.
+                        this.strNext = value;
+                        this.beginTimeout();
+                    }
+                }
+
+                this.strPrevious = value;
+                this.changed = false;
+            }
         } else {
+            // No change.
             this.strPrevious = value;
             this.changed = false;
         }
@@ -68,13 +100,61 @@ public class Changed {
         }
 
         if (value != this.intCurrent) {
-            this.intPrevious = this.intCurrent;
-            this.intCurrent = value;
-            this.changed = true;
+            if (this.timeoutPassed()) {
+                // Change. And we're ready to pass it on.
+                this.intPrevious = this.intCurrent;
+                this.intCurrent = value;
+                this.changed = true;
+                this.intNext = 0;
+            } else {
+                if (this.intNext == 0) {
+                    // Time to set up the time out tracking.
+                    this.intNext = value;
+                } else {
+                    if (this.intNext != value) {
+                        // We got a new value before the timeout expired. So we reset the timer.
+                        this.intNext = value;
+                        this.beginTimeout();
+                    }
+                }
+
+                this.intPrevious = value;
+                this.changed = false;
+            }
         } else {
+            // No change.
             this.intPrevious = value;
             this.changed = false;
         }
+    }
+
+    public Boolean timeoutPassed() {
+        if (this.useChangeTimeout) {
+            if (this.timeoutWhen == 0) {
+                // Time to begin the timeout.
+                this.beginTimeout();
+                return false;
+            } else {
+                if (this.timeInMilliseconds() > this.timeoutWhen) {
+                    // Timeout has begun, and finished.
+                    this.endTimeout();
+                    return true;
+                } else {
+                    // Timeout has begun, and is still in progress.
+                    return false;
+                }
+            }
+        } else {
+            return true;
+        }
+    }
+
+    public void beginTimeout() {
+        this.timeoutWhen = this.timeInMilliseconds() + this.changeTimeout;
+    }
+
+    public void endTimeout() {
+        this.timeoutWhen = 0;
     }
 
     public Boolean hasChanged() {
@@ -99,5 +179,10 @@ public class Changed {
 
     public Boolean getMissmatch() {
         return missmatch;
+    }
+
+    private long timeInMilliseconds() {
+        Date date = new Date();
+        return date.getTime();
     }
 }

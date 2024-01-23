@@ -184,6 +184,60 @@ public class HandWaveyConfig {
             "400",
             "Int (milliseconds): If we haven't had any update in this amount of time, any new frame that we receive is deemed to be new. Under normal, active operation, we receive 10s of frames per seciond. Ie <100 milliseconds.");
 
+        Group changeTimeouts = dataCleaning.newGroup("changeTimeouts");
+        String defaultChangeTimeout = "100";
+        Group primaryHandTimeouts = changeTimeouts.newGroup("primaryHand");
+        primaryHandTimeouts.newItem(
+            "zoneChanged",
+            defaultChangeTimeout,
+            "Int (milliseconds): The amount of time that a change in zone must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        primaryHandTimeouts.newItem(
+            "OOBChanged",
+            defaultChangeTimeout,
+            "Int (milliseconds): The amount of time that a change in OOB (hands out of bounds/viewable area) must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        primaryHandTimeouts.newItem(
+            "segmentChanged",
+            defaultChangeTimeout,
+            "Int (milliseconds): The amount of time that a change in segment must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        primaryHandTimeouts.newItem(
+            "stateChanged",
+            defaultChangeTimeout,
+            "Int (milliseconds): The amount of time that a change in state (open/closed/absent) must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        primaryHandTimeouts.newItem(
+            "stationaryChanged",
+            defaultChangeTimeout,
+            "Int (milliseconds): The amount of time that a change in whether the hand is stationary, or not, must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        // primaryHandTimeouts.newItem(
+        //     "tapChanged",
+        //     defaultChangeTimeout,
+        //     "Int (milliseconds): The amount of time that a change in whether the hand has tapped, or not, must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+
+        Group secondaryHandTimeouts = changeTimeouts.newGroup("secondaryHand");
+        secondaryHandTimeouts.newItem(
+            "zoneChanged",
+            defaultChangeTimeout,
+            "Int (milliseconds): The amount of time that a change in zone must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        secondaryHandTimeouts.newItem(
+            "OOBChanged",
+            defaultChangeTimeout,
+            "Int (milliseconds): The amount of time that a change in OOB (hands out of bounds/viewable area) must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        secondaryHandTimeouts.newItem(
+            "segmentChanged",
+            defaultChangeTimeout,
+            "Int (milliseconds): The amount of time that a change in segment must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        secondaryHandTimeouts.newItem(
+            "stateChanged",
+            defaultChangeTimeout,
+            "Int (milliseconds): The amount of time that a change in state (open/closed/absent) must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        secondaryHandTimeouts.newItem(
+            "stationaryChanged",
+            defaultChangeTimeout,
+            "Int (milliseconds): The amount of time that a change in whether the hand is stationary, or not, must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        // secondaryHandTimeouts.newItem(
+        //     "tapChanged",
+        //     defaultChangeTimeout,
+        //     "Int (milliseconds): The amount of time that a change in whether the hand has tapped, or not, must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+
         Group ultraMotion = this.config.newGroup("ultraMotion");
         ultraMotion.newItem(
             "maxHands",
