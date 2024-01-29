@@ -208,6 +208,7 @@ public class HandsState {
 
             int primarySegment = getHandSegment(true, this.handSummaries[0], this.cleanPrimary);
             this.primaryState.setSegment(primarySegment);
+            primarySegment = this.primaryState.getSegment();
             this.primaryState.setState(this.cleanPrimary.getState());
 
             double primaryDistanceFromCenter = this.getSegmentDistanceFromCenter(primarySegment, true, this.handSummaries[0], this.cleanPrimary);

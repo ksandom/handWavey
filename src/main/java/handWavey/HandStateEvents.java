@@ -71,6 +71,10 @@ public class HandStateEvents {
         }
     }
 
+    public int getSegment() {
+        return this.segmentChanged.toInt();
+    }
+
     public void setState(int state) {
         this.stateChanged.set(state);
 
