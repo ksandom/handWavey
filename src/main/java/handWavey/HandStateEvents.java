@@ -42,7 +42,7 @@ public class HandStateEvents {
     }
 
     public void setTimeouts(long zoneTimeout, long OOBTimeout, long segmentTimeout, long stateTimeout, long stationaryTimeout) {
-        this.zoneChanged.setTimeout(zoneTimeout);
+        //this.zoneChanged.setTimeout(zoneTimeout);
         this.OOBChanged.setTimeout(OOBTimeout);
         this.segmentChanged.setTimeout(segmentTimeout);
         this.stateChanged.setTimeout(stateTimeout);

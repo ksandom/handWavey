@@ -185,11 +185,11 @@ public class HandWaveyConfig {
             "Int (milliseconds): If we haven't had any update in this amount of time, any new frame that we receive is deemed to be new. Under normal, active operation, we receive 10s of frames per seciond. Ie <100 milliseconds.");
 
         Group changeTimeouts = dataCleaning.newGroup("changeTimeouts");
-        String defaultChangeTimeout = "100";
+        String defaultChangeTimeout = "20";
         Group primaryHandTimeouts = changeTimeouts.newGroup("primaryHand");
         primaryHandTimeouts.newItem(
             "zoneChanged",
-            defaultChangeTimeout,
+            "0",
             "Int (milliseconds): The amount of time that a change in zone must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
         primaryHandTimeouts.newItem(
             "OOBChanged",
@@ -215,7 +215,7 @@ public class HandWaveyConfig {
         Group secondaryHandTimeouts = changeTimeouts.newGroup("secondaryHand");
         secondaryHandTimeouts.newItem(
             "zoneChanged",
-            defaultChangeTimeout,
+            "0",
             "Int (milliseconds): The amount of time that a change in zone must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
         secondaryHandTimeouts.newItem(
             "OOBChanged",
