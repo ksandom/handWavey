@@ -697,7 +697,7 @@ public class HandWaveyConfig {
             "The moving mean length for the finger (used for whether the hand is open or closed). >0. 1 effectively disables the moving mean. A larger number is more effective at removing noise, at the expense of responsiveness.");
         handCleaner.newItem(
             "autoTrimMaxChangePerSecond",
-            "0.3",
+            "0.15",
             "The maximum change (in radians) that the auto-trim can apply per second. It is applied proportionally based on the duration since the last sample. The goal of auto-trim is to adjust to changes in the resting position of the hand so that segments still feel intuitive to the user despite the user not being consistent. Setting this to 0 disables autoTrim.");
         handCleaner.newItem(
             "autoTrimMaxChange",
