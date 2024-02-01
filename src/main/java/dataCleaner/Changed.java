@@ -53,6 +53,11 @@ public class Changed {
         debug = Debug.getDebug("Changed");
     }
 
+    public void enableTimeout(Boolean enabled) {
+        this.useChangeTimeout = enabled;
+        this.endTimeout();
+    }
+
     public void setTimeout(long timeout) {
         this.useChangeTimeout = true;
         this.changeTimeout = timeout;

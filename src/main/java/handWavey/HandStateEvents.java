@@ -50,6 +50,15 @@ public class HandStateEvents {
         // this.tapChanged.setTimeout(tapTimeout);
     }
 
+    public void enableTimeouts(Boolean zoneEnabled, Boolean OOBEnabled, Boolean segmentEnabled, Boolean stateEnabled, Boolean stationaryEnabled) {
+        //this.zoneChanged.enableTimeout(zoneEnabled);
+        this.OOBChanged.enableTimeout(OOBEnabled);
+        this.segmentChanged.enableTimeout(segmentEnabled);
+        this.stateChanged.enableTimeout(stateEnabled);
+        this.stationaryChanged.enableTimeout(stationaryEnabled);
+        // this.tapChanged.enableTimeout(tapEnabled);
+    }
+
     public void setZone(String zone) {
         this.zoneChanged.set(zone);
         String OOBState = (zone.equals("OOB"))?"OOB":"nonOOB";

@@ -153,6 +153,23 @@ public class HandsState {
             );
     }
 
+    private void enableTimeouts(HandStateEvents handStateEvents, Boolean enabled, String handName) {
+        handStateEvents.enableTimeouts(
+            enabled, // zone
+            enabled, // OOB
+            enabled, // segment
+            enabled, // state
+            enabled  // stationary
+            );
+
+        String enabledString = "disabled";
+        if (enabled) {
+            enabledString = "enabled";
+        }
+
+        this.debug.out(1, "\"Changed\" timeouts for " + handName + " " + enabledString + ".");
+    }
+
     public synchronized static HandsState singleton() {
         if (HandsState.handsState == null) {
             HandsState.handsState = new HandsState();
@@ -178,6 +195,7 @@ public class HandsState {
         Double primaryHandZ;
 
         if (primaryAbsent) {
+            this.enableTimeouts(this.primaryState, false, "primary");
             this.primaryState.setState(Gesture.absent);
             this.primaryState.setZone("OOB");
             this.primaryState.setSegment(0);
@@ -546,6 +564,7 @@ public class HandsState {
         this.newHandsCursorFreeze = false;
         this.debug.out(1, "Releasing newHand cursor freeze.");
         this.handWaveyEvent.triggerEvent("special-newHandUnfreezeCursor");
+        this.enableTimeouts(this.primaryState, true, "primary");
     }
 
     public Boolean newHandsCursorFreeze() {
