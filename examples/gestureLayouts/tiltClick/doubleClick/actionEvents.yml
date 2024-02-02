@@ -23,9 +23,9 @@ items:
   general-zone-sActive-exit:
     value: releaseKeys();
   general-state-pClosed-enter:
-    value: lockCursor();do("custom-allowWheelClicks");setSlot("3", "custom-doScroll");lockTaps("primary");cancelDelayedDo("custom-tap-left");
+    value: lockCursor();do("custom-allowWheelClicks");setSlot("3", "custom-doScroll");cancelDelayedDo("custom-tap-left");
   general-state-pClosed-exit:
-    value: unlockCursor();do("custom-allowWheelClicks");setSlot("3", "custom-noop");rewindCursorPosition();releaseZone();unlockCursor();unlockTaps("primary", "600");
+    value: cancelDelayedDo("custom-trippleClick");unlockCursor();do("custom-allowWheelClicks");setSlot("3", "custom-noop");rewindCursorPosition();releaseZone();unlockCursor();unlockTaps("primary", "600");
   special-newHandUnfreezeEvent:
     value: ""
   special-newHandUnfreezeCursor:
@@ -60,6 +60,8 @@ items:
     value: setButton("left");releaseButtons();releaseKeys();releaseZone();unlockTaps("primary");cancelDelayedDo("custom-tap-left");
   tap-p0Open:
     value: delayedDo("custom-tap-left", "150");
+  tap-p0Closed:
+    value: delayedDo("custom-trippleClick", "150");
   custom-tap-left:
     value: setButton("left");lockCursor();rewindCursorPosition("150");mouseDown();mouseUp();unlockCursor();
   special-primaryMoving:
@@ -79,6 +81,6 @@ items:
   custom-closedRight-exit:
     value: rewindCursorPosition();unlockCursor();unlockTaps("primary", "600");
   custom-doScroll:
-    value: rewindCursorPosition();overrideZone("scroll");setSlot("3", "custom-noop");do("custom-disallowWheelClicks");
+    value: rewindCursorPosition();overrideZone("scroll");setSlot("3", "custom-noop");do("custom-disallowWheelClicks");lockTaps("primary");
   custom-noop:
     value: ""
