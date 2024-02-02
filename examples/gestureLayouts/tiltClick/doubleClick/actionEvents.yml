@@ -23,9 +23,9 @@ items:
   general-zone-sActive-exit:
     value: releaseKeys();
   general-state-pClosed-enter:
-    value: ""
+    value: lockCursor();do("custom-allowWheelClicks");setSlot("3", "custom-doScroll");lockTaps("primary");cancelDelayedDo("custom-tap-left");
   general-state-pClosed-exit:
-    value: ""
+    value: unlockCursor();do("custom-allowWheelClicks");setSlot("3", "custom-noop");rewindCursorPosition();releaseZone();unlockCursor();unlockTaps("primary", "600");
   special-newHandUnfreezeEvent:
     value: ""
   special-newHandUnfreezeCursor:
@@ -45,20 +45,40 @@ items:
   individual-pNonOOB6Open-exit:
     value: rewindCursorPosition();releaseButtons();unlockCursor();unlockTaps("primary");
   individual-pNonOOB1Closed-enter:
-    value: setButton("middle");lockCursor();rewindCursorPosition();mouseDown();lockTaps("primary");cancelDelayedDo("custom-tap-left");
+    value: doSlot("0", "custom-noop");
   individual-pNonOOB1Closed-exit:
-    value: rewindCursorPosition();rewindScroll();releaseButtons();unlockCursor();unlockTaps("primary", "600");
+    value: doSlot("10", "custom-noop");
   individual-pNonOOB0Closed-enter:
-    value: rewindCursorPosition();overrideZone("scroll");lockTaps("primary");cancelDelayedDo("custom-tap-left");
+    value: ""
   individual-pNonOOB0Closed-exit:
-    value: rewindCursorPosition();releaseZone();unlockCursor();unlockTaps("primary", "600");
+    value: ""
   individual-pNonOOB6Closed-enter:
-    value: rewindCursorPosition();setButton("left");doubleClick();lockTaps("primary");cancelDelayedDo("custom-tap-left");
+    value: doSlot("1", "custom-noop");
   individual-pNonOOB6Closed-exit:
-    value: rewindCursorPosition();unlockCursor();unlockTaps("primary", "600");
+    value: doSlot("11", "custom-noop");
   general-state-pAbsent-enter:
     value: setButton("left");releaseButtons();releaseKeys();releaseZone();unlockTaps("primary");cancelDelayedDo("custom-tap-left");
   tap-p0Open:
     value: delayedDo("custom-tap-left", "150");
   custom-tap-left:
     value: setButton("left");lockCursor();rewindCursorPosition("150");mouseDown();mouseUp();unlockCursor();
+  special-primaryMoving:
+    value: lockGestures("primary");doSlot("3", "noop");
+  special-primaryStationary:
+    value: unlockGestures("primary");
+  custom-allowWheelClicks:
+    value: setSlot("0", "custom-closedLeft-enter");setSlot("1", "custom-closedRight-enter");setSlot("10", "custom-closedLeft-exit");setSlot("11", "custom-closedRight-exit");
+  custom-disallowWheelClicks:
+    value: setSlot("0", "custom-noop");setSlot("1", "custom-noop");setSlot("10", "custom-noop");setSlot("11", "custom-custom-noop");
+  custom-closedLeft-enter:
+    value: setButton("middle");lockCursor();rewindCursorPosition();mouseDown();lockTaps("primary");cancelDelayedDo("custom-tap-left");
+  custom-closedLeft-exit:
+    value: rewindCursorPosition();rewindScroll();releaseButtons();unlockCursor();unlockTaps("primary", "600");
+  custom-closedRight-enter:
+    value: rewindCursorPosition();setButton("left");doubleClick();lockTaps("primary");cancelDelayedDo("custom-tap-left");
+  custom-closedRight-exit:
+    value: rewindCursorPosition();unlockCursor();unlockTaps("primary", "600");
+  custom-doScroll:
+    value: rewindCursorPosition();overrideZone("scroll");setSlot("3", "custom-noop");do("custom-disallowWheelClicks");
+  custom-noop:
+    value: ""
