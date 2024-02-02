@@ -132,6 +132,42 @@ public class HandsState {
 
         this.earlyUnfreeze = Boolean.parseBoolean(newHands.getItem("earlyUnfreeze").get());
         this.earlyUnfreezeZone = newHands.getItem("earlyUnfreezeZone").get();
+
+
+        // Configure state change timeouts.
+        Group changeTimeouts = config.getGroup("dataCleaning").getGroup("changeTimeouts");
+        Group changeTimeoutsPrimary = changeTimeouts.getGroup("primaryHand");
+        this.setupTimeouts(this.primaryState, changeTimeoutsPrimary);
+
+        Group changeTimeoutsSecondary = changeTimeouts.getGroup("secondaryHand");
+        this.setupTimeouts(this.secondaryState, changeTimeoutsSecondary);
+    }
+
+    private void setupTimeouts(HandStateEvents handStateEvents, Group configGroupToLoad) {
+        handStateEvents.setTimeouts(
+            Integer.parseInt(configGroupToLoad.getItem("zoneChanged").get()),
+            Integer.parseInt(configGroupToLoad.getItem("OOBChanged").get()),
+            Integer.parseInt(configGroupToLoad.getItem("segmentChanged").get()),
+            Integer.parseInt(configGroupToLoad.getItem("stateChanged").get()),
+            Integer.parseInt(configGroupToLoad.getItem("stationaryChanged").get())
+            );
+    }
+
+    private void enableTimeouts(HandStateEvents handStateEvents, Boolean enabled, String handName) {
+        handStateEvents.enableTimeouts(
+            enabled, // zone
+            enabled, // OOB
+            enabled, // segment
+            enabled, // state
+            enabled  // stationary
+            );
+
+        String enabledString = "disabled";
+        if (enabled) {
+            enabledString = "enabled";
+        }
+
+        this.debug.out(1, "\"Changed\" timeouts for " + handName + " " + enabledString + ".");
     }
 
     public synchronized static HandsState singleton() {
@@ -159,6 +195,7 @@ public class HandsState {
         Double primaryHandZ;
 
         if (primaryAbsent) {
+            this.enableTimeouts(this.primaryState, false, "primary");
             this.primaryState.setState(Gesture.absent);
             this.primaryState.setZone("OOB");
             this.primaryState.setSegment(0);
@@ -189,6 +226,7 @@ public class HandsState {
 
             int primarySegment = getHandSegment(true, this.handSummaries[0], this.cleanPrimary);
             this.primaryState.setSegment(primarySegment);
+            primarySegment = this.primaryState.getSegment();
             this.primaryState.setState(this.cleanPrimary.getState());
 
             double primaryDistanceFromCenter = this.getSegmentDistanceFromCenter(primarySegment, true, this.handSummaries[0], this.cleanPrimary);
@@ -526,6 +564,7 @@ public class HandsState {
         this.newHandsCursorFreeze = false;
         this.debug.out(1, "Releasing newHand cursor freeze.");
         this.handWaveyEvent.triggerEvent("special-newHandUnfreezeCursor");
+        this.enableTimeouts(this.primaryState, true, "primary");
     }
 
     public Boolean newHandsCursorFreeze() {

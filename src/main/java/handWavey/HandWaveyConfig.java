@@ -184,6 +184,60 @@ public class HandWaveyConfig {
             "400",
             "Int (milliseconds): If we haven't had any update in this amount of time, any new frame that we receive is deemed to be new. Under normal, active operation, we receive 10s of frames per seciond. Ie <100 milliseconds.");
 
+        Group changeTimeouts = dataCleaning.newGroup("changeTimeouts");
+        String defaultChangeTimeout = "20";
+        Group primaryHandTimeouts = changeTimeouts.newGroup("primaryHand");
+        primaryHandTimeouts.newItem(
+            "zoneChanged",
+            "0",
+            "Int (milliseconds): The amount of time that a change in zone must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        primaryHandTimeouts.newItem(
+            "OOBChanged",
+            defaultChangeTimeout,
+            "Int (milliseconds): The amount of time that a change in OOB (hands out of bounds/viewable area) must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        primaryHandTimeouts.newItem(
+            "segmentChanged",
+            defaultChangeTimeout,
+            "Int (milliseconds): The amount of time that a change in segment must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        primaryHandTimeouts.newItem(
+            "stateChanged",
+            defaultChangeTimeout,
+            "Int (milliseconds): The amount of time that a change in state (open/closed/absent) must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        primaryHandTimeouts.newItem(
+            "stationaryChanged",
+            defaultChangeTimeout,
+            "Int (milliseconds): The amount of time that a change in whether the hand is stationary, or not, must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        // primaryHandTimeouts.newItem(
+        //     "tapChanged",
+        //     defaultChangeTimeout,
+        //     "Int (milliseconds): The amount of time that a change in whether the hand has tapped, or not, must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+
+        Group secondaryHandTimeouts = changeTimeouts.newGroup("secondaryHand");
+        secondaryHandTimeouts.newItem(
+            "zoneChanged",
+            "0",
+            "Int (milliseconds): The amount of time that a change in zone must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        secondaryHandTimeouts.newItem(
+            "OOBChanged",
+            defaultChangeTimeout,
+            "Int (milliseconds): The amount of time that a change in OOB (hands out of bounds/viewable area) must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        secondaryHandTimeouts.newItem(
+            "segmentChanged",
+            defaultChangeTimeout,
+            "Int (milliseconds): The amount of time that a change in segment must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        secondaryHandTimeouts.newItem(
+            "stateChanged",
+            defaultChangeTimeout,
+            "Int (milliseconds): The amount of time that a change in state (open/closed/absent) must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        secondaryHandTimeouts.newItem(
+            "stationaryChanged",
+            defaultChangeTimeout,
+            "Int (milliseconds): The amount of time that a change in whether the hand is stationary, or not, must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        // secondaryHandTimeouts.newItem(
+        //     "tapChanged",
+        //     defaultChangeTimeout,
+        //     "Int (milliseconds): The amount of time that a change in whether the hand has tapped, or not, must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+
         Group ultraMotion = this.config.newGroup("ultraMotion");
         ultraMotion.newItem(
             "maxHands",
@@ -384,11 +438,11 @@ public class HandWaveyConfig {
             "Z greater than this value denotes the beginning of the active zone.");
         active.newItem(
             "movingMeanBegin",
-            "4",
+            "7",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         active.newItem(
             "movingMeanEnd",
-            "4",
+            "7",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
 
         Group tpAction = touchPad.newGroup("action");
@@ -643,7 +697,7 @@ public class HandWaveyConfig {
             "The moving mean length for the finger (used for whether the hand is open or closed). >0. 1 effectively disables the moving mean. A larger number is more effective at removing noise, at the expense of responsiveness.");
         handCleaner.newItem(
             "autoTrimMaxChangePerSecond",
-            "0.3",
+            "0.15",
             "The maximum change (in radians) that the auto-trim can apply per second. It is applied proportionally based on the duration since the last sample. The goal of auto-trim is to adjust to changes in the resting position of the hand so that segments still feel intuitive to the user despite the user not being consistent. Setting this to 0 disables autoTrim.");
         handCleaner.newItem(
             "autoTrimMaxChange",

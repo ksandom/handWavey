@@ -41,6 +41,24 @@ public class HandStateEvents {
         this.gesture = new Gesture();
     }
 
+    public void setTimeouts(long zoneTimeout, long OOBTimeout, long segmentTimeout, long stateTimeout, long stationaryTimeout) {
+        //this.zoneChanged.setTimeout(zoneTimeout);
+        this.OOBChanged.setTimeout(OOBTimeout);
+        this.segmentChanged.setTimeout(segmentTimeout);
+        this.stateChanged.setTimeout(stateTimeout);
+        this.stationaryChanged.setTimeout(stationaryTimeout);
+        // this.tapChanged.setTimeout(tapTimeout);
+    }
+
+    public void enableTimeouts(Boolean zoneEnabled, Boolean OOBEnabled, Boolean segmentEnabled, Boolean stateEnabled, Boolean stationaryEnabled) {
+        //this.zoneChanged.enableTimeout(zoneEnabled);
+        this.OOBChanged.enableTimeout(OOBEnabled);
+        this.segmentChanged.enableTimeout(segmentEnabled);
+        this.stateChanged.enableTimeout(stateEnabled);
+        this.stationaryChanged.enableTimeout(stationaryEnabled);
+        // this.tapChanged.enableTimeout(tapEnabled);
+    }
+
     public void setZone(String zone) {
         this.zoneChanged.set(zone);
         String OOBState = (zone.equals("OOB"))?"OOB":"nonOOB";
@@ -60,6 +78,10 @@ public class HandStateEvents {
         if (this.segmentChanged.hasChanged()) {
             this.debug.out(1, this.handLetter + " hand has changed segment to " + String.valueOf(segment));
         }
+    }
+
+    public int getSegment() {
+        return this.segmentChanged.toInt();
     }
 
     public void setState(int state) {
