@@ -207,6 +207,10 @@ public class HandWaveyConfig {
             "stationaryChanged",
             defaultChangeTimeout,
             "Int (milliseconds): The amount of time that a change in whether the hand is stationary, or not, must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        primaryHandTimeouts.newItem(
+            "zStationaryChanged",
+            defaultChangeTimeout,
+            "Int (milliseconds): The amount of time that a change in whether the hand is stationary on the z axis, or not, must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
         // primaryHandTimeouts.newItem(
         //     "tapChanged",
         //     defaultChangeTimeout,
@@ -233,6 +237,10 @@ public class HandWaveyConfig {
             "stationaryChanged",
             defaultChangeTimeout,
             "Int (milliseconds): The amount of time that a change in whether the hand is stationary, or not, must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
+        secondaryHandTimeouts.newItem(
+            "zStationaryChanged",
+            defaultChangeTimeout,
+            "Int (milliseconds): The amount of time that a change in whether the hand is stationary on the z axis, or not, must be stable before it gets reported. You want a number that is small enough to not be noticed by a human. But large enough to catch errors that can cause random clicks/states.");
         // secondaryHandTimeouts.newItem(
         //     "tapChanged",
         //     defaultChangeTimeout,
@@ -543,7 +551,7 @@ public class HandWaveyConfig {
             "When a new primary hand is introduced, the cursor and the ability to click the mouse or press keys, is disabled while the device stabilises.");
         actionEvents.newItem(
             "special-newHandUnfreezeCursor",
-            "recalibrateSegments();",
+            "recalibrateSegments();setSlot(\"250\", \"custom-recalibrateSegments\");",
             "When the time has expired for the Cursor freeze after a new primary hand is introduced.");
         actionEvents.newItem(
             "special-newHandUnfreezeEvent",
@@ -565,6 +573,22 @@ public class HandWaveyConfig {
             "special-secondaryStationary",
             "unlockGestures(\"secondary\");",
             "When the secondary hand starts moving.");
+        actionEvents.newItem(
+            "special-primaryZMoving",
+            "",
+            "When the primary hand starts moving on the z axis.");
+        actionEvents.newItem(
+            "special-primaryZStationary",
+            "setSlot(\"250\", \"custom-noop\");",
+            "When the primary hand starts moving on the z axis.");
+        actionEvents.newItem(
+            "special-secondaryZMoving",
+            "",
+            "When the secondary hand starts moving on the z axis.");
+        actionEvents.newItem(
+            "special-secondaryZStationary",
+            "",
+            "When the secondary hand starts moving on the z axis.");
         this.generateCustomConfig(actionEvents);
 
         Group audioConfig = this.config.newGroup("audioConfig");
@@ -773,5 +797,7 @@ public class HandWaveyConfig {
         customGroup.getItem("custom-delete").overrideDefault("keyDown(\"delete\");keyUp(\"delete\");"); // Press and release the delete key.
         customGroup.getItem("custom-ctrl+z").overrideDefault("keyDown(\"ctrl\");keyDown(\"z\");keyUp(\"z\");keyUp(\"ctrl\");"); // CTRL + z. Typically used for undo.
         customGroup.getItem("custom-ctrl+shift+z").overrideDefault("keyDown(\"ctrl\");keyDown(\"shift\");keyDown(\"z\");keyUp(\"z\");keyUp(\"shift\");keyUp(\"ctrl\");"); // CTRL + Shift z. Typically used for re-doing an undone task.
+
+        customGroup.getItem("custom-recalibrate").overrideDefault("setSlot(\"250\", \"custom-noop\");recalibrateSegments();"); // Recalibrate the segments once after entry.
     }
 }
