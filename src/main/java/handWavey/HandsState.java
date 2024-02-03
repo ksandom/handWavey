@@ -149,7 +149,8 @@ public class HandsState {
             Integer.parseInt(configGroupToLoad.getItem("OOBChanged").get()),
             Integer.parseInt(configGroupToLoad.getItem("segmentChanged").get()),
             Integer.parseInt(configGroupToLoad.getItem("stateChanged").get()),
-            Integer.parseInt(configGroupToLoad.getItem("stationaryChanged").get())
+            Integer.parseInt(configGroupToLoad.getItem("stationaryChanged").get()),
+            Integer.parseInt(configGroupToLoad.getItem("zStationaryChanged").get())
             );
     }
 
@@ -159,7 +160,8 @@ public class HandsState {
             enabled, // OOB
             enabled, // segment
             enabled, // state
-            enabled  // stationary
+            enabled, // stationary
+            enabled  // zStationary
             );
 
         String enabledString = "disabled";
@@ -236,6 +238,7 @@ public class HandsState {
             this.primaryState.setTap(this.cleanPrimary.isDoingATap(zone));
 
             this.primaryState.setStationary(this.cleanPrimary.isStationary());
+            this.primaryState.setZStationary(this.cleanPrimary.isZStationary());
         }
 
         if (this.handSummaries[1] == null || !this.handSummaries[1].isValid()) {
@@ -259,6 +262,7 @@ public class HandsState {
             this.secondaryState.setTap(this.cleanSecondary.isDoingATap(zone));
 
             this.secondaryState.setStationary(this.cleanSecondary.isStationary());
+            this.secondaryState.setZStationary(this.cleanSecondary.isZStationary());
         } else if (this.handSummaries[1] != null) {
             // TODO Is this branch needed?
             this.secondaryState.setState(this.cleanSecondary.getState());
@@ -274,6 +278,14 @@ public class HandsState {
                     this.debug.out(2, "Primary is \"" + stationaryState + "\" at speed " + String.valueOf(speed));
 
                     this.handWaveyEvent.triggerEvent("special-primary" + stationaryState);
+                }
+
+                if (this.primaryState.zStationaryChanged()) {
+                    String stationaryState = this.primaryState.getZStationaryString();
+
+                    this.debug.out(2, "Primary is \"z" + stationaryState + "\".");
+
+                    this.handWaveyEvent.triggerEvent("special-primaryZ" + stationaryState);
                 }
 
                 if (this.primaryState.tapChanged()) {
@@ -293,6 +305,15 @@ public class HandsState {
                     this.debug.out(2, "Secondary is \"" + stationaryState + "\" at speed " + String.valueOf(speed));
 
                     this.handWaveyEvent.triggerEvent("special-secondary" + stationaryState);
+                }
+
+                if (this.secondaryState.zStationaryChanged()) {
+                    String stationaryState = this.secondaryState.getZStationaryString();
+                    double speed = this.cleanSecondary.getSpeed();
+
+                    this.debug.out(2, "Secondary is \"" + stationaryState + "\".");
+
+                    this.handWaveyEvent.triggerEvent("special-secondaryZ" + stationaryState);
                 }
 
                 if (this.secondaryState.tapChanged()) {

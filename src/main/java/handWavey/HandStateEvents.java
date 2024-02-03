@@ -23,6 +23,7 @@ public class HandStateEvents {
     private Changed segmentChanged = new Changed(0, "segmentChanged");
     private Changed stateChanged = new Changed(Gesture.absent, "stateChanged");
     private Changed stationaryChanged = new Changed(1, "stationaryChanged");
+    private Changed zStationaryChanged = new Changed(1, "zStationaryChanged");
     private Changed tapChanged = new Changed(0, "tapChanged");
 
     private List<String> anyChangeEvents = new ArrayList<String>();
@@ -41,21 +42,23 @@ public class HandStateEvents {
         this.gesture = new Gesture();
     }
 
-    public void setTimeouts(long zoneTimeout, long OOBTimeout, long segmentTimeout, long stateTimeout, long stationaryTimeout) {
+    public void setTimeouts(long zoneTimeout, long OOBTimeout, long segmentTimeout, long stateTimeout, long stationaryTimeout, long zStationaryTimeout) {
         //this.zoneChanged.setTimeout(zoneTimeout);
         this.OOBChanged.setTimeout(OOBTimeout);
         this.segmentChanged.setTimeout(segmentTimeout);
         this.stateChanged.setTimeout(stateTimeout);
         this.stationaryChanged.setTimeout(stationaryTimeout);
+        this.zStationaryChanged.setTimeout(zStationaryTimeout);
         // this.tapChanged.setTimeout(tapTimeout);
     }
 
-    public void enableTimeouts(Boolean zoneEnabled, Boolean OOBEnabled, Boolean segmentEnabled, Boolean stateEnabled, Boolean stationaryEnabled) {
+    public void enableTimeouts(Boolean zoneEnabled, Boolean OOBEnabled, Boolean segmentEnabled, Boolean stateEnabled, Boolean stationaryEnabled, Boolean zStationaryEnabled) {
         //this.zoneChanged.enableTimeout(zoneEnabled);
         this.OOBChanged.enableTimeout(OOBEnabled);
         this.segmentChanged.enableTimeout(segmentEnabled);
         this.stateChanged.enableTimeout(stateEnabled);
         this.stationaryChanged.enableTimeout(stationaryEnabled);
+        this.zStationaryChanged.enableTimeout(zStationaryEnabled);
         // this.tapChanged.enableTimeout(tapEnabled);
     }
 
@@ -97,6 +100,11 @@ public class HandStateEvents {
         this.stationaryChanged.set(value);
     }
 
+    public void setZStationary(Boolean stationary) {
+        int value = (stationary)?1:0;
+        this.zStationaryChanged.set(value);
+    }
+
     public void setTap(Boolean isTapping) {
         int value = (isTapping)?1:0;
         this.tapChanged.set(value);
@@ -106,12 +114,20 @@ public class HandStateEvents {
         return this.stationaryChanged.hasChanged();
     }
 
+    public Boolean zStationaryChanged() {
+        return this.zStationaryChanged.hasChanged();
+    }
+
     public Boolean tapChanged() {
         return this.tapChanged.hasChanged();
     }
 
     public String getStationaryString() {
         return (this.stationaryChanged.toInt() == 1)?"Stationary":"Moving";
+    }
+
+    public String getZStationaryString() {
+        return (this.zStationaryChanged.toInt() == 1)?"Stationary":"Moving";
     }
 
     public Boolean didTap() {
@@ -131,7 +147,7 @@ public class HandStateEvents {
     }
 
     public Boolean specialChanged() {
-        return (this.stationaryChanged.hasChanged() || this.tapChanged.hasChanged());
+        return (this.stationaryChanged.hasChanged() || this.zStationaryChanged.hasChanged() || this.tapChanged.hasChanged());
     }
 
     public List<String> getAnyChangeEvents() {
