@@ -265,6 +265,10 @@ public class HandCleaner {
         return (speed < stationarySpeed);
     }
 
+    public Boolean isZStationary() {
+        return (Math.abs(zSpeed) < tapSpeed);
+    }
+
     public void setGestureLock(Boolean desiredState) {
         this.gesturesLocked = desiredState;
     }
@@ -358,7 +362,7 @@ public class HandCleaner {
         }
 
         // Have we met the speed threshold for a tap?
-        if (Math.abs(zSpeed) < tapSpeed) {
+        if (isZStationary()) {
             return false;
         }
 
