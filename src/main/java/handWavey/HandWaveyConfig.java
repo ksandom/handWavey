@@ -482,7 +482,7 @@ public class HandWaveyConfig {
         Group touchPadConfig = this.config.newGroup("touchPad");
         touchPadConfig.newItem(
             "inputMultiplier",
-            "1",
+            "0.9",
             "Input is pretty small. Make it a bit bigger.");
         touchPadConfig.newItem(
             "outputMultiplier",
