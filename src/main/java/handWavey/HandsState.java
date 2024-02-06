@@ -569,6 +569,7 @@ public class HandsState {
     }
 
     private Boolean frameIsActuallyNew(HandSummary[] newHS) {
+        if (newHS.length < 1) return false;
         if (newHS[0] == null) return false;
 
         double tolerance = 0.0000001;
