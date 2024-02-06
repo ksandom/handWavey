@@ -729,7 +729,7 @@ public class HandWaveyConfig {
             "The maximum change (in radians) that the auto-trim can apply in total. Setting this too small will limit how much auto-trim can help you. Setting it too large could lead to confusing behavior. The goal of auto-trim is to adjust to changes in the resting position of the hand so that segments still feel intuitive to the user despite the user not being consistent.");
         handCleaner.newItem(
             "stationarySpeed",
-            "15",
+            "18",
             "The speed, below which, the hand is considered stationary, and segment/state changes will be allowed. This is called speedLock. Setting this to -1 disables the speedLock. Change the debug level for HandsState to at least 2 to see the live speeds when the lock engages and disengages. You'll need stationarySpeed to be set to something positive for this to work. I suggest starting around 5-10.");
 
         Group tap = this.config.newGroup("tap");
