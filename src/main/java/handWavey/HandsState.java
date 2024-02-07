@@ -187,16 +187,17 @@ public class HandsState {
     }
 
     public Boolean setHandSummaries(HandSummary[] handSummaries) {
-        Boolean result = true;
+        Boolean handsAreNew = true;
         double tolerance = 0.00001;
 
-        result = this.frameIsActuallyNew(handSummaries);
-
+        handsAreNew = this.frameIsActuallyNew(handSummaries);
         this.handSummaries = handSummaries;
 
-        notifyGotFrame();
+        if (handsAreNew) {
+            notifyGotFrame();
+        }
 
-        return result;
+        return handsAreNew;
     }
 
     public void figureOutStuff() {
