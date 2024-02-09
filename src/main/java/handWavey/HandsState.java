@@ -14,10 +14,12 @@ import debug.Debug;
 import java.util.HashMap;
 import java.util.List;
 import java.sql.Timestamp;
+import java.lang.Math;
 
 public class HandsState {
     private static HandsState handsState = null;
     private HandSummary[] handSummaries;
+    private double previousX = 0;
     private HandWaveyEvent handWaveyEvent;
 
     private Debug debug;
@@ -184,10 +186,18 @@ public class HandsState {
         this.handWaveyEvent = handWaveyEvent;
     }
 
+    public Boolean setHandSummaries(HandSummary[] handSummaries) {
+        Boolean handsAreNew = true;
+        double tolerance = 0.00001;
 
-    public void setHandSummaries(HandSummary[] handSummaries) {
+        handsAreNew = this.frameIsActuallyNew(handSummaries);
         this.handSummaries = handSummaries;
-        notifyGotFrame();
+
+        if (handsAreNew) {
+            notifyGotFrame();
+        }
+
+        return handsAreNew;
     }
 
     public void figureOutStuff() {
@@ -547,6 +557,38 @@ public class HandsState {
 
     private long getNow() {
         return new Timestamp(System.currentTimeMillis()).getTime();
+    }
+
+    private Boolean withinTolerance(double value1, double value2, double tolerance) {
+        Boolean result = false;
+
+        double absDifference = Math.abs(value2 - value1);
+
+        // this.debug.out(0, "::: v1=" + String.valueOf(value1) + ", v2=" + String.valueOf(value2) + ", absDiff=" + String.valueOf(absDifference) + ", t=" + String.valueOf(tolerance));
+
+        return (absDifference < tolerance);
+    }
+
+    private Boolean frameIsActuallyNew(HandSummary[] newHS) {
+        Boolean haveHands = false;
+        for (int i = 0; i < 10; i++) {
+            if (newHS[0] != null) {
+                haveHands = true;
+                break;
+            }
+        }
+
+        if (!haveHands) {
+            return true;
+        }
+
+        double tolerance = 0.0000001;
+
+        if (withinTolerance(newHS[0].getHandX(), this.previousX, tolerance)) return false;
+
+        this.previousX = newHS[0].getHandX();
+
+        return true;
     }
 
     public void notifyGotFrame() {

@@ -284,11 +284,10 @@ public final class HandWaveyManager {
             this.handWaveyEvent.triggerAudioOnly("bug");
         }
 
-        this.handsState.setHandSummaries(handSummaries);
-
-        this.handSummaries = handSummaries;
-
-        this.handsState.figureOutStuff();
+        if (this.handsState.setHandSummaries(handSummaries)) {
+            this.handSummaries = handSummaries;
+            this.handsState.figureOutStuff();
+        }
 
         this.handWaveyEvent.triggerDelayedEvents();
 
