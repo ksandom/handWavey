@@ -49,10 +49,12 @@ public final class Motion {
 
     private int touchPadX = 0;
     private int touchPadY = 0;
-    private double touchPadInputMultiplier = 5;
-    private double touchPadOutputMultiplier = 1;
-    private double touchPadAcceleration = 2;
+    private double touchPadUnAcceleratedBaseMultiplier = 1;
+    private double touchPadAcceleratedBaseMultiplier = 1;
+    private double touchPadAccelerationExponent = 1;
+    private double touchPadAccelerationThreshold = 10;
     private double touchPadMaxSpeed = 20;
+    private long lastAccelerationCalculation = 0;
 
     private int rewindCursorTime = 300;
     private int repeatRewindCursorTime = 700;
@@ -169,9 +171,10 @@ public final class Motion {
 
         // Load touchpad mode config.
         Group touchPadConfig = Config.singleton().getGroup("touchPad");
-        this.touchPadInputMultiplier = Double.parseDouble(touchPadConfig.getItem("inputMultiplier").get());
-        this.touchPadOutputMultiplier = Double.parseDouble(touchPadConfig.getItem("outputMultiplier").get());
-        this.touchPadAcceleration = Double.parseDouble(touchPadConfig.getItem("acceleration").get());
+        this.touchPadUnAcceleratedBaseMultiplier = Double.parseDouble(touchPadConfig.getItem("unAcceleratedBaseMultiplier").get());
+        this.touchPadAcceleratedBaseMultiplier = Double.parseDouble(touchPadConfig.getItem("acceleratedBaseMultiplier").get());
+        this.touchPadAccelerationExponent = Double.parseDouble(touchPadConfig.getItem("accelerationExponent").get());
+        this.touchPadAccelerationThreshold = Double.parseDouble(touchPadConfig.getItem("accelerationThreshold").get());
         this.touchPadMaxSpeed = Double.parseDouble(touchPadConfig.getItem("maxSpeed").get());
 
 
@@ -338,6 +341,28 @@ public final class Motion {
         moveMouseTouchPadFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
     }
 
+    private double getAcceleratedDistance(double linearDiff) {
+        // Figure out speed.
+        double rawInputMultiplier = 0.1;
+        double frameDurationSeconds = this.handsState.getPreviousFrameAge() / 1000.0;
+        double speed = (linearDiff / frameDurationSeconds) * rawInputMultiplier;
+
+        double acceleratedDistance = linearDiff * this.touchPadUnAcceleratedBaseMultiplier;
+        if (speed > this.touchPadAccelerationThreshold) {
+            // Accelerated movement.
+            double baseMultiplier = this.touchPadAcceleratedBaseMultiplier;
+
+            // Apply multipliers separately to give smooth acceleration.
+            double baseChange = this.touchPadAccelerationThreshold * this.touchPadUnAcceleratedBaseMultiplier;
+            double remainingChange = Math.pow(linearDiff * (speed / this.touchPadAccelerationThreshold), this.touchPadAccelerationExponent) * baseMultiplier;
+
+            // Combine together.
+            acceleratedDistance = acceleratedDistance + remainingChange;
+        }
+
+        return acceleratedDistance;
+    }
+
     private void moveMouseTouchPadFromCoordinates(double xCoord, double yCoord) {
         // Calculate how far the hand has moved since the last iteration.
         double xCoordDiff = 0;
@@ -353,7 +378,7 @@ public final class Motion {
         // Calculate the distance we have moved regardless of direction.
         double angularDiff = Math.pow((Math.pow(xCoordDiff, 2) + Math.pow(yCoordDiff, 2)), 0.5);
 
-        // Apply maxChange.
+        // A sudden large spike is likely an error. Don't act on it.
         if (angularDiff > this.maxChange) {
             this.debug.out(1, "maxChange has been hit (" + String.valueOf(angularDiff) + " > " + String.valueOf(maxChange) + "), and this frame has been filtered. If this movement was legitimate, consider increasing the maxChange value in the config.");
             this.lastAbsoluteX = xCoord;
@@ -361,26 +386,28 @@ public final class Motion {
             return;
         }
 
-        // Get time component.
-        long previousFrameAge = this.handsState.getPreviousFrameAge();
+        // Calculate acceleration.
+        double acceleratedDistance = getAcceleratedDistance(angularDiff);
 
-        // Calculate our acceleration.
-        double accelerationThreshold = 1;
-        double accelerationMultiplier = accelerationThreshold;
-        double angularSpeed = angularDiff * previousFrameAge / 1000 * this.touchPadAcceleration;
-        if (angularSpeed > accelerationThreshold) {
-            if (angularSpeed > this.touchPadMaxSpeed) {
-                this.debug.out(2, "Limited touchPad speed (" + String.valueOf(angularSpeed) + ") to maxSpeed (" + String.valueOf(this.touchPadMaxSpeed) + ")");
-                angularSpeed = this.touchPadMaxSpeed;
-            }
-            accelerationMultiplier = angularSpeed;
+        // Limit our acceleration.
+        if (acceleratedDistance > this.touchPadMaxSpeed) {
+            this.debug.out(1, "Limited touchPad speed (" + String.valueOf(acceleratedDistance) + ") to maxSpeed (" + String.valueOf(this.touchPadMaxSpeed) + ")");
+            acceleratedDistance = this.touchPadMaxSpeed;
         }
 
+        // Get the separate x,y components.
+        double absX = Math.abs(xCoordDiff);
+        double absY = Math.abs(yCoordDiff);
+        double totalXY = absX + absY;
+        double xDistance = acceleratedDistance* (absX / totalXY);
+        double yDistance = acceleratedDistance* (absY / totalXY);
+
+        if (xCoordDiff < 0) xDistance *= -1;
+        if (yCoordDiff < 0) yDistance *= -1;
+
         // Bring everything together to calcuate how far we should move the cursor.
-        double xInput = xCoordDiff * this.touchPadInputMultiplier;
-        int diffX = (int) Math.round((xInput * accelerationMultiplier) * this.touchPadOutputMultiplier);
-        double yInput = yCoordDiff * this.touchPadInputMultiplier;
-        int diffY = (int) Math.round((yInput * accelerationMultiplier) * this.touchPadOutputMultiplier);
+        int diffX = (int) Math.round((xDistance));
+        int diffY = (int) Math.round((yDistance));
 
         // Apply the changes.
         this.touchPadX = this.touchPadX + (diffX * (int)Math.round(this.xMultiplier));
