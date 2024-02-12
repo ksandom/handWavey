@@ -1,0 +1,24 @@
+groups: {}
+items:
+  accelerationThreshold:
+    description: 'Decimal: The speed that the hand must move faster than for acceleration
+      to apply.'
+    value: '10'
+  unAcceleratedBaseMultiplier:
+    description: 'Decimal: How much to speed up unaccelerated movement. 1 is no change,
+      0.5 is half as fast, 2 is twice as fast. Think of this as how fast you want
+      to cursor to move normally.'
+    value: '2'
+  acceleratedBaseMultiplier:
+    description: 'Decimal: How much to speed up accelerated movement. 1 is no change,
+      0.5 is half as fast, 2 is twice as fast. Think of this as how fast you want
+      to cursor to move when acceleration is active.'
+    value: '2'
+  maxSpeed:
+    description: Maximum speed per second.
+    value: '500'
+  accelerationExponent:
+    description: 'Decimal: How much to increase the power of the acceleration. 1 is
+      no change, 0.5 is half as fast, 2 is twice as fast. Think of this as how power
+      the acceleration is.'
+    value: '1.1'
