@@ -159,7 +159,7 @@ public class HandWaveyConfig {
         Group dataCleaning = this.config.newGroup("dataCleaning");
         dataCleaning.newItem(
             "maxChange",
-            "30",
+            "100",
             "If the difference between the current input position and the previous input position is larger than this number, ignore it, and reset the state so that subsequent input makes sense. This is usually caused by going OOB on one side of the usable cone, and re-entering on the other side of the cone. When this number is too high, errors can slip through that cause the mouse cursor to jump. When it's too low, the cursor will regularly stop when you move your hand too fast. This symptom should not be confused with a hang due to something like garbage collection.");
 
         Group newHands = dataCleaning.newGroup("newHands");
@@ -481,20 +481,24 @@ public class HandWaveyConfig {
 
         Group touchPadConfig = this.config.newGroup("touchPad");
         touchPadConfig.newItem(
-            "inputMultiplier",
-            "0.9",
-            "Input is pretty small. Make it a bit bigger.");
-        touchPadConfig.newItem(
-            "outputMultiplier",
+            "unAcceleratedBaseMultiplier",
             "2",
-            "Input is pretty small. Make it a bit bigger.");
+            "Decimal: How much to speed up unaccelerated movement. 1 is no change, 0.5 is half as fast, 2 is twice as fast. Think of this as how fast you want to cursor to move normally.");
         touchPadConfig.newItem(
-            "acceleration",
-            "200",
-            "Small change in output moves the pointer very precisely. A larger movement moves the pointer much more drastically.");
+            "acceleratedBaseMultiplier",
+            "2",
+            "Decimal: How much to speed up accelerated movement. 1 is no change, 0.5 is half as fast, 2 is twice as fast. Think of this as how fast you want to cursor to move when acceleration is active.");
+        touchPadConfig.newItem(
+            "accelerationExponent",
+            "1.2",
+            "Decimal: How much to increase the power of the acceleration. 1 is no change, 0.5 is half as fast, 2 is twice as fast. Think of this as how power the acceleration is.");
+        touchPadConfig.newItem(
+            "accelerationThreshold",
+            "8",
+            "Decimal: The speed that the hand must move faster than for acceleration to apply.");
         touchPadConfig.newItem(
             "maxSpeed",
-            "25",
+            "500",
             "Maximum speed per second.");
 
 
