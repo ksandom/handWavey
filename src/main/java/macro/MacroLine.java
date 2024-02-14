@@ -30,6 +30,11 @@ public class MacroLine extends MacroCore {
 
     public void runLine(String line) {
         // TODO This currently will not handle ");" well in parameters. Make sure it doesn't match escaped versions.
+
+        if (line.equals("")) {
+            return;
+        }
+
         this.shouldCompleteLine[this.getLevel()].start(line);
         String[] instructions = line.split("\\);");
 

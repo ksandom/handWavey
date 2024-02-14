@@ -760,6 +760,8 @@ public class HandWaveyConfig {
     }
 
     private void generateMacroConfig(Group macrosGroup) {
+        macrosGroup.addItemTemplate(".*", "", "A user-defined macro.");
+
         // macrosGroup.newItem(
         //     "testMacros",
         //     "debug(\"1\", \"Using the macros definition to run code.\");",

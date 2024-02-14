@@ -25,13 +25,13 @@ public class MacroCore {
     private HandWaveyEvent handWaveyEvent;
     private String[] slot = new String[256];
     private int nestingLevel = 0;
-    protected static final int maxNesting = 10;
+    protected static final int maxNesting = 99;
     private Boolean slotsEnabled = true;
 
     private config.Group macros;
     private config.Group events;
 
-    private ShouldComplete[] shouldCompleteInstruction = new ShouldComplete[100];
+    private ShouldComplete[] shouldCompleteInstruction = new ShouldComplete[this.maxNesting + 1];
 
     public MacroCore(String context, OutputProtection output, HandsState handsState, HandWaveyManager handWaveyManager, HandWaveyEvent handWaveyEvent) {
         this.debug = Debug.getDebug(context);
@@ -46,9 +46,10 @@ public class MacroCore {
 
         Arrays.fill(this.slot, 0, 256, "");
 
-        for (int level = 0;  level <= this.maxNesting; level++) {
+        for (int level = 0; level < this.maxNesting; level++) {
             this.shouldCompleteInstruction[level] = new ShouldComplete("MacroCore/instruction-" + String.valueOf(level));
         }
+        this.debug.out(0, "Successful startup.");
     }
 
     protected void doInstruction(String instruction) {
@@ -183,7 +184,7 @@ public class MacroCore {
 
             // Oh ohhhhhhhh.
             default:
-                if (!tryMacro(command)) {
+                if (!this.tryMacro(command)) {
                     this.debug.out(0, "Unknown command: " + command);
                 }
                 break;
@@ -207,6 +208,8 @@ public class MacroCore {
             }
 
             this.increaseNesting();
+            String dots = new String(new char[this.nestingLevel]).replace("\0", ".");
+            this.debug.out(1, dots + String.valueOf(this.nestingLevel) + " " + command + ": " + macro);
             macroLine.runLine(macro);
             this.decreaseNesting();
         }
@@ -220,7 +223,7 @@ public class MacroCore {
 
         this.increaseNesting();
         if (!this.tryMacro(command)) {
-            if (this.events.getItem(command) == null) {
+            if (!this.events.itemCanExist(command)) {
                 this.debug.out(0, command + " doesn't appear to be a macro or event.");
             } else {
                 this.handWaveyEvent.triggerSubEvent(command, indent);
