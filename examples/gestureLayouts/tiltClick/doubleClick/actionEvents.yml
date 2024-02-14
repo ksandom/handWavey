@@ -37,13 +37,13 @@ items:
   general-segment-pAnyChange:
     value: lockCursor();rewindCursorPosition();
   individual-pNonOOB1Open-enter:
-    value: setButton("left");lockCursor();rewindCursorPosition();mouseDown();lockTaps("primary");cancelDelayedDo("custom-tap-left");
+    value: mDownLeft();
   individual-pNonOOB1Open-exit:
-    value: rewindCursorPosition();releaseButtons();unlockCursor();unlockTaps("primary");
+    value: mUpLeft();
   individual-pNonOOB6Open-enter:
-    value: setButton("right");lockCursor();rewindCursorPosition();mouseDown();lockTaps("primary");cancelDelayedDo("custom-tap-left");
+    value: mDownRight();
   individual-pNonOOB6Open-exit:
-    value: rewindCursorPosition();releaseButtons();unlockCursor();unlockTaps("primary");
+    value: mUpRight();
   individual-pNonOOB1Closed-enter:
     value: doSlot("0", "custom-noop");
   individual-pNonOOB1Closed-exit:
@@ -59,7 +59,7 @@ items:
   general-state-pAbsent-enter:
     value: setButton("left");releaseButtons();releaseKeys();releaseZone();unlockTaps("primary");cancelDelayedDo("custom-tap-left");
   tap-p0Open:
-    value: delayedDo("custom-tap-left", "150");
+    value: delayedDo("custom-tap-left", "150");testMacros();
   tap-p0Closed:
     value: delayedDo("custom-trippleClick", "150");
   custom-tap-left:

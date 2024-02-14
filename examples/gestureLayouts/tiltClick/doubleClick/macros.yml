@@ -1,0 +1,29 @@
+groups: {}
+items:
+  prepForClick:
+    description: Prepare for a click.
+    value: lockCursor();rewindCursorPosition();lockTaps("primary");
+  cancelTaps:
+    description: Cancel any pending taps.
+    value: cancelDelayedDo("custom-tap-left");
+  mDownLeft:
+    description: Mouse down - Left.
+    value: setButton("left");prepForClick();mouseDown();cancelTaps();
+  mDownRight:
+    description: Mouse down - Right.
+    value: setButton("right");prepForClick();mouseDown();cancelTaps();
+  mDownMiddle:
+    description: Mouse down - Middle.
+    value: setButton("middle");prepForClick();mouseDown();cancelTaps();
+  mUpGeneral:
+    description: Mouse up - General.
+    value: rewindCursorPosition();releaseButtons();unlockCursor();unlockTaps("primary");
+  mUpLeft:
+    description: Mouse up - Left.
+    value: mUpGeneral();
+  mUpRight:
+    description: Mouse up - Right.
+    value: mUpGeneral();
+  mUpMiddle:
+    description: Mouse up - Middle.
+    value: mUpGeneral();
