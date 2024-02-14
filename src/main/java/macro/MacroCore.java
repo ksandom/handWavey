@@ -9,6 +9,7 @@ Specific implementations like MacroLine, which provides single line macros, shou
 package macro;
 
 import mouseAndKeyboardOutput.*;
+import config.*;
 import debug.Debug;
 import handWavey.HandsState;
 import handWavey.HandWaveyManager;
@@ -27,6 +28,9 @@ public class MacroCore {
     protected static final int maxNesting = 10;
     private Boolean slotsEnabled = true;
 
+    private config.Group macros;
+    private config.Group events;
+
     private ShouldComplete[] shouldCompleteInstruction = new ShouldComplete[100];
 
     public MacroCore(String context, OutputProtection output, HandsState handsState, HandWaveyManager handWaveyManager, HandWaveyEvent handWaveyEvent) {
@@ -36,6 +40,9 @@ public class MacroCore {
         this.handsState = handsState;
         this.handWaveyManager = handWaveyManager;
         this.handWaveyEvent = handWaveyEvent;
+
+        this.macros = Config.singleton().getGroup("macros");
+        this.events = Config.singleton().getGroup("actionEvents");
 
         Arrays.fill(this.slot, 0, 256, "");
 
@@ -145,9 +152,7 @@ public class MacroCore {
                 break;
             case "do":
                 this.debug.out(0, "do: " + parm(parameters, 0, ""));
-                this.increaseNesting();
-                this.handWaveyEvent.triggerSubEvent(parm(parameters, 0, ""), "----");
-                this.decreaseNesting();
+                this.doSubAction(parm(parameters, 0, ""), "----");
                 break;
             case "delayedDo":
                 this.handWaveyEvent.triggerLaterSubEvent(parm(parameters, 0, ""), Long.parseLong(parm(parameters, 1, "")));
@@ -178,10 +183,50 @@ public class MacroCore {
 
             // Oh ohhhhhhhh.
             default:
-                this.debug.out(0, "Unknown command: " + command);
+                if (!tryMacro(command)) {
+                    this.debug.out(0, "Unknown command: " + command);
+                }
                 break;
         }
         this.shouldCompleteInstruction[this.nestingLevel].finish();
+    }
+
+    private Boolean tryMacro(String command) {
+        Boolean result = false;
+
+        config.Item macroItem = this.macros.getItem(command);
+        if (macroItem != null) {
+            result = true;
+
+            String macro = macroItem.get();
+            MacroLine macroLine = MacroLine.singleton();
+
+            if (macroLine == null) {
+                this.debug.out(0, "MacroLine doesn't appear to have been initialised yet. Can not run " + command + ", which would do \"" + macro + "\"");
+                return result;
+            }
+
+            this.increaseNesting();
+            macroLine.runLine(macro);
+            this.decreaseNesting();
+        }
+
+        return result;
+    }
+
+    private void doSubAction(String command, String indent) {
+        // Prefer a macro. But if we don't have that, trigger an event instead.
+        // Complain if neither exist.
+
+        this.increaseNesting();
+        if (!this.tryMacro(command)) {
+            if (this.events.getItem(command) == null) {
+                this.debug.out(0, command + " doesn't appear to be a macro or event.");
+            } else {
+                this.handWaveyEvent.triggerSubEvent(command, indent);
+            }
+        }
+        this.decreaseNesting();
     }
 
 
@@ -206,9 +251,7 @@ public class MacroCore {
                 return;
             }
 
-            this.increaseNesting();
-            this.handWaveyEvent.triggerSubEvent(eventToRun, "-->");
-            this.decreaseNesting();
+            this.doSubAction(eventToRun, "-->");
         } else {
             this.debug.out(1, "Would have run slot " + String.valueOf(slot) + " == " + eventToRun + ". Previous value: " + previousValue + ". But slots are currently disabled.");
         }

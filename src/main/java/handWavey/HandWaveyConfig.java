@@ -42,6 +42,7 @@ public class HandWaveyConfig {
         this.config.addGroupToSeparate("gestureConfig");
         this.config.addGroupToSeparate("handCleaner");
         this.config.addGroupToSeparate("tap");
+        this.config.addGroupToSeparate("macros");
 
         // Build up general config.
         Item configFormatVersion = this.config.newItem(
@@ -753,6 +754,16 @@ public class HandWaveyConfig {
             "samplesToWaitPositive",
             "5",
             "Number of samples in the positive direction to wait until allowing a tap.");
+
+        Group macros = this.config.newGroup("macros");
+        generateMacroConfig(macros);
+    }
+
+    private void generateMacroConfig(Group macrosGroup) {
+        // macrosGroup.newItem(
+        //     "testMacros",
+        //     "debug(\"1\", \"Using the macros definition to run code.\");",
+        //     "A test macro.");
 
     }
 
