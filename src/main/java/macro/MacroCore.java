@@ -193,28 +193,29 @@ public class MacroCore {
     }
 
     private Boolean tryMacro(String command) {
-        Boolean result = false;
-
-        config.Item macroItem = this.macros.getItem(command);
-        if (macroItem != null) {
-            result = true;
-
-            String macro = macroItem.get();
-            MacroLine macroLine = MacroLine.singleton();
-
-            if (macroLine == null) {
-                this.debug.out(0, "MacroLine doesn't appear to have been initialised yet. Can not run " + command + ", which would do \"" + macro + "\"");
-                return result;
-            }
-
-            this.increaseNesting();
-            String dots = new String(new char[this.nestingLevel]).replace("\0", ".");
-            this.debug.out(1, dots + String.valueOf(this.nestingLevel) + " " + command + ": " + macro);
-            macroLine.runLine(macro);
-            this.decreaseNesting();
+        if (!this.macros.itemExists(command)) {
+            return false;
         }
 
-        return result;
+        config.Item macroItem = this.macros.getItem(command);
+
+        String macro = macroItem.get();
+        MacroLine macroLine = MacroLine.singleton();
+
+        if (macroLine == null) {
+            this.debug.out(0, "MacroLine doesn't appear to have been initialised yet. Can not run " + command + ", which would do \"" + macro + "\"");
+
+            /* While this is a failure, we've only got here because the macro exists, but we were not in a state to be able to run it. Therefore we should Fail and complain about it, rather than return false, which will lead to a fall-back event being triggered instead, which could mask the problem. */
+            return true;
+        }
+
+        this.increaseNesting();
+        String dots = new String(new char[this.nestingLevel]).replace("\0", ".");
+        this.debug.out(1, dots + String.valueOf(this.nestingLevel) + " " + command + ": " + macro);
+        macroLine.runLine(macro);
+        this.decreaseNesting();
+
+        return true;
     }
 
     private void doSubAction(String command, String indent) {
@@ -223,9 +224,11 @@ public class MacroCore {
 
         this.increaseNesting();
         if (!this.tryMacro(command)) {
-            if (!this.events.itemCanExist(command)) {
+            this.debug.out(1, "Macro \"" + command + "\" does not exist.");
+            if (!this.events.itemExists(command)) {
                 this.debug.out(0, command + " doesn't appear to be a macro or event.");
             } else {
+                this.debug.out(2, "Event \"" + command + "\" exists. Triggering that.");
                 this.handWaveyEvent.triggerSubEvent(command, indent);
             }
         }

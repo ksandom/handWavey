@@ -79,6 +79,13 @@ public class Group extends Dirt { // A collection of related configuration Items
         return (getItem(key) != null);
     }
 
+    public boolean itemExists(String key) {
+        Item result = this.items.get(key);
+
+        return (result != null);
+    }
+
+
     public Group newGroup(String key) {
         // TODO Check if the group already exists and raise an exception if it does.
 
