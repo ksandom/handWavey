@@ -27,3 +27,9 @@ items:
   mUpMiddle:
     description: Mouse up - Middle.
     value: mUpGeneral();
+  allowWheelClicks:
+    description: Define the actions to be performed when clicking with a closed hand.
+    value: setSlot("0", "custom-closedLeft-enter");setSlot("1", "custom-closedRight-enter");setSlot("10", "custom-closedLeft-exit");setSlot("11", "custom-closedRight-exit");
+  disallowWheelClicks:
+    description: Mouse up - Middle.
+    value: setSlot("0", "");setSlot("1", "");setSlot("10", "");setSlot("11", "");
