@@ -239,7 +239,7 @@ The counterpart is `disableSlots();`
 
 ### do
 
-`do("eventName");` triggers the specified event name. It's intended for running `custom-` events that you define in your gesture layout, so that you can abstract out repeating functionality.
+`do("eventName");` triggers the specified macro or event name. It was originally intended for running `custom-` events that you define in your gesture layout, so that you can abstract out repeating functionality. Now you can do that with macros.yml, and `do("eventName");` only remains for completeness. **It may be removed in the future.**
 
 Example
 
@@ -254,9 +254,25 @@ Here we create an event called `custom-click-left` that has the abstracted funct
 
 ### delayedDo
 
-`delaydDo("eventName", "millisecondsDelay");` triggers the specified event name after `millisecondsDelay` has elapsed. It's intended for running `custom-` events that you define in your gesture layout, so that you can abstract out repeating functionality.
+`delaydDo("eventName", "millisecondsDelay");` runs the specified macro name after `millisecondsDelay` has elapsed. It's useful for being sure that we want to trigger an action, by triggering the action after a period of time, or cancelling it before that time has elapsed using `cancelDelayedDo();` or `cancelAllDelayedDos();`.
 
-Example
+Example using macros.yml and actionEvents.yml:
+```yaml
+  tap-left:
+    description: Perform a click from a tap event.
+    value: setButton("left");lockCursor();rewindCursorPosition("150");click();unlockCursor();
+```
+
+actionEvents.yml:
+
+```yaml
+  tap-p0Open:
+    value: delayedDo("tap-left", "150");
+```
+
+Here we created a `tap-left();` macro, and then called it from the `tap-p0Open` event via the `delayedDo` call.
+
+Here's the same example using only actionEvents.yml:
 
 ```yaml
   custom-tap-left:
@@ -265,13 +281,13 @@ Example
     value: delayedDo("custom-tap-left", "150");
 ```
 
-Just like with the `do();` example, we create an event called `custom-click-left` that has the abstracted functionality. Then when the `tap-p0Open` event gets triggered, it triggers the `custom-click-left`.
-
-However, we do so with a 150 millisecond delay. Ie it doesn't get triggered immediately. In a future iteration, pending events will be checked, and when the time has elapsed, it will be triggered.
+Here, we create an event called `custom-tap-left` that has the abstracted functionality. Then when the `tap-p0Open` event gets triggered, it triggers the `custom-tap-left` event. However, we do so with a 150 millisecond delay. Ie it doesn't get triggered immediately. In a future iteration, pending events will be checked, and when the time has elapsed, it will be triggered.
 
 Notice that we've specified a 150 millisecond delay, but also specified an `additionalDelay` of 150 milliseconds in `rewindCursorPosition("150");`. This is because rewindCursorPosition is expecting to have been triggered immediately, so we are telling it how much it has been delayed by so that it can rewind to the correct time. See `rewindCursorPosition` for full information.
 
 Have a look at `cancelDelayedDo();` for why we'd want to do this.
+
+Note: I'm currently evaluating whether triggering events is still valuable, or whether it can be removed now that we can trigger macros via these same mechanisms. Please consider triggering events as deprecated.
 
 ### cancelDelayedDo
 
@@ -298,6 +314,10 @@ Here, we've added two more events to the `delayedDo();` example:
 The logic here is that when you begin closing the hand, the Z axis from the LeapMotion controller becomes unreliable, often triggering a tap event. So we use `delayedDo();` to make use of that event, but delay it enough that we have some certainty about whether it was correct. If the hand has closed enough to trigger the `individual-pNonOOB0Closed-enter` event, we can cancel the `custom-tap-left` event that might have been waiting to be triggered.
 
 This has the effect of allowing two very different actions to be reliably triggered from similar data changes.
+
+### cancelAllDelayedDos
+
+`cancelAllDelayedDos();` cancels all pending `delayedDo` calls.
 
 ## Calibration instructions
 
