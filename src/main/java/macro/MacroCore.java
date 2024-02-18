@@ -156,10 +156,13 @@ public class MacroCore {
                 this.doSubAction(parm(parameters, 0, ""), "----");
                 break;
             case "delayedDo":
-                this.handWaveyEvent.triggerLaterSubEvent(parm(parameters, 0, ""), Long.parseLong(parm(parameters, 1, "")));
+                this.handWaveyEvent.addLaterSubEvent(parm(parameters, 0, ""), Long.parseLong(parm(parameters, 1, "")));
                 break;
             case "cancelDelayedDo":
                 this.handWaveyEvent.cancelLaterSubEvent(parm(parameters, 0, ""));
+                break;
+            case "cancelAllDelayedDos":
+                this.handWaveyEvent.cancelAllLaterSubEvents();
                 break;
 
             // Calibration.

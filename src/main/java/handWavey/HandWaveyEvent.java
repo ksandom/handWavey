@@ -111,17 +111,22 @@ public class HandWaveyEvent {
         return date.getTime();
     }
 
-    public void triggerLaterSubEvent(String eventName, long delay) {
+    public void addLaterSubEvent(String eventName, long delay) {
         long dueTime = timeInMilliseconds() + delay;
 
-        this.debug.out(1, "triggerLaterSubEvent(\"" + eventName + "\", " + String.valueOf(delay) + ") due at " + String.valueOf(dueTime));
+        this.debug.out(1, "Adding delayed event \"" + eventName + "\", with delay " + String.valueOf(delay) + " due at " + String.valueOf(dueTime) + ".");
         this.delayedEvents.put(eventName, dueTime);
     }
 
     public void cancelLaterSubEvent(String eventName) {
         if (this.delayedEvents.containsKey(eventName)) {
-            this.debug.out(1, "cancelLaterSubEvent(\"" + eventName + "\")");            this.delayedEvents.remove(eventName);
+            this.debug.out(1, "Cancelling delayed event \"" + eventName + "\".");            this.delayedEvents.remove(eventName);
         }
+    }
+
+    public void cancelAllLaterSubEvents() {
+        this.debug.out(1, "Cancelling all delayed events.");
+        this.delayedEvents = new HashMap<String, Long>();
     }
 
     public void triggerDelayedEvents() {
