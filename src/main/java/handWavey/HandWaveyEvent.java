@@ -143,7 +143,8 @@ public class HandWaveyEvent {
             if (delay < now) {
                 this.debug.out(1, "triggerDelayedEvents: " + eventName);
                 cancelLaterSubEvent(eventName);
-                triggerEvent(eventName);
+
+                macroLine.doSubAction(eventName, "____");
             }
         }
     }

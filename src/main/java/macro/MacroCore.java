@@ -221,7 +221,7 @@ public class MacroCore {
         return true;
     }
 
-    private void doSubAction(String command, String indent) {
+    public void doSubAction(String command, String indent) {
         // Prefer a macro. But if we don't have that, trigger an event instead.
         // Complain if neither exist.
 
