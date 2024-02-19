@@ -2,22 +2,19 @@ groups: {}
 items:
   prepForClick:
     description: Prepare for a click.
-    value: lockCursor();rewindCursorPosition();lockTaps("primary");
-  cancelTaps:
-    description: Cancel any pending taps.
-    value: cancelDelayedDo("custom-tap-left");
+    value: cancelAllDelayedDos();lockCursor();rewindCursorPosition();lockTaps("primary");
   mDownLeft:
     description: Mouse down - Left.
-    value: setButton("left");prepForClick();mouseDown();cancelTaps();
+    value: setButton("left");prepForClick();mouseDown();
   mDownRight:
     description: Mouse down - Right.
-    value: setButton("right");prepForClick();mouseDown();cancelTaps();
+    value: setButton("right");prepForClick();mouseDown();
   mDownMiddle:
     description: Mouse down - Middle.
-    value: setButton("middle");prepForClick();mouseDown();cancelTaps();
+    value: setButton("middle");prepForClick();mouseDown();
   mUpGeneral:
     description: Mouse up - General.
-    value: rewindCursorPosition();releaseButtons();unlockCursor();unlockTaps("primary");
+    value: cancelAllDelayedDos();rewindCursorPosition();releaseButtons();unlockCursor();unlockTaps("primary");
   mUpLeft:
     description: Mouse up - Left.
     value: mUpGeneral();
@@ -29,7 +26,74 @@ items:
     value: mUpGeneral();
   allowWheelClicks:
     description: Define the actions to be performed when clicking with a closed hand.
-    value: setSlot("0", "custom-closedLeft-enter");setSlot("1", "custom-closedRight-enter");setSlot("10", "custom-closedLeft-exit");setSlot("11", "custom-closedRight-exit");
+    value: setSlot("0", "closedLeft-enter");setSlot("1", "closedRight-enter");setSlot("10", "closedLeft-exit");setSlot("11", "closedRight-exit");
   disallowWheelClicks:
     description: Mouse up - Middle.
     value: setSlot("0", "");setSlot("1", "");setSlot("10", "");setSlot("11", "");
+  noHands:
+    description: To be triggered when the primary hand is no longer present.
+    value: cancelAllDelayedDos();setButton("left");releaseButtons();releaseKeys();releaseZone();unlockTaps("primary");
+  simple-leftClick:
+    description: Perform a left click. Intended to be called by a tap. This includes a delay that can be cancelled.
+    value: delayedDo("do-simple-leftClick", "150");
+  do-simple-leftClick:
+    description: Do the actual work of the left click from a tap. Intended to be called by tap-left();
+    value: cancelAllDelayedDos(); setButton("left");lockCursor();rewindCursorPosition("150");click();unlockCursor();
+  simple-trippleLeftClick:
+    description:
+    value: delayedDo("do-simple-trippleLeftClick", "150");
+  do-simple-trippleLeftClick:
+    description: Do the work of a simple tripple click.
+    value: cancelAllDelayedDos();setButton("left");lockCursor();rewindCursorPosition("150");click();click();click();unlockCursor();
+  stabliseSegment:
+    description: Reduce noise caused by the hand rotating.
+    value: lockCursor();rewindCursorPosition();
+  yankScroll-enter:
+    description: Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -enter macro gets it set up.
+    value: cancelAllDelayedDos();lockCursor();allowWheelClicks();setSlot("3", "do-scroll");
+  yankScroll-exit:
+    description: Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -exit macro puts it away.
+    value: cancelAllDelayedDos();unlockCursor();allowWheelClicks();setSlot("3", "");rewindCursorPosition();releaseZone();unlockCursor();unlockTaps("primary", "600");
+  do-mDoubleClick-left:
+    description: Perform a double left click right now.
+    value: lockCursor();rewindCursorPosition();releaseButtons();setButton("left");doubleClick();
+  do-scroll:
+    description:
+    value: rewindCursorPosition();overrideZone("scroll");setSlot("3", "");delayedDo("disallowWheelClicks", "150");lockTaps("primary");
+  movingProtection-enable:
+    description: Enable protections against accidental gestures from erratic data while the hand is moving quickly.
+    value: lockGestures("primary");doSlot("3", "");lockTaps("primary");
+  movingProtection-disable:
+    description: Disable protections against accidental gestures from erratic data while the hand is moving quickly.
+    value: unlockGestures("primary");unlockTaps("primary", "150");
+  prep-sharedScroll-slot:
+    description: Preparations to be done before running an overrideable slot for sharedScroll functionality.
+    value: cancelAllDelayedDos();setSlot("3", "");rewindCursorPosition();lockTaps("primary");
+  finish-sharedScroll-slot:
+    description: What has to be done after running an overrideable slot for sharedScroll functionality.
+    value: cancelAllDelayedDos();rewindCursorPosition();rewindScroll();unlockTaps("primary", "600");
+  closedLeft-enter:
+    description: What happens when a closedLeft gesture is performed. Intended to be called by the event. Please override the closedLeft-overrideable-enter instead if possible.
+    value: prep-sharedScroll-slot();closedLeft-overrideable-enter();
+  closedLeft-exit:
+    description: What happens when a closedLeft gesture is finished. Intended to be called by the event. Please override the closedLeft-overrideable-exit instead if possible.
+    value: finish-sharedScroll-slot();closedLeft-overrideable-exit();
+  closedRight-enter:
+    description: What happens when a closedLeft gesture is performed. Intended to be called by the event. Please override the closedRight-overrideable-enter instead if possible.
+    value: prep-sharedScroll-slot();closedRight-overrideable-enter();
+  closedRight-exit:
+    description: What happens when a closedLeft gesture is finished. Intended to be called by the event. Please override the closedRight-overrideable-enter instead if possible.
+    value: finish-sharedScroll-slot();closedRight-overrideable-exit();
+  closedLeft-overrideable-enter:
+    description: Overrideable action to be performed when the closedLeft gesture is performed.
+    value: setButton("middle");mouseDown();
+  closedLeft-overrideable-exit:
+    description: Overrideable action to be performed when the closedLeft gesture is finished.
+    value: releaseButtons();
+  closedRight-overrideable-enter:
+    description: Overrideable action to be performed when the closedRight gesture is performed.
+    value: setButton("left");doubleClick();
+  closedRight-overrideable-exit:
+    description: Overrideable action to be performed when the closedRight gesture is finished.
+    value: ""
+
