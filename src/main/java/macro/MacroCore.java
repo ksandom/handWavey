@@ -61,9 +61,26 @@ public class MacroCore {
         doInstruction(command, parameters);
     }
 
-    protected void doInstruction(String command, String[] parameters) {
+    protected boolean doInstruction(String command, String[] parameters) {
+        boolean success = true;
+
+        String commandToTry = command.trim();
+
+        if (!doInternalInstruction(commandToTry, parameters)) {
+            if (!this.tryMacro(commandToTry)) {
+                this.debug.out(0, "Unknown command (not an internal instruction, or a macro): \"" + commandToTry + "\"");
+                success = false;
+            }
+        }
+
+        return success;
+    }
+
+    private boolean doInternalInstruction(String command, String[] parameters) {
         String commandSummary = command + "(\"" + String.join("\", \"", parameters) + "\");";
         this.shouldCompleteInstruction[this.nestingLevel].start(commandSummary);
+
+        boolean success = true;
 
         switch (command) {
             case "debug":
@@ -187,12 +204,12 @@ public class MacroCore {
 
             // Oh ohhhhhhhh.
             default:
-                if (!this.tryMacro(command)) {
-                    this.debug.out(0, "Unknown command: " + command);
-                }
+                success = false;
                 break;
         }
         this.shouldCompleteInstruction[this.nestingLevel].finish();
+
+        return success;
     }
 
     private Boolean tryMacro(String command) {
@@ -225,14 +242,20 @@ public class MacroCore {
         // Prefer a macro. But if we don't have that, trigger an event instead.
         // Complain if neither exist.
 
+        String commandToTry = command.trim();
+
         this.increaseNesting();
-        if (!this.tryMacro(command)) {
-            this.debug.out(1, "Macro \"" + command + "\" does not exist.");
-            if (!this.events.itemExists(command)) {
-                this.debug.out(0, command + " doesn't appear to be a macro or event.");
-            } else {
-                this.debug.out(2, "Event \"" + command + "\" exists. Triggering that.");
-                this.handWaveyEvent.triggerSubEvent(command, indent);
+        String[] parameters = separateParameters("");
+        if (!doInternalInstruction(commandToTry, parameters)) {
+            this.debug.out(1, "Internal instruction \"" + commandToTry + "\" does not exist.");
+            if (!this.tryMacro(commandToTry)) {
+                this.debug.out(1, "Macro \"" + commandToTry + "\" does not exist.");
+                if (!this.events.itemExists(commandToTry)) {
+                    this.debug.out(0, commandToTry + " doesn't appear to be a macro or event.");
+                } else {
+                    this.debug.out(2, "Event \"" + commandToTry + "\" exists. Triggering that.");
+                    this.handWaveyEvent.triggerSubEvent(commandToTry, indent);
+                }
             }
         }
         this.decreaseNesting();

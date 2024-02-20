@@ -38,7 +38,7 @@ items:
     value: delayedDo("do-simple-leftClick", "150");
   do-simple-leftClick:
     description: Do the actual work of the left click from a tap. Intended to be called by tap-left();
-    value: cancelAllDelayedDos(); setButton("left");lockCursor();rewindCursorPosition("150");click();unlockCursor();
+    value: cancelAllDelayedDos();setButton("left");lockCursor();rewindCursorPosition("150");click();unlockCursor();
   simple-trippleLeftClick:
     description:
     value: delayedDo("do-simple-trippleLeftClick", "150");
