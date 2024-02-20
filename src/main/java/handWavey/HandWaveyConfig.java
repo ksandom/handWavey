@@ -160,7 +160,7 @@ public class HandWaveyConfig {
         Group dataCleaning = this.config.newGroup("dataCleaning");
         dataCleaning.newItem(
             "maxChange",
-            "100",
+            "20",
             "If the difference between the current input position and the previous input position is larger than this number, ignore it, and reset the state so that subsequent input makes sense. This is usually caused by going OOB on one side of the usable cone, and re-entering on the other side of the cone. When this number is too high, errors can slip through that cause the mouse cursor to jump. When it's too low, the cursor will regularly stop when you move your hand too fast. This symptom should not be confused with a hang due to something like garbage collection.");
         dataCleaning.newItem(
             "minFrameGapSeconds",
@@ -451,11 +451,11 @@ public class HandWaveyConfig {
             "Z greater than this value denotes the beginning of the active zone.");
         active.newItem(
             "movingMeanBegin",
-            "7",
+            "15",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         active.newItem(
             "movingMeanEnd",
-            "7",
+            "15",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
 
         Group tpAction = touchPad.newGroup("action");
