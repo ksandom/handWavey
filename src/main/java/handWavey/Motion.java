@@ -72,6 +72,8 @@ public final class Motion {
     private double relativeSensitivity = 0.1;
 
     private int maxChange = 200;
+    private double minFrameGapSeconds = 0.002;
+    private double frameTimeOverflow = 0;
 
     private String zoneMode = "touchScreen";
 
@@ -105,6 +107,8 @@ public final class Motion {
         Group dataCleaning = Config.singleton().getGroup("dataCleaning");
         this.maxChange = Integer.parseInt(dataCleaning.getItem("maxChange").get());
 
+        // Set up minFrameGapSeconds.
+        this.minFrameGapSeconds = Double.parseDouble(dataCleaning.getItem("minFrameGapSeconds").get());
 
         // Get configured multipliers.
         Group axisOrientation = Config.singleton().getGroup("axisOrientation");
@@ -341,10 +345,10 @@ public final class Motion {
         moveMouseTouchPadFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
     }
 
-    private double getAcceleratedDistance(double linearDiff) {
+    private double getAcceleratedDistance(double linearDiff, double frameDurationSeconds) {
         // Figure out speed.
         double rawInputMultiplier = 0.1;
-        double frameDurationSeconds = this.handsState.getPreviousFrameAge() / 1000.0;
+
         double speed = (linearDiff / frameDurationSeconds) * rawInputMultiplier;
 
         double acceleratedDistance = linearDiff * this.touchPadUnAcceleratedBaseMultiplier;
@@ -368,6 +372,20 @@ public final class Motion {
         double xCoordDiff = 0;
         double yCoordDiff = 0;
 
+        // Calculate time since the last frame.
+        double frameDurationSeconds = this.handsState.getPreviousFrameAge() / 1000.0;
+
+        if (frameDurationSeconds < minFrameGapSeconds) {
+            this.debug.out(1, "Skipping frame with only " + String.valueOf(frameDurationSeconds) + " seconds gap from the previous frame.");
+
+            this.frameTimeOverflow = frameDurationSeconds;
+            return;
+        } else {
+            frameDurationSeconds += this.frameTimeOverflow;
+            this.frameTimeOverflow = 0;
+        }
+
+        // Handle accumulated movement.
         if (!this.shouldDiscardOldPosition) {
             xCoordDiff = xCoord - this.lastAbsoluteX + this.diffRemainderX;
             yCoordDiff = yCoord - this.lastAbsoluteY + this.diffRemainderY;
@@ -387,7 +405,7 @@ public final class Motion {
         }
 
         // Calculate acceleration.
-        double acceleratedDistance = getAcceleratedDistance(angularDiff);
+        double acceleratedDistance = getAcceleratedDistance(angularDiff, frameDurationSeconds);
 
         // Limit our acceleration.
         if (acceleratedDistance > this.touchPadMaxSpeed) {
