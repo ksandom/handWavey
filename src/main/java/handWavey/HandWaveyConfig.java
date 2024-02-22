@@ -161,6 +161,10 @@ public class HandWaveyConfig {
             "maxChange",
             "100",
             "If the difference between the current input position and the previous input position is larger than this number, ignore it, and reset the state so that subsequent input makes sense. This is usually caused by going OOB on one side of the usable cone, and re-entering on the other side of the cone. When this number is too high, errors can slip through that cause the mouse cursor to jump. When it's too low, the cursor will regularly stop when you move your hand too fast. This symptom should not be confused with a hang due to something like garbage collection.");
+        dataCleaning.newItem(
+            "minFrameGapSeconds",
+            "0.002",
+            "The minimum gap between frames in seconds. When the gap is smaller than this number, a debug message will be produced like \"Skipping frame that is only 0.001 seconds old.\", and the frame will not contribute to the cursor moving. If this number is too high, then too many frames will get skipped, and the cursor won't move as much as desired. If this number is too low, then pointer acceleration can be erratic when frame timings get erratic (Common during high CPU load.)");
 
         Group newHands = dataCleaning.newGroup("newHands");
         newHands.newItem(

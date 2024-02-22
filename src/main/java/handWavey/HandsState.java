@@ -619,6 +619,7 @@ public class HandsState {
 
         // We really don't need to track anything that long.
         if (this.previousFrameAge > this.sillyFrameAge) {
+            this.debug.out(0, "previousFrameAge was too big (" + String.valueOf(this.previousFrameAge) + "). Setting it to " + String.valueOf(this.sillyFrameAge) + ".");
             this.previousFrameAge = this.sillyFrameAge;
         }
     }
