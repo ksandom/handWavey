@@ -486,19 +486,19 @@ public class HandWaveyConfig {
         Group touchPadConfig = this.config.newGroup("touchPad");
         touchPadConfig.newItem(
             "unAcceleratedBaseMultiplier",
-            "2",
+            "1.5",
             "Decimal: How much to speed up unaccelerated movement. 1 is no change, 0.5 is half as fast, 2 is twice as fast. Think of this as how fast you want to cursor to move normally.");
         touchPadConfig.newItem(
             "acceleratedBaseMultiplier",
-            "2",
+            "1.6",
             "Decimal: How much to speed up accelerated movement. 1 is no change, 0.5 is half as fast, 2 is twice as fast. Think of this as how fast you want to cursor to move when acceleration is active.");
         touchPadConfig.newItem(
             "accelerationExponent",
-            "1.2",
+            "1.3",
             "Decimal: How much to increase the power of the acceleration. 1 is no change, 0.5 is half as fast, 2 is twice as fast. Think of this as how power the acceleration is.");
         touchPadConfig.newItem(
             "accelerationThreshold",
-            "8",
+            "12",
             "Decimal: The speed that the hand must move faster than for acceleration to apply.");
         touchPadConfig.newItem(
             "maxSpeed",
