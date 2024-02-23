@@ -15,8 +15,7 @@ Improvements on tiltClick that make it easier to chain gestures together in usef
     * Double click:
       * Close your hand, then tilt to the side it naturally wants to turn.
       * Touch the action zone.
-    * Tripple click: Close your hand, tilt like left click, open hand, return to neutral position.
-* Scroll: Hand in neutral position. Close your hand. Move hand up/down.
+    * Tripple click: Tap with closed hand (like a slight punching motion.)
 * Keys <!-- (nice to haves) -->
     * CTRL: Introduce secondary hard. Tilt slightly unnaturally.
     * ALT: Introduce secondary hard. Keep relatively flat.

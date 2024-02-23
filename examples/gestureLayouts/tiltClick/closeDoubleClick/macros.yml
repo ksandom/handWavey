@@ -1,0 +1,15 @@
+groups: {}
+items:
+  closedSlot0-overrideable-enter:
+    description: Overrideable action to be performed when the closedSlot0 gesture is performed.
+    value: setButton("left");doubleClick();
+  closedSlot0-overrideable-exit:
+    description: Overrideable action to be performed when the closedSlot0 gesture is finished.
+    value: ''
+  closedSlot1-overrideable-enter:
+    description: Overrideable action to be performed when the closedSlot1 gesture is performed.
+    value: setButton("middle");mouseDown();mouseUp();
+  closedSlot1-overrideable-exit:
+    description: Overrideable action to be performed when the closedSlot1 gesture
+      is finished.
+    value: ''

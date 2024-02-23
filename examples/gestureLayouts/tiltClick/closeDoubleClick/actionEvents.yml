@@ -1,7 +1,7 @@
 groups: {}
 items:
   general-zone-pAction-enter:
-    value: lockCursor();rewindCursorPosition();releaseButtons();setButton("left");doubleClick();
+    value: do-mDoubleClick-left();
   general-segment-p0-enter:
     value: ""
   general-segment-p2-enter:
@@ -23,42 +23,46 @@ items:
   general-zone-sActive-exit:
     value: releaseKeys();
   general-state-pClosed-enter:
-    value: ""
+    value: yankScroll-enter();
   general-state-pClosed-exit:
-    value: ""
+    value: yankScroll-exit();
   special-newHandUnfreezeEvent:
     value: ""
   special-newHandUnfreezeCursor:
-    value: 'recalibrateSegments();'
+    value: recalibrateSegments();
   special-newHandFreeze:
     value: ''
   general-segment-p1-enter:
     value: ''
   general-segment-pAnyChange:
-    value: lockCursor();rewindCursorPosition();
+    value: stabliseSegment();
   individual-pNonOOB1Open-enter:
-    value: setButton("left");lockCursor();rewindCursorPosition();mouseDown();cancelDelayedDo("custom-tap-left");
+    value: mDownLeft();
   individual-pNonOOB1Open-exit:
-    value: rewindCursorPosition();releaseButtons();unlockCursor();
+    value: mUpLeft();
   individual-pNonOOB6Open-enter:
-    value: setButton("right");lockCursor();rewindCursorPosition();mouseDown();cancelDelayedDo("custom-tap-left");
+    value: mDownRight();
   individual-pNonOOB6Open-exit:
-    value: rewindCursorPosition();releaseButtons();unlockCursor();
+    value: mUpRight();
   individual-pNonOOB1Closed-enter:
-    value: lockCursor();rewindCursorPosition();releaseButtons();setButton("left");doubleClick();
+    value: closedSlot0-enter();
   individual-pNonOOB1Closed-exit:
-    value: unlockCursor();
+    value: closedSlot0-exit();
   individual-pNonOOB0Closed-enter:
-    value: rewindCursorPosition();overrideZone("scroll");lockTaps("primary");cancelDelayedDo("custom-tap-left");
+    value: ""
   individual-pNonOOB0Closed-exit:
-    value: rewindCursorPosition();releaseZone();unlockCursor();unlockTaps("primary", "300");
+    value: ""
   individual-pNonOOB6Closed-enter:
-    value: setButton("middle");lockCursor();rewindCursorPosition();mouseDown();
+    value: closedSlot1-enter();
   individual-pNonOOB6Closed-exit:
-    value: rewindCursorPosition();rewindScroll();releaseButtons();unlockCursor();
+    value: closedSlot1-exit();
   general-state-pAbsent-enter:
-    value: setButton("left");releaseButtons();releaseKeys();releaseZone();unlockTaps("primary");cancelDelayedDo("custom-tap-left");
+    value: noHands();
   tap-p0Open:
-    value: delayedDo("custom-tap-left", "150");
-  custom-tap-left:
-    value: setButton("left");lockCursor();rewindCursorPosition("150");mouseDown();mouseUp();unlockCursor();
+    value: simple-leftClick();
+  tap-p0Closed:
+    value: simple-trippleLeftClick();
+  special-primaryMoving:
+    value: movingProtection-enable();
+  special-primaryStationary:
+    value: movingProtection-disable();
