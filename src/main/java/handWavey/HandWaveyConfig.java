@@ -955,7 +955,7 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "closedSlot0-overrideable-enter",
-            "setButton(\"middle\");mouseDown();mouseUp();",
+            "setButton(\"middle\");click();",
             "Overrideable action to be performed when the closedSlot0 gesture is performed.");
 
         macrosGroup.newItem(
