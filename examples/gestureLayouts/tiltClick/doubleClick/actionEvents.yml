@@ -45,17 +45,17 @@ items:
   individual-pNonOOB6Open-exit:
     value: mUpRight();
   individual-pNonOOB1Closed-enter:
-    value: doSlot("0", "");
+    value: closedSlot0-enter();
   individual-pNonOOB1Closed-exit:
-    value: doSlot("10", "");
+    value: closedSlot0-exit();
   individual-pNonOOB0Closed-enter:
     value: ""
   individual-pNonOOB0Closed-exit:
     value: ""
   individual-pNonOOB6Closed-enter:
-    value: doSlot("1", "");
+    value: closedSlot1-enter();
   individual-pNonOOB6Closed-exit:
-    value: doSlot("11", "");
+    value: closedSlot1-exit();
   general-state-pAbsent-enter:
     value: noHands();
   tap-p0Open:

@@ -26,7 +26,7 @@ items:
     value: mUpGeneral();
   allowWheelClicks:
     description: Define the actions to be performed when clicking with a closed hand.
-    value: setSlot("0", "closedLeft-enter");setSlot("1", "closedRight-enter");setSlot("10", "closedLeft-exit");setSlot("11", "closedRight-exit");
+    value: setSlot("0", "closedSlot0-action-enter");setSlot("1", "closedSlot1-action-enter");setSlot("10", "closedSlot0-action-exit");setSlot("11", "closedSlot1-action-exit");
   disallowWheelClicks:
     description: Mouse up - Middle.
     value: setSlot("0", "");setSlot("1", "");setSlot("10", "");setSlot("11", "");
@@ -72,28 +72,40 @@ items:
   finish-sharedScroll-slot:
     description: What has to be done after running an overrideable slot for sharedScroll functionality.
     value: cancelAllDelayedDos();rewindCursorPosition();rewindScroll();unlockTaps("primary", "600");
-  closedLeft-enter:
-    description: What happens when a closedLeft gesture is performed. Intended to be called by the event. Please override the closedLeft-overrideable-enter instead if possible.
-    value: prep-sharedScroll-slot();closedLeft-overrideable-enter();
-  closedLeft-exit:
-    description: What happens when a closedLeft gesture is finished. Intended to be called by the event. Please override the closedLeft-overrideable-exit instead if possible.
-    value: finish-sharedScroll-slot();closedLeft-overrideable-exit();
-  closedRight-enter:
-    description: What happens when a closedLeft gesture is performed. Intended to be called by the event. Please override the closedRight-overrideable-enter instead if possible.
-    value: prep-sharedScroll-slot();closedRight-overrideable-enter();
-  closedRight-exit:
-    description: What happens when a closedLeft gesture is finished. Intended to be called by the event. Please override the closedRight-overrideable-enter instead if possible.
-    value: finish-sharedScroll-slot();closedRight-overrideable-exit();
-  closedLeft-overrideable-enter:
-    description: Overrideable action to be performed when the closedLeft gesture is performed.
+  closedSlot0-enter:
+    description: What happens when a closedSlot0 gesture is performed. Intended to be called by the event. Please override the closedSlot0-overrideable-enter instead if possible.
+    value: doSlot("0", "");
+  closedSlot0-exit:
+    description: What happens when a closedSlot0 gesture is finished. Intended to be called by the event. Please override the closedSlot0-overrideable-exit instead if possible.
+    value: doSlot("10", "");
+  closedSlot1-enter:
+    description: What happens when a closedSlot1 gesture is performed. Intended to be called by the event. Please override the closedSlot1-overrideable-enter instead if possible.
+    value: doSlot("1", "");
+  closedSlot1-exit:
+    description: What happens when a closedSlot1 gesture is finished. Intended to be called by the event. Please override the closedSlot1-overrideable-enter instead if possible.
+    value: doSlot("11", "");
+  closedSlot0-action-enter:
+    description: When the closed gestures get enabled. This is one of the macros that gets allocated.
+    value: prep-sharedScroll-slot();closedSlot0-overrideable-enter();
+  closedSlot0-action-exit:
+    description: When the closed gestures get enabled. This is one of the macros that gets allocated.
+    value: finish-sharedScroll-slot();closedSlot0-overrideable-exit();
+  closedSlot1-action-enter:
+    description: When the closed gestures get enabled. This is one of the macros that gets allocated.
+    value: prep-sharedScroll-slot();closedSlot1-overrideable-enter();
+  closedSlot1-action-exit:
+    description: When the closed gestures get enabled. This is one of the macros that gets allocated.
+    value: finish-sharedScroll-slot();closedSlot1-overrideable-exit();
+  closedSlot0-overrideable-enter:
+    description: Overrideable action to be performed when the closedSlot0 gesture is performed.
     value: setButton("middle");mouseDown();
-  closedLeft-overrideable-exit:
-    description: Overrideable action to be performed when the closedLeft gesture is finished.
+  closedSlot0-overrideable-exit:
+    description: Overrideable action to be performed when the closedSlot0 gesture is finished.
     value: releaseButtons();
-  closedRight-overrideable-enter:
-    description: Overrideable action to be performed when the closedRight gesture is performed.
+  closedSlot1-overrideable-enter:
+    description: Overrideable action to be performed when the closedSlot1 gesture is performed.
     value: setButton("left");doubleClick();
-  closedRight-overrideable-exit:
-    description: Overrideable action to be performed when the closedRight gesture is finished.
+  closedSlot1-overrideable-exit:
+    description: Overrideable action to be performed when the closedSlot1 gesture is finished.
     value: ""
 
