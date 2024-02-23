@@ -4,12 +4,21 @@ items:
     description: Prepare for a click.
     value: cancelAllDelayedDos();lockCursor();rewindCursorPosition();lockTaps("primary");
   mDownLeft:
+    description: Mouse down - Left, with delay. To be called by the event.
+    value: delayedDo("do-mDownLeft", "150");
+  do-mDownLeft:
     description: Mouse down - Left.
     value: setButton("left");prepForClick();mouseDown();
   mDownRight:
+    description: Mouse down - Right, with delay. To be called by the event.
+    value: delayedDo("do-mDownRight", "150");
+  do-mDownRight:
     description: Mouse down - Right.
     value: setButton("right");prepForClick();mouseDown();
   mDownMiddle:
+    description: Mouse down - Middle, with delay. To be called by the event.
+    value: delayedDo("do-mDownMiddle", "150");
+  do-mDownMiddle:
     description: Mouse down - Middle.
     value: setButton("middle");prepForClick();mouseDown();
   mUpGeneral:
@@ -50,7 +59,7 @@ items:
     value: lockCursor();rewindCursorPosition();
   yankScroll-enter:
     description: Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -enter macro gets it set up.
-    value: cancelAllDelayedDos();lockCursor();allowWheelClicks();setSlot("3", "do-scroll");
+    value: cancelAllDelayedDos();lockCursor();allowWheelClicks();setSlot("3", "do-scroll");lockTaps("primary");unlockTaps("primary" , "600");
   yankScroll-exit:
     description: Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -exit macro puts it away.
     value: cancelAllDelayedDos();unlockCursor();allowWheelClicks();setSlot("3", "");rewindCursorPosition();releaseZone();unlockCursor();unlockTaps("primary", "600");
@@ -69,9 +78,12 @@ items:
   prep-sharedScroll-slot:
     description: Preparations to be done before running an overrideable slot for sharedScroll functionality.
     value: cancelAllDelayedDos();setSlot("3", "");rewindCursorPosition();lockTaps("primary");
+  finish-sharedScroll-slot-withoutCancel:
+    description: What has to be done after running an overrideable slot for sharedScroll functionality.
+    value: rewindCursorPosition();rewindScroll();unlockTaps("primary", "800");
   finish-sharedScroll-slot:
     description: What has to be done after running an overrideable slot for sharedScroll functionality.
-    value: cancelAllDelayedDos();rewindCursorPosition();rewindScroll();unlockTaps("primary", "600");
+    value: cancelAllDelayedDos();finish-sharedScroll-slot-withoutCancel();
   closedSlot0-enter:
     description: What happens when a closedSlot0 gesture is performed. Intended to be called by the event. Please override the closedSlot0-overrideable-enter instead if possible.
     value: doSlot("0", "");
@@ -86,22 +98,28 @@ items:
     value: doSlot("11", "");
   closedSlot0-action-enter:
     description: When the closed gestures get enabled. This is one of the macros that gets allocated.
+    value: delayedDo("do-closedSlot0-action-enter", "150");
+  do-closedSlot0-action-enter:
+    description: When the closed gestures get enabled. This gets triggered via a delay for stability.
     value: prep-sharedScroll-slot();closedSlot0-overrideable-enter();
   closedSlot0-action-exit:
     description: When the closed gestures get enabled. This is one of the macros that gets allocated.
-    value: finish-sharedScroll-slot();closedSlot0-overrideable-exit();
+    value: finish-sharedScroll-slot-withoutCancel();closedSlot0-overrideable-exit();
   closedSlot1-action-enter:
     description: When the closed gestures get enabled. This is one of the macros that gets allocated.
+    value: delayedDo("do-closedSlot1-action-enter", "150");
+  do-closedSlot1-action-enter:
+    description: When the closed gestures get enabled. This gets triggered via a delay for stability.
     value: prep-sharedScroll-slot();closedSlot1-overrideable-enter();
   closedSlot1-action-exit:
     description: When the closed gestures get enabled. This is one of the macros that gets allocated.
-    value: finish-sharedScroll-slot();closedSlot1-overrideable-exit();
+    value: finish-sharedScroll-slot-withoutCancel();closedSlot1-overrideable-exit();
   closedSlot0-overrideable-enter:
     description: Overrideable action to be performed when the closedSlot0 gesture is performed.
-    value: setButton("middle");mouseDown();
+    value: setButton("middle");mouseDown();mouseUp();
   closedSlot0-overrideable-exit:
     description: Overrideable action to be performed when the closedSlot0 gesture is finished.
-    value: releaseButtons();
+    value: ""
   closedSlot1-overrideable-enter:
     description: Overrideable action to be performed when the closedSlot1 gesture is performed.
     value: setButton("left");doubleClick();
