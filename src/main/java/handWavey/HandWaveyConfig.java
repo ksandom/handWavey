@@ -762,11 +762,216 @@ public class HandWaveyConfig {
     private void generateMacroConfig(Group macrosGroup) {
         macrosGroup.addItemTemplate(".*", "", "A user-defined macro.");
 
-        // macrosGroup.newItem(
-        //     "testMacros",
-        //     "debug(\"1\", \"Using the macros definition to run code.\");",
-        //     "A test macro.");
 
+        macrosGroup.newItem(
+            "prepForClick",
+            "cancelAllDelayedDos();lockCursor();rewindCursorPosition();lockTaps(\"primary\");",
+            "Prepare for a click.");
+
+        macrosGroup.newItem(
+            "mDownLeft",
+            "delayedDo(\"do-mDownLeft\", \"150\");",
+            "Mouse down - Left, with delay. To be called by the event.");
+
+        macrosGroup.newItem(
+            "do-mDownLeft",
+            "setButton(\"left\");prepForClick();mouseDown();",
+            "Mouse down - Left.");
+
+        macrosGroup.newItem(
+            "mDownRight",
+            "delayedDo(\"do-mDownRight\", \"150\");",
+            "Mouse down - Right, with delay. To be called by the event.");
+
+        macrosGroup.newItem(
+            "do-mDownRight",
+            "setButton(\"right\");prepForClick();mouseDown();",
+            "Mouse down - Right.");
+
+        macrosGroup.newItem(
+            "mDownMiddle",
+            "delayedDo(\"do-mDownMiddle\", \"150\");",
+            "Mouse down - Middle, with delay. To be called by the event.");
+
+        macrosGroup.newItem(
+            "do-mDownMiddle",
+            "setButton(\"middle\");prepForClick();mouseDown();",
+            "Mouse down - Middle.");
+
+        macrosGroup.newItem(
+            "mUpGeneral",
+            "cancelAllDelayedDos();rewindCursorPosition();releaseButtons();unlockCursor();unlockTaps(\"primary\");",
+            "Mouse up - General.");
+
+        macrosGroup.newItem(
+            "mUpLeft",
+            "mUpGeneral();",
+            "Mouse up - Left.");
+
+        macrosGroup.newItem(
+            "mUpRight",
+            "mUpGeneral();",
+            "Mouse up - Right.");
+
+        macrosGroup.newItem(
+            "mUpMiddle",
+            "mUpGeneral();",
+            "Mouse up - Middle.");
+
+        macrosGroup.newItem(
+            "allowWheelClicks",
+            "setSlot(\"0\", \"closedSlot0-action-enter\");setSlot(\"1\", \"closedSlot1-action-enter\");setSlot(\"10\", \"closedSlot0-action-exit\");setSlot(\"11\", \"closedSlot1-action-exit\");",
+            "Define the actions to be performed when clicking with a closed hand.");
+
+        macrosGroup.newItem(
+            "disallowWheelClicks",
+            "setSlot(\"0\", \"\");setSlot(\"1\", \"\");setSlot(\"10\", \"\");setSlot(\"11\", \"\");",
+            "Mouse up - Middle.");
+
+        macrosGroup.newItem(
+            "noHands",
+            "cancelAllDelayedDos();setButton(\"left\");releaseButtons();releaseKeys();releaseZone();unlockTaps(\"primary\");",
+            "To be triggered when the primary hand is no longer present.");
+
+        macrosGroup.newItem(
+            "simple-leftClick",
+            "delayedDo(\"do-simple-leftClick\", \"150\");",
+            "Perform a left click. Intended to be called by a tap. This includes a delay that can be cancelled.");
+
+        macrosGroup.newItem(
+            "do-simple-leftClick",
+            "cancelAllDelayedDos();setButton(\"left\");lockCursor();rewindCursorPosition(\"150\");click();unlockCursor();",
+            "Do the actual work of the left click from a tap. Intended to be called by tap-left();");
+
+        macrosGroup.newItem(
+            "simple-trippleLeftClick",
+            "delayedDo(\"do-simple-trippleLeftClick\", \"150\");",
+            "");
+
+        macrosGroup.newItem(
+            "do-simple-trippleLeftClick",
+            "cancelAllDelayedDos();setButton(\"left\");lockCursor();rewindCursorPosition(\"150\");click();click();click();unlockCursor();",
+            "Do the work of a simple tripple click.");
+
+        macrosGroup.newItem(
+            "stabliseSegment",
+            "lockCursor();rewindCursorPosition();",
+            "Reduce noise caused by the hand rotating.");
+
+        macrosGroup.newItem(
+            "yankScroll-enter",
+            "cancelAllDelayedDos();lockCursor();allowWheelClicks();setSlot(\"3\", \"do-scroll\");lockTaps(\"primary\");unlockTaps(\"primary\" , \"600\");",
+            "Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -enter macro gets it set up.");
+
+        macrosGroup.newItem(
+            "yankScroll-exit",
+            "cancelAllDelayedDos();unlockCursor();allowWheelClicks();setSlot(\"3\", \"\");rewindCursorPosition();releaseZone();unlockCursor();unlockTaps(\"primary\", \"600\");",
+            "Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -exit macro puts it away.");
+
+        macrosGroup.newItem(
+            "do-mDoubleClick-left",
+            "lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();",
+            "Perform a double left click right now.");
+
+        macrosGroup.newItem(
+            "do-scroll",
+            "rewindCursorPosition();overrideZone(\"scroll\");setSlot(\"3\", \"\");delayedDo(\"disallowWheelClicks\", \"150\");lockTaps(\"primary\");",
+            "");
+
+        macrosGroup.newItem(
+            "movingProtection-enable",
+            "lockGestures(\"primary\");doSlot(\"3\", \"\");lockTaps(\"primary\");",
+            "Enable protections against accidental gestures from erratic data while the hand is moving quickly.");
+
+        macrosGroup.newItem(
+            "movingProtection-disable",
+            "unlockGestures(\"primary\");unlockTaps(\"primary\", \"150\");",
+            "Disable protections against accidental gestures from erratic data while the hand is moving quickly.");
+
+        macrosGroup.newItem(
+            "prep-sharedScroll-slot",
+            "cancelAllDelayedDos();setSlot(\"3\", \"\");rewindCursorPosition();lockTaps(\"primary\");",
+            "Preparations to be done before running an overrideable slot for sharedScroll functionality.");
+
+        macrosGroup.newItem(
+            "finish-sharedScroll-slot-withoutCancel",
+            "rewindCursorPosition();rewindScroll();unlockTaps(\"primary\", \"800\");",
+            "What has to be done after running an overrideable slot for sharedScroll functionality.");
+
+        macrosGroup.newItem(
+            "finish-sharedScroll-slot",
+            "cancelAllDelayedDos();finish-sharedScroll-slot-withoutCancel();",
+            "What has to be done after running an overrideable slot for sharedScroll functionality.");
+
+        macrosGroup.newItem(
+            "closedSlot0-enter",
+            "doSlot(\"0\", \"\");",
+            "What happens when a closedSlot0 gesture is performed. Intended to be called by the event. Please override the closedSlot0-overrideable-enter instead if possible.");
+
+        macrosGroup.newItem(
+            "closedSlot0-exit",
+            "doSlot(\"10\", \"\");",
+            "What happens when a closedSlot0 gesture is finished. Intended to be called by the event. Please override the closedSlot0-overrideable-exit instead if possible.");
+
+        macrosGroup.newItem(
+            "closedSlot1-enter",
+            "doSlot(\"1\", \"\");",
+            "What happens when a closedSlot1 gesture is performed. Intended to be called by the event. Please override the closedSlot1-overrideable-enter instead if possible.");
+
+        macrosGroup.newItem(
+            "closedSlot1-exit",
+            "doSlot(\"11\", \"\");",
+            "What happens when a closedSlot1 gesture is finished. Intended to be called by the event. Please override the closedSlot1-overrideable-enter instead if possible.");
+
+        macrosGroup.newItem(
+            "closedSlot0-action-enter",
+            "delayedDo(\"do-closedSlot0-action-enter\", \"150\");",
+            "When the closed gestures get enabled. This is one of the macros that gets allocated.");
+
+        macrosGroup.newItem(
+            "do-closedSlot0-action-enter",
+            "prep-sharedScroll-slot();closedSlot0-overrideable-enter();",
+            "When the closed gestures get enabled. This gets triggered via a delay for stability.");
+
+        macrosGroup.newItem(
+            "closedSlot0-action-exit",
+            "finish-sharedScroll-slot-withoutCancel();closedSlot0-overrideable-exit();",
+            "When the closed gestures get enabled. This is one of the macros that gets allocated.");
+
+        macrosGroup.newItem(
+            "closedSlot1-action-enter",
+            "delayedDo(\"do-closedSlot1-action-enter\", \"150\");",
+            "When the closed gestures get enabled. This is one of the macros that gets allocated.");
+
+        macrosGroup.newItem(
+            "do-closedSlot1-action-enter",
+            "prep-sharedScroll-slot();closedSlot1-overrideable-enter();",
+            "When the closed gestures get enabled. This gets triggered via a delay for stability.");
+
+        macrosGroup.newItem(
+            "closedSlot1-action-exit",
+            "finish-sharedScroll-slot-withoutCancel();closedSlot1-overrideable-exit();",
+            "When the closed gestures get enabled. This is one of the macros that gets allocated.");
+
+        macrosGroup.newItem(
+            "closedSlot0-overrideable-enter",
+            "setButton(\"middle\");mouseDown();mouseUp();",
+            "Overrideable action to be performed when the closedSlot0 gesture is performed.");
+
+        macrosGroup.newItem(
+            "closedSlot0-overrideable-exit",
+            "",
+            "Overrideable action to be performed when the closedSlot0 gesture is finished.");
+
+        macrosGroup.newItem(
+            "closedSlot1-overrideable-enter",
+            "setButton(\"left\");doubleClick();",
+            "Overrideable action to be performed when the closedSlot1 gesture is performed.");
+
+        macrosGroup.newItem(
+            "closedSlot1-overrideable-exit",
+            "",
+            "Overrideable action to be performed when the closedSlot1 gesture is finished.");
     }
 
     private void generateCustomConfig(Group customGroup) {
