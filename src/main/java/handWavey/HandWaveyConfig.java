@@ -860,12 +860,12 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "yankScroll-enter",
-            "cancelAllDelayedDos();lockCursor();allowWheelClicks();setSlot(\"3\", \"do-scroll\");lockTaps(\"primary\");unlockTaps(\"primary\" , \"600\");delayedDo(\"do-scroll\", \"1500\");",
+            "cancelAllDelayedDos();lockCursor();allowWheelClicks();setSlot(\"3\", \"do-scroll\");lockTaps(\"primary\");unlockTaps(\"primary\" , \"800\");delayedDo(\"do-scroll\", \"1500\");",
             "Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -enter macro gets it set up.");
 
         macrosGroup.newItem(
             "yankScroll-exit",
-            "cancelAllDelayedDos();unlockCursor();allowWheelClicks();setSlot(\"3\", \"\");rewindCursorPosition();releaseZone();unlockCursor();unlockTaps(\"primary\", \"600\");",
+            "cancelAllDelayedDos();unlockCursor();allowWheelClicks();setSlot(\"3\", \"\");rewindCursorPosition();releaseZone();unlockCursor();unlockTaps(\"primary\", \"800\");",
             "Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -exit macro puts it away.");
 
         macrosGroup.newItem(
