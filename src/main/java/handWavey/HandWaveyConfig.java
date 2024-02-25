@@ -880,7 +880,7 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "movingProtection-enable",
-            "lockGestures(\"primary\");doSlot(\"3\", \"\");lockTaps(\"primary\");",
+            "lockGestures(\"primary\");doSlot(\"3\", \"\");lockTaps(\"primary\");cancelAllDelayedDos();",
             "Enable protections against accidental gestures from erratic data while the hand is moving quickly.");
 
         macrosGroup.newItem(
