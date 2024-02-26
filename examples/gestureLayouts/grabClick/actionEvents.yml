@@ -3,11 +3,11 @@ items:
   general-zone-pAction-enter:
     value: do-mDoubleClick-left();
   general-segment-p0-enter:
-    value: setButton("left");
+    value: unlockTaps("primary", "150");setButton("left");
   general-segment-p1-enter:
-    value: setButton("right");
+    value: lockTaps("primary");unlockTaps("primary", "150");setButton("right");
   general-segment-p2-enter:
-    value: setButton("middle");overrideZone("scroll");lockTaps("primary");
+    value: setButton("middle");overrideZone("scroll");lockTaps("primary");unlockTaps("primary", "150");
   general-segment-p2-exit:
     value: releaseZone();unlockTaps("primary");
   general-segment-s0-enter:
@@ -42,3 +42,7 @@ items:
     value: movingProtection-enable();
   special-primaryStationary:
     value: movingProtection-disable();
+  tap-p1Open:
+    value: simple-rightClick();
+  tap-p2Open:
+    value: simple-middleClick();

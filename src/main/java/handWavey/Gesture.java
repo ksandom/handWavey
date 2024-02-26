@@ -75,15 +75,15 @@ public class Gesture {
         // Set taps.
         overrideDefault(
             "tap-p0Open",
-            "do(\"custom-tap-left\");",
+            "simple-leftClick();",
             "metalDing08.wav");
         overrideDefault(
             "tap-s0Open",
-            "do(\"custom-tap-right\");",
+            "simple-rightClick();",
             "metalDing05.wav");
         overrideDefault(
             "tap-s0Closed",
-            "do(\"custom-tap-middle\");",
+            "simple-middleClick();",
             "metalDing04.wav");
 
         // Set buttons.

@@ -770,7 +770,7 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "mDownAmbiguous",
-            "delayedDo(\"do-mDownLeft\", \"150\");",
+            "delayedDo(\"do-mDownAmbiguous\", \"150\");",
             "Mouse down - Ambiguous, with delay. To be called by the event.");
 
         macrosGroup.newItem(
@@ -844,14 +844,44 @@ public class HandWaveyConfig {
             "To be triggered when the primary hand is no longer present.");
 
         macrosGroup.newItem(
+            "simple-ambiguousClick",
+            "delayedDo(\"do-simple-ambiguousClick\", \"150\");",
+            "Perform an ambiguous click. Intended to be called by a tap. This includes a delay that can be cancelled.");
+
+        macrosGroup.newItem(
+            "do-simple-ambiguousClick",
+            "cancelAllDelayedDos();lockCursor();rewindCursorPosition(\"150\");click();unlockCursor();",
+            "Do a simple click without specifying the button. It's intended for this to have been done before getting to this point. Either by abstracting it out, or by the gestureLayout setting it.");
+
+        macrosGroup.newItem(
             "simple-leftClick",
             "delayedDo(\"do-simple-leftClick\", \"150\");",
             "Perform a left click. Intended to be called by a tap. This includes a delay that can be cancelled.");
 
         macrosGroup.newItem(
             "do-simple-leftClick",
-            "cancelAllDelayedDos();setButton(\"left\");lockCursor();rewindCursorPosition(\"150\");click();unlockCursor();",
-            "Do the actual work of the left click from a tap. Intended to be called by tap-left();");
+            "setButton(\"left\");do-simple-ambiguousClick();",
+            "Do the actual work of the left click from a tap. Intended to be called by simple-leftClick();");
+
+        macrosGroup.newItem(
+            "simple-rightClick",
+            "delayedDo(\"do-simple-rightClick\", \"150\");",
+            "Perform a right click. Intended to be called by a tap. This includes a delay that can be cancelled.");
+
+        macrosGroup.newItem(
+            "do-simple-rightClick",
+            "setButton(\"right\");do-simple-ambiguousClick();",
+            "Do the actual work of the right click from a tap. Intended to be called by simple-rightClick();");
+
+        macrosGroup.newItem(
+            "simple-middleClick",
+            "delayedDo(\"do-simple-middleClick\", \"150\");",
+            "Perform a middle click. Intended to be called by a tap. This includes a delay that can be cancelled.");
+
+        macrosGroup.newItem(
+            "do-simple-middleClick",
+            "setButton(\"middle\");do-simple-ambiguousClick();",
+            "Do the actual work of the middle click from a tap. Intended to be called by simple-middleClick();");
 
         macrosGroup.newItem(
             "simple-trippleLeftClick",
