@@ -1,7 +1,7 @@
 groups: {}
 items:
   general-zone-pAction-enter:
-    value: lockCursor();rewindCursorPosition();setButton("left");doubleClick();
+    value: do-mDoubleClick-left();
   general-segment-p0-enter:
     value: setButton("left");
   general-segment-p1-enter:
@@ -23,20 +23,22 @@ items:
   general-segment-s2-enter:
     value: keyDown("shift");
   general-state-pClosed-enter:
-    value: lockCursor();rewindCursorPosition();mouseDown();
+    value: mDownAmbiguous();
   general-state-pClosed-exit:
-    value: rewindCursorPosition();rewindScroll();releaseButtons();unlockCursor();
+    value: mUpGeneral();
   special-newHandUnfreezeEvent:
     value: ""
   special-newHandUnfreezeCursor:
-    value: 'recalibrateSegments();'
+    value: recalibrateSegments();
   special-newHandFreeze:
     value: ''
   general-zone-sActive-exit:
     value: releaseKeys();
   general-state-pAbsent-enter:
-    value: setButton("left");releaseButtons();releaseKeys();releaseZone();
+    value: noHands();
   general-segment-pAnyChange:
-    value: lockCursor();rewindCursorPosition();
-  general-state-pAbsent-enter:
-    value: setButton("left");releaseButtons();releaseKeys();releaseZone();unlockTaps("primary");
+    value: stabliseSegment();
+  special-primaryMoving:
+    value: movingProtection-enable();
+  special-primaryStationary:
+    value: movingProtection-disable();

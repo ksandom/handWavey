@@ -769,13 +769,23 @@ public class HandWaveyConfig {
             "Prepare for a click.");
 
         macrosGroup.newItem(
+            "mDownAmbiguous",
+            "delayedDo(\"do-mDownLeft\", \"150\");",
+            "Mouse down - Ambiguous, with delay. To be called by the event.");
+
+        macrosGroup.newItem(
+            "do-mDownAmbiguous",
+            "prepForClick();mouseDown();",
+            "Mouse down - Ambiguous.");
+
+        macrosGroup.newItem(
             "mDownLeft",
             "delayedDo(\"do-mDownLeft\", \"150\");",
             "Mouse down - Left, with delay. To be called by the event.");
 
         macrosGroup.newItem(
             "do-mDownLeft",
-            "setButton(\"left\");prepForClick();mouseDown();",
+            "setButton(\"left\");do-mDownAmbiguous();",
             "Mouse down - Left.");
 
         macrosGroup.newItem(
@@ -785,7 +795,7 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "do-mDownRight",
-            "setButton(\"right\");prepForClick();mouseDown();",
+            "setButton(\"right\");do-mDownAmbiguous();",
             "Mouse down - Right.");
 
         macrosGroup.newItem(
@@ -795,7 +805,7 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "do-mDownMiddle",
-            "setButton(\"middle\");prepForClick();mouseDown();",
+            "setButton(\"middle\");do-mDownAmbiguous();",
             "Mouse down - Middle.");
 
         macrosGroup.newItem(
