@@ -33,7 +33,6 @@ import bug.ShouldComplete;
 
 import java.util.HashMap;
 import java.io.File;
-import java.sql.Timestamp;
 
 /* HandWaveyManager is the glue that brings everything together. */
 public final class HandWaveyManager {
@@ -56,8 +55,6 @@ public final class HandWaveyManager {
 
     private double zMultiplier = -1;
 
-    private long lastFrame = 0;
-    private double minFrameGapSeconds = 0.002;
 
     public HandWaveyManager() {
         initialSetup(false);
@@ -166,9 +163,6 @@ public final class HandWaveyManager {
             this.debug.out(1, "  " + key + ":  " + this.zones.get(key).toString());
         }
 
-        // Set up minFrameGapSeconds.
-        Group dataCleaning = Config.singleton().getGroup("dataCleaning");
-        this.minFrameGapSeconds = Double.parseDouble(dataCleaning.getItem("minFrameGapSeconds").get());
 
 
 
@@ -217,26 +211,6 @@ public final class HandWaveyManager {
                 }
             }
         }
-    }
-
-    private long getNow() {
-        return new Timestamp(System.currentTimeMillis()).getTime();
-    }
-
-    private Boolean gapIsWideEnough() {
-        long now = getNow();
-        long gap = now - this.lastFrame;
-        // TODO Refactor this to use milliseconds.
-        double frameDurationSeconds = gap / 1000.0;
-
-        if (frameDurationSeconds < minFrameGapSeconds) {
-            this.debug.out(1, "Skipping frame with only " + String.valueOf(frameDurationSeconds) + " seconds gap from the previous frame.");
-            return false;
-        } else {
-            this.lastFrame = now;
-        }
-
-        return true;
     }
 
     // Make available to other classes.
@@ -306,10 +280,6 @@ public final class HandWaveyManager {
 
     // This is where everything gets glued together.
     public void sendHandSummaries(HandSummary[] handSummaries) {
-        if (!gapIsWideEnough()) {
-            return;
-        }
-
         if (!this.shouldCompleteSFO.start("na")) {
             this.handWaveyEvent.triggerAudioOnly("bug");
         }
