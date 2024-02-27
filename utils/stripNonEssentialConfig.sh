@@ -2,7 +2,7 @@
 # Strip out a few non essential entries from a config file.
 # This is used to help you focus when deriving a new gestureLayout from and old one. It also makes sure that what you set gets loaded in the way that you expect.
 # The entries that are stripped out are everything that is not "value".
-# 
+#
 # Syntax:
 #   $0 "fileName.yml"
 
@@ -24,6 +24,6 @@ fi
 fileName="$1"
 temporaryFileName="$fileName.cleaned"
 
-grep -v '\(zzzEmpty\|oldValue\):' "$fileName" > "$temporaryFileName"
+grep -v '\(zzzEmpty\|oldValue\|defaultValue\):' "$fileName" > "$temporaryFileName"
 diff "$temporaryFileName" "$fileName"
 mv "$temporaryFileName" "$fileName"
