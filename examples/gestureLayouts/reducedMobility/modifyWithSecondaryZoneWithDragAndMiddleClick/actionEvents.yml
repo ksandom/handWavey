@@ -31,21 +31,21 @@ items:
   general-zone-sActive-exit:
     value: ""
   combined-pAction0Open-sOOB0Absent-enter:
-    value: debug("1", "action!");lockCursor();rewindCursorPosition();mouseDown();
+    value: debug("1", "action!");mDownAmbiguous();
   combined-pAction0Open-sOOB0Absent-exit:
-    value: rewindCursorPosition();mouseUp();unlockCursor();
+    value: mUpAmbiguous();
   combined-pActive0Open-sNoMove0Open-enter:
     value: overrideZone("scroll");
   combined-pActive0Open-sNoMove0Open-exit:
     value: releaseZone();
   combined-pAction0Open-sActive0Open-enter:
-    value: lockCursor();rewindCursorPosition();setButton("right");mouseDown();
+    value: mDownRight();
   combined-pAction0Open-sActive0Open-exit:
-    value: rewindCursorPosition();mouseUp();unlockCursor();
+    value: mUpRight();
   combined-pActive0Open-sAction0Open-enter:
-    value: lockCursor();rewindCursorPosition();setButton("left");mouseDown();
+    value: mDownLeft();
   combined-pActive0Open-sAction0Open-exit:
-    value: rewindCursorPosition();mouseUp();unlockCursor();
+    value: mUpLeft();
   combined-pAction0Open-sAction0Open-enter:
     value: lockCursor();rewindCursorPosition();mouseUp();setButton("middle");click();
   combined-pAction0Open-sAction0Open-exit:
