@@ -489,60 +489,60 @@ The counterpart is `lockGestures();`
 ## Default macros
 
 <!-- BEGIN macro table. -->
-| custom- event | Description | What it does by default |
-| --- | --- | --- |
-| `prepForClick` | Prepare for a click. | `cancelAllDelayedDos();lockCursor();rewindCursorPosition();lockTaps("primary");` |
-| `mDownAmbiguous` | Mouse down - Ambiguous, with delay. To be called by the event. | `delayedDo("do-mDownAmbiguous", "150");` |
-| `do-mDownAmbiguous` | Mouse down - Ambiguous. | `prepForClick();mouseDown();` |
-| `mDownLeft` | Mouse down - Left, with delay. To be called by the event. | `delayedDo("do-mDownLeft", "150");` |
-| `do-mDownLeft` | Mouse down - Left. | `setButton("left");do-mDownAmbiguous();` |
-| `mDownRight` | Mouse down - Right, with delay. To be called by the event. | `delayedDo("do-mDownRight", "150");` |
-| `do-mDownRight` | Mouse down - Right. | `setButton("right");do-mDownAmbiguous();` |
-| `mDownMiddle` | Mouse down - Middle, with delay. To be called by the event. | `delayedDo("do-mDownMiddle", "150");` |
-| `do-mDownMiddle` | Mouse down - Middle. | `setButton("middle");do-mDownAmbiguous();` |
-| `mUpAmbiguous` | Mouse up - General. | `cancelAllDelayedDos();rewindCursorPosition();releaseButtons();unlockCursor();unlockTaps("primary");` |
-| `mUpLeft` | Mouse up - Left. | `mUpAmbiguous();` |
-| `mUpRight` | Mouse up - Right. | `mUpAmbiguous();` |
-| `mUpMiddle` | Mouse up - Middle. | `mUpAmbiguous();` |
-| `allowWheelClicks` | Define the actions to be performed when clicking with a closed hand. | `setSlot("0", "closedSlot0-action-enter");setSlot("1", "closedSlot1-action-enter");setSlot("10", "closedSlot0-action-exit");setSlot("11", "closedSlot1-action-exit");` |
-| `disallowWheelClicks` | Mouse up - Middle. | `setSlot("0", "");setSlot("1", "");setSlot("10", "");setSlot("11", "");` |
-| `noHands` | To be triggered when the primary hand is no longer present. | `cancelAllDelayedDos();setButton("left");releaseButtons();releaseKeys();releaseZone();unlockTaps("primary");` |
-| `simple-ambiguousClick` | Perform an ambiguous click. Intended to be called by a tap. This includes a delay that can be cancelled. | `delayedDo("do-simple-ambiguousClick", "150");` |
-| `do-simple-ambiguousClick` | Do a simple click without specifying the button. It's intended for this to have been done before getting to this point. Either by abstracting it out, or by the gestureLayout setting it. | `cancelAllDelayedDos();lockCursor();rewindCursorPosition("150");click();unlockCursor();` |
-| `simple-leftClick` | Perform a left click. Intended to be called by a tap. This includes a delay that can be cancelled. | `delayedDo("do-simple-leftClick", "150");` |
-| `do-simple-leftClick` | Do the actual work of the left click from a tap. Intended to be called by simple-leftClick(); | `setButton("left");do-simple-ambiguousClick();` |
-| `simple-rightClick` | Perform a right click. Intended to be called by a tap. This includes a delay that can be cancelled. | `delayedDo("do-simple-rightClick", "150");` |
-| `do-simple-rightClick` | Do the actual work of the right click from a tap. Intended to be called by simple-rightClick(); | `setButton("right");do-simple-ambiguousClick();` |
-| `simple-middleClick` | Perform a middle click. Intended to be called by a tap. This includes a delay that can be cancelled. | `delayedDo("do-simple-middleClick", "150");` |
-| `do-simple-middleClick` | Do the actual work of the middle click from a tap. Intended to be called by simple-middleClick(); | `setButton("middle");do-simple-ambiguousClick();` |
-| `simple-trippleLeftClick` | Perform a complete tripple-click. | `delayedDo("do-simple-trippleLeftClick", "150");` |
-| `do-simple-trippleLeftClick` | Do the work of a simple tripple click. | `cancelAllDelayedDos();setButton("left");lockCursor();rewindCursorPosition("150");click();click();click();unlockCursor();` |
-| `stabliseSegment` | Reduce noise caused by the hand rotating. | `lockCursor();rewindCursorPosition();` |
-| `yankScroll-enter` | Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -enter macro gets it set up. | `cancelAllDelayedDos();lockCursor();allowWheelClicks();setSlot("3", "do-scroll");lockTaps("primary");unlockTaps("primary" , "800");delayedDo("do-scroll", "1200");` |
-| `yankScroll-exit` | Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -exit macro puts it away. | `cancelAllDelayedDos();unlockCursor();allowWheelClicks();setSlot("3", "");rewindCursorPosition();releaseZone();unlockCursor();unlockTaps("primary", "800");` |
-| `do-mDoubleClick-left` | Perform a double left click right now. | `lockCursor();rewindCursorPosition();releaseButtons();setButton("left");doubleClick();` |
-| `do-scroll` |  | `rewindCursorPosition();overrideZone("scroll");setSlot("3", "");delayedDo("disallowWheelClicks", "150");lockTaps("primary");` |
-| `movingProtection-enable` | Enable protections against accidental gestures from erratic data while the hand is moving quickly. | `lockGestures("primary");doSlot("3", "");lockTaps("primary");cancelAllDelayedDos();` |
-| `movingProtection-disable` | Disable protections against accidental gestures from erratic data while the hand is moving quickly. | `unlockGestures("primary");unlockTaps("primary", "150");` |
-| `movingProtectionSecondary-enable` | Enable protections against accidental gestures from erratic data while the hand is moving quickly. | `lockGestures("secondary");lockTaps("secondary");cancelAllDelayedDos();` |
-| `movingProtectionSecondary-disable` | Disable protections against accidental gestures from erratic data while the hand is moving quickly. | `unlockGestures("secondary");unlockTaps("secondary", "150");` |
-| `prep-sharedScroll-slot` | Preparations to be done before running an overrideable slot for sharedScroll functionality. | `cancelAllDelayedDos();setSlot("3", "");rewindCursorPosition();lockTaps("primary");` |
-| `finish-sharedScroll-slot-withoutCancel` | What has to be done after running an overrideable slot for sharedScroll functionality. | `rewindCursorPosition();rewindScroll();unlockTaps("primary", "800");` |
-| `finish-sharedScroll-slot` | What has to be done after running an overrideable slot for sharedScroll functionality. | `cancelAllDelayedDos();finish-sharedScroll-slot-withoutCancel();` |
-| `closedSlot0-enter` | What happens when a closedSlot0 gesture is performed. Intended to be called by the event. Please override the closedSlot0-overrideable-enter instead if possible. | `doSlot("0", "");` |
-| `closedSlot0-exit` | What happens when a closedSlot0 gesture is finished. Intended to be called by the event. Please override the closedSlot0-overrideable-exit instead if possible. | `doSlot("10", "");` |
-| `closedSlot1-enter` | What happens when a closedSlot1 gesture is performed. Intended to be called by the event. Please override the closedSlot1-overrideable-enter instead if possible. | `doSlot("1", "");` |
-| `closedSlot1-exit` | What happens when a closedSlot1 gesture is finished. Intended to be called by the event. Please override the closedSlot1-overrideable-enter instead if possible. | `doSlot("11", "");` |
-| `closedSlot0-action-enter` | When the closed gestures get enabled. This is one of the macros that gets allocated. | `delayedDo("do-closedSlot0-action-enter", "150");` |
-| `do-closedSlot0-action-enter` | When the closed gestures get enabled. This gets triggered via a delay for stability. | `prep-sharedScroll-slot();closedSlot0-overrideable-enter();` |
-| `closedSlot0-action-exit` | When the closed gestures get enabled. This is one of the macros that gets allocated. | `finish-sharedScroll-slot-withoutCancel();closedSlot0-overrideable-exit();` |
-| `closedSlot1-action-enter` | When the closed gestures get enabled. This is one of the macros that gets allocated. | `delayedDo("do-closedSlot1-action-enter", "150");` |
-| `do-closedSlot1-action-enter` | When the closed gestures get enabled. This gets triggered via a delay for stability. | `prep-sharedScroll-slot();closedSlot1-overrideable-enter();` |
-| `closedSlot1-action-exit` | When the closed gestures get enabled. This is one of the macros that gets allocated. | `finish-sharedScroll-slot-withoutCancel();closedSlot1-overrideable-exit();` |
-| `closedSlot0-overrideable-enter` | Overrideable action to be performed when the closedSlot0 gesture is performed. | `setButton("middle");click();` |
-| `closedSlot0-overrideable-exit` | Overrideable action to be performed when the closedSlot0 gesture is finished. | `` |
-| `closedSlot1-overrideable-enter` | Overrideable action to be performed when the closedSlot1 gesture is performed. | `setButton("left");doubleClick();` |
-| `closedSlot1-overrideable-exit` | Overrideable action to be performed when the closedSlot1 gesture is finished. | `` |
+| custom- event | Description |
+| --- | --- |
+| `prepForClick` | Prepare for a click. |
+| `mDownAmbiguous` | Mouse down - Ambiguous, with delay. To be called by the event. |
+| `do-mDownAmbiguous` | Mouse down - Ambiguous. |
+| `mDownLeft` | Mouse down - Left, with delay. To be called by the event. |
+| `do-mDownLeft` | Mouse down - Left. |
+| `mDownRight` | Mouse down - Right, with delay. To be called by the event. |
+| `do-mDownRight` | Mouse down - Right. |
+| `mDownMiddle` | Mouse down - Middle, with delay. To be called by the event. |
+| `do-mDownMiddle` | Mouse down - Middle. |
+| `mUpAmbiguous` | Mouse up - General. |
+| `mUpLeft` | Mouse up - Left. |
+| `mUpRight` | Mouse up - Right. |
+| `mUpMiddle` | Mouse up - Middle. |
+| `allowWheelClicks` | Define the actions to be performed when clicking with a closed hand. |
+| `disallowWheelClicks` | Mouse up - Middle. |
+| `noHands` | To be triggered when the primary hand is no longer present. |
+| `simple-ambiguousClick` | Perform an ambiguous click. Intended to be called by a tap. This includes a delay that can be cancelled. |
+| `do-simple-ambiguousClick` | Do a simple click without specifying the button. It's intended for this to have been done before getting to this point. Either by abstracting it out, or by the gestureLayout setting it. |
+| `simple-leftClick` | Perform a left click. Intended to be called by a tap. This includes a delay that can be cancelled. |
+| `do-simple-leftClick` | Do the actual work of the left click from a tap. Intended to be called by simple-leftClick(); |
+| `simple-rightClick` | Perform a right click. Intended to be called by a tap. This includes a delay that can be cancelled. |
+| `do-simple-rightClick` | Do the actual work of the right click from a tap. Intended to be called by simple-rightClick(); |
+| `simple-middleClick` | Perform a middle click. Intended to be called by a tap. This includes a delay that can be cancelled. |
+| `do-simple-middleClick` | Do the actual work of the middle click from a tap. Intended to be called by simple-middleClick(); |
+| `simple-trippleLeftClick` | Perform a complete tripple-click. |
+| `do-simple-trippleLeftClick` | Do the work of a simple tripple click. |
+| `stabliseSegment` | Reduce noise caused by the hand rotating. |
+| `yankScroll-enter` | Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -enter macro gets it set up. |
+| `yankScroll-exit` | Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -exit macro puts it away. |
+| `do-mDoubleClick-left` | Perform a double left click right now. |
+| `do-scroll` |  |
+| `movingProtection-enable` | Enable protections against accidental gestures from erratic data while the hand is moving quickly. |
+| `movingProtection-disable` | Disable protections against accidental gestures from erratic data while the hand is moving quickly. |
+| `movingProtectionSecondary-enable` | Enable protections against accidental gestures from erratic data while the hand is moving quickly. |
+| `movingProtectionSecondary-disable` | Disable protections against accidental gestures from erratic data while the hand is moving quickly. |
+| `prep-sharedScroll-slot` | Preparations to be done before running an overrideable slot for sharedScroll functionality. |
+| `finish-sharedScroll-slot-withoutCancel` | What has to be done after running an overrideable slot for sharedScroll functionality. |
+| `finish-sharedScroll-slot` | What has to be done after running an overrideable slot for sharedScroll functionality. |
+| `closedSlot0-enter` | What happens when a closedSlot0 gesture is performed. Intended to be called by the event. Please override the closedSlot0-overrideable-enter instead if possible. |
+| `closedSlot0-exit` | What happens when a closedSlot0 gesture is finished. Intended to be called by the event. Please override the closedSlot0-overrideable-exit instead if possible. |
+| `closedSlot1-enter` | What happens when a closedSlot1 gesture is performed. Intended to be called by the event. Please override the closedSlot1-overrideable-enter instead if possible. |
+| `closedSlot1-exit` | What happens when a closedSlot1 gesture is finished. Intended to be called by the event. Please override the closedSlot1-overrideable-enter instead if possible. |
+| `closedSlot0-action-enter` | When the closed gestures get enabled. This is one of the macros that gets allocated. |
+| `do-closedSlot0-action-enter` | When the closed gestures get enabled. This gets triggered via a delay for stability. |
+| `closedSlot0-action-exit` | When the closed gestures get enabled. This is one of the macros that gets allocated. |
+| `closedSlot1-action-enter` | When the closed gestures get enabled. This is one of the macros that gets allocated. |
+| `do-closedSlot1-action-enter` | When the closed gestures get enabled. This gets triggered via a delay for stability. |
+| `closedSlot1-action-exit` | When the closed gestures get enabled. This is one of the macros that gets allocated. |
+| `closedSlot0-overrideable-enter` | Overrideable action to be performed when the closedSlot0 gesture is performed. |
+| `closedSlot0-overrideable-exit` | Overrideable action to be performed when the closedSlot0 gesture is finished. |
+| `closedSlot1-overrideable-enter` | Overrideable action to be performed when the closedSlot1 gesture is performed. |
+| `closedSlot1-overrideable-exit` | Overrideable action to be performed when the closedSlot1 gesture is finished. |
 <!-- END macro table. -->
 
 The above table is generated by `./utils/generateMacrosTable.sh`.

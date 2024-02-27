@@ -48,13 +48,16 @@ function macrosToLines
 
 function tableHeader
 {
-    echo "| custom- event | Description | What it does by default |"
-    echo "| --- | --- | --- |"
+    #echo "| custom- event | Description | What it does by default |"
+    #echo "| --- | --- | --- |"
+    echo "| custom- event | Description |"
+    echo "| --- | --- |"
 }
 
 function tableLine
 {
-    echo "| \`$macroName\` | $description | \`$value\` |"
+    #echo "| \`$macroName\` | $description | \`$value\` |"
+    echo "| \`$macroName\` | $description |"
 }
 
 function generateTable
