@@ -2,15 +2,17 @@
 
 This is documentation of the commands that are defined in [MacroCore.doInstruction()](https://github.com/ksandom/handWavey/blob/main/src/main/java/macro/MacroCore.java#L56).
 
-## Mouse instructions
+## Built-ins
 
-### mouseMove
+### Mouse instructions
+
+#### mouseMove
 
 `mouseMove("X", "Y");` places the mouse cursor in a specific (X,Y) location on your screen.
 
 Note: **If you use this command, please consider whether you are solving your problem in the best way. Hard-coding X,Y co-ordinates will not be portable between different systems.**
 
-### click
+#### click
 
 `click("button");` will `mouseDown` and `mouseUp` in the current cursor location.
 
@@ -25,7 +27,7 @@ Eg:
 
 `click("left");`
 
-### doubleClick
+#### doubleClick
 
 `doubleClick("button");` will `click` twice in the current cursor location with no delay.
 
@@ -40,7 +42,7 @@ Eg:
 
 `doubleClick("left");`
 
-### mouseDown
+#### mouseDown
 
 `mouseDown("button");` will press the mouse button down, but not release it, in the current cursor location.
 
@@ -57,7 +59,7 @@ Eg:
 
 Note: **There are protections in place to stop the same mouse button from being pressed multiple times without being released. It will work as expected. However, please don't rely on this, because assumptions like that are likely to lead to bugs in your configuration.**
 
-### mouseUp
+#### mouseUp
 
 `mouseUp("button");` will release the mouse button in the current cursor location.
 
@@ -74,7 +76,7 @@ Eg:
 
 Note: **There are protections in place to stop the same mouse button from being released multiple times without being pressed. It will work as expected. However, please don't rely on this, because assumptions like that are likely to lead to bugs in your configuration.**
 
-### setButton
+#### setButton
 
 `setButton("buttonName");` sets the default button that will be used for commands like `mouseDown`, `mouseUp`, `click`, `doubleClick` etc.
 
@@ -83,7 +85,7 @@ Note: **There are protections in place to stop the same mouse button from being 
 * `"right"`
 * If no value is provided (eg `setButton();`), then `"left"` will be used.
 
-### releaseButtons
+#### releaseButtons
 
 `releaseButtons();` makes sure that all buttons are released.
 
@@ -91,7 +93,7 @@ It's important to call this from an event like `general-state-pAbsent-enter` to 
 
 The keyboard equivalent of this is `releaseKeys`.
 
-### rewindScroll
+#### rewindScroll
 
 `rewindScroll("additionalDelay");` undoes any scrolling that has taken place in the specified amount of time. That time comes from two places:
 
@@ -103,7 +105,7 @@ There are two motivations for doing this:
 * The data from the LeapMotion controller tends to fluctuate while doing a gesture. So we want to get the position from when the user began the gesture, not during, or after.
 * If we are using something like `delaydDo`, then we should set the `additionalDelay` to the same amount of time that the command was delayed so that we get the scroll location from when the action was triggered.
 
-### rewindCursorPosition
+#### rewindCursorPosition
 
 `rewindCursorPosition("additionalDelay");` moves it back to where it was at the specified time. That time comes from two places:
 
@@ -115,7 +117,7 @@ There are two motivations for doing this:
 * The data from the LeapMotion controller tends to fluctuate while doing a gesture. So we want to get the position from when the user began the gesture, not during, or after.
 * If we are using something like `delaydDo`, then we should set the `additionalDelay` to the same amount of time that the command was delayed so that we get the cursor location from when the action was triggered.
 
-### lockCursor
+#### lockCursor
 
 `lockCursor();` stops the cursor from being moved by handWavey.
 
@@ -126,11 +128,11 @@ This is really useful for things like
 
 The counterpart is `unlockCursor();`
 
-### unlockCursor
+#### unlockCursor
 
 `unlockCursor();` undoes the lock that was placed by `lockCursor();`
 
-### overrideZone
+#### overrideZone
 
 `overrideZone("zoneName");` replaces the current understanding of which zone the hand is in, with the `zoneName` provided.
 
@@ -144,13 +146,13 @@ The purpose is to completely change the behaviour of what handWavey does with th
 
 The counterpart is `releaseZone();`
 
-### releaseZone
+#### releaseZone
 
 `releaseZone();` undoes `overrideZone("zoneName");` to restore the behaviour and functionality that would normally be in place for the current gestures.
 
-## Keyboard instructions
+### Keyboard instructions
 
-### keyDown
+#### keyDown
 
 `keyDown("keyName");`
 
@@ -173,7 +175,7 @@ Important notes:
 * Make sure to release any keys with `keyDown`. Either explicitly with `keyUp`, or with `releaseKeys` when the hand is removed.
 * The counterpart is `keyUp("keyName");`
 
-### keyUp
+#### keyUp
 
 `keyUp("keyName");` releases the specific key that has been pressed down with `keyDown("keyName")`.
 
@@ -181,7 +183,7 @@ Eg:
 
 `keyUp("c");`
 
-### keyPress
+#### keyPress
 
 `keyPress("keyName");` does a complete `keyDown` and `keyUp` of the `"keyName"` that you specify.
 
@@ -195,7 +197,7 @@ to
 
 `keyDown("ctrl");keyPress("c");keyUp("ctrl");`
 
-### releaseKeys
+#### releaseKeys
 
 `releaseKeys();` releases all keys that have not been `keyUp`'d after their `keyDown`.
 
@@ -203,41 +205,41 @@ It's important to call this from an event like `general-state-pAbsent-enter` to 
 
 The mouse equivalent of this is `releaseButtons`.
 
-## Dynamic instructions
+### Dynamic instructions
 
-### setSlot
+#### setSlot
 
 `setSlot("slotNumber", "eventName");` is used for [creating dynamic gestureLayouts](https://github.com/ksandom/handWavey/blob/main/docs/user/howTo/createADynamicGestureLayout.md), and is better explained in that documentation. But the TL;DR is that it specifies which event should be used on a given slot when `doSlot();` is called.
 
 * `slotNumber`: Integer 0-255.
 * `eventName`: Specify the eventName to be triggered by `doSlot();`. This is intended for the `custom-` events that you can create yourself.
 
-### doSlot
+#### doSlot
 
 `doSlot("slotNumber", "eventName");` is used for [creating dynamic gestureLayouts](https://github.com/ksandom/handWavey/blob/main/docs/user/howTo/createADynamicGestureLayout.md), and is better explained in that documentation. But the TL;DR is that it runs the eventName allocated to the specified slot. If no eventName has been set with `setSlot();` yet, it will use the eventName provided as the default.
 
 * `slotNumber`: Integer 0-255.
 * `eventName`: Specify the eventName to be triggered. This is intended for the `custom-` events that you can create yourself.
 
-### setAllSlots
+#### setAllSlots
 
 `setAllSlots("eventName");` is used for [creating dynamic gestureLayouts](https://github.com/ksandom/handWavey/blob/main/docs/user/howTo/createADynamicGestureLayout.md), and is better explained in that documentation. But the TL;DR is that it sets all slots to the specified eventName. Eg `setAllSlots("");` can be used to reset all slots back to defaults by making them empty.
 
 * `eventName`: Specify the eventName to be triggered. This is intended for the `custom-` events that you can create yourself.
 
-### disableSlots
+#### disableSlots
 
 `disableSlots();` is used for [creating dynamic gestureLayouts](https://github.com/ksandom/handWavey/blob/main/docs/user/howTo/createADynamicGestureLayout.md), and is better explained in that documentation. But the TL;DR is that it disables the `doSlot();` command. This is useful for disabling actions while the slots are being reconfigured (ie you're changing toolsets in a dynamic gestureLayout).
 
 The counterpart is `enableSlots();`
 
-### enableSlots
+#### enableSlots
 
 `enableSlots();` is used for [creating dynamic gestureLayouts](https://github.com/ksandom/handWavey/blob/main/docs/user/howTo/createADynamicGestureLayout.md), and is better explained in that documentation. But the TL;DR is that it re-enables the `doSlot();` command after having been disabled by the `disableSlots();` command. This is useful the slots have been reconfigured (ie you changed toolsets in a dynamic gestureLayout).
 
 The counterpart is `disableSlots();`
 
-### do
+#### do
 
 `do("eventName");` triggers the specified macro or event name. It was originally intended for running `custom-` events that you define in your gesture layout, so that you can abstract out repeating functionality. Now you can do that with macros.yml, and `do("eventName");` only remains for completeness. **It may be removed in the future.**
 
@@ -252,7 +254,7 @@ Example
 
 Here we create an event called `custom-click-left` that has the abstracted functionality. Then when the `tap-p0Open` event gets triggered, it triggers the `custom-click-left`.
 
-### delayedDo
+#### delayedDo
 
 `delaydDo("eventName", "millisecondsDelay");` runs the specified macro name after `millisecondsDelay` has elapsed. It's useful for being sure that we want to trigger an action, by triggering the action after a period of time, or cancelling it before that time has elapsed using `cancelDelayedDo();` or `cancelAllDelayedDos();`.
 
@@ -289,7 +291,7 @@ Have a look at `cancelDelayedDo();` for why we'd want to do this.
 
 Note: I'm currently evaluating whether triggering events is still valuable, or whether it can be removed now that we can trigger macros via these same mechanisms. Please consider triggering events as deprecated.
 
-### cancelDelayedDo
+#### cancelDelayedDo
 
 `cancelDelayedDo("eventName");` cancels a requested eventName that has been requested by `delayedDo();`. This is useful for either canceling, or continuing with an event that was uncertain to be correct.
 
@@ -315,13 +317,13 @@ The logic here is that when you begin closing the hand, the Z axis from the Leap
 
 This has the effect of allowing two very different actions to be reliably triggered from similar data changes.
 
-### cancelAllDelayedDos
+#### cancelAllDelayedDos
 
 `cancelAllDelayedDos();` cancels all pending `delayedDo` calls.
 
-## Calibration instructions
+### Calibration instructions
 
-### recalibrateSegments
+#### recalibrateSegments
 
 `recalibrateSegments();` recalibrates the roll of every present hand so that segment 0 is centered around the current hand position.
 
@@ -331,9 +333,9 @@ This instantly makes handWavey automatically calibrated to the individual person
 
 See [autoCalibration](https://github.com/ksandom/handWavey/blob/main/docs/user/configuration/autoCalibration.md).
 
-## Gesture control
+### Gesture control
 
-### lockTaps
+#### lockTaps
 
 `lockTaps("hand", "unlockAfter");` stops taps from being triggered.
 
@@ -373,7 +375,7 @@ Will lock the primary hand.
 
 The counterpart is `unlockTaps`.
 
-### unlockTaps
+#### unlockTaps
 
 `unlockTaps(hand, unlockAfter);` unlocks the taps after they have been locked by `lockTaps();`.
 
@@ -412,7 +414,7 @@ Will unlock the primary hand.
 
 The counterpart is `lockTaps();`.
 
-### lockGestures
+#### lockGestures
 
 `lockGestures("hand");` locks roll and open/closed state changes, effectively locking most gestures that can be performed.
 
@@ -450,7 +452,7 @@ See [speedLock](https://github.com/ksandom/handWavey/blob/main/docs/user/configu
 
 The counterpart is `unlockGestures();`
 
-### unlockGestures
+#### unlockGestures
 
 `unlockGestures("hand");` unlocks the gestures that have previously been locked by `lockGestures();`. See `lockGestures();` for more information.
 
@@ -483,3 +485,68 @@ unlockGestures();
 Will unlock gestures on the primary hand.
 
 The counterpart is `lockGestures();`
+
+## Default macros
+
+<!-- BEGIN macro table. -->
+| custom- event | Description | What it does by default |
+| --- | --- | --- |
+| `prepForClick` | Prepare for a click. | `cancelAllDelayedDos();lockCursor();rewindCursorPosition();lockTaps("primary");` |
+| `mDownAmbiguous` | Mouse down - Ambiguous, with delay. To be called by the event. | `delayedDo("do-mDownAmbiguous", "150");` |
+| `do-mDownAmbiguous` | Mouse down - Ambiguous. | `prepForClick();mouseDown();` |
+| `mDownLeft` | Mouse down - Left, with delay. To be called by the event. | `delayedDo("do-mDownLeft", "150");` |
+| `do-mDownLeft` | Mouse down - Left. | `setButton("left");do-mDownAmbiguous();` |
+| `mDownRight` | Mouse down - Right, with delay. To be called by the event. | `delayedDo("do-mDownRight", "150");` |
+| `do-mDownRight` | Mouse down - Right. | `setButton("right");do-mDownAmbiguous();` |
+| `mDownMiddle` | Mouse down - Middle, with delay. To be called by the event. | `delayedDo("do-mDownMiddle", "150");` |
+| `do-mDownMiddle` | Mouse down - Middle. | `setButton("middle");do-mDownAmbiguous();` |
+| `mUpAmbiguous` | Mouse up - General. | `cancelAllDelayedDos();rewindCursorPosition();releaseButtons();unlockCursor();unlockTaps("primary");` |
+| `mUpLeft` | Mouse up - Left. | `mUpAmbiguous();` |
+| `mUpRight` | Mouse up - Right. | `mUpAmbiguous();` |
+| `mUpMiddle` | Mouse up - Middle. | `mUpAmbiguous();` |
+| `allowWheelClicks` | Define the actions to be performed when clicking with a closed hand. | `setSlot("0", "closedSlot0-action-enter");setSlot("1", "closedSlot1-action-enter");setSlot("10", "closedSlot0-action-exit");setSlot("11", "closedSlot1-action-exit");` |
+| `disallowWheelClicks` | Mouse up - Middle. | `setSlot("0", "");setSlot("1", "");setSlot("10", "");setSlot("11", "");` |
+| `noHands` | To be triggered when the primary hand is no longer present. | `cancelAllDelayedDos();setButton("left");releaseButtons();releaseKeys();releaseZone();unlockTaps("primary");` |
+| `simple-ambiguousClick` | Perform an ambiguous click. Intended to be called by a tap. This includes a delay that can be cancelled. | `delayedDo("do-simple-ambiguousClick", "150");` |
+| `do-simple-ambiguousClick` | Do a simple click without specifying the button. It's intended for this to have been done before getting to this point. Either by abstracting it out, or by the gestureLayout setting it. | `cancelAllDelayedDos();lockCursor();rewindCursorPosition("150");click();unlockCursor();` |
+| `simple-leftClick` | Perform a left click. Intended to be called by a tap. This includes a delay that can be cancelled. | `delayedDo("do-simple-leftClick", "150");` |
+| `do-simple-leftClick` | Do the actual work of the left click from a tap. Intended to be called by simple-leftClick(); | `setButton("left");do-simple-ambiguousClick();` |
+| `simple-rightClick` | Perform a right click. Intended to be called by a tap. This includes a delay that can be cancelled. | `delayedDo("do-simple-rightClick", "150");` |
+| `do-simple-rightClick` | Do the actual work of the right click from a tap. Intended to be called by simple-rightClick(); | `setButton("right");do-simple-ambiguousClick();` |
+| `simple-middleClick` | Perform a middle click. Intended to be called by a tap. This includes a delay that can be cancelled. | `delayedDo("do-simple-middleClick", "150");` |
+| `do-simple-middleClick` | Do the actual work of the middle click from a tap. Intended to be called by simple-middleClick(); | `setButton("middle");do-simple-ambiguousClick();` |
+| `simple-trippleLeftClick` | Perform a complete tripple-click. | `delayedDo("do-simple-trippleLeftClick", "150");` |
+| `do-simple-trippleLeftClick` | Do the work of a simple tripple click. | `cancelAllDelayedDos();setButton("left");lockCursor();rewindCursorPosition("150");click();click();click();unlockCursor();` |
+| `stabliseSegment` | Reduce noise caused by the hand rotating. | `lockCursor();rewindCursorPosition();` |
+| `yankScroll-enter` | Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -enter macro gets it set up. | `cancelAllDelayedDos();lockCursor();allowWheelClicks();setSlot("3", "do-scroll");lockTaps("primary");unlockTaps("primary" , "800");delayedDo("do-scroll", "1200");` |
+| `yankScroll-exit` | Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -exit macro puts it away. | `cancelAllDelayedDos();unlockCursor();allowWheelClicks();setSlot("3", "");rewindCursorPosition();releaseZone();unlockCursor();unlockTaps("primary", "800");` |
+| `do-mDoubleClick-left` | Perform a double left click right now. | `lockCursor();rewindCursorPosition();releaseButtons();setButton("left");doubleClick();` |
+| `do-scroll` |  | `rewindCursorPosition();overrideZone("scroll");setSlot("3", "");delayedDo("disallowWheelClicks", "150");lockTaps("primary");` |
+| `movingProtection-enable` | Enable protections against accidental gestures from erratic data while the hand is moving quickly. | `lockGestures("primary");doSlot("3", "");lockTaps("primary");cancelAllDelayedDos();` |
+| `movingProtection-disable` | Disable protections against accidental gestures from erratic data while the hand is moving quickly. | `unlockGestures("primary");unlockTaps("primary", "150");` |
+| `movingProtectionSecondary-enable` | Enable protections against accidental gestures from erratic data while the hand is moving quickly. | `lockGestures("secondary");lockTaps("secondary");cancelAllDelayedDos();` |
+| `movingProtectionSecondary-disable` | Disable protections against accidental gestures from erratic data while the hand is moving quickly. | `unlockGestures("secondary");unlockTaps("secondary", "150");` |
+| `prep-sharedScroll-slot` | Preparations to be done before running an overrideable slot for sharedScroll functionality. | `cancelAllDelayedDos();setSlot("3", "");rewindCursorPosition();lockTaps("primary");` |
+| `finish-sharedScroll-slot-withoutCancel` | What has to be done after running an overrideable slot for sharedScroll functionality. | `rewindCursorPosition();rewindScroll();unlockTaps("primary", "800");` |
+| `finish-sharedScroll-slot` | What has to be done after running an overrideable slot for sharedScroll functionality. | `cancelAllDelayedDos();finish-sharedScroll-slot-withoutCancel();` |
+| `closedSlot0-enter` | What happens when a closedSlot0 gesture is performed. Intended to be called by the event. Please override the closedSlot0-overrideable-enter instead if possible. | `doSlot("0", "");` |
+| `closedSlot0-exit` | What happens when a closedSlot0 gesture is finished. Intended to be called by the event. Please override the closedSlot0-overrideable-exit instead if possible. | `doSlot("10", "");` |
+| `closedSlot1-enter` | What happens when a closedSlot1 gesture is performed. Intended to be called by the event. Please override the closedSlot1-overrideable-enter instead if possible. | `doSlot("1", "");` |
+| `closedSlot1-exit` | What happens when a closedSlot1 gesture is finished. Intended to be called by the event. Please override the closedSlot1-overrideable-enter instead if possible. | `doSlot("11", "");` |
+| `closedSlot0-action-enter` | When the closed gestures get enabled. This is one of the macros that gets allocated. | `delayedDo("do-closedSlot0-action-enter", "150");` |
+| `do-closedSlot0-action-enter` | When the closed gestures get enabled. This gets triggered via a delay for stability. | `prep-sharedScroll-slot();closedSlot0-overrideable-enter();` |
+| `closedSlot0-action-exit` | When the closed gestures get enabled. This is one of the macros that gets allocated. | `finish-sharedScroll-slot-withoutCancel();closedSlot0-overrideable-exit();` |
+| `closedSlot1-action-enter` | When the closed gestures get enabled. This is one of the macros that gets allocated. | `delayedDo("do-closedSlot1-action-enter", "150");` |
+| `do-closedSlot1-action-enter` | When the closed gestures get enabled. This gets triggered via a delay for stability. | `prep-sharedScroll-slot();closedSlot1-overrideable-enter();` |
+| `closedSlot1-action-exit` | When the closed gestures get enabled. This is one of the macros that gets allocated. | `finish-sharedScroll-slot-withoutCancel();closedSlot1-overrideable-exit();` |
+| `closedSlot0-overrideable-enter` | Overrideable action to be performed when the closedSlot0 gesture is performed. | `setButton("middle");click();` |
+| `closedSlot0-overrideable-exit` | Overrideable action to be performed when the closedSlot0 gesture is finished. | `` |
+| `closedSlot1-overrideable-enter` | Overrideable action to be performed when the closedSlot1 gesture is performed. | `setButton("left");doubleClick();` |
+| `closedSlot1-overrideable-exit` | Overrideable action to be performed when the closedSlot1 gesture is finished. | `` |
+<!-- END macro table. -->
+
+The above table is generated by `./utils/generateMacrosTable.sh`.
+
+## Custom macros
+
+You can define macros, or override the ones above in macros.yml within [your configuration directory](https://github.com/ksandom/handWavey/blob/main/docs/user/configuration/whereIsMyConfigurationDirectory.md).
