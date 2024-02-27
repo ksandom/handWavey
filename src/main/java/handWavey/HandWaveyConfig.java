@@ -568,19 +568,19 @@ public class HandWaveyConfig {
             "When the time has expired for the Event freeze after a new primary hand is introduced. This event is triggered.");
         actionEvents.newItem(
             "special-primaryMoving",
-            "lockGestures(\"primary\");",
+            "movingProtection-enable();",
             "When the primary hand starts moving.");
         actionEvents.newItem(
             "special-primaryStationary",
-            "unlockGestures(\"primary\");",
+            "movingProtection-disable();",
             "When the primary hand starts moving.");
         actionEvents.newItem(
             "special-secondaryMoving",
-            "lockGestures(\"secondary\");",
+            "movingProtectionSecondary-enable();",
             "When the secondary hand starts moving.");
         actionEvents.newItem(
             "special-secondaryStationary",
-            "unlockGestures(\"secondary\");",
+            "movingProtectionSecondary-disable();",
             "When the secondary hand starts moving.");
         actionEvents.newItem(
             "special-primaryZMoving",
@@ -621,7 +621,7 @@ public class HandWaveyConfig {
             "When a new primary hand is introduced, the cursor and the ability to click the mouse or press keys, is disabled while the device stabilises.");
         audioEvents.newItem(
             "special-newHandUnfreezeCursor",
-            "",
+            "recalibrateSegments();",
             "When the time has expired for the Cursor freeze after a new primary hand is introduced.");
         audioEvents.newItem(
             "special-newHandUnfreezeEvent",
@@ -926,6 +926,16 @@ public class HandWaveyConfig {
         macrosGroup.newItem(
             "movingProtection-disable",
             "unlockGestures(\"primary\");unlockTaps(\"primary\", \"150\");",
+            "Disable protections against accidental gestures from erratic data while the hand is moving quickly.");
+
+        macrosGroup.newItem(
+            "movingProtectionSecondary-enable",
+            "lockGestures(\"secondary\");lockTaps(\"secondary\");cancelAllDelayedDos();",
+            "Enable protections against accidental gestures from erratic data while the hand is moving quickly.");
+
+        macrosGroup.newItem(
+            "movingProtectionSecondary-disable",
+            "unlockGestures(\"secondary\");unlockTaps(\"secondary\", \"150\");",
             "Disable protections against accidental gestures from erratic data while the hand is moving quickly.");
 
         macrosGroup.newItem(

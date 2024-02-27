@@ -137,7 +137,7 @@ public class Gesture {
         // Stabilise gesture changes.
         overrideDefault(
             "general-segment-pAnyChange",
-            "lockCursor();rewindCursorPosition();",
+            "stabliseSegment();",
             "");
         overrideDefault(
             "special-newHandUnfreezeEvent",
@@ -145,7 +145,7 @@ public class Gesture {
             "");
         overrideDefault(
             "general-state-pAbsent-enter",
-            "setButton(\"left\");releaseButtons();releaseKeys();releaseZone();",
+            "noHands();",
             "");
 
         // General auido feedback.

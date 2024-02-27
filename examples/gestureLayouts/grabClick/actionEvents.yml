@@ -26,18 +26,8 @@ items:
     value: mDownAmbiguous();
   general-state-pClosed-exit:
     value: mUpGeneral();
-  special-newHandUnfreezeEvent:
-    value: ""
-  special-newHandUnfreezeCursor:
-    value: recalibrateSegments();
-  special-newHandFreeze:
-    value: ''
   general-zone-sActive-exit:
     value: releaseKeys();
-  general-state-pAbsent-enter:
-    value: noHands();
-  general-segment-pAnyChange:
-    value: stabliseSegment();
   special-primaryMoving:
     value: movingProtection-enable();
   special-primaryStationary:

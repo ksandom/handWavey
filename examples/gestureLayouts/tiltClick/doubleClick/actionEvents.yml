@@ -26,16 +26,8 @@ items:
     value: yankScroll-enter();
   general-state-pClosed-exit:
     value: yankScroll-exit();
-  special-newHandUnfreezeEvent:
-    value: ""
-  special-newHandUnfreezeCursor:
-    value: recalibrateSegments();
-  special-newHandFreeze:
-    value: ''
   general-segment-p1-enter:
     value: ''
-  general-segment-pAnyChange:
-    value: stabliseSegment();
   individual-pNonOOB1Open-enter:
     value: mDownLeft();
   individual-pNonOOB1Open-exit:
@@ -56,13 +48,7 @@ items:
     value: closedSlot1-enter();
   individual-pNonOOB6Closed-exit:
     value: closedSlot1-exit();
-  general-state-pAbsent-enter:
-    value: noHands();
   tap-p0Open:
     value: simple-leftClick();
   tap-p0Closed:
     value: simple-trippleLeftClick();
-  special-primaryMoving:
-    value: movingProtection-enable();
-  special-primaryStationary:
-    value: movingProtection-disable();

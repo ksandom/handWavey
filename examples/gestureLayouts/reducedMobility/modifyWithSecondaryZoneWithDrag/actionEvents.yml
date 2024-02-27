@@ -28,17 +28,7 @@ items:
     value: ""
   general-state-pClosed-exit:
     value: ""
-  special-newHandUnfreezeEvent:
-    value: ""
-  special-newHandUnfreezeCursor:
-    value: ''
-  special-newHandFreeze:
-    value: ''
   general-zone-sActive-exit:
-    value: ""
-  general-state-pAbsent-enter:
-    value: setButton("left");releaseButtons();releaseKeys();releaseZone();
-  general-segment-pAnyChange:
     value: ""
   combined-pAction0Open-sOOB0Absent-enter:
     value: debug("1", "action!");lockCursor();rewindCursorPosition();mouseDown();
