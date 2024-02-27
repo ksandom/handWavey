@@ -886,7 +886,7 @@ public class HandWaveyConfig {
         macrosGroup.newItem(
             "simple-trippleLeftClick",
             "delayedDo(\"do-simple-trippleLeftClick\", \"150\");",
-            "");
+            "Perform a complete tripple-click.");
 
         macrosGroup.newItem(
             "do-simple-trippleLeftClick",
