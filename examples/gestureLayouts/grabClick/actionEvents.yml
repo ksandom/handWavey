@@ -25,7 +25,7 @@ items:
   general-state-pClosed-enter:
     value: mDownAmbiguous();
   general-state-pClosed-exit:
-    value: mUpGeneral();
+    value: mUpAmbiguous();
   general-zone-sActive-exit:
     value: releaseKeys();
   special-primaryMoving:

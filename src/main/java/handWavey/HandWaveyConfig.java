@@ -809,23 +809,23 @@ public class HandWaveyConfig {
             "Mouse down - Middle.");
 
         macrosGroup.newItem(
-            "mUpGeneral",
+            "mUpAmbiguous",
             "cancelAllDelayedDos();rewindCursorPosition();releaseButtons();unlockCursor();unlockTaps(\"primary\");",
             "Mouse up - General.");
 
         macrosGroup.newItem(
             "mUpLeft",
-            "mUpGeneral();",
+            "mUpAmbiguous();",
             "Mouse up - Left.");
 
         macrosGroup.newItem(
             "mUpRight",
-            "mUpGeneral();",
+            "mUpAmbiguous();",
             "Mouse up - Right.");
 
         macrosGroup.newItem(
             "mUpMiddle",
-            "mUpGeneral();",
+            "mUpAmbiguous();",
             "Mouse up - Middle.");
 
         macrosGroup.newItem(
