@@ -1,0 +1,22 @@
+groups:
+  changeTimeouts:
+    groups:
+      primaryHand:
+        groups: {}
+        items:
+          stateChanged:
+            description: 'Int (milliseconds): The amount of time that a change in
+              state (open/closed/absent) must be stable before it gets reported. You
+              want a number that is small enough to not be noticed by a human. But
+              large enough to catch errors that can cause random clicks/states.'
+            value: '0'
+      secondaryHand:
+        groups: {}
+        items:
+          stateChanged:
+            description: 'Int (milliseconds): The amount of time that a change in
+              state (open/closed/absent) must be stable before it gets reported. You
+              want a number that is small enough to not be noticed by a human. But
+              large enough to catch errors that can cause random clicks/states.'
+            value: '0'
+    items: {}
