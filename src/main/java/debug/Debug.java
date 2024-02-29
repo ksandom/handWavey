@@ -80,7 +80,7 @@ public class Debug {
         return "Debug " + String.valueOf(level) + " (" + this.context + "): " + message;
     }
 
-    protected Boolean shouldOutput(int level) {
+    public Boolean shouldOutput(int level) {
         return (level <= this.level);
     }
 

@@ -82,6 +82,11 @@ public class MacroCore {
 
         boolean success = true;
 
+        if (this.debug.shouldOutput(2)) {
+            String prefix = nestedDebugPrefix(this.nestingLevel);
+            this.debug.out(2, prefix + command + " " + Arrays.toString(parameters));
+        }
+
         switch (command) {
             case "debug":
                 this.debug.out(
@@ -233,12 +238,20 @@ public class MacroCore {
         }
 
         this.increaseNesting();
-        String dots = new String(new char[this.nestingLevel]).replace("\0", ".");
-        this.debug.out(1, dots + String.valueOf(this.nestingLevel) + " " + command + ": " + macro);
+        String prefix = nestedDebugPrefix(this.nestingLevel);
+        this.debug.out(1, prefix + command + ": " + macro);
         macroLine.runLine(macro);
         this.decreaseNesting();
 
         return true;
+    }
+
+    private String nestedDebugPrefix(int level) {
+        return dotsForNestingLevel(level) + String.valueOf(this.nestingLevel) + " ";
+    }
+
+    private String dotsForNestingLevel(int level) {
+        return new String(new char[level]).replace("\0", ".");
     }
 
     public void doSubAction(String command, String indent) {
@@ -266,12 +279,12 @@ public class MacroCore {
 
 
     private void setAllSlots(String eventName) {
-        this.debug.out(1, "Set all slots to \"" + eventName + "\".");
+        this.debug.out(2, "Set all slots to \"" + eventName + "\".");
         Arrays.fill(this.slot, 0, 256, eventName);
     }
 
     private void setSlot(int slot, String eventName) {
-        this.debug.out(1, "Set slot " + String.valueOf(slot) + " to " + eventName);
+        this.debug.out(2, "Set slot " + String.valueOf(slot) + " to " + eventName);
         this.slot[slot] = eventName;
     }
 
@@ -279,23 +292,23 @@ public class MacroCore {
         String previousValue = this.slot[slot];
         String eventToRun = (!this.slot[slot].equals(""))?this.slot[slot]:eventName;
         if (slotsEnabled) {
-            this.debug.out(1, "Run slot " + String.valueOf(slot) + " == " + eventToRun + ". Previous value: " + previousValue);
+            this.debug.out(2, "Run slot " + String.valueOf(slot) + " == " + eventToRun + ". Previous value: " + previousValue);
 
             if (eventToRun == "") {
-                this.debug.out(1, "Slot " + String.valueOf(slot) + " is currently set to \"\". So not doing anything.");
+                this.debug.out(2, "Slot " + String.valueOf(slot) + " is currently set to \"\". So not doing anything.");
                 return "";
             }
 
             return eventToRun;
         } else {
-            this.debug.out(1, "Would have run slot " + String.valueOf(slot) + " == " + eventToRun + ". Previous value: " + previousValue + ". But slots are currently disabled.");
+            this.debug.out(2, "Would have run slot " + String.valueOf(slot) + " == " + eventToRun + ". Previous value: " + previousValue + ". But slots are currently disabled.");
             return "";
         }
     }
 
     private void doSlot(int slot, String eventName) {
         String eventToRun = getSlot(slot, eventName);
-        this.debug.out(0, "Got event to run: " + eventToRun);
+        this.debug.out(2, "Got event to run: " + eventToRun);
         if (!eventToRun.equals("")) {
             this.doSubAction(eventToRun, "-->");
         }
