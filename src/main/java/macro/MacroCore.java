@@ -239,7 +239,7 @@ public class MacroCore {
 
         this.increaseNesting();
         String prefix = nestedDebugPrefix(this.nestingLevel);
-        this.debug.out(1, prefix + command + ": " + macro);
+        this.debug.out(2, prefix + command + ": " + macro);
         macroLine.runLine(macro);
         this.decreaseNesting();
 
@@ -263,9 +263,9 @@ public class MacroCore {
         this.increaseNesting();
         String[] parameters = separateParameters("");
         if (!doInternalInstruction(commandToTry, parameters)) {
-            this.debug.out(1, "Internal instruction \"" + commandToTry + "\" does not exist.");
+            this.debug.out(2, "Internal instruction \"" + commandToTry + "\" does not exist.");
             if (!this.tryMacro(commandToTry)) {
-                this.debug.out(1, "Macro \"" + commandToTry + "\" does not exist.");
+                this.debug.out(2, "Macro \"" + commandToTry + "\" does not exist.");
                 if (!this.events.itemExists(commandToTry)) {
                     this.debug.out(0, commandToTry + " doesn't appear to be a macro or event.");
                 } else {
