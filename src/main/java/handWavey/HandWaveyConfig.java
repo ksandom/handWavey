@@ -769,6 +769,11 @@ public class HandWaveyConfig {
             "Prepare for a click.");
 
         macrosGroup.newItem(
+            "prepForDelayedClick",
+            "cancelAllDelayedDos();lockCursor();rewindCursorPosition(\"150\");lockTaps(\"primary\");",
+            "Prepare for a delayed click.");
+
+        macrosGroup.newItem(
             "mDownAmbiguous",
             "delayedDo(\"do-mDownAmbiguous\", \"150\");",
             "Mouse down - Ambiguous, with delay. To be called by the event.");
@@ -777,6 +782,11 @@ public class HandWaveyConfig {
             "do-mDownAmbiguous",
             "prepForClick();mouseDown();",
             "Mouse down - Ambiguous.");
+
+        macrosGroup.newItem(
+            "mUpAmbiguous",
+            "cancelAllDelayedDos();rewindCursorPosition();releaseButtons();unlockCursor();unlockTaps(\"primary\");",
+            "Mouse up - General.");
 
         macrosGroup.newItem(
             "mDownLeft",
@@ -807,11 +817,6 @@ public class HandWaveyConfig {
             "do-mDownMiddle",
             "setButton(\"middle\");do-mDownAmbiguous();",
             "Mouse down - Middle.");
-
-        macrosGroup.newItem(
-            "mUpAmbiguous",
-            "cancelAllDelayedDos();rewindCursorPosition();releaseButtons();unlockCursor();unlockTaps(\"primary\");",
-            "Mouse up - General.");
 
         macrosGroup.newItem(
             "mUpLeft",
@@ -850,7 +855,7 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "do-simple-ambiguousClick",
-            "cancelAllDelayedDos();lockCursor();rewindCursorPosition(\"150\");click();unlockCursor();",
+            "prepForDelayedClick();click();unlockCursor();",
             "Do a simple click without specifying the button. It's intended for this to have been done before getting to this point. Either by abstracting it out, or by the gestureLayout setting it.");
 
         macrosGroup.newItem(
@@ -914,6 +919,21 @@ public class HandWaveyConfig {
             "Perform a double left click right now.");
 
         macrosGroup.newItem(
+            "do-mDoubleClickHold-left",
+            "lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");click();mouseDown();",
+            "Perform a double left click hold right now.");
+
+        macrosGroup.newItem(
+            "do-mTrippleClick-left",
+            "lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();click();",
+            "Perform a double left click right now.");
+
+        macrosGroup.newItem(
+            "do-mTrippleClickHold-left",
+            "lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();mouseDown();",
+            "Perform a tripple left click hold right now.");
+
+        macrosGroup.newItem(
             "do-earlyScroll",
             "rewindCursorPosition();overrideZone(\"scroll\");",
             "");
@@ -930,12 +950,12 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "movingProtection-enable",
-            "lockGestures(\"primary\");doSlot(\"3\", \"\");lockTaps(\"primary\");cancelAllDelayedDos();",
+            "doSlot(\"3\", \"\");simpleMovingProtection-enable();",
             "Enable protections against accidental gestures from erratic data while the hand is moving quickly.");
 
         macrosGroup.newItem(
             "movingProtection-disable",
-            "unlockGestures(\"primary\");unlockTaps(\"primary\", \"150\");",
+            "simpleMovingProtection-disable();",
             "Disable protections against accidental gestures from erratic data while the hand is moving quickly.");
 
         macrosGroup.newItem(
@@ -947,6 +967,16 @@ public class HandWaveyConfig {
             "movingProtectionSecondary-disable",
             "unlockGestures(\"secondary\");unlockTaps(\"secondary\", \"150\");",
             "Disable protections against accidental gestures from erratic data while the hand is moving quickly.");
+
+        macrosGroup.newItem(
+            "simpleMovingProtection-enable",
+            "lockGestures(\"primary\");lockTaps(\"primary\");cancelAllDelayedDos();",
+            "Enable moving protection. For most gestureLayouts, you'll want movingProtection-enable.");
+
+        macrosGroup.newItem(
+            "simpleMovingProtection-disable",
+            "unlockGestures(\"primary\");unlockTaps(\"primary\", \"150\");",
+            "Disable moving protection. For most gestureLayouts, you'll want movingProtection-disable.");
 
         macrosGroup.newItem(
             "prep-sharedScroll-slot",
