@@ -51,42 +51,8 @@ items:
 * Rotating the hand denotes which toolset is desired.
 * Closing the hand denotes selecting that toolset.
 
-## Custom events
+## What can you run in slots?
 
-Custom events are what get triggered by the slots.
+Any [macroCommand](https://github.com/ksandom/handWavey/blob/main/docs/user/reference/macroCommands.md).
 
-* These can all be changed or added to in actionEvents.yml in the user's config.
-* Their default values are set in the generateCustomConfig function in [HandWaveyConfig.java](https://github.com/ksandom/handWavey/blob/main/src/main/java/handWavey/HandWaveyConfig.java).
-
-These are the default actions for the custom events:
-
-<!-- BEGIN custom- table. -->
-| custom- event | Description |
-| --- | --- |
-| custom-noOp | Do nothing. Useful to have a blank slot that can sometimes be used for other things. |
-| custom-releaseAll | Release all buttons and keys. Useful for getting the keyboard and mouse into a known state. |
-| custom-mouseDown-left | Press down the left mouse button. |
-| custom-mouseDown-right | Press down the right mouse button. |
-| custom-mouseDown-middle | Press down the middle mouse button. |
-| custom-releaseZone | Release and zone overrides. This is typically used at the end of overriding the zone for something like scrolling. |
-| custom-override-scroll | Override the zone to scroll. This has the effect that any movement of the hand causes scroll movement instead of mouse cursor movement. |
-| custom-override-ctrl+scroll | Press the CTRL key down, and override the zone to scroll. Often this is used for zooming. |
-| custom-doubleClick-hold | Double click the left button, without lifting the finger at the end of the second click. This is useful for doing things like drag-selecting by word rather than by character. |
-| custom-trippleClick-hold | Tripple click the left button, without lifting the finger at the end of the second click. This is useful for doing things like drag-selecting by line rather than by character. |
-| custom-doubleClick | Double click the left button. |
-| custom-trippleClick | Tripple click the left button. |
-| custom-alt+mouseDown-left | Press the ALT key, then hold down the left button. |
-| custom-alt+mouseDown-right | Press the ALT key, then hold down the right button. |
-| custom-alt+mouseDown-middle | Press the ALT key, then hold down the middle button. |
-| custom-ctrl+mouseDown-left | Press the CTRL key, then hold down the left button. |
-| custom-ctrl+mouseDown-right | Press the CTRL key, then hold down the right button. |
-| custom-ctrl+mouseDown-middle | Press the CTRL key, then hold down the middle button. |
-| custom-ctrl+c | CTRL + c. Typically used for copying a selection. |
-| custom-ctrl+v | CTRL + v. Typically used for pasting. |
-| custom-ctrl+x | CTRL + x. Typically used for cutting a selection. |
-| custom-delete | Press and release the delete key. |
-| custom-ctrl+z | CTRL + z. Typically used for undo. |
-| custom-ctrl+shift+z | CTRL + Shift z. Typically used for re-doing an undone task. |
-<!-- END custom- table. -->
-
-This table can be automatically updated with `./generateCustomTable.sh`. It's generated from  generateCustomConfig function in [HandWaveyConfig.java](https://github.com/ksandom/handWavey/blob/main/src/main/java/handWavey/HandWaveyConfig.java#L576) that sets the defaults.
+While you would use the full form, eg `doSomething();` inside an event, or another macro; you use the short form within slots, eg `setSlot("0", "doSomething");`

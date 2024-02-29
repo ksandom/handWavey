@@ -28,31 +28,25 @@ items:
     value: ""
   general-state-pClosed-exit:
     value: ""
-  special-newHandUnfreezeEvent:
-    value: ""
-  special-newHandUnfreezeCursor:
-    value: ''
-  special-newHandFreeze:
-    value: ''
   general-zone-sActive-exit:
     value: ""
-  general-state-pAbsent-enter:
-    value: setButton("left");releaseButtons();releaseKeys();releaseZone();
-  general-segment-pAnyChange:
-    value: ""
   combined-pAction0Open-sOOB0Absent-enter:
-    value: debug("1", "action!");lockCursor();rewindCursorPosition();mouseDown();
+    value: debug("1", "action!");mDownAmbiguous();
   combined-pAction0Open-sOOB0Absent-exit:
-    value: rewindCursorPosition();mouseUp();unlockCursor();
+    value: mUpAmbiguous();
   combined-pActive0Open-sNoMove0Open-enter:
     value: overrideZone("scroll");
   combined-pActive0Open-sNoMove0Open-exit:
     value: releaseZone();
   combined-pAction0Open-sActive0Open-enter:
-    value: lockCursor();rewindCursorPosition();setButton("right");mouseDown();
+    value: mDownRight();
   combined-pAction0Open-sActive0Open-exit:
-    value: rewindCursorPosition();mouseUp();unlockCursor();
+    value: mUpRight();
   combined-pActive0Open-sAction0Open-enter:
-    value: lockCursor();rewindCursorPosition();setButton("left");mouseDown();
+    value: mDownLeft();
   combined-pActive0Open-sAction0Open-exit:
-    value: rewindCursorPosition();mouseUp();unlockCursor();
+    value: mUpLeft();
+  tap-p1Open:
+    value: ""
+  tap-p2Open:
+    value: ""

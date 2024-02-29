@@ -42,6 +42,7 @@ public class HandWaveyConfig {
         this.config.addGroupToSeparate("gestureConfig");
         this.config.addGroupToSeparate("handCleaner");
         this.config.addGroupToSeparate("tap");
+        this.config.addGroupToSeparate("macros");
 
         // Build up general config.
         Item configFormatVersion = this.config.newItem(
@@ -159,7 +160,7 @@ public class HandWaveyConfig {
         Group dataCleaning = this.config.newGroup("dataCleaning");
         dataCleaning.newItem(
             "maxChange",
-            "100",
+            "20",
             "If the difference between the current input position and the previous input position is larger than this number, ignore it, and reset the state so that subsequent input makes sense. This is usually caused by going OOB on one side of the usable cone, and re-entering on the other side of the cone. When this number is too high, errors can slip through that cause the mouse cursor to jump. When it's too low, the cursor will regularly stop when you move your hand too fast. This symptom should not be confused with a hang due to something like garbage collection.");
         dataCleaning.newItem(
             "minFrameGapSeconds",
@@ -450,11 +451,11 @@ public class HandWaveyConfig {
             "Z greater than this value denotes the beginning of the active zone.");
         active.newItem(
             "movingMeanBegin",
-            "7",
+            "15",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
         active.newItem(
             "movingMeanEnd",
-            "7",
+            "15",
             "int 1-4096. A moving mean is applied to the data stream to make it more steady. This variable defined how many samples are used in the mean. More == smoother, but less responsive. It's currently possible to go up to 4096, although 50 is probably a lot. 1 effectively == disabled. The \"begin\" portion when your hand enters the zone.");
 
         Group tpAction = touchPad.newGroup("action");
@@ -490,7 +491,7 @@ public class HandWaveyConfig {
             "Decimal: How much to speed up unaccelerated movement. 1 is no change, 0.5 is half as fast, 2 is twice as fast. Think of this as how fast you want to cursor to move normally.");
         touchPadConfig.newItem(
             "acceleratedBaseMultiplier",
-            "1.6",
+            "1.7",
             "Decimal: How much to speed up accelerated movement. 1 is no change, 0.5 is half as fast, 2 is twice as fast. Think of this as how fast you want to cursor to move when acceleration is active.");
         touchPadConfig.newItem(
             "accelerationExponent",
@@ -498,7 +499,7 @@ public class HandWaveyConfig {
             "Decimal: How much to increase the power of the acceleration. 1 is no change, 0.5 is half as fast, 2 is twice as fast. Think of this as how power the acceleration is.");
         touchPadConfig.newItem(
             "accelerationThreshold",
-            "12",
+            "14",
             "Decimal: The speed that the hand must move faster than for acceleration to apply.");
         touchPadConfig.newItem(
             "maxSpeed",
@@ -567,19 +568,19 @@ public class HandWaveyConfig {
             "When the time has expired for the Event freeze after a new primary hand is introduced. This event is triggered.");
         actionEvents.newItem(
             "special-primaryMoving",
-            "lockGestures(\"primary\");",
+            "movingProtection-enable();",
             "When the primary hand starts moving.");
         actionEvents.newItem(
             "special-primaryStationary",
-            "unlockGestures(\"primary\");",
+            "movingProtection-disable();",
             "When the primary hand starts moving.");
         actionEvents.newItem(
             "special-secondaryMoving",
-            "lockGestures(\"secondary\");",
+            "movingProtectionSecondary-enable();",
             "When the secondary hand starts moving.");
         actionEvents.newItem(
             "special-secondaryStationary",
-            "unlockGestures(\"secondary\");",
+            "movingProtectionSecondary-disable();",
             "When the secondary hand starts moving.");
         actionEvents.newItem(
             "special-primaryZMoving",
@@ -620,7 +621,7 @@ public class HandWaveyConfig {
             "When a new primary hand is introduced, the cursor and the ability to click the mouse or press keys, is disabled while the device stabilises.");
         audioEvents.newItem(
             "special-newHandUnfreezeCursor",
-            "",
+            "recalibrateSegments();",
             "When the time has expired for the Cursor freeze after a new primary hand is introduced.");
         audioEvents.newItem(
             "special-newHandUnfreezeEvent",
@@ -670,15 +671,15 @@ public class HandWaveyConfig {
             "When you rotate your hand; it enters different segments. Increasing the number of segments increases the number of things you can do with your hand. Decreasing the number of segments makes it easier to be precise. Remember that some segments are hard for a human hand to reach, so you need to keep that in mind when choosing this number. It is expected that some segments will be unused for this reason. Don't hurt yourself.");
         primaryHand.newItem(
             "mergeIntoSegment",
-            "1",
+            "0",
             "Merge unused segments into this segment. This has the effect of not causing an unnecessary segment change event when accidentally moving into an unused segment.");
         primaryHand.newItem(
             "mergeFrom",
-            "2",
+            "0",
             "Merge between this value, and mergeTo, into mergeIntoSegment.");
         primaryHand.newItem(
             "mergeTo",
-            "3",
+            "0",
             "Merge between this value, and mergeTo, into mergeIntoSegment.");
         Group secondaryHand = gestureConfig.newGroup("secondaryHand");
         secondaryHand.newItem(
@@ -687,15 +688,15 @@ public class HandWaveyConfig {
             "When you rotate your hand; it enters different segments. Increasing the number of segments increases the number of things you can do with your hand. Decreasing the number of segments makes it easier to be precise. Remember that some segments are hard for a human hand to reach, so you need to keep that in mind when choosing this number. It is expected that some segments will be unused for this reason. Don't hurt yourself.");
         secondaryHand.newItem(
             "mergeIntoSegment",
-            "1",
+            "0",
             "Merge unused segments into this segment. This has the effect of not causing an unnecessary segment change event when accidentally moving into an unused segment.");
         secondaryHand.newItem(
             "mergeFrom",
-            "2",
+            "0",
             "Merge between this value, and mergeTo, into mergeIntoSegment.");
         secondaryHand.newItem(
             "mergeTo",
-            "3",
+            "0",
             "Merge between this value, and mergeTo, into mergeIntoSegment.");
 
         Group handCleaner = this.config.newGroup("handCleaner");
@@ -737,7 +738,7 @@ public class HandWaveyConfig {
             "The maximum change (in radians) that the auto-trim can apply in total. Setting this too small will limit how much auto-trim can help you. Setting it too large could lead to confusing behavior. The goal of auto-trim is to adjust to changes in the resting position of the hand so that segments still feel intuitive to the user despite the user not being consistent.");
         handCleaner.newItem(
             "stationarySpeed",
-            "18",
+            "22",
             "The speed, below which, the hand is considered stationary, and segment/state changes will be allowed. This is called speedLock. Setting this to -1 disables the speedLock. Change the debug level for HandsState to at least 2 to see the live speeds when the lock engages and disengages. You'll need stationarySpeed to be set to something positive for this to work. I suggest starting around 5-10.");
 
         Group tap = this.config.newGroup("tap");
@@ -754,6 +755,313 @@ public class HandWaveyConfig {
             "5",
             "Number of samples in the positive direction to wait until allowing a tap.");
 
+        Group macros = this.config.newGroup("macros");
+        generateMacroConfig(macros);
+    }
+
+    private void generateMacroConfig(Group macrosGroup) {
+        macrosGroup.addItemTemplate(".*", "", "A user-defined macro.");
+
+
+        macrosGroup.newItem(
+            "prepForClick",
+            "cancelAllDelayedDos();lockCursor();rewindCursorPosition();lockTaps(\"primary\");",
+            "Prepare for a click.");
+
+        macrosGroup.newItem(
+            "prepForDelayedClick",
+            "cancelAllDelayedDos();lockCursor();rewindCursorPosition(\"150\");lockTaps(\"primary\");",
+            "Prepare for a delayed click.");
+
+        macrosGroup.newItem(
+            "mDownAmbiguous",
+            "delayedDo(\"do-mDownAmbiguous\", \"150\");",
+            "Mouse down - Ambiguous, with delay. To be called by the event.");
+
+        macrosGroup.newItem(
+            "do-mDownAmbiguous",
+            "prepForClick();mouseDown();",
+            "Mouse down - Ambiguous.");
+
+        macrosGroup.newItem(
+            "mUpAmbiguous",
+            "cancelAllDelayedDos();rewindCursorPosition();releaseButtons();unlockCursor();unlockTaps(\"primary\");",
+            "Mouse up - General.");
+
+        macrosGroup.newItem(
+            "mDownLeft",
+            "delayedDo(\"do-mDownLeft\", \"150\");",
+            "Mouse down - Left, with delay. To be called by the event.");
+
+        macrosGroup.newItem(
+            "do-mDownLeft",
+            "setButton(\"left\");do-mDownAmbiguous();",
+            "Mouse down - Left.");
+
+        macrosGroup.newItem(
+            "mDownRight",
+            "delayedDo(\"do-mDownRight\", \"150\");",
+            "Mouse down - Right, with delay. To be called by the event.");
+
+        macrosGroup.newItem(
+            "do-mDownRight",
+            "setButton(\"right\");do-mDownAmbiguous();",
+            "Mouse down - Right.");
+
+        macrosGroup.newItem(
+            "mDownMiddle",
+            "delayedDo(\"do-mDownMiddle\", \"150\");",
+            "Mouse down - Middle, with delay. To be called by the event.");
+
+        macrosGroup.newItem(
+            "do-mDownMiddle",
+            "setButton(\"middle\");do-mDownAmbiguous();",
+            "Mouse down - Middle.");
+
+        macrosGroup.newItem(
+            "mUpLeft",
+            "mUpAmbiguous();",
+            "Mouse up - Left.");
+
+        macrosGroup.newItem(
+            "mUpRight",
+            "mUpAmbiguous();",
+            "Mouse up - Right.");
+
+        macrosGroup.newItem(
+            "mUpMiddle",
+            "mUpAmbiguous();",
+            "Mouse up - Middle.");
+
+        macrosGroup.newItem(
+            "allowWheelClicks",
+            "setSlot(\"0\", \"closedSlot0-action-enter\");setSlot(\"1\", \"closedSlot1-action-enter\");setSlot(\"10\", \"closedSlot0-action-exit\");setSlot(\"11\", \"closedSlot1-action-exit\");",
+            "Define the actions to be performed when clicking with a closed hand.");
+
+        macrosGroup.newItem(
+            "disallowWheelClicks",
+            "setSlot(\"0\", \"\");setSlot(\"1\", \"\");setSlot(\"10\", \"\");setSlot(\"11\", \"\");",
+            "Mouse up - Middle.");
+
+        macrosGroup.newItem(
+            "noHands",
+            "cancelAllDelayedDos();setButton(\"left\");releaseButtons();releaseKeys();releaseZone();unlockTaps(\"primary\");",
+            "To be triggered when the primary hand is no longer present.");
+
+        macrosGroup.newItem(
+            "simple-ambiguousClick",
+            "delayedDo(\"do-simple-ambiguousClick\", \"150\");",
+            "Perform an ambiguous click. Intended to be called by a tap. This includes a delay that can be cancelled.");
+
+        macrosGroup.newItem(
+            "do-simple-ambiguousClick",
+            "prepForDelayedClick();click();unlockCursor();",
+            "Do a simple click without specifying the button. It's intended for this to have been done before getting to this point. Either by abstracting it out, or by the gestureLayout setting it.");
+
+        macrosGroup.newItem(
+            "simple-leftClick",
+            "delayedDo(\"do-simple-leftClick\", \"150\");",
+            "Perform a left click. Intended to be called by a tap. This includes a delay that can be cancelled.");
+
+        macrosGroup.newItem(
+            "do-simple-leftClick",
+            "setButton(\"left\");do-simple-ambiguousClick();",
+            "Do the actual work of the left click from a tap. Intended to be called by simple-leftClick();");
+
+        macrosGroup.newItem(
+            "simple-rightClick",
+            "delayedDo(\"do-simple-rightClick\", \"150\");",
+            "Perform a right click. Intended to be called by a tap. This includes a delay that can be cancelled.");
+
+        macrosGroup.newItem(
+            "do-simple-rightClick",
+            "setButton(\"right\");do-simple-ambiguousClick();",
+            "Do the actual work of the right click from a tap. Intended to be called by simple-rightClick();");
+
+        macrosGroup.newItem(
+            "simple-middleClick",
+            "delayedDo(\"do-simple-middleClick\", \"150\");",
+            "Perform a middle click. Intended to be called by a tap. This includes a delay that can be cancelled.");
+
+        macrosGroup.newItem(
+            "do-simple-middleClick",
+            "setButton(\"middle\");do-simple-ambiguousClick();",
+            "Do the actual work of the middle click from a tap. Intended to be called by simple-middleClick();");
+
+        macrosGroup.newItem(
+            "simple-trippleLeftClick",
+            "delayedDo(\"do-simple-trippleLeftClick\", \"150\");",
+            "Perform a complete tripple-click.");
+
+        macrosGroup.newItem(
+            "do-simple-trippleLeftClick",
+            "cancelAllDelayedDos();setButton(\"left\");lockCursor();rewindCursorPosition(\"150\");click();click();click();unlockCursor();",
+            "Do the work of a simple tripple click.");
+
+        macrosGroup.newItem(
+            "stabliseSegment",
+            "lockCursor();rewindCursorPosition();",
+            "Reduce noise caused by the hand rotating.");
+
+        macrosGroup.newItem(
+            "yankScroll-enter",
+            "cancelAllDelayedDos();lockCursor();allowWheelClicks();setSlot(\"3\", \"do-scroll\");lockTaps(\"primary\");unlockTaps(\"primary\" , \"800\");delayedDo(\"do-earlyScroll\", \"900\");delayedDo(\"do-scroll\", \"1500\");",
+            "Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -enter macro gets it set up.");
+
+        macrosGroup.newItem(
+            "yankScroll-exit",
+            "cancelAllDelayedDos();unlockCursor();allowWheelClicks();setSlot(\"3\", \"\");rewindCursorPosition();releaseZone();unlockCursor();unlockTaps(\"primary\", \"800\");",
+            "Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -exit macro puts it away.");
+
+        macrosGroup.newItem(
+            "do-mDoubleClick-left",
+            "lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();",
+            "Perform a double left click right now.");
+
+        macrosGroup.newItem(
+            "do-mDoubleClickHold-left",
+            "lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");click();mouseDown();",
+            "Perform a double left click hold right now.");
+
+        macrosGroup.newItem(
+            "do-mTrippleClick-left",
+            "lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();click();",
+            "Perform a double left click right now.");
+
+        macrosGroup.newItem(
+            "do-mTrippleClickHold-left",
+            "lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();mouseDown();",
+            "Perform a tripple left click hold right now.");
+
+        macrosGroup.newItem(
+            "do-earlyScroll",
+            "rewindCursorPosition();overrideZone(\"scroll\");",
+            "");
+
+        macrosGroup.newItem(
+            "undo-earlyScroll",
+            "releaseZone();",
+            "");
+
+        macrosGroup.newItem(
+            "do-scroll",
+            "cancelAllDelayedDos();rewindCursorPosition();overrideZone(\"scroll\");setSlot(\"3\", \"\");delayedDo(\"disallowWheelClicks\", \"150\");lockTaps(\"primary\");",
+            "");
+
+        macrosGroup.newItem(
+            "movingProtection-enable",
+            "doSlot(\"3\", \"\");simpleMovingProtection-enable();",
+            "Enable protections against accidental gestures from erratic data while the hand is moving quickly.");
+
+        macrosGroup.newItem(
+            "movingProtection-disable",
+            "simpleMovingProtection-disable();",
+            "Disable protections against accidental gestures from erratic data while the hand is moving quickly.");
+
+        macrosGroup.newItem(
+            "movingProtectionSecondary-enable",
+            "lockGestures(\"secondary\");lockTaps(\"secondary\");cancelAllDelayedDos();",
+            "Enable protections against accidental gestures from erratic data while the hand is moving quickly.");
+
+        macrosGroup.newItem(
+            "movingProtectionSecondary-disable",
+            "unlockGestures(\"secondary\");unlockTaps(\"secondary\", \"150\");",
+            "Disable protections against accidental gestures from erratic data while the hand is moving quickly.");
+
+        macrosGroup.newItem(
+            "simpleMovingProtection-enable",
+            "lockGestures(\"primary\");lockTaps(\"primary\");cancelAllDelayedDos();",
+            "Enable moving protection. For most gestureLayouts, you'll want movingProtection-enable.");
+
+        macrosGroup.newItem(
+            "simpleMovingProtection-disable",
+            "unlockGestures(\"primary\");unlockTaps(\"primary\", \"150\");",
+            "Disable moving protection. For most gestureLayouts, you'll want movingProtection-disable.");
+
+        macrosGroup.newItem(
+            "prep-sharedScroll-slot",
+            "undo-earlyScroll();cancelAllDelayedDos();setSlot(\"3\", \"\");rewindCursorPosition();lockTaps(\"primary\");",
+            "Preparations to be done before running an overrideable slot for sharedScroll functionality.");
+
+        macrosGroup.newItem(
+            "finish-sharedScroll-slot-withoutCancel",
+            "rewindCursorPosition();rewindScroll();unlockTaps(\"primary\", \"800\");",
+            "What has to be done after running an overrideable slot for sharedScroll functionality.");
+
+        macrosGroup.newItem(
+            "finish-sharedScroll-slot",
+            "cancelAllDelayedDos();finish-sharedScroll-slot-withoutCancel();",
+            "What has to be done after running an overrideable slot for sharedScroll functionality.");
+
+        macrosGroup.newItem(
+            "closedSlot0-enter",
+            "doSlot(\"0\", \"\");",
+            "What happens when a closedSlot0 gesture is performed. Intended to be called by the event. Please override the closedSlot0-overrideable-enter instead if possible.");
+
+        macrosGroup.newItem(
+            "closedSlot0-exit",
+            "doSlot(\"10\", \"\");",
+            "What happens when a closedSlot0 gesture is finished. Intended to be called by the event. Please override the closedSlot0-overrideable-exit instead if possible.");
+
+        macrosGroup.newItem(
+            "closedSlot1-enter",
+            "doSlot(\"1\", \"\");",
+            "What happens when a closedSlot1 gesture is performed. Intended to be called by the event. Please override the closedSlot1-overrideable-enter instead if possible.");
+
+        macrosGroup.newItem(
+            "closedSlot1-exit",
+            "doSlot(\"11\", \"\");",
+            "What happens when a closedSlot1 gesture is finished. Intended to be called by the event. Please override the closedSlot1-overrideable-enter instead if possible.");
+
+        macrosGroup.newItem(
+            "closedSlot0-action-enter",
+            "delayedDo(\"do-closedSlot0-action-enter\", \"150\");",
+            "When the closed gestures get enabled. This is one of the macros that gets allocated.");
+
+        macrosGroup.newItem(
+            "do-closedSlot0-action-enter",
+            "prep-sharedScroll-slot();closedSlot0-overrideable-enter();",
+            "When the closed gestures get enabled. This gets triggered via a delay for stability.");
+
+        macrosGroup.newItem(
+            "closedSlot0-action-exit",
+            "finish-sharedScroll-slot-withoutCancel();closedSlot0-overrideable-exit();",
+            "When the closed gestures get enabled. This is one of the macros that gets allocated.");
+
+        macrosGroup.newItem(
+            "closedSlot1-action-enter",
+            "delayedDo(\"do-closedSlot1-action-enter\", \"150\");",
+            "When the closed gestures get enabled. This is one of the macros that gets allocated.");
+
+        macrosGroup.newItem(
+            "do-closedSlot1-action-enter",
+            "prep-sharedScroll-slot();closedSlot1-overrideable-enter();",
+            "When the closed gestures get enabled. This gets triggered via a delay for stability.");
+
+        macrosGroup.newItem(
+            "closedSlot1-action-exit",
+            "finish-sharedScroll-slot-withoutCancel();closedSlot1-overrideable-exit();",
+            "When the closed gestures get enabled. This is one of the macros that gets allocated.");
+
+        macrosGroup.newItem(
+            "closedSlot0-overrideable-enter",
+            "setButton(\"middle\");click();",
+            "Overrideable action to be performed when the closedSlot0 gesture is performed.");
+
+        macrosGroup.newItem(
+            "closedSlot0-overrideable-exit",
+            "",
+            "Overrideable action to be performed when the closedSlot0 gesture is finished.");
+
+        macrosGroup.newItem(
+            "closedSlot1-overrideable-enter",
+            "setButton(\"left\");doubleClick();",
+            "Overrideable action to be performed when the closedSlot1 gesture is performed.");
+
+        macrosGroup.newItem(
+            "closedSlot1-overrideable-exit",
+            "",
+            "Overrideable action to be performed when the closedSlot1 gesture is finished.");
     }
 
     private void generateCustomConfig(Group customGroup) {
@@ -767,45 +1075,5 @@ public class HandWaveyConfig {
 
         // Create the template.
         customGroup.addItemTemplate("custom-.*", "", "A custom event that a user can trigger in a gestureLayout. It is intended to be used with slots, and can be read about in createADynamicGestureLayout.md.");
-
-        // Set the default values.
-        customGroup.getItem("custom-noOp").overrideDefault("debug(\"0\", \"No action is currently assigned to this slot.\");"); // Do nothing. Useful to have a blank slot that can sometimes be used for other things.
-        customGroup.getItem("custom-releaseAll").overrideDefault("rewindCursorPosition();rewindScroll();releaseButtons();releaseKeys();unlockCursor();"); // Release all buttons and keys. Useful for getting the keyboard and mouse into a known state.
-
-        customGroup.getItem("custom-mouseDown-left").overrideDefault("setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();"); // Press down the left mouse button.
-        customGroup.getItem("custom-mouseDown-right").overrideDefault("setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();"); // Press down the right mouse button.
-        customGroup.getItem("custom-mouseDown-middle").overrideDefault("setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();"); // Press down the middle mouse button.
-
-        // Tap-specific clicks.
-        customGroup.getItem("custom-tap-left").overrideDefault("setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Tap: Click left mouse button.
-        customGroup.getItem("custom-tap-right").overrideDefault("setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Tap: Click right mouse button.
-        customGroup.getItem("custom-tap-middle").overrideDefault("setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Tap: Click middle mouse button.
-
-        customGroup.getItem("custom-click-left").overrideDefault("setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Press down the left mouse button.
-        customGroup.getItem("custom-click-right").overrideDefault("setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Press down the right mouse button.
-        customGroup.getItem("custom-click-middle").overrideDefault("setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Press down the middle mouse button.
-
-        customGroup.getItem("custom-releaseZone").overrideDefault("rewindCursorPosition();releaseZone();unlockCursor();"); // Release and zone overrides. This is typically used at the end of overriding the zone for something like scrolling.
-        customGroup.getItem("custom-override-scroll").overrideDefault("rewindCursorPosition();overrideZone(\"scroll\");releaseKeys();"); // Override the zone to scroll. This has the effect that any movement of the hand causes scroll movement instead of mouse cursor movement.
-        customGroup.getItem("custom-override-ctrl+scroll").overrideDefault("rewindCursorPosition();keyDown(\"ctrl\");overrideZone(\"scroll\");"); // Press the CTRL key down, and override the zone to scroll. Often this is used for zooming.
-
-        customGroup.getItem("custom-doubleClick-hold").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");click();mouseDown();"); // Double click the left button, without lifting the finger at the end of the second click. This is useful for doing things like drag-selecting by word rather than by character.
-        customGroup.getItem("custom-trippleClick-hold").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();mouseDown();"); // Tripple click the left button, without lifting the finger at the end of the second click. This is useful for doing things like drag-selecting by line rather than by character.
-        customGroup.getItem("custom-doubleClick").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();"); // Double click the left button.
-        customGroup.getItem("custom-trippleClick").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();click();"); // Tripple click the left button.
-        customGroup.getItem("custom-alt+mouseDown-left").overrideDefault("keyDown(\"alt\");setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"alt\");"); // Press the ALT key, then hold down the left button.
-        customGroup.getItem("custom-alt+mouseDown-right").overrideDefault("keyDown(\"alt\");setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"alt\");"); // Press the ALT key, then hold down the right button.
-        customGroup.getItem("custom-alt+mouseDown-middle").overrideDefault("keyDown(\"alt\");setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"alt\");"); // Press the ALT key, then hold down the middle button.
-        customGroup.getItem("custom-ctrl+mouseDown-left").overrideDefault("keyDown(\"ctrl\");setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"ctrl\");"); // Press the CTRL key, then hold down the left button.
-        customGroup.getItem("custom-ctrl+mouseDown-right").overrideDefault("keyDown(\"ctrl\");setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"ctrl\");"); // Press the CTRL key, then hold down the right button.
-        customGroup.getItem("custom-ctrl+mouseDown-middle").overrideDefault("keyDown(\"ctrl\");setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"ctrl\");"); // Press the CTRL key, then hold down the middle button.
-        customGroup.getItem("custom-ctrl+c").overrideDefault("keyDown(\"ctrl\");keyDown(\"c\");keyUp(\"c\");keyUp(\"ctrl\");"); // CTRL + c. Typically used for copying a selection.
-        customGroup.getItem("custom-ctrl+v").overrideDefault("keyDown(\"ctrl\");keyDown(\"v\");keyUp(\"v\");keyUp(\"ctrl\");"); // CTRL + v. Typically used for pasting.
-        customGroup.getItem("custom-ctrl+x").overrideDefault("keyDown(\"ctrl\");keyDown(\"x\");keyUp(\"x\");keyUp(\"ctrl\");"); // CTRL + x. Typically used for cutting a selection.
-        customGroup.getItem("custom-delete").overrideDefault("keyDown(\"delete\");keyUp(\"delete\");"); // Press and release the delete key.
-        customGroup.getItem("custom-ctrl+z").overrideDefault("keyDown(\"ctrl\");keyDown(\"z\");keyUp(\"z\");keyUp(\"ctrl\");"); // CTRL + z. Typically used for undo.
-        customGroup.getItem("custom-ctrl+shift+z").overrideDefault("keyDown(\"ctrl\");keyDown(\"shift\");keyDown(\"z\");keyUp(\"z\");keyUp(\"shift\");keyUp(\"ctrl\");"); // CTRL + Shift z. Typically used for re-doing an undone task.
-
-        customGroup.getItem("custom-recalibrate").overrideDefault("setSlot(\"250\", \"custom-noop\");recalibrateSegments();"); // Recalibrate the segments once after entry.
     }
 }

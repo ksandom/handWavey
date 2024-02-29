@@ -7,23 +7,23 @@ items:
   individual-pAction0Open-enter:
     value: debug("0", "Toolset = Simple (default).");
   individual-pAction0Closed-enter:
-    value: setAllSlots("");
+    value: toolset-default();
   individual-pAction1Open-enter:
     value: debug("0", "Toolset = Copy/paste.");
   individual-pAction1Closed-enter:
-    value: setAllSlots("");setSlot("0", "custom-mouseDown-left1");setSlot("1", "custom-mouseDown-middle");setSlot("3", "custom-mouseDown-right");
+    value: toolset-copyPaste();
   individual-pAction3Open-enter:
     value: debug("0", "Toolset = Modified click.");
   individual-pAction3Closed-enter:
-    value: setAllSlots("");setSlot("0", "custom-alt+mouseDown-left");setSlot("1", "custom-alt+mouseDown-right");setSlot("2", "custom-ctrl+mouseDown-left");setSlot("3", "custom-ctrl+mouseDown-left");setSlot("4", "custom-override-ctrl+scroll");
+    value: toolset-modifiedClick();
   individual-pAction8Open-enter:
     value: debug("0", "Toolset = Web.");
   individual-pAction8Closed-enter:
-    value: setAllSlots("");setSlot("1", "custom-mouseDown-left2");setSlot("2", "custom-mouseDown-left3");setSlot("3", "custom-mouseDown-left4");
+    value: toolset-web();
   individual-pAction9Open-enter:
     value: debug("0", "Toolset = Multi-click.");
   individual-pAction9Closed-enter:
-    value: setAllSlots("");setSlot("0", "custom-doubleClick-hold");setSlot("1", "custom-trippleClick-hold");setSlot("2", "custom-doubleClic");setSlot("3", "custom-trippleClick");
+    value: toolset-multiClick();
   general-segment-p0-enter:
     value: ""
   general-segment-p2-enter:
@@ -48,41 +48,35 @@ items:
     value: ""
   general-state-pClosed-exit:
     value: ""
-  special-newHandUnfreezeEvent:
-    value: ""
-  special-newHandUnfreezeCursor:
-    value: ''
-  special-newHandFreeze:
-    value: ''
   general-segment-p1-enter:
     value: ''
-  general-segment-pAnyChange:
-    value: lockCursor();rewindCursorPosition();
   individual-pNonOOB1Open-enter:
-    value: doSlot("0", "custom-mouseDown-left");cancelDelayedDo("custom-tap-left");
+    value: delayedDoSlot("0", "do-mDownLeft", "150");
   individual-pNonOOB1Open-exit:
-    value: doSlot("5", "custom-releaseAll");
+    value: doSlot("5", "mUpAmbiguous");releaseKeys();
   individual-pNonOOB9Open-enter:
-    value: doSlot("1", "custom-mouseDown-right");cancelDelayedDo("custom-tap-left");
+    value: delayedDoSlot("1", "do-mDownRight", "150");
   individual-pNonOOB9Open-exit:
-    value: doSlot("6", "custom-releaseAll");
+    value: doSlot("5", "mUpAmbiguous");releaseKeys();
   individual-pNonOOB0Closed-enter:
-    value: doSlot("4", "custom-override-scroll");cancelDelayedDo("custom-tap-left");
+    value: delayedDoSlot("4", "scrollStart", "150");
   individual-pNonOOB0Closed-exit:
-    value: doSlot("9", "custom-releaseZone");
+    value: doSlot("9", "scrollStop");releaseKeys();
   individual-pNonOOB1Closed-enter:
-    value: doSlot("2", "custom-noOp");cancelDelayedDo("custom-tap-left");
+    value: delayedDoSlot("2", "", "150");
   individual-pNonOOB1Closed-exit:
-    value: doSlot("7", "custom-releaseAll");
+    value: doSlot("5", "mUpAmbiguous");releaseKeys();
   individual-pNonOOB9Closed-enter:
-    value: doSlot("3", "custom-noOp");cancelDelayedDo("custom-tap-left");
+    value: delayedDoSlot("3", "", "150");
   individual-pNonOOB9Closed-exit:
-    value: doSlot("8", "custom-releaseAll");
+    value: doSlot("5", "mUpAmbiguous");releaseKeys();
+  special-primaryMoving:
+    value: simpleMovingProtection-enable();
+  special-primaryStationary:
+    value: simpleMovingProtection-disable();
   general-state-pAbsent-enter:
-    value: setButton("left");releaseButtons();releaseKeys();releaseZone();cancelDelayedDo("custom-tap-left");
-  individual-pOOB0Absent-enter:
-    value: setButton("left");releaseButtons();releaseKeys();releaseZone();cancelDelayedDo("custom-tap-left");
-  tap-p0Open:
-    value: delayedDo("custom-tap-left", "150");
-  custom-tap-left:
-    value: setButton("left");lockCursor();rewindCursorPosition("150");mouseDown();mouseUp();unlockCursor();
+    value: noHands();toolset-default();
+  tap-p1Open:
+    value: ""
+  tap-p2Open:
+    value: ""

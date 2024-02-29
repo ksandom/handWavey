@@ -1,7 +1,7 @@
 groups: {}
 items:
   general-zone-pAction-enter:
-    value: lockCursor();rewindCursorPosition();releaseButtons();setButton("left");doubleClick();
+    value: do-mDoubleClick-left();
   general-segment-p0-enter:
     value: ""
   general-segment-p2-enter:
@@ -23,64 +23,36 @@ items:
   general-zone-sActive-exit:
     value: releaseKeys();
   general-state-pClosed-enter:
-    value: lockCursor();do("custom-allowWheelClicks");setSlot("3", "custom-doScroll");cancelDelayedDo("custom-tap-left");
+    value: yankScroll-enter();
   general-state-pClosed-exit:
-    value: cancelDelayedDo("custom-trippleClick");unlockCursor();do("custom-allowWheelClicks");setSlot("3", "custom-noop");rewindCursorPosition();releaseZone();unlockCursor();unlockTaps("primary", "600");
-  special-newHandUnfreezeEvent:
-    value: ""
-  special-newHandUnfreezeCursor:
-    value: 'recalibrateSegments();'
-  special-newHandFreeze:
-    value: ''
+    value: yankScroll-exit();
   general-segment-p1-enter:
     value: ''
-  general-segment-pAnyChange:
-    value: lockCursor();rewindCursorPosition();
   individual-pNonOOB1Open-enter:
-    value: setButton("left");lockCursor();rewindCursorPosition();mouseDown();lockTaps("primary");cancelDelayedDo("custom-tap-left");
+    value: mDownLeft();
   individual-pNonOOB1Open-exit:
-    value: rewindCursorPosition();releaseButtons();unlockCursor();unlockTaps("primary");
+    value: mUpLeft();
   individual-pNonOOB6Open-enter:
-    value: setButton("right");lockCursor();rewindCursorPosition();mouseDown();lockTaps("primary");cancelDelayedDo("custom-tap-left");
+    value: mDownRight();
   individual-pNonOOB6Open-exit:
-    value: rewindCursorPosition();releaseButtons();unlockCursor();unlockTaps("primary");
+    value: mUpRight();
   individual-pNonOOB1Closed-enter:
-    value: doSlot("0", "custom-noop");
+    value: closedSlot0-enter();
   individual-pNonOOB1Closed-exit:
-    value: doSlot("10", "custom-noop");
+    value: closedSlot0-exit();
   individual-pNonOOB0Closed-enter:
     value: ""
   individual-pNonOOB0Closed-exit:
     value: ""
   individual-pNonOOB6Closed-enter:
-    value: doSlot("1", "custom-noop");
+    value: closedSlot1-enter();
   individual-pNonOOB6Closed-exit:
-    value: doSlot("11", "custom-noop");
-  general-state-pAbsent-enter:
-    value: setButton("left");releaseButtons();releaseKeys();releaseZone();unlockTaps("primary");cancelDelayedDo("custom-tap-left");
+    value: closedSlot1-exit();
   tap-p0Open:
-    value: delayedDo("custom-tap-left", "150");
+    value: simple-leftClick();
   tap-p0Closed:
-    value: delayedDo("custom-trippleClick", "150");
-  custom-tap-left:
-    value: setButton("left");lockCursor();rewindCursorPosition("150");mouseDown();mouseUp();unlockCursor();
-  special-primaryMoving:
-    value: lockGestures("primary");doSlot("3", "noop");
-  special-primaryStationary:
-    value: unlockGestures("primary");
-  custom-allowWheelClicks:
-    value: setSlot("0", "custom-closedLeft-enter");setSlot("1", "custom-closedRight-enter");setSlot("10", "custom-closedLeft-exit");setSlot("11", "custom-closedRight-exit");
-  custom-disallowWheelClicks:
-    value: setSlot("0", "custom-noop");setSlot("1", "custom-noop");setSlot("10", "custom-noop");setSlot("11", "custom-custom-noop");
-  custom-closedLeft-enter:
-    value: setSlot("3", "custom-noop");cancelDelayedDo("custom-disallowWheelClicks");setButton("middle");rewindCursorPosition();mouseDown();lockTaps("primary");cancelDelayedDo("custom-trippleClick");
-  custom-closedLeft-exit:
-    value: rewindCursorPosition();rewindScroll();releaseButtons();unlockTaps("primary", "600");cancelDelayedDo("custom-trippleClick");
-  custom-closedRight-enter:
-    value: setSlot("3", "custom-noop");cancelDelayedDo("custom-disallowWheelClicks");rewindCursorPosition();setButton("left");doubleClick();lockTaps("primary");cancelDelayedDo("custom-trippleClick");
-  custom-closedRight-exit:
-    value: rewindCursorPosition();unlockTaps("primary", "600");cancelDelayedDo("custom-trippleClick");
-  custom-doScroll:
-    value: rewindCursorPosition();overrideZone("scroll");setSlot("3", "custom-noop");delayedDo("custom-disallowWheelClicks", "150");lockTaps("primary");
-  custom-noop:
+    value: simple-trippleLeftClick();
+  tap-p1Open:
+    value: ""
+  tap-p2Open:
     value: ""

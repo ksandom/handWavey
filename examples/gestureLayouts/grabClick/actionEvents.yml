@@ -1,13 +1,13 @@
 groups: {}
 items:
   general-zone-pAction-enter:
-    value: lockCursor();rewindCursorPosition();setButton("left");doubleClick();
+    value: do-mDoubleClick-left();
   general-segment-p0-enter:
-    value: setButton("left");
+    value: unlockTaps("primary", "150");setButton("left");
   general-segment-p1-enter:
-    value: setButton("right");
+    value: lockTaps("primary");unlockTaps("primary", "150");setButton("right");
   general-segment-p2-enter:
-    value: setButton("middle");overrideZone("scroll");lockTaps("primary");
+    value: setButton("middle");overrideZone("scroll");lockTaps("primary");unlockTaps("primary", "150");
   general-segment-p2-exit:
     value: releaseZone();unlockTaps("primary");
   general-segment-s0-enter:
@@ -23,20 +23,16 @@ items:
   general-segment-s2-enter:
     value: keyDown("shift");
   general-state-pClosed-enter:
-    value: lockCursor();rewindCursorPosition();mouseDown();
+    value: mDownAmbiguous();
   general-state-pClosed-exit:
-    value: rewindCursorPosition();rewindScroll();releaseButtons();unlockCursor();
-  special-newHandUnfreezeEvent:
-    value: ""
-  special-newHandUnfreezeCursor:
-    value: 'recalibrateSegments();'
-  special-newHandFreeze:
-    value: ''
+    value: mUpAmbiguous();
   general-zone-sActive-exit:
     value: releaseKeys();
-  general-state-pAbsent-enter:
-    value: setButton("left");releaseButtons();releaseKeys();releaseZone();
-  general-segment-pAnyChange:
-    value: lockCursor();rewindCursorPosition();
-  general-state-pAbsent-enter:
-    value: setButton("left");releaseButtons();releaseKeys();releaseZone();unlockTaps("primary");
+  special-primaryMoving:
+    value: movingProtection-enable();
+  special-primaryStationary:
+    value: movingProtection-disable();
+  tap-p1Open:
+    value: simple-rightClick();
+  tap-p2Open:
+    value: simple-middleClick();

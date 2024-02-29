@@ -1,0 +1,38 @@
+groups: {}
+items:
+  toolset-default:
+    description: Toolset = Default.
+    value: setAllSlots("");
+  toolset-copyPaste:
+    description: Toolset = Copy/paste.
+    value: setAllSlots("");setSlot("0", "do-mDownLeft");setSlot("1", "do-mDownMiddle");setSlot("3", "do-mDownRight");
+  toolset-modifiedClick:
+    description: Toolset = Modified click.
+    value: setAllSlots("");setSlot("0", "alt-mLeftDown");setSlot("1", "alt-mRightDown");setSlot("2", "ctrl-mLeftDown");setSlot("3", "ctrl-mRightDown");setSlot("4", "ctrl-scroll");
+  toolset-web:
+    description: Toolset = Web.
+    value: toolset-default();debug("0", "toolset-web has not been configured yet.");
+  toolset-multiClick:
+    description: Toolset = Multi-click.
+    value: setAllSlots("");setSlot("0", "do-mDoubleClickHold-left");setSlot("1", "do-mTrippleClickHold-left");setSlot("2", "do-mDoubleClick-left");setSlot("3", "do-mTrippleClick-left");
+  scrollStart:
+    description: Start scroll.
+    value: cancelAllDelayedDos();rewindCursorPosition();overrideZone("scroll");lockTaps("primary");
+  scrollStop:
+    description: Stop scroll.
+    value: releaseZone();
+  alt-mLeftDown:
+    description: Alt + Mouse left down.
+    value: keyDown("alt");do-mDownLeft();
+  alt-mRightDown:
+    description: Alt + Mouse right down.
+    value: keyDown("alt");do-mDownRight();
+  ctrl-mLeftDown:
+    description: Ctrl + Mouse left down.
+    value: keyDown("ctrl");do-mDownLeft();
+  ctrl-mRightDown:
+    description: Ctrl + Mouse right down.
+    value: keyDown("ctrl");do-mDownRight();
+  ctrl-scroll:
+    description: Ctrl + Scroll.
+    value: keyDown("ctrl");scrollStart();

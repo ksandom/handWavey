@@ -9,6 +9,7 @@ Specific implementations like MacroLine, which provides single line macros, shou
 package macro;
 
 import mouseAndKeyboardOutput.*;
+import config.*;
 import debug.Debug;
 import handWavey.HandsState;
 import handWavey.HandWaveyManager;
@@ -24,10 +25,13 @@ public class MacroCore {
     private HandWaveyEvent handWaveyEvent;
     private String[] slot = new String[256];
     private int nestingLevel = 0;
-    protected static final int maxNesting = 10;
+    protected static final int maxNesting = 99;
     private Boolean slotsEnabled = true;
 
-    private ShouldComplete[] shouldCompleteInstruction = new ShouldComplete[100];
+    private config.Group macros;
+    private config.Group events;
+
+    private ShouldComplete[] shouldCompleteInstruction = new ShouldComplete[this.maxNesting + 1];
 
     public MacroCore(String context, OutputProtection output, HandsState handsState, HandWaveyManager handWaveyManager, HandWaveyEvent handWaveyEvent) {
         this.debug = Debug.getDebug(context);
@@ -37,11 +41,15 @@ public class MacroCore {
         this.handWaveyManager = handWaveyManager;
         this.handWaveyEvent = handWaveyEvent;
 
+        this.macros = Config.singleton().getGroup("macros");
+        this.events = Config.singleton().getGroup("actionEvents");
+
         Arrays.fill(this.slot, 0, 256, "");
 
-        for (int level = 0;  level <= this.maxNesting; level++) {
+        for (int level = 0; level < this.maxNesting; level++) {
             this.shouldCompleteInstruction[level] = new ShouldComplete("MacroCore/instruction-" + String.valueOf(level));
         }
+        this.debug.out(0, "Successful startup.");
     }
 
     protected void doInstruction(String instruction) {
@@ -53,9 +61,31 @@ public class MacroCore {
         doInstruction(command, parameters);
     }
 
-    protected void doInstruction(String command, String[] parameters) {
+    protected boolean doInstruction(String command, String[] parameters) {
+        boolean success = true;
+
+        String commandToTry = command.trim();
+
+        if (!doInternalInstruction(commandToTry, parameters)) {
+            if (!this.tryMacro(commandToTry)) {
+                this.debug.out(0, "Unknown command (not an internal instruction, or a macro): \"" + commandToTry + "\"");
+                success = false;
+            }
+        }
+
+        return success;
+    }
+
+    private boolean doInternalInstruction(String command, String[] parameters) {
         String commandSummary = command + "(\"" + String.join("\", \"", parameters) + "\");";
         this.shouldCompleteInstruction[this.nestingLevel].start(commandSummary);
+
+        boolean success = true;
+
+        if (this.debug.shouldOutput(2)) {
+            String prefix = nestedDebugPrefix(this.nestingLevel);
+            this.debug.out(2, prefix + command + " " + Arrays.toString(parameters));
+        }
 
         switch (command) {
             case "debug":
@@ -145,15 +175,19 @@ public class MacroCore {
                 break;
             case "do":
                 this.debug.out(0, "do: " + parm(parameters, 0, ""));
-                this.increaseNesting();
-                this.handWaveyEvent.triggerSubEvent(parm(parameters, 0, ""), "----");
-                this.decreaseNesting();
+                this.doSubAction(parm(parameters, 0, ""), "----");
                 break;
             case "delayedDo":
-                this.handWaveyEvent.triggerLaterSubEvent(parm(parameters, 0, ""), Long.parseLong(parm(parameters, 1, "")));
+                this.handWaveyEvent.addLaterSubEvent(parm(parameters, 0, ""), Long.parseLong(parm(parameters, 1, "")));
+                break;
+            case "delayedDoSlot":
+                delayedDoSlot(Integer.parseInt(parm(parameters, 0, "")), parm(parameters, 1, ""), Long.parseLong(parm(parameters, 2, "")));
                 break;
             case "cancelDelayedDo":
                 this.handWaveyEvent.cancelLaterSubEvent(parm(parameters, 0, ""));
+                break;
+            case "cancelAllDelayedDos":
+                this.handWaveyEvent.cancelAllLaterSubEvents();
                 break;
 
             // Calibration.
@@ -178,39 +212,112 @@ public class MacroCore {
 
             // Oh ohhhhhhhh.
             default:
-                this.debug.out(0, "Unknown command: " + command);
+                success = false;
                 break;
         }
         this.shouldCompleteInstruction[this.nestingLevel].finish();
+
+        return success;
+    }
+
+    private Boolean tryMacro(String command) {
+        if (!this.macros.itemExists(command)) {
+            return false;
+        }
+
+        config.Item macroItem = this.macros.getItem(command);
+
+        String macro = macroItem.get();
+        MacroLine macroLine = MacroLine.singleton();
+
+        if (macroLine == null) {
+            this.debug.out(0, "MacroLine doesn't appear to have been initialised yet. Can not run " + command + ", which would do \"" + macro + "\"");
+
+            /* While this is a failure, we've only got here because the macro exists, but we were not in a state to be able to run it. Therefore we should Fail and complain about it, rather than return false, which will lead to a fall-back event being triggered instead, which could mask the problem. */
+            return true;
+        }
+
+        this.increaseNesting();
+        String prefix = nestedDebugPrefix(this.nestingLevel);
+        this.debug.out(1, prefix + command + ": " + macro);
+        macroLine.runLine(macro);
+        this.decreaseNesting();
+
+        return true;
+    }
+
+    private String nestedDebugPrefix(int level) {
+        return dotsForNestingLevel(level) + String.valueOf(this.nestingLevel) + " ";
+    }
+
+    private String dotsForNestingLevel(int level) {
+        return new String(new char[level]).replace("\0", ".");
+    }
+
+    public void doSubAction(String command, String indent) {
+        // Prefer a macro. But if we don't have that, trigger an event instead.
+        // Complain if neither exist.
+
+        String commandToTry = command.trim();
+
+        this.increaseNesting();
+        String[] parameters = separateParameters("");
+        if (!doInternalInstruction(commandToTry, parameters)) {
+            this.debug.out(1, "Internal instruction \"" + commandToTry + "\" does not exist.");
+            if (!this.tryMacro(commandToTry)) {
+                this.debug.out(1, "Macro \"" + commandToTry + "\" does not exist.");
+                if (!this.events.itemExists(commandToTry)) {
+                    this.debug.out(0, commandToTry + " doesn't appear to be a macro or event.");
+                } else {
+                    this.debug.out(2, "Event \"" + commandToTry + "\" exists. Triggering that.");
+                    this.handWaveyEvent.triggerSubEvent(commandToTry, indent);
+                }
+            }
+        }
+        this.decreaseNesting();
     }
 
 
     private void setAllSlots(String eventName) {
-        this.debug.out(1, "Set all slots to \"" + eventName + "\".");
+        this.debug.out(2, "Set all slots to \"" + eventName + "\".");
         Arrays.fill(this.slot, 0, 256, eventName);
     }
 
     private void setSlot(int slot, String eventName) {
-        this.debug.out(1, "Set slot " + String.valueOf(slot) + " to " + eventName);
+        this.debug.out(2, "Set slot " + String.valueOf(slot) + " to " + eventName);
         this.slot[slot] = eventName;
     }
 
-    private void doSlot(int slot, String eventName) {
+    private String getSlot(int slot, String eventName) {
         String previousValue = this.slot[slot];
         String eventToRun = (!this.slot[slot].equals(""))?this.slot[slot]:eventName;
         if (slotsEnabled) {
-            this.debug.out(1, "Run slot " + String.valueOf(slot) + " == " + eventToRun + ". Previous value: " + previousValue);
+            this.debug.out(2, "Run slot " + String.valueOf(slot) + " == " + eventToRun + ". Previous value: " + previousValue);
 
             if (eventToRun == "") {
-                this.debug.out(1, "Slot " + String.valueOf(slot) + " is currently set to \"\". So not doing anything.");
-                return;
+                this.debug.out(2, "Slot " + String.valueOf(slot) + " is currently set to \"\". So not doing anything.");
+                return "";
             }
 
-            this.increaseNesting();
-            this.handWaveyEvent.triggerSubEvent(eventToRun, "-->");
-            this.decreaseNesting();
+            return eventToRun;
         } else {
-            this.debug.out(1, "Would have run slot " + String.valueOf(slot) + " == " + eventToRun + ". Previous value: " + previousValue + ". But slots are currently disabled.");
+            this.debug.out(2, "Would have run slot " + String.valueOf(slot) + " == " + eventToRun + ". Previous value: " + previousValue + ". But slots are currently disabled.");
+            return "";
+        }
+    }
+
+    private void doSlot(int slot, String eventName) {
+        String eventToRun = getSlot(slot, eventName);
+        this.debug.out(2, "Got event to run: " + eventToRun);
+        if (!eventToRun.equals("")) {
+            this.doSubAction(eventToRun, "-->");
+        }
+    }
+
+    private void delayedDoSlot(int slot, String eventName, long delay) {
+        String eventToRun = getSlot(slot, eventName);
+        if (!eventToRun.equals("")) {
+            this.handWaveyEvent.addLaterSubEvent(eventToRun, delay);
         }
     }
 
