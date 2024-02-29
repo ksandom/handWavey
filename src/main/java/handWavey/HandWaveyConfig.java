@@ -900,7 +900,7 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "yankScroll-enter",
-            "cancelAllDelayedDos();lockCursor();allowWheelClicks();setSlot(\"3\", \"do-scroll\");lockTaps(\"primary\");unlockTaps(\"primary\" , \"800\");delayedDo(\"do-scroll\", \"1200\");",
+            "cancelAllDelayedDos();lockCursor();allowWheelClicks();setSlot(\"3\", \"do-scroll\");lockTaps(\"primary\");unlockTaps(\"primary\" , \"800\");delayedDo(\"do-earlyScroll\", \"900\");delayedDo(\"do-scroll\", \"1500\");",
             "Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -enter macro gets it set up.");
 
         macrosGroup.newItem(
@@ -914,8 +914,18 @@ public class HandWaveyConfig {
             "Perform a double left click right now.");
 
         macrosGroup.newItem(
+            "do-earlyScroll",
+            "rewindCursorPosition();overrideZone(\"scroll\");",
+            "");
+
+        macrosGroup.newItem(
+            "undo-earlyScroll",
+            "releaseZone();",
+            "");
+
+        macrosGroup.newItem(
             "do-scroll",
-            "rewindCursorPosition();overrideZone(\"scroll\");setSlot(\"3\", \"\");delayedDo(\"disallowWheelClicks\", \"150\");lockTaps(\"primary\");",
+            "cancelAllDelayedDos();rewindCursorPosition();overrideZone(\"scroll\");setSlot(\"3\", \"\");delayedDo(\"disallowWheelClicks\", \"150\");lockTaps(\"primary\");",
             "");
 
         macrosGroup.newItem(
@@ -940,7 +950,7 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "prep-sharedScroll-slot",
-            "cancelAllDelayedDos();setSlot(\"3\", \"\");rewindCursorPosition();lockTaps(\"primary\");",
+            "undo-earlyScroll();cancelAllDelayedDos();setSlot(\"3\", \"\");rewindCursorPosition();lockTaps(\"primary\");",
             "Preparations to be done before running an overrideable slot for sharedScroll functionality.");
 
         macrosGroup.newItem(
