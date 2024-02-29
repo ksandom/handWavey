@@ -50,3 +50,7 @@ items:
     value: lockCursor();rewindCursorPosition();mouseUp();setButton("middle");click();
   combined-pAction0Open-sAction0Open-exit:
     value: rewindCursorPosition();setButton("left");mouseDown();unlockCursor();
+  tap-p1Open:
+    value: ""
+  tap-p2Open:
+    value: ""

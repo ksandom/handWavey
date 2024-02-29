@@ -46,3 +46,7 @@ items:
     value: overrideZone("scroll");
   combined-pActive0Open-sAction0Open-exit:
     value: releaseZone();
+  tap-p1Open:
+    value: ""
+  tap-p2Open:
+    value: ""

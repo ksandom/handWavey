@@ -46,3 +46,7 @@ items:
     value: mDownLeft();
   combined-pActive0Open-sAction0Open-exit:
     value: mUpLeft();
+  tap-p1Open:
+    value: ""
+  tap-p2Open:
+    value: ""

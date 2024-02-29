@@ -52,3 +52,7 @@ items:
     value: simple-leftClick();
   tap-p0Closed:
     value: simple-trippleLeftClick();
+  tap-p1Open:
+    value: ""
+  tap-p2Open:
+    value: ""

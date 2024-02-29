@@ -59,23 +59,31 @@ public class Gesture {
         // Double click when entering the action zone.
         overrideDefault(
             "general-zone-pAction-enter",
-            "lockCursor();rewindCursorPosition();doubleClick();",
+            "do-mDoubleClick-left();",
             "metalDing07.wav");
 
         // Normal click behavior.
         overrideDefault(
             "general-state-pClosed-enter",
-            "lockCursor();rewindCursorPosition();mouseDown();",
+            "mDownAmbiguous();",
             "metalDing07.wav");
         overrideDefault(
             "general-state-pClosed-exit",
-            "rewindCursorPosition();rewindScroll();releaseButtons();unlockCursor();",
+            "mUpAmbiguous();",
             "metalDing08.wav");
 
         // Set taps.
         overrideDefault(
             "tap-p0Open",
             "simple-leftClick();",
+            "metalDing08.wav");
+        overrideDefault(
+            "tap-p1Open",
+            "simple-rightClick();",
+            "metalDing08.wav");
+        overrideDefault(
+            "tap-p2Open",
+            "simple-middleClick();",
             "metalDing08.wav");
         overrideDefault(
             "tap-s0Open",
@@ -89,19 +97,19 @@ public class Gesture {
         // Set buttons.
         overrideDefault(
             "general-segment-p0-enter",
-            "setButton(\"left\");",
+            "unlockTaps(\"primary\", \"150\");setButton(\"left\");",
             "");
         overrideDefault(
             "general-segment-p1-enter",
-            "setButton(\"right\");",
+            "lockTaps(\"primary\");unlockTaps(\"primary\", \"150\");setButton(\"right\");",
             "");
         overrideDefault(
             "general-segment-p2-enter",
-            "setButton(\"middle\");overrideZone(\"scroll\");",
+            "setButton(\"middle\");overrideZone(\"scroll\");lockTaps(\"primary\");unlockTaps(\"primary\", \"150\");",
             "");
         overrideDefault(
             "general-segment-p2-exit",
-            "releaseZone();",
+            "releaseZone();unlockTaps(\"primary\");",
             "");
 
         // Set keys.

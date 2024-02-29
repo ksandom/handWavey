@@ -76,3 +76,7 @@ items:
     value: simpleMovingProtection-disable();
   general-state-pAbsent-enter:
     value: noHands();toolset-default();
+  tap-p1Open:
+    value: ""
+  tap-p2Open:
+    value: ""
