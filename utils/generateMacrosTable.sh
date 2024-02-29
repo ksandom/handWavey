@@ -48,9 +48,9 @@ function macrosToLines
 
 function tableHeader
 {
-    #echo "| custom- event | Description | What it does by default |"
+    #echo "| Macro name | Description | What it does by default |"
     #echo "| --- | --- | --- |"
-    echo "| custom- event | Description |"
+    echo "| Macro name | Description |"
     echo "| --- | --- |"
 }
 
