@@ -1075,45 +1075,5 @@ public class HandWaveyConfig {
 
         // Create the template.
         customGroup.addItemTemplate("custom-.*", "", "A custom event that a user can trigger in a gestureLayout. It is intended to be used with slots, and can be read about in createADynamicGestureLayout.md.");
-
-        // Set the default values.
-        customGroup.getItem("custom-noOp").overrideDefault("debug(\"0\", \"No action is currently assigned to this slot.\");"); // Do nothing. Useful to have a blank slot that can sometimes be used for other things.
-        customGroup.getItem("custom-releaseAll").overrideDefault("rewindCursorPosition();rewindScroll();releaseButtons();releaseKeys();unlockCursor();"); // Release all buttons and keys. Useful for getting the keyboard and mouse into a known state.
-
-        customGroup.getItem("custom-mouseDown-left").overrideDefault("setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();"); // Press down the left mouse button.
-        customGroup.getItem("custom-mouseDown-right").overrideDefault("setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();"); // Press down the right mouse button.
-        customGroup.getItem("custom-mouseDown-middle").overrideDefault("setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();"); // Press down the middle mouse button.
-
-        // Tap-specific clicks.
-        customGroup.getItem("custom-tap-left").overrideDefault("setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Tap: Click left mouse button.
-        customGroup.getItem("custom-tap-right").overrideDefault("setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Tap: Click right mouse button.
-        customGroup.getItem("custom-tap-middle").overrideDefault("setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Tap: Click middle mouse button.
-
-        customGroup.getItem("custom-click-left").overrideDefault("setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Press down the left mouse button.
-        customGroup.getItem("custom-click-right").overrideDefault("setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Press down the right mouse button.
-        customGroup.getItem("custom-click-middle").overrideDefault("setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();mouseUp();unlockCursor();"); // Press down the middle mouse button.
-
-        customGroup.getItem("custom-releaseZone").overrideDefault("rewindCursorPosition();releaseZone();unlockCursor();"); // Release and zone overrides. This is typically used at the end of overriding the zone for something like scrolling.
-        customGroup.getItem("custom-override-scroll").overrideDefault("rewindCursorPosition();overrideZone(\"scroll\");releaseKeys();"); // Override the zone to scroll. This has the effect that any movement of the hand causes scroll movement instead of mouse cursor movement.
-        customGroup.getItem("custom-override-ctrl+scroll").overrideDefault("rewindCursorPosition();keyDown(\"ctrl\");overrideZone(\"scroll\");"); // Press the CTRL key down, and override the zone to scroll. Often this is used for zooming.
-
-        customGroup.getItem("custom-doubleClick-hold").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");click();mouseDown();"); // Double click the left button, without lifting the finger at the end of the second click. This is useful for doing things like drag-selecting by word rather than by character.
-        customGroup.getItem("custom-trippleClick-hold").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();mouseDown();"); // Tripple click the left button, without lifting the finger at the end of the second click. This is useful for doing things like drag-selecting by line rather than by character.
-        customGroup.getItem("custom-doubleClick").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();"); // Double click the left button.
-        customGroup.getItem("custom-trippleClick").overrideDefault("lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();click();"); // Tripple click the left button.
-        customGroup.getItem("custom-alt+mouseDown-left").overrideDefault("keyDown(\"alt\");setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"alt\");"); // Press the ALT key, then hold down the left button.
-        customGroup.getItem("custom-alt+mouseDown-right").overrideDefault("keyDown(\"alt\");setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"alt\");"); // Press the ALT key, then hold down the right button.
-        customGroup.getItem("custom-alt+mouseDown-middle").overrideDefault("keyDown(\"alt\");setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"alt\");"); // Press the ALT key, then hold down the middle button.
-        customGroup.getItem("custom-ctrl+mouseDown-left").overrideDefault("keyDown(\"ctrl\");setButton(\"left\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"ctrl\");"); // Press the CTRL key, then hold down the left button.
-        customGroup.getItem("custom-ctrl+mouseDown-right").overrideDefault("keyDown(\"ctrl\");setButton(\"right\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"ctrl\");"); // Press the CTRL key, then hold down the right button.
-        customGroup.getItem("custom-ctrl+mouseDown-middle").overrideDefault("keyDown(\"ctrl\");setButton(\"middle\");lockCursor();rewindCursorPosition();mouseDown();keyUp(\"ctrl\");"); // Press the CTRL key, then hold down the middle button.
-        customGroup.getItem("custom-ctrl+c").overrideDefault("keyDown(\"ctrl\");keyDown(\"c\");keyUp(\"c\");keyUp(\"ctrl\");"); // CTRL + c. Typically used for copying a selection.
-        customGroup.getItem("custom-ctrl+v").overrideDefault("keyDown(\"ctrl\");keyDown(\"v\");keyUp(\"v\");keyUp(\"ctrl\");"); // CTRL + v. Typically used for pasting.
-        customGroup.getItem("custom-ctrl+x").overrideDefault("keyDown(\"ctrl\");keyDown(\"x\");keyUp(\"x\");keyUp(\"ctrl\");"); // CTRL + x. Typically used for cutting a selection.
-        customGroup.getItem("custom-delete").overrideDefault("keyDown(\"delete\");keyUp(\"delete\");"); // Press and release the delete key.
-        customGroup.getItem("custom-ctrl+z").overrideDefault("keyDown(\"ctrl\");keyDown(\"z\");keyUp(\"z\");keyUp(\"ctrl\");"); // CTRL + z. Typically used for undo.
-        customGroup.getItem("custom-ctrl+shift+z").overrideDefault("keyDown(\"ctrl\");keyDown(\"shift\");keyDown(\"z\");keyUp(\"z\");keyUp(\"shift\");keyUp(\"ctrl\");"); // CTRL + Shift z. Typically used for re-doing an undone task.
-
-        customGroup.getItem("custom-recalibrate").overrideDefault("setSlot(\"250\", \"custom-noop\");recalibrateSegments();"); // Recalibrate the segments once after entry.
     }
 }
