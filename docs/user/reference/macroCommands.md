@@ -291,6 +291,10 @@ Have a look at `cancelDelayedDo();` for why we'd want to do this.
 
 Note: I'm currently evaluating whether triggering events is still valuable, or whether it can be removed now that we can trigger macros via these same mechanisms. Please consider triggering events as deprecated.
 
+#### delayedDoSlot
+
+`delayedDoSlot("slotNumber", "eventName", "millisecondsDelay");` is exactly like combining `delayedDo`, and `doSlot`. The reguested slotNumber will be trigered after millisecondsDelay time has elapsed. See `doSlot` to understand how slotNumber and eventName relate to each other.
+
 #### cancelDelayedDo
 
 `cancelDelayedDo("eventName");` cancels a requested eventName that has been requested by `delayedDo();`. This is useful for either canceling, or continuing with an event that was uncertain to be correct.

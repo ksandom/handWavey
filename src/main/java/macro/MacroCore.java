@@ -175,6 +175,9 @@ public class MacroCore {
             case "delayedDo":
                 this.handWaveyEvent.addLaterSubEvent(parm(parameters, 0, ""), Long.parseLong(parm(parameters, 1, "")));
                 break;
+            case "delayedDoSlot":
+                delayedDoSlot(Integer.parseInt(parm(parameters, 0, "")), parm(parameters, 1, ""), Long.parseLong(parm(parameters, 2, "")));
+                break;
             case "cancelDelayedDo":
                 this.handWaveyEvent.cancelLaterSubEvent(parm(parameters, 0, ""));
                 break;
@@ -272,7 +275,7 @@ public class MacroCore {
         this.slot[slot] = eventName;
     }
 
-    private void doSlot(int slot, String eventName) {
+    private String getSlot(int slot, String eventName) {
         String previousValue = this.slot[slot];
         String eventToRun = (!this.slot[slot].equals(""))?this.slot[slot]:eventName;
         if (slotsEnabled) {
@@ -280,12 +283,28 @@ public class MacroCore {
 
             if (eventToRun == "") {
                 this.debug.out(1, "Slot " + String.valueOf(slot) + " is currently set to \"\". So not doing anything.");
-                return;
+                return "";
             }
 
-            this.doSubAction(eventToRun, "-->");
+            return eventToRun;
         } else {
             this.debug.out(1, "Would have run slot " + String.valueOf(slot) + " == " + eventToRun + ". Previous value: " + previousValue + ". But slots are currently disabled.");
+            return "";
+        }
+    }
+
+    private void doSlot(int slot, String eventName) {
+        String eventToRun = getSlot(slot, eventName);
+        this.debug.out(0, "Got event to run: " + eventToRun);
+        if (!eventToRun.equals("")) {
+            this.doSubAction(eventToRun, "-->");
+        }
+    }
+
+    private void delayedDoSlot(int slot, String eventName, long delay) {
+        String eventToRun = getSlot(slot, eventName);
+        if (!eventToRun.equals("")) {
+            this.handWaveyEvent.addLaterSubEvent(eventToRun, delay);
         }
     }
 
