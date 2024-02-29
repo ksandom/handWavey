@@ -493,18 +493,19 @@ The counterpart is `lockGestures();`
 ## Default macros
 
 <!-- BEGIN macro table. -->
-| custom- event | Description |
+| Macro name | Description |
 | --- | --- |
 | `prepForClick` | Prepare for a click. |
+| `prepForDelayedClick` | Prepare for a delayed click. |
 | `mDownAmbiguous` | Mouse down - Ambiguous, with delay. To be called by the event. |
 | `do-mDownAmbiguous` | Mouse down - Ambiguous. |
+| `mUpAmbiguous` | Mouse up - General. |
 | `mDownLeft` | Mouse down - Left, with delay. To be called by the event. |
 | `do-mDownLeft` | Mouse down - Left. |
 | `mDownRight` | Mouse down - Right, with delay. To be called by the event. |
 | `do-mDownRight` | Mouse down - Right. |
 | `mDownMiddle` | Mouse down - Middle, with delay. To be called by the event. |
 | `do-mDownMiddle` | Mouse down - Middle. |
-| `mUpAmbiguous` | Mouse up - General. |
 | `mUpLeft` | Mouse up - Left. |
 | `mUpRight` | Mouse up - Right. |
 | `mUpMiddle` | Mouse up - Middle. |
@@ -525,11 +526,18 @@ The counterpart is `lockGestures();`
 | `yankScroll-enter` | Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -enter macro gets it set up. |
 | `yankScroll-exit` | Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -exit macro puts it away. |
 | `do-mDoubleClick-left` | Perform a double left click right now. |
+| `do-mDoubleClickHold-left` | Perform a double left click hold right now. |
+| `do-mTrippleClick-left` | Perform a double left click right now. |
+| `do-mTrippleClickHold-left` | Perform a tripple left click hold right now. |
+| `do-earlyScroll` |  |
+| `undo-earlyScroll` |  |
 | `do-scroll` |  |
 | `movingProtection-enable` | Enable protections against accidental gestures from erratic data while the hand is moving quickly. |
 | `movingProtection-disable` | Disable protections against accidental gestures from erratic data while the hand is moving quickly. |
 | `movingProtectionSecondary-enable` | Enable protections against accidental gestures from erratic data while the hand is moving quickly. |
 | `movingProtectionSecondary-disable` | Disable protections against accidental gestures from erratic data while the hand is moving quickly. |
+| `simpleMovingProtection-enable` | Enable moving protection. For most gestureLayouts, you'll want movingProtection-enable. |
+| `simpleMovingProtection-disable` | Disable moving protection. For most gestureLayouts, you'll want movingProtection-disable. |
 | `prep-sharedScroll-slot` | Preparations to be done before running an overrideable slot for sharedScroll functionality. |
 | `finish-sharedScroll-slot-withoutCancel` | What has to be done after running an overrideable slot for sharedScroll functionality. |
 | `finish-sharedScroll-slot` | What has to be done after running an overrideable slot for sharedScroll functionality. |
