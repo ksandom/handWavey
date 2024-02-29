@@ -725,7 +725,7 @@ public class HandWaveyConfig {
             "The moving mean length for the yaw axis. >0. 1 effectively disables the moving mean. A larger number is more effective at removing noise, at the expense of responsiveness.");
         handCleaner.newItem(
             "movingMeanFinger",
-            "20",
+            "4",
             "The moving mean length for the finger (used for whether the hand is open or closed). >0. 1 effectively disables the moving mean. A larger number is more effective at removing noise, at the expense of responsiveness.");
         handCleaner.newItem(
             "autoTrimMaxChangePerSecond",
