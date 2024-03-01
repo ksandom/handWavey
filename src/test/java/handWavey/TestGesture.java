@@ -73,7 +73,7 @@ class TestGesture {
 
         // A specific change in a single component.
         assertEquals("", actionEvents.getItem("general-zone-pActive-enter").get());
-        assertEquals("setButton(\"left\");", actionEvents.getItem("general-segment-p0-enter").get());
+        assertEquals("unlockTaps(\"primary\", \"150\");setButton(\"left\");", actionEvents.getItem("general-segment-p0-enter").get());
         assertEquals("", actionEvents.getItem("general-state-pOpen-enter").get());
         assertEquals("", actionEvents.getItem("general-zone-sActive-enter").get());
         assertEquals("keyDown(\"ctrl\");", actionEvents.getItem("general-segment-s0-enter").get());
@@ -81,7 +81,7 @@ class TestGesture {
 
         // Any change in a single component.
         assertEquals("", actionEvents.getItem("general-zone-pAnyChange").get());
-        assertEquals("lockCursor();rewindCursorPosition();", actionEvents.getItem("general-segment-pAnyChange").get());
+        assertEquals("stabliseSegment();", actionEvents.getItem("general-segment-pAnyChange").get());
         assertEquals("", actionEvents.getItem("general-state-pAnyChange").get());
         assertEquals("", actionEvents.getItem("general-zone-sAnyChange").get());
         assertEquals("", actionEvents.getItem("general-segment-sAnyChange").get());
@@ -92,7 +92,7 @@ class TestGesture {
         assertEquals("", actionEvents.getItem("individual-pOOB0Absent-exit").get());
 
         // Special events.
-        assertEquals("recalibrateSegments();", actionEvents.getItem("special-newHandUnfreezeCursor").get());
+        assertEquals("recalibrateSegments();setSlot(\"250\", \"custom-recalibrateSegments\");", actionEvents.getItem("special-newHandUnfreezeCursor").get());
     }
 
     @Test
