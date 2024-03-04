@@ -418,6 +418,22 @@ Will unlock the primary hand.
 
 The counterpart is `lockTaps();`.
 
+#### showTapLocks
+
+`showTapLocks();` shows the current state of tap locks. Eg
+
+```
+Debug 1 (HandCleaner): Primary taps are locked with no timeout.
+Debug 1 (HandCleaner): Secondary taps are not locked locked.
+```
+
+or
+
+```
+Debug 1 (HandCleaner): Primary taps are locked for another 150 milliseconds (1709562338165-1709562338015).
+Debug 1 (HandCleaner): Primary gestures are locked.
+```
+
 #### lockGestures
 
 `lockGestures("hand");` locks roll and open/closed state changes, effectively locking most gestures that can be performed.
@@ -489,6 +505,33 @@ unlockGestures();
 Will unlock gestures on the primary hand.
 
 The counterpart is `lockGestures();`
+
+#### showGestureLocks
+
+`showGestureLocks();` shows the current state of gesture locks. Eg
+
+```
+Debug 1 (HandCleaner): Secondary gestures are not locked.
+Debug 1 (HandCleaner): Primary taps are not locked locked.
+```
+
+or
+
+```
+Debug 1 (HandCleaner): Primary gestures are locked.
+Debug 1 (HandCleaner): Primary taps are locked with no timeout.
+```
+
+#### showLocks
+
+`showLocks();` shows the state of all locks. At the time of this writing, that is `showTapLocks();` and `showGestureLocks();`, but will likely show other kinds of locks in the future. This currently looks like this:
+
+```
+Debug 1 (HandCleaner): Primary taps are locked with no timeout.
+Debug 1 (HandCleaner): Secondary taps are not locked locked.
+Debug 1 (HandCleaner): Primary gestures are locked.
+Debug 1 (HandCleaner): Secondary gestures are not locked.
+```
 
 ## Default macros
 

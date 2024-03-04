@@ -202,11 +202,20 @@ public class MacroCore {
             case "unlockGestures":
                 this.handWaveyManager.unlockGestures(parm(parameters, 0, "primary"));
                 break;
+            case "showGestureLocks":
+                this.handWaveyManager.showGestureLocks();
+                break;
             case "lockTaps":
                 this.handWaveyManager.lockTaps(parm(parameters, 0, "primary"), Long.parseLong(parm(parameters, 1, "0")));
                 break;
             case "unlockTaps":
                 this.handWaveyManager.unlockTaps(parm(parameters, 0, "primary"), Long.parseLong(parm(parameters, 1, "0")));
+                break;
+            case "showTapLocks":
+                this.handWaveyManager.showTapLocks();
+                break;
+            case "showLocks":
+                this.handWaveyManager.showLocks();
                 break;
 
 

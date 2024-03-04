@@ -20,7 +20,7 @@ class TestHandCleaner {
         this.handWaveyConfig = new HandWaveyConfig("unitTest");
         this.handWaveyConfig.defineGeneralConfig();
 
-        this.handCleaner = new HandCleaner();
+        this.handCleaner = new HandCleaner("UnitTest");
 
         this.handSummary = new HandSummary(42);
         this.handSummary.setHandPosition(10, 200, 20);

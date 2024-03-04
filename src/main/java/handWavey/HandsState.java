@@ -27,8 +27,8 @@ public class HandsState {
     private HandStateEvents primaryState = new HandStateEvents(true);
     private HandStateEvents secondaryState = new HandStateEvents(false);
 
-    private HandCleaner cleanPrimary = new HandCleaner();
-    private HandCleaner cleanSecondary = new HandCleaner();
+    private HandCleaner cleanPrimary = new HandCleaner("Primary");
+    private HandCleaner cleanSecondary = new HandCleaner("Secondary");
 
     private double zNoMoveBegin = 0;
     private double zActiveBegin = 0;
@@ -669,6 +669,12 @@ public class HandsState {
         }
     }
 
+    public void showGestureLocks() {
+        this.cleanPrimary.showGestureLocks();
+        this.cleanSecondary.showGestureLocks();
+    }
+
+
     public void lockTaps(String hand, long time) {
         if (!hand.equals("secondary")) {
             this.cleanPrimary.setTapLock(true, time);
@@ -683,6 +689,16 @@ public class HandsState {
         } else {
             this.cleanSecondary.setTapLock(false, time);
         }
+    }
+
+    public void showTapLocks() {
+        this.cleanPrimary.showTapLocks();
+        this.cleanSecondary.showTapLocks();
+    }
+
+    public void showLocks() {
+        this.showTapLocks();
+        this.showGestureLocks();
     }
 }
 

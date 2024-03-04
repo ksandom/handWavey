@@ -7,10 +7,15 @@ For cleaning the input hand data that comes in via HandSummary objects.
 package handWavey;
 
 import config.*;
+import debug.Debug;
 import dataCleaner.MovingMean;
 import java.util.Date;
 
 public class HandCleaner {
+    private Debug debug;
+
+    String name = "Unknown";
+
     private MovingMean movingMeanX = null;
     private MovingMean movingMeanY = null;
     private MovingMean movingMeanZ = null;
@@ -51,7 +56,11 @@ public class HandCleaner {
     private Boolean tapsLocked = false;
     private long tapUnlockTime = 0;
 
-    public HandCleaner() {
+    public HandCleaner(String name) {
+        this.name = name;
+
+        this.debug = Debug.getDebug("HandCleaner");
+
         Group ultraMotionConfig = Config.singleton().getGroup("ultraMotion");
         this.openThreshold = Float.parseFloat(ultraMotionConfig.getItem("openThreshold").get());
 
@@ -271,6 +280,15 @@ public class HandCleaner {
 
     public void setGestureLock(Boolean desiredState) {
         this.gesturesLocked = desiredState;
+        this.showGestureLocks();
+    }
+
+    public void showGestureLocks() {
+        if (this.gesturesLocked) {
+            this.debug.out(1, this.name + " gestures are locked.");
+        } else {
+            this.debug.out(1, this.name + " gestures are not locked.");
+        }
     }
 
     public void setTapLock(Boolean desiredState, long time) {
@@ -285,6 +303,8 @@ public class HandCleaner {
         if (this.tapsLocked) {
             resetTap();
         }
+
+        this.showTapLocks();
     }
 
     private Boolean tapsAreLocked() {
@@ -292,10 +312,26 @@ public class HandCleaner {
             if (timeInMilliseconds() > this.tapUnlockTime) {
                 this.tapsLocked = false;
                 this.tapUnlockTime = 0;
+
+                this.showTapLocks();
             }
         }
 
         return this.tapsLocked;
+    }
+
+    public void showTapLocks() {
+        if (this.tapsLocked) {
+            long now = timeInMilliseconds();
+            if (this.tapUnlockTime == 0) {
+                this.debug.out(1, this.name + " taps are locked with no timeout.");
+            } else {
+                String timeUntilUnlock = String.valueOf(this.tapUnlockTime - now);
+                this.debug.out(1, this.name + " taps are locked for another " + timeUntilUnlock + " milliseconds (" + String.valueOf(this.tapUnlockTime) + "-" + String.valueOf(now) + ").");
+            }
+        } else {
+            this.debug.out(1, this.name + " taps are not locked locked.");
+        }
     }
 
     private Boolean isRetracting() {
