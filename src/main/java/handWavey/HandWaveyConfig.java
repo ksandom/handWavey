@@ -121,6 +121,10 @@ public class HandWaveyConfig {
             "1",
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. HandsState tracks what gesture the hands are currently making, and triggers events based on changes.");
         debug.newItem(
+            "HandCleaner",
+            "1",
+            "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. HandCleaner is responsible for filtering out noise in the data that handWavey receives.");
+        debug.newItem(
             "Motion",
             "1",
             "Int: Sensible numbers are 0-5, where 0 is no debugging, and 5 is probably more detail than you'll ever want. Motion takes hand movements and converts them into output movements like moving the mouse cursor, or scrolling.");
@@ -845,7 +849,7 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "noHands",
-            "cancelAllDelayedDos();setButton(\"left\");releaseButtons();releaseKeys();releaseZone();unlockTaps(\"primary\");",
+            "showLocks();cancelAllDelayedDos();setButton(\"left\");releaseButtons();releaseKeys();releaseZone();unlockTaps(\"primary\");",
             "To be triggered when the primary hand is no longer present.");
 
         macrosGroup.newItem(
