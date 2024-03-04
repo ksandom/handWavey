@@ -859,7 +859,7 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "do-simple-ambiguousClick",
-            "prepForDelayedClick();click();unlockCursor();",
+            "prepForDelayedClick();click();unlockCursor();unlockTaps();",
             "Do a simple click without specifying the button. It's intended for this to have been done before getting to this point. Either by abstracting it out, or by the gestureLayout setting it.");
 
         macrosGroup.newItem(
