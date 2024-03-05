@@ -318,6 +318,17 @@ public final class HandWaveyManager {
 
     // This is where everything gets glued together.
     public void sendHandSummaries(HandSummary[] handSummaries) {
+        try {
+            doHandSummaries(handSummaries);
+        }
+        catch(Exception e) {
+            this.debug.out(0, "Exception detected: " + e.getMessage());
+            e.printStackTrace();
+            this.handWaveyEvent.triggerAudioOnly("bug");
+        }
+    }
+
+    private void doHandSummaries(HandSummary[] handSummaries) {
         if (!gapIsWideEnough()) {
             return;
         }
