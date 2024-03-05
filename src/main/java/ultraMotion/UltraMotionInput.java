@@ -128,6 +128,16 @@ public class UltraMotionInput extends Listener {
     }
 
     public void onFrame(Controller controller) {
+        try {
+            this.handleFrame(controller);
+        }
+        catch(Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void handleFrame(Controller controller) {
         // Get the most recent frame and report some basic information
         Frame frame = controller.frame();
         this.debug.out(2, "Frame id: " + frame.id()
@@ -229,7 +239,16 @@ public class UltraMotionInput extends Listener {
             handNumber++;
         }
 
-        if (this.handSummaries[0].isValid()) {
+        Boolean shouldSendHandSummaries = true;
+        if (this.handSummaries[0] == null) {
+            shouldSendHandSummaries = false;
+        } else {
+            if (!this.handSummaries[0].isValid()) {
+                shouldSendHandSummaries = false;
+            }
+        }
+
+        if (shouldSendHandSummaries) {
             sendHandSummaries();
         } else {
             this.ultraMotionManager.getHandWaveyManager().discardOldPosition();
