@@ -18,6 +18,7 @@ import bug.ShouldComplete;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class HandWaveyEvent {
@@ -135,17 +136,29 @@ public class HandWaveyEvent {
         }
 
         long now = timeInMilliseconds();
+        List<String> toRemove = new ArrayList<String>();
 
-
+        // Call events that are due.
         for (String eventName : this.delayedEvents.keySet()) {
-            long delay = this.delayedEvents.get(eventName);
+            if (!this.delayedEvents.containsKey(eventName)) {
+                this.debug.out(1, "triggerDelayedEvents: Skipping obsolete event: " + eventName);
+                continue;
+            }
+
+            Long delay = this.delayedEvents.get(eventName);
 
             if (delay < now) {
                 this.debug.out(1, "triggerDelayedEvents: " + eventName);
-                cancelLaterSubEvent(eventName);
+                toRemove.add(eventName);
 
                 macroLine.doSubAction(eventName, "____");
             }
+        }
+
+        // Remove the triggered events.
+        // This is done separately so as not to modify the hashmap while it's being read.
+        for (String eventName : toRemove) {
+            cancelLaterSubEvent(eventName);
         }
     }
 
