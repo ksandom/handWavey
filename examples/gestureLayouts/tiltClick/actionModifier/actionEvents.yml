@@ -24,12 +24,6 @@ items:
     value: debug("0", "Toolset = Multi-click.");
   individual-pAction9Closed-enter:
     value: toolset-multiClick();
-  general-segment-p0-enter:
-    value: ""
-  general-segment-p2-enter:
-    value: ""
-  general-segment-p2-exit:
-    value: ""
   general-segment-s0-enter:
     value: keyDown("ctrl");
   general-segment-s0-exit:

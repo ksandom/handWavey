@@ -2,12 +2,6 @@ groups: {}
 items:
   general-zone-pAction-enter:
     value: do-mDoubleClick-left();
-  general-segment-p0-enter:
-    value: ""
-  general-segment-p2-enter:
-    value: ""
-  general-segment-p2-exit:
-    value: ""
   general-segment-s0-enter:
     value: keyDown("ctrl");
   general-segment-s0-exit:

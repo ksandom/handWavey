@@ -908,6 +908,21 @@ public class HandWaveyConfig {
             "Reduce noise caused by the hand rotating.");
 
         macrosGroup.newItem(
+            "stabliseNeutralPosition",
+            "lockGestures(\"primary\");delayedDo(\"continue-stabliseNeutralPosition\", \"100\");",
+            "When coming out of a gesture, it's easy to accidentally slingshot into another gesture. This is to prevent that, and is intended to be called when entering segment 0.");
+
+        macrosGroup.newItem(
+            "continue-stabliseNeutralPosition",
+            "unlockGestures(\"primary\");recalibrateSegments();cancelAllDelayedDos();delayedDo(\"finish-stabliseNeutralPosition\", \"60\");",
+            "Part to of preventing slingshotting.");
+
+        macrosGroup.newItem(
+            "finish-stabliseNeutralPosition",
+            "recalibrateSegments();cancelAllDelayedDos();",
+            "The final part of slingshot prevention.");
+
+        macrosGroup.newItem(
             "yankScroll-enter",
             "cancelAllDelayedDos();lockCursor();allowWheelClicks();setSlot(\"3\", \"do-scroll\");lockTaps(\"primary\");unlockTaps(\"primary\" , \"800\");delayedDo(\"do-earlyScroll\", \"900\");delayedDo(\"do-scroll\", \"1500\");",
             "Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -enter macro gets it set up.");
