@@ -259,7 +259,7 @@ public class HandCleaner {
         }
     }
 
-    private void resetAutoTrim() {
+    public void resetAutoTrim() {
         trimRoll = 0;
         lastChangeTime = timeInMilliseconds();
     }

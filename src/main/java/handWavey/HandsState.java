@@ -644,12 +644,14 @@ public class HandsState {
             this.primaryOffset = this.cleanPrimary.getHandRoll();
             if (!this.handSummaries[0].handIsLeft()) this.primaryOffset *= -1;
             this.debug.out(0, "recalibrateSegments: primary = " + String.valueOf(this.primaryOffset));
+            this.cleanPrimary.resetAutoTrim();
         }
 
         if (this.handSummaries[1] != null && this.handSummaries[1].isValid()) {
             this.secondaryOffset = this.cleanSecondary.getHandRoll();
             if (!this.handSummaries[1].handIsLeft()) this.secondaryOffset *= -1;
             this.debug.out(0, "recalibrateSegments: secondary = " + String.valueOf(this.secondaryOffset));
+            this.cleanSecondary.resetAutoTrim();
         }
     }
 
