@@ -655,6 +655,11 @@ public class HandsState {
         }
     }
 
+    public void resetAutoTrim() {
+        this.cleanPrimary.resetAutoTrim();
+        this.cleanSecondary.resetAutoTrim();
+    }
+
     public void lockGestures(String hand) {
         if (!hand.equals("secondary")) {
             this.cleanPrimary.setGestureLock(true);

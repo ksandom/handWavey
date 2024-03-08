@@ -337,6 +337,12 @@ This instantly makes handWavey automatically calibrated to the individual person
 
 See [autoCalibration](https://github.com/ksandom/handWavey/blob/main/docs/user/configuration/autoCalibration.md).
 
+#### resetAutoTrim
+
+`resetAutoTrim();` sets the trim that has accumulated via [autoTrim](https://github.com/ksandom/handWavey/blob/main/docs/user/configuration/autoCalibration.md#autotrim) to 0 for each hand.
+
+This happens automatically when you re-introduce your hand, or when you call `recalibrateSegments();`. But you can also use `resetAutoTrim();` at times when the value is likely to have moved beyond what is helpful for that situation.
+
 ### Gesture control
 
 #### lockTaps

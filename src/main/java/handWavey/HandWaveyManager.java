@@ -264,6 +264,10 @@ public final class HandWaveyManager {
         handsState.recalibrateSegments();
     }
 
+    public void resetAutoTrim() {
+        handsState.resetAutoTrim();
+    }
+
     public void lockGestures(String hand) {
         handsState.lockGestures(hand);
     }
