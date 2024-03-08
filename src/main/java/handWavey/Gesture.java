@@ -96,19 +96,19 @@ public class Gesture {
 
         // Set buttons.
         overrideDefault(
-            "general-segment-p0-enter",
+            "individual-pNonOOB0Open-enter",
             "unlockTaps(\"primary\", \"150\");setButton(\"left\");",
             "");
         overrideDefault(
-            "general-segment-p1-enter",
+            "individual-pNonOOB1Open-enter",
             "lockTaps(\"primary\");unlockTaps(\"primary\", \"150\");setButton(\"right\");",
             "");
         overrideDefault(
-            "general-segment-p2-enter",
+            "individual-pNonOOB2Open-enter",
             "setButton(\"middle\");overrideZone(\"scroll\");lockTaps(\"primary\");unlockTaps(\"primary\", \"150\");",
             "");
         overrideDefault(
-            "general-segment-p2-exit",
+            "individual-pNonOOB2Open-enter",
             "releaseZone();unlockTaps(\"primary\");",
             "");
 
@@ -146,6 +146,10 @@ public class Gesture {
         overrideDefault(
             "general-segment-pAnyChange",
             "stabliseSegment();",
+            "");
+        overrideDefault(
+            "general-segment-p0-enter",
+            "stabliseNeutralPosition();",
             "");
         overrideDefault(
             "special-newHandUnfreezeEvent",

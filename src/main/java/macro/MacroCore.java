@@ -194,6 +194,9 @@ public class MacroCore {
             case "recalibrateSegments":
                 this.handWaveyManager.recalibrateSegments();
                 break;
+            case "resetAutoTrim":
+                this.handWaveyManager.resetAutoTrim();
+                break;
 
             // Gesture control.
             case "lockGestures":
