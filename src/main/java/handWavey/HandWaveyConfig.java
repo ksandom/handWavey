@@ -909,18 +909,13 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "stabliseNeutralPosition",
-            "lockGestures(\"primary\");delayedDo(\"continue-stabliseNeutralPosition\", \"100\");",
+            "lockGestures(\"primary\");delayedDo(\"finish-stabliseNeutralPosition\", \"100\");",
             "When coming out of a gesture, it's easy to accidentally slingshot into another gesture. This is to prevent that, and is intended to be called when entering segment 0.");
 
         macrosGroup.newItem(
-            "continue-stabliseNeutralPosition",
-            "unlockGestures(\"primary\");recalibrateSegments();cancelAllDelayedDos();delayedDo(\"finish-stabliseNeutralPosition\", \"60\");",
-            "Part to of preventing slingshotting.");
-
-        macrosGroup.newItem(
             "finish-stabliseNeutralPosition",
-            "recalibrateSegments();cancelAllDelayedDos();",
-            "The final part of slingshot prevention.");
+            "unlockGestures(\"primary\");cancelAllDelayedDos();resetAutoTrim();",
+            "The final step of preventing slingshotting. Called by stabliseNeutralPosition();");
 
         macrosGroup.newItem(
             "yankScroll-enter",
