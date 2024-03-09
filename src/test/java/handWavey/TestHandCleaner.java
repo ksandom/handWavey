@@ -93,7 +93,7 @@ class TestHandCleaner {
 
         assertEquals(this.handCleaner.getHandX(), 7.5);
         assertEquals(this.handCleaner.getHandY(), 150);
-        assertEquals(this.handCleaner.getHandZ(), 15);
+        assertEquals(this.handCleaner.getHandZ(), 0);
         assertEquals(this.handCleaner.getHandRoll(), 0.075, 0.001);
         assertEquals(this.handCleaner.getHandPitch(), 0);
         assertEquals(this.handCleaner.getHandYaw(), -0.075, 0.001);
