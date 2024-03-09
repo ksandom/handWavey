@@ -748,16 +748,20 @@ public class HandWaveyConfig {
         Group tap = this.config.newGroup("tap");
         tap.newItem(
             "tapSpeed",
-            "10",
+            "5",
             "The speed of the Z axis (away from you), above which, the hand is considered to be performing a tap. Setting this to -1 disables the tap gesture. You'll need tapSpeed to be set to something positive for this to work. I suggest starting around 5-10.");
         tap.newItem(
-            "samplesToWaitNegative",
-            "1",
-            "Number of samples in the negative direction to wait until allowing another tap.");
+            "tapMinTime",
+            "50",
+            "The minimum time that the tap must take.");
         tap.newItem(
-            "samplesToWaitPositive",
-            "5",
-            "Number of samples in the positive direction to wait until allowing a tap.");
+            "tapMaxTime",
+            "100",
+            "The maximum time that the tap can take.");
+        tap.newItem(
+            "postTapTime",
+            "100",
+            "The minimum amount of time that the hand must not be moving more than tapSpeed after performing the tap.");
 
         Group macros = this.config.newGroup("macros");
         generateMacroConfig(macros);
