@@ -73,7 +73,7 @@ class TestGesture {
 
         // A specific change in a single component.
         assertEquals("", actionEvents.getItem("general-zone-pActive-enter").get());
-        assertEquals("unlockTaps(\"primary\", \"150\");setButton(\"left\");", actionEvents.getItem("general-segment-p0-enter").get());
+        assertEquals("stabliseNeutralPosition();", actionEvents.getItem("general-segment-p0-enter").get());
         assertEquals("", actionEvents.getItem("general-state-pOpen-enter").get());
         assertEquals("", actionEvents.getItem("general-zone-sActive-enter").get());
         assertEquals("keyDown(\"ctrl\");", actionEvents.getItem("general-segment-s0-enter").get());
