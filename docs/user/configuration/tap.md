@@ -20,16 +20,37 @@ The motivation for this is to
 
 ### Tuning
 
+        tap.newItem(
+            "tapMinTime",
+            "50",
+            "The minimum time that the tap must take.");
+        tap.newItem(
+            "tapMaxTime",
+            "100",
+            "The maximum time that the tap can take.");
+        tap.newItem(
+            "postTapTime",
+            "100",
+            "The minimum amount of time that the hand must not be moving more than tapSpeed after performing the tap.");
+
+
+
 * tap.yml
     * `tapSpeed` - How fast your hand needs to move to trigger the tap event.
-        * Setting this too low leads to unwanted tap events.
-        * Setting this too high makes it very hard to trigger a tap event.
-    * `samplesToWaitNegative` - How many retraction samples to wait until you can trigger another tap event after the last successful one completed.
-        * Setting this too small leads to unwanted tap events.
-        * Setting this too large restricts your ability to tap multiple things in a short space of time.
-    * `samplesToWaitPositive` - After `samplesToWaitNegative` has succeeded, How many samples going deeper to wait until you can trigger another tap event after the last successful one completed.
-        * Setting this too small leads to unwanted tap events.
-        * Setting this too large restricts your ability to tap multiple things in a short space of time.
+        * Too low:
+            * can lead to unwanted tap events.
+            * it can also lead to `isZStationary()` fluctuating and no taps can be performed.
+        * Too high: makes it very hard to trigger a tap event.
+        * Try starting with a setting around 5-10.
+    * `tapMinTime` - The minimum amount of milliseconds that you must be moving your hand in the Z direction bove the `tapSpeed` value to be counted as a tap motion.
+        * Too low: will make it too easy to trigger a tap event.
+        * Too high: will make you have to move your hand over a long distance to perform a tap.
+    * `tapMaxTime` - The maximum amount of milliseconds. If your hand is still moving after this time, it isn't a tap, and it will be discarded.
+        * Too low will cause legitimate taps to be discarded because they took a little too long.
+        * Too high: will allow some non-legitimate movements to count as taps.
+    * `postTapTime` - How long (in milliseconds) your hand must be relatively stationary on the Z axis to be counted as a tap. If you move away too quickly, it will be assumed that it is part of another action.
+        * Too low: It will be easy to trigger accidental taps.
+        * Too high: You will have to concentrate to keep your hand steady after performing a tap.
 * click.yaml
     * `rewindCursorTime` - Use the cursor position from this much time before the tap event was triggered.
         * Setting this too low will make the effective click location move with the noise created during the tap.

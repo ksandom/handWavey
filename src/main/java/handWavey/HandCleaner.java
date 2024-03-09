@@ -9,6 +9,7 @@ package handWavey;
 import config.*;
 import debug.Debug;
 import dataCleaner.MovingMean;
+import dataCleaner.Consistently;
 import java.util.Date;
 
 public class HandCleaner {
@@ -45,16 +46,16 @@ public class HandCleaner {
     private long lastSubmissionTime = 0;
     private double stationarySpeed = 0;
 
-    private Boolean tapArmed = false;
-    private double tapSpeed = 0;
-    private long tapNegativeCount = -1;
-    private long tapPositiveCount = -1;
-    private long samplesToWaitNegative = 5;
-    private long samplesToWaitPositive = 5;
-
     private Boolean gesturesLocked = false;
     private Boolean tapsLocked = false;
     private long tapUnlockTime = 0;
+
+    private double tapSpeed = 0;
+    private Consistently consistentZTap = null;
+    private Consistently consistentZPostTap = null;
+    private Consistently consistentZOverflow = null;
+
+    private int tapProgress = 0;
 
     public HandCleaner(String name) {
         this.name = name;
@@ -82,8 +83,16 @@ public class HandCleaner {
 
         Group tap = Config.singleton().getGroup("tap");
         tapSpeed = Double.parseDouble(tap.getItem("tapSpeed").get());
-        samplesToWaitNegative = Integer.parseInt(tap.getItem("samplesToWaitNegative").get());
-        samplesToWaitPositive = Integer.parseInt(tap.getItem("samplesToWaitPositive").get());
+
+        long tapMinTime = Integer.parseInt(tap.getItem("tapMinTime").get());
+        long tapMaxTime = Integer.parseInt(tap.getItem("tapMaxTime").get());
+        long tapOverflow = tapMaxTime - tapMinTime;
+        long postTapTime = Integer.parseInt(tap.getItem("postTapTime").get());
+
+        this.consistentZTap = new Consistently(true, tapMinTime, "z tap");
+        this.consistentZOverflow = new Consistently(true, tapOverflow, "z tap overflow");
+        this.consistentZPostTap = new Consistently(true, postTapTime, "z post tap");
+
 
         lastChangeTime = timeInMilliseconds();
 
@@ -359,57 +368,56 @@ public class HandCleaner {
             return false;
         }
 
-        /*
-            There are a couple of related things going on here.
-
-            * We only want a tap when the hand is pushing away from you.
-            * We don't want the tap to trigger when entering the active zone. Therefore we need to make sure that we don't arm the taps until the hand has started to retreat after entering the active zone.
-        */
-        if (isRetracting()) {
-            tapArmed = true;
-            tapNegativeCount ++;
-            tapPositiveCount = 0;
-            return false;
-        } else {
-            tapPositiveCount ++;
-        }
-
         // If the hand is moving, we are busy doing something else.
         if (!isStationary()) {
             resetTap();
             return false;
         }
 
-        //System.out.println(zSpeed);
+        // A basic state machine for figuring out if a tap is happening.
+        Boolean tapAction = (!isRetracting() && !isZStationary());
+        String output = "false";
+        if (tapAction) output = "true";
+        this.consistentZTap.tick(tapAction);
+        this.consistentZOverflow.tick(tapAction);
+        this.consistentZPostTap.tick(isStationary());
 
-        // We haven't yet met the conditions to perform a tap. Don't do anything further.
-        if (!tapArmed) {
-            resetTap();
-            return false;
+        switch (tapProgress) {
+            case 0:
+                if (this.consistentZTap.isConsistent()) {
+                    tapProgress = 1;
+                    this.debug.out(2, "Tap: motion");
+                    this.consistentZOverflow.reset();
+                }
+                break;
+            case 1:
+                if (this.consistentZOverflow.isConsistent()) {
+                    this.debug.out(2, "Tap: overflow");
+                    resetTap();
+                }
+
+                if (!isStationary()) {
+                    this.debug.out(2, "Tap: moving");
+                    this.consistentZPostTap.reset();
+                }
+
+                if (this.consistentZPostTap.isConsistent()) {
+                    this.debug.out(2, "Tap: complete");
+                    resetTap();
+                    return true;
+                }
+            default:
+                resetTap();
         }
 
-        // If the state is fluctuating, we don't want to trigger multiple events.
-        if (tapNegativeCount > -1 && tapNegativeCount < samplesToWaitNegative) {
-            return false;
-        }
-
-        if (tapPositiveCount < samplesToWaitPositive) {
-            return false;
-        }
-
-        // Have we met the speed threshold for a tap?
-        if (isZStationary()) {
-            return false;
-        }
-
-        // Phew! We're ready to perform the tap.
-        resetTap();
-        return true;
+        return false;
     }
 
     private void resetTap() {
-        tapNegativeCount = 0;
-        tapPositiveCount = 0;
-        tapArmed = false;
+        tapProgress = 0;
+
+        this.consistentZTap.reset();
+        this.consistentZOverflow.reset();
+        this.consistentZPostTap.reset();
     }
 }
