@@ -278,11 +278,8 @@ public class MacroCore {
             this.debug.out(2, "Internal instruction \"" + commandToTry + "\" does not exist.");
             if (!this.tryMacro(commandToTry)) {
                 this.debug.out(2, "Macro \"" + commandToTry + "\" does not exist.");
-                if (!this.events.itemExists(commandToTry)) {
+                if (!this.handWaveyEvent.triggerSubEvent(commandToTry, indent)) {
                     this.debug.out(0, commandToTry + " doesn't appear to be a macro or event.");
-                } else {
-                    this.debug.out(2, "Event \"" + commandToTry + "\" exists. Triggering that.");
-                    this.handWaveyEvent.triggerSubEvent(commandToTry, indent);
                 }
             }
         }

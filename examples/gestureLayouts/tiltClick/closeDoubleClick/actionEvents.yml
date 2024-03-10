@@ -1,7 +1,7 @@
 groups: {}
 items:
   general-zone-pAction-enter:
-    value: do-mDoubleClick-left();
+    value: simple-doubleLeftClick();
   general-segment-s0-enter:
     value: keyDown("ctrl");
   general-segment-s0-exit:

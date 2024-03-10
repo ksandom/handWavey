@@ -1,26 +1,72 @@
 groups: {}
 items:
-  general-state-pClosed-enter:
-    value: metalDing07.wav
-  special-newHandFreeze:
+  general-zone-pActive-enter:
+    value: piano-short-C3.wav
+  abstract-scroll-begin:
     value: ''
-  general-segment-sAnyChange:
-    value: metalDing04.wav
+  abstract-mMiddle-down:
+    value: piano-short-F3.wav
+  individual-pNonOOB1Open-enter:
+    value: ''
+  abstract-mRight-up:
+    value: piano-short-A3.wav
   general-zone-pAction-enter:
-    value: metalDing07.wav
-  general-zone-pAnyChange:
-    value: metalDing01.wav
-  general-state-pClosed-exit:
-    value: metalDing08.wav
-  general-zone-sAnyChange:
-    value: metalDing03.wav
-  general-segment-pAnyChange:
-    value: metalDing02.wav
-  imposterHand-replace:
-    value: ''
+    value: piano-short-C4.wav
   special-newHandUnfreezeEvent:
     value: ''
-  special-newHandUnfreezeCursor:
+  imposterHand-replace:
     value: ''
+  abstract-doubleClick:
+    value: metalDing01.wav
+  special-newHandUnfreezeCursor:
+    value: recalibrateSegments();
+  abstract-mMiddle-click:
+    value: piano-short-B4.wav
+  abstract-mLeft-click:
+    value: piano-short-G4.wav
+  special-secondaryStationary:
+    value: ''
+  special-newHandFreeze:
+    value: ''
+  abstract-mRight-click:
+    value: piano-short-A4.wav
+  general-zone-sAnyChange:
+    value: metalDing03.wav
+  general-zone-pNoMove-enter:
+    value: piano-short-C2.wav
   imposterHand-discard:
+    value: ''
+  individual-pNonOOB2Open-enter:
+    value: ''
+  abstract-mRight-down:
+    value: piano-short-F3.wav
+  abstract-mMiddle-up:
+    value: piano-short-B3.wav
+  general-segment-sAnyChange:
+    value: metalDing04.wav
+  general-state-pClosed-exit:
+    value: metalDing07.wav
+  abstract-mLeft-down:
+    value: piano-short-E3.wav
+  special-secondaryMoving:
+    value: ''
+  abstract-scroll-end:
+    value: ''
+  abstract-mLeft-up:
+    value: piano-short-G3.wav
+  general-zone-pOOB-enter:
+    value: piano-short-C1.wav
+  abstract-trippleClick:
+    value: metalDing02.wav
+  abstract-scroll-early:
+    value: metalDing04.wav
+  general-state-pClosed-enter:
+    value: metalDing08.wav
+  bug:
+    value: coocoo1.wav
+  individual-pNonOOB0Open-enter:
+    value: ''
+  special-primaryMoving:
+    value: ''
+  special-primaryStationary:
     value: ''
