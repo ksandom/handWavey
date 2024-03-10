@@ -409,7 +409,7 @@ public class Gesture {
 
         switch (direction) {
             case Gesture.entering:
-                result = "enterint";
+                result = "entering";
                 break;
             case Gesture.exiting:
                 result = "exiting";
