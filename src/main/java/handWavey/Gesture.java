@@ -60,39 +60,39 @@ public class Gesture {
         overrideDefault(
             "general-zone-pAction-enter",
             "do-mDoubleClick-left();",
-            "metalDing07.wav");
+            "");
 
         // Normal click behavior.
         overrideDefault(
             "general-state-pClosed-enter",
             "mDownAmbiguous();",
-            "metalDing07.wav");
+            "");
         overrideDefault(
             "general-state-pClosed-exit",
             "mUpAmbiguous();",
-            "metalDing08.wav");
+            "");
 
         // Set taps.
         overrideDefault(
             "tap-p0Open",
             "simple-leftClick();",
-            "metalDing08.wav");
+            "");
         overrideDefault(
             "tap-p1Open",
             "simple-rightClick();",
-            "metalDing08.wav");
+            "");
         overrideDefault(
             "tap-p2Open",
             "simple-middleClick();",
-            "metalDing08.wav");
+            "");
         overrideDefault(
             "tap-s0Open",
             "simple-rightClick();",
-            "metalDing05.wav");
+            "");
         overrideDefault(
             "tap-s0Closed",
             "simple-middleClick();",
-            "metalDing04.wav");
+            "");
 
         // Set buttons.
         overrideDefault(
@@ -161,9 +161,9 @@ public class Gesture {
             "");
 
         // General auido feedback.
-        this.audioEvents.getItem("general-zone-pAnyChange").overrideDefault("metalDing01.wav");
+        this.audioEvents.getItem("general-zone-pAnyChange").overrideDefault("");
         this.audioEvents.getItem("general-zone-sAnyChange").overrideDefault("metalDing03.wav");
-        this.audioEvents.getItem("general-segment-pAnyChange").overrideDefault("metalDing02.wav");
+        this.audioEvents.getItem("general-segment-pAnyChange").overrideDefault("");
         this.audioEvents.getItem("general-segment-sAnyChange").overrideDefault("metalDing04.wav");
     }
 
