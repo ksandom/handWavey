@@ -8,7 +8,7 @@ items:
     value: ''
   closedSlot1-overrideable-enter:
     description: Overrideable action to be performed when the closedSlot1 gesture is performed.
-    value: setButton("middle");mouseDown();mouseUp();
+    value: simple-middleClick();
   closedSlot1-overrideable-exit:
     description: Overrideable action to be performed when the closedSlot1 gesture
       is finished.
