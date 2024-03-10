@@ -70,10 +70,6 @@ Move primary hand to action zone. Tilt hand to denote the toolset. Close hand, a
   * Slot (3/8):
   * Slot (4/9):
 
-## Considerations
-
-* Dragging over larger areas is currently unreliable.
-
 ## Target audience
 
 It's not particularly complicated, but there's a bit to read here to understand it. It's probably worth getting the hang of one of the other [tiltClick implementations](https://github.com/ksandom/handWavey/tree/main/examples/gestureLayouts/tiltClick) like [tiltClick-closeDoubleClick](https://github.com/ksandom/handWavey/tree/main/examples/gestureLayouts/tiltClick/closeDoubleClick).

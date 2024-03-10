@@ -1,4 +1,6 @@
-# tiltClick-doubleClick
+# tiltClick-easyMiddleClick
+
+If you use middle click a lot, this is for you. It makes middle click easier, and with less strain.
 
 ## Using it
 
@@ -9,12 +11,11 @@
 * Clicks
     * Click: Tilt your hand off to the side it naturally wants to turn.
     * Right click: Tilt your hand slightly unnaturally.
-    * Middle click: Close your hand, then tilt to the side it naturally wants to turn.
+    * Middle click: Tap with closed hand (like a slight punching motion.)
     * Double click:
+      * Close your hand, then tilt to the side it naturally wants to turn.
       * Touch the action zone.
-      * Hand in neutral position. Close your hand. Rotate slightly unnaturally.
-    * Tripple click: Tap with closed hand (like a slight punching motion.)
-* Scroll: Hand in neutral position. Close your hand. Move hand up/down.
+    * Tripple click: Close your hand, then tilt it inwards (unnaturally).
 * Keys <!-- (nice to haves) -->
     * CTRL: Introduce secondary hard. Tilt slightly unnaturally.
     * ALT: Introduce secondary hard. Keep relatively flat.
@@ -26,6 +27,7 @@ Most people?
 
 This is meant to
 
+* be easier to middle click often.
 * be easier to click repetitively with less impact on your wrist.
 * be a more relax way to hold your hand.
 
