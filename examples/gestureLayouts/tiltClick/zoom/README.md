@@ -18,10 +18,6 @@
     * ALT: Introduce secondary hard. Keep relatively flat.
     * Shift: Introduce secondary hard. Tilt in natural direction to almost vertical.
 
-## Considerations
-
-* Dragging over larger areas is currently unreliable.
-
 ## Target audience
 
 Most people?

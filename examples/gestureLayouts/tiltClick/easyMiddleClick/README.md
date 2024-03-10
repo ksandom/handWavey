@@ -21,16 +21,13 @@ If you use middle click a lot, this is for you. It makes middle click easier, an
     * ALT: Introduce secondary hard. Keep relatively flat.
     * Shift: Introduce secondary hard. Tilt in natural direction to almost vertical.
 
-## Considerations
-
-* Dragging over larger areas is currently unreliable.
-
 ## Target audience
 
 Most people?
 
 This is meant to
 
+* be easier to middle click often.
 * be easier to click repetitively with less impact on your wrist.
 * be a more relax way to hold your hand.
 
