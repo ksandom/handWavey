@@ -661,6 +661,9 @@ public class HandWaveyConfig {
             "",
             "When the secondary hand starts moving.");
 
+        audioEvents.addItemTemplate("abstract-.*", "", "A notification for an abstract action rather than a specific event.");
+
+
 
         this.config.newItem(
             "relativeSensitivity",
@@ -803,7 +806,7 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "do-mDownLeft",
-            "setButton(\"left\");do-mDownAmbiguous();",
+            "setButton(\"left\");do-mDownAmbiguous();do(\"abstract-mLeft-down\");",
             "Mouse down - Left.");
 
         macrosGroup.newItem(
@@ -813,7 +816,7 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "do-mDownRight",
-            "setButton(\"right\");do-mDownAmbiguous();",
+            "setButton(\"right\");do-mDownAmbiguous();do(\"abstract-mRight-down\");",
             "Mouse down - Right.");
 
         macrosGroup.newItem(
@@ -823,22 +826,22 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "do-mDownMiddle",
-            "setButton(\"middle\");do-mDownAmbiguous();",
+            "setButton(\"middle\");do-mDownAmbiguous();do(\"abstract-mMiddle-down\");",
             "Mouse down - Middle.");
 
         macrosGroup.newItem(
             "mUpLeft",
-            "mUpAmbiguous();",
+            "mUpAmbiguous();do(\"abstract-mLeft-up\");",
             "Mouse up - Left.");
 
         macrosGroup.newItem(
             "mUpRight",
-            "mUpAmbiguous();",
+            "mUpAmbiguous();do(\"abstract-mRight-up\");",
             "Mouse up - Right.");
 
         macrosGroup.newItem(
             "mUpMiddle",
-            "mUpAmbiguous();",
+            "mUpAmbiguous();do(\"abstract-mMiddle-up\");",
             "Mouse up - Middle.");
 
         macrosGroup.newItem(
@@ -873,7 +876,7 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "do-simple-leftClick",
-            "setButton(\"left\");do-simple-ambiguousClick();",
+            "setButton(\"left\");do-simple-ambiguousClick();do(\"abstract-mLeft-click\");",
             "Do the actual work of the left click from a tap. Intended to be called by simple-leftClick();");
 
         macrosGroup.newItem(
@@ -883,7 +886,7 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "do-simple-rightClick",
-            "setButton(\"right\");do-simple-ambiguousClick();",
+            "setButton(\"right\");do-simple-ambiguousClick();do(\"abstract-mRight-click\");",
             "Do the actual work of the right click from a tap. Intended to be called by simple-rightClick();");
 
         macrosGroup.newItem(
@@ -893,8 +896,18 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "do-simple-middleClick",
-            "setButton(\"middle\");do-simple-ambiguousClick();",
+            "setButton(\"middle\");do-simple-ambiguousClick();do(\"abstract-mMiddle-click\");",
             "Do the actual work of the middle click from a tap. Intended to be called by simple-middleClick();");
+
+        macrosGroup.newItem(
+            "simple-doubleLeftClick",
+            "delayedDo(\"do-mDoubleClick-left\", \"150\");",
+            "Perform a complete double-click.");
+
+        macrosGroup.newItem(
+            "do-mDoubleClick-left",
+            "lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();do(\"abstract-doubleClick\");",
+            "Perform a double left click right now.");
 
         macrosGroup.newItem(
             "simple-trippleLeftClick",
@@ -903,7 +916,7 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "do-simple-trippleLeftClick",
-            "cancelAllDelayedDos();setButton(\"left\");lockCursor();rewindCursorPosition(\"150\");click();click();click();unlockCursor();",
+            "cancelAllDelayedDos();setButton(\"left\");lockCursor();rewindCursorPosition(\"150\");click();click();click();unlockCursor();do(\"abstract-trippleClick\");",
             "Do the work of a simple tripple click.");
 
         macrosGroup.newItem(
@@ -928,13 +941,8 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "yankScroll-exit",
-            "cancelAllDelayedDos();unlockCursor();allowWheelClicks();setSlot(\"3\", \"\");rewindCursorPosition();releaseZone();unlockCursor();unlockTaps(\"primary\", \"800\");",
+            "cancelAllDelayedDos();unlockCursor();allowWheelClicks();setSlot(\"3\", \"\");rewindCursorPosition();releaseZone();unlockCursor();unlockTaps(\"primary\", \"800\");do(\"abstract-scroll-end\");",
             "Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -exit macro puts it away.");
-
-        macrosGroup.newItem(
-            "do-mDoubleClick-left",
-            "lockCursor();rewindCursorPosition();releaseButtons();setButton(\"left\");doubleClick();",
-            "Perform a double left click right now.");
 
         macrosGroup.newItem(
             "do-mDoubleClickHold-left",
@@ -953,7 +961,7 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "do-earlyScroll",
-            "rewindCursorPosition();overrideZone(\"scroll\");",
+            "rewindCursorPosition();overrideZone(\"scroll\");do(\"abstract-scroll-early\");",
             "");
 
         macrosGroup.newItem(
@@ -963,7 +971,7 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "do-scroll",
-            "cancelAllDelayedDos();rewindCursorPosition();overrideZone(\"scroll\");setSlot(\"3\", \"\");delayedDo(\"disallowWheelClicks\", \"150\");lockTaps(\"primary\");",
+            "cancelAllDelayedDos();rewindCursorPosition();overrideZone(\"scroll\");setSlot(\"3\", \"\");delayedDo(\"disallowWheelClicks\", \"150\");lockTaps(\"primary\");do(\"abstract-scroll-begin\");",
             "");
 
         macrosGroup.newItem(

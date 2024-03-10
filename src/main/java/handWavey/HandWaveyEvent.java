@@ -80,7 +80,9 @@ public class HandWaveyEvent {
         this.shouldCompleteEvent.finish();
     }
 
-    public void triggerSubEvent(String eventName, String indent) {
+    public Boolean triggerSubEvent(String eventName, String indent) {
+        Boolean result = false;
+
         // Get the info we need for the event.
         String macroLine = this.getEventAction(eventName);
         String fileToPlay = "";
@@ -98,13 +100,17 @@ public class HandWaveyEvent {
         if (doMacro) {
             this.debug.out(2, indent + "  macroLine: \"" + macroLine + "\"");
             this.macroLine.runLine(macroLine);
+            result = true;
         }
 
         // Do Audio.
         if (doAudio) {
             this.debug.out(2, indent + "  fileToPlay: \"" + fileToPlay + "\"");
             BackgroundSound.play(fileToPlay);
+            result = true;
         }
+
+        return result;
     }
 
     private long timeInMilliseconds() {

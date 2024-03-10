@@ -66,11 +66,11 @@ public class Gesture {
         overrideDefault(
             "general-state-pClosed-enter",
             "mDownAmbiguous();",
-            "");
+            "metalDing08.wav");
         overrideDefault(
             "general-state-pClosed-exit",
             "mUpAmbiguous();",
-            "");
+            "metalDing07.wav");
 
         // Set taps.
         overrideDefault(
@@ -161,10 +161,29 @@ public class Gesture {
             "");
 
         // General auido feedback.
-        this.audioEvents.getItem("general-zone-pAnyChange").overrideDefault("");
+        this.audioEvents.getItem("general-zone-pOOB-enter").overrideDefault("piano-short-C1.wav");
+        this.audioEvents.getItem("general-zone-pNoMove-enter").overrideDefault("piano-short-C2.wav");
+        this.audioEvents.getItem("general-zone-pActive-enter").overrideDefault("piano-short-C3.wav");
+        this.audioEvents.getItem("general-zone-pAction-enter").overrideDefault("piano-short-C4.wav");
         this.audioEvents.getItem("general-zone-sAnyChange").overrideDefault("metalDing03.wav");
         this.audioEvents.getItem("general-segment-pAnyChange").overrideDefault("");
         this.audioEvents.getItem("general-segment-sAnyChange").overrideDefault("metalDing04.wav");
+
+        // Final action audio feedback.
+        this.audioEvents.getItem("abstract-mLeft-down").overrideDefault("piano-short-E3.wav");
+        this.audioEvents.getItem("abstract-mLeft-up").overrideDefault("piano-short-G3.wav");
+        this.audioEvents.getItem("abstract-mLeft-click").overrideDefault("piano-short-G4.wav");
+        this.audioEvents.getItem("abstract-mRight-down").overrideDefault("piano-short-F3.wav");
+        this.audioEvents.getItem("abstract-mRight-up").overrideDefault("piano-short-A3.wav");
+        this.audioEvents.getItem("abstract-mRight-click").overrideDefault("piano-short-A4.wav");
+        this.audioEvents.getItem("abstract-mMiddle-down").overrideDefault("piano-short-F3.wav");
+        this.audioEvents.getItem("abstract-mMiddle-up").overrideDefault("piano-short-B3.wav");
+        this.audioEvents.getItem("abstract-mMiddle-click").overrideDefault("piano-short-B4.wav");
+        this.audioEvents.getItem("abstract-doubleClick").overrideDefault("metalDing01.wav");
+        this.audioEvents.getItem("abstract-trippleClick").overrideDefault("metalDing02.wav");
+        this.audioEvents.getItem("abstract-scroll-early").overrideDefault("metalDing04.wav");
+        this.audioEvents.getItem("abstract-scroll-begin").overrideDefault("metalDing03.wav");
+        this.audioEvents.getItem("abstract-scroll-end").overrideDefault("");
     }
 
     private void overrideDefault(String eventName, String actionLine, String audioNotification) {
