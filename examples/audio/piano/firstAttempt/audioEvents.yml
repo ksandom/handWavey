@@ -116,3 +116,31 @@ items:
     value: piano-short-C5.wav
   individual-sAction7Open-enter:
     value: piano-short-E5.wav
+  abstract-mLeft-down:
+    value: ""
+  abstract-mLeft-up:
+    value: ""
+  abstract-mLeft-click:
+    value: ""
+  abstract-mRight-down:
+    value: ""
+  abstract-mRight-up:
+    value: ""
+  abstract-mRight-click:
+    value: ""
+  abstract-mMiddle-down:
+    value: ""
+  abstract-mMiddle-up:
+    value: ""
+  abstract-mMiddle-click:
+    value: ""
+  abstract-doubleClick:
+    value: ""
+  abstract-trippleClick:
+    value: ""
+  abstract-scroll-early:
+    value: ""
+  abstract-scroll-begin:
+    value: ""
+  abstract-scroll-end:
+    value: ""
