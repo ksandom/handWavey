@@ -47,6 +47,7 @@ public final class HandWaveyManager {
     private ShouldComplete shouldCompleteSFO;
 
     private String zoneMode = "touchScreen";
+    private String lastZone = "";
 
     private double zNoMoveBegin = 0;
     private double zActiveBegin = 0;
@@ -83,7 +84,7 @@ public final class HandWaveyManager {
 
 
         this.handsState = HandsState.singleton();
-        this.motion = Motion.singleton();
+        this.motion = Motion.singleton(this);
         this.handWaveyEvent = new HandWaveyEvent(this.motion.getOutput(), useAudio, this.handsState, this);
         this.handsState.setHandWaveyEvent(this.handWaveyEvent);
 
@@ -375,9 +376,16 @@ public final class HandWaveyManager {
             } else if (zone.equals("action")) {
                 motion.updateMovingMeans(zone, handZ, this.handSummaries, this.zones);
                 motion.touchPadNone();
-            } else if (zone.equals("scroll")) { // TODO This isn't getting triggered even though it should match.
+            } else if (zone.equals("scroll-wheel") || zone.equals("scroll")) {
                 motion.updateMovingMeans(zone, handZ, this.handSummaries, this.zones);
                 motion.scrollFromCoordinates();
+            } else if (zone.equals("scroll-joystick")) {
+                motion.updateMovingMeans(zone, handZ, this.handSummaries, this.zones);
+                if (!zone.equals(this.lastZone)) {
+                    motion.resetJoystickScroll();
+                }
+
+                motion.joyStickScrollFromCoordinates();
             } else {
                 this.debug.out(3, "A hand was detected, but it outside of any zones. z=" + String.valueOf(handZ));
             }
@@ -388,5 +396,7 @@ public final class HandWaveyManager {
                 motion.touchPadNone();
             }
         }
+
+        this.lastZone = zone;
     }
 }

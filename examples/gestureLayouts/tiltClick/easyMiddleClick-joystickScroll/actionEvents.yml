@@ -1,0 +1,52 @@
+groups: {}
+items:
+  general-zone-pAction-enter:
+    value: simple-doubleLeftClick();
+  general-segment-s0-enter:
+    value: keyDown("ctrl");
+  general-segment-s0-exit:
+    value: keyUp("ctrl");
+  general-segment-s1-enter:
+    value: keyDown("alt");
+  general-segment-s1-exit:
+    value: keyUp("alt");
+  general-segment-s2-enter:
+    value: keyDown("shift");
+  general-segment-s2-exit:
+    value: keyUp("shift");
+  general-zone-sActive-exit:
+    value: releaseKeys();
+  general-state-pClosed-enter:
+    value: joystickScroll-enter();
+  general-state-pClosed-exit:
+    value: joystickScroll-exit();
+  general-segment-p1-enter:
+    value: ''
+  individual-pNonOOB1Open-enter:
+    value: mDownLeft();
+  individual-pNonOOB1Open-exit:
+    value: mUpLeft();
+  individual-pNonOOB6Open-enter:
+    value: mDownRight();
+  individual-pNonOOB6Open-exit:
+    value: mUpRight();
+  individual-pNonOOB1Closed-enter:
+    value: closedSlot0-enter();
+  individual-pNonOOB1Closed-exit:
+    value: closedSlot0-exit();
+  individual-pNonOOB0Closed-enter:
+    value: ""
+  individual-pNonOOB0Closed-exit:
+    value: ""
+  individual-pNonOOB6Closed-enter:
+    value: closedSlot1-enter();
+  individual-pNonOOB6Closed-exit:
+    value: closedSlot1-exit();
+  tap-p0Open:
+    value: simple-leftClick();
+  tap-p0Closed:
+    value: simple-middleClick();
+  tap-p1Open:
+    value: ""
+  tap-p2Open:
+    value: ""

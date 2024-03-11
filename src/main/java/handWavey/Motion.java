@@ -20,6 +20,9 @@ public final class Motion {
 
     private static Motion motion = null;
 
+    private static final int SET_X = 0;
+    private static final int SET_Y = 1;
+
     private Debug debug;
     private OutputProtection output;
 
@@ -46,6 +49,17 @@ public final class Motion {
     private double diffRemainderX = 0;
     private double diffScrollRemainderY = 0;
     private double diffScrollRemainderX = 0;
+
+    private double joystickScrollCenterX = 0;
+    private double joystickScrollCenterY = 0;
+    private double joystickDeadZoneSize = 10;
+    private double joystickStartSpeed = 0.2;
+    private double joystickMultiplier = 0.3;
+    private int joystickSpeedLimit = 8;
+    private long joystickLastTick = 0;
+
+    private Boolean isInJoystickDeadZone = true;
+    private Boolean wasInJoystickDeadZone = true;
 
     private int touchPadX = 0;
     private int touchPadY = 0;
@@ -77,19 +91,22 @@ public final class Motion {
 
     private Boolean shouldDiscardOldPosition = true;
 
+    private HandWaveyManager handWaveyManager = null;
 
-    public synchronized static Motion singleton() {
+
+    public synchronized static Motion singleton(HandWaveyManager hwm) {
         if (Motion.motion == null) {
-            Motion.motion = new Motion();
+            Motion.motion = new Motion(hwm);
         }
 
         return Motion.motion;
     }
 
 
-    public Motion() {
+    public Motion(HandWaveyManager hwm) {
         this.debug = Debug.getDebug("Motion");
         this.handsState = HandsState.singleton();
+        this.handWaveyManager = hwm;
 
         reloadConfig();
     }
@@ -195,6 +212,16 @@ public final class Motion {
         this.rewindScrollTime = Integer.parseInt(scrollConfig.getItem("rewindScrollTime").get());
         int scrollHistorySize = Integer.parseInt(scrollConfig.getItem("historySize").get());
         this.historyScroll = new History(scrollHistorySize, 0);
+
+        // Load joystick scroll config.
+        Group joystickConfig = Config.singleton().getGroup("joystick");
+
+        // private double joystickSpeedLimit = 8;
+        this.joystickDeadZoneSize = Double.parseDouble(joystickConfig.getItem("deadZoneSize").get());
+        this.joystickStartSpeed = Double.parseDouble(joystickConfig.getItem("startSpeed").get());
+        this.joystickMultiplier = Double.parseDouble(joystickConfig.getItem("speedMultiplier").get());
+        this.joystickSpeedLimit = Integer.parseInt(joystickConfig.getItem("speedLimit").get());
+
     }
 
     public double getZMultiplier() {
@@ -239,8 +266,7 @@ public final class Motion {
     }
 
     public void rewindCursorPosition(long additionalTime) {
-        Timestamp now = new Timestamp(System.currentTimeMillis());
-        long nowMillis = now.getTime();
+        long nowMillis = getTimeMillis();
         long rewindTime = 0;
         long timeSinceLastRewind = nowMillis - this.lastCursorRewind;
 
@@ -270,6 +296,11 @@ public final class Motion {
 
             this.lastCursorRewind = rewindTime;
         }
+    }
+
+    private long getTimeMillis() {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        return now.getTime();
     }
 
     public void rewindScroll(long additionalTime) {
@@ -509,6 +540,111 @@ public final class Motion {
         this.lastAbsoluteY = yCoord;
     }
 
+    public void resetJoystickScroll() {
+        resetJoystickScroll(this.movingMeanX.get(), this.movingMeanY.get());
+    }
+
+    public void resetJoystickScroll(double xCoord, double yCoord) {
+        this.joystickScrollCenterX = xCoord;
+        this.joystickScrollCenterY = yCoord;
+        this.joystickLastTick = getTimeMillis();
+        this.diffScrollRemainderX = 0;
+        this.diffScrollRemainderY = 0;
+        this.isInJoystickDeadZone = true;
+        this.wasInJoystickDeadZone = true;
+    }
+
+    public void joyStickScrollFromCoordinates() {
+        this.joyStickScrollFromCoordinates(this.movingMeanX.get(), this.movingMeanY.get());
+    }
+
+    public void joyStickScrollFromCoordinates(double xCoord, double yCoord) {
+        long now = getTimeMillis();
+        long timeSinceLastTick = now - this.joystickLastTick;
+        this.joystickLastTick = now;
+        double secondsSinceLastTick = timeSinceLastTick / 1000.0;
+
+        double totalDistanceX = xCoord - this.joystickScrollCenterX;
+        double totalDistanceY = yCoord - this.joystickScrollCenterY;
+
+        // Update the last position so that the cursor doesn't jump when we move the cusor again.
+        this.lastAbsoluteX = xCoord;
+        this.lastAbsoluteY = yCoord;
+
+        //int effortX = joystickEffortFromDistance(totalDistanceX, secondsSinceLastTick, SET_X);
+        int effortY = joystickEffortFromDistance(totalDistanceY, secondsSinceLastTick, SET_Y);
+
+        this.output.scroll(effortY);
+
+        if (this.wasInJoystickDeadZone != this.isInJoystickDeadZone) {
+            String eventName = "";
+            if (this.isInJoystickDeadZone) {
+                eventName = "abstract-scroll-deadZone-reEnter";
+            } else {
+                eventName = "abstract-scroll-deadZone-exit";
+            }
+
+            this.handWaveyManager.triggerEvent(eventName);
+        }
+
+        this.wasInJoystickDeadZone = this.isInJoystickDeadZone;
+    }
+
+    private int joystickEffortFromDistance(double distance, double time, int set) {
+        double absDistance = Math.abs(distance);
+        double actionDistance = absDistance - joystickDeadZoneSize;
+        double internalMultiplier = 1;
+
+        Double leftOvers = 0.0;
+        if (set == SET_X) {
+            leftOvers = this.diffScrollRemainderX;
+        } else {
+            leftOvers = this.diffScrollRemainderY;
+        }
+
+        // Don't do anything while we are in the dead zone.
+        if (actionDistance < 0) {
+            leftOvers = 0.0;
+            this.isInJoystickDeadZone = true;
+            return 0;
+        } else {
+            this.isInJoystickDeadZone = false;
+        }
+
+        // Apply acceleration characteristics.
+        double effort = this.joystickStartSpeed + (actionDistance * this.joystickMultiplier * internalMultiplier);
+
+
+        // Make the effort per second.
+        effort *= time;
+        //this.debug.out(0, "Scroll: " + String.valueOf(time));
+
+        // Get just what we need just now, and take leftOvers into account.
+        effort += leftOvers;
+        int effortInt = (int) Math.round(effort);
+        leftOvers = effort - effortInt;
+
+        // Apply speed limit.
+        if (effortInt > this.joystickSpeedLimit) {
+            effortInt = (int) this.joystickSpeedLimit;
+            leftOvers = 0.0;
+        }
+
+        // Return the leftovers.
+        if (set == SET_X) {
+            this.diffScrollRemainderX = leftOvers;
+        } else {
+            this.diffScrollRemainderY = leftOvers;
+        }
+
+        // Make sure we are going in the requested direction.
+        if (distance < 0) {
+            effortInt *= -1;
+        }
+
+        return effortInt;
+    }
+
     public void touchPadNone() {
         touchPadNone(this.movingMeanX.get(), this.movingMeanY.get());
     }
@@ -551,9 +687,12 @@ public final class Motion {
 
     public void updateMovingMeans(String zone, double handZ, HandSummary[] handSummaries, HashMap<String, Zone> zones) {
         // TODO This has been changed from private to public to aid in the abstraction. But maybe this should belong somewhere else, or the code that calls it should be moved in here.
+        String zoneToUse = zone;
+        if (zone.equals("scroll-wheel") || zone.equals("scroll-joystick")) zoneToUse = "scroll";
+
         this.movingMeanX.set(handSummaries[0].getHandX());
         this.movingMeanY.set(handSummaries[0].getHandY());
-        this.movingMeanX.resize(zones.get(zone).getMovingMeanWidth(handZ));
-        this.movingMeanY.resize(zones.get(zone).getMovingMeanWidth(handZ));
+        this.movingMeanX.resize(zones.get(zoneToUse).getMovingMeanWidth(handZ));
+        this.movingMeanY.resize(zones.get(zoneToUse).getMovingMeanWidth(handZ));
     }
 }

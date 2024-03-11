@@ -34,6 +34,7 @@ public class HandWaveyConfig {
         this.config.addGroupToSeparate("physicalBoundaries");
         this.config.addGroupToSeparate("zones");
         this.config.addGroupToSeparate("touchPad");
+        this.config.addGroupToSeparate("joystick");
         this.config.addGroupToSeparate("click");
         this.config.addGroupToSeparate("scroll");
         this.config.addGroupToSeparate("actionEvents");
@@ -511,6 +512,25 @@ public class HandWaveyConfig {
             "Maximum speed per second.");
 
 
+        Group joystickConfig = this.config.newGroup("joystick");
+        joystickConfig.newItem(
+            "deadZoneSize",
+            "20",
+            "Decimal: When the hand enters the joystick zone, the dead zone is automatically centered around the hand. This setting defines how big that dead zone is. Making it small makes the scroll start sooner. Making it large gives more room for error to be gracefully handled without creating bad actions.");
+        joystickConfig.newItem(
+            "startSpeed",
+            "0.005",
+            "Decimal: How many wheel clicks per second.");
+        joystickConfig.newItem(
+            "speedMultiplier",
+            "0.3",
+            "Decimal: How many wheel clicks per second.");
+        joystickConfig.newItem(
+            "speedLimit",
+            "1",
+            "Int: Maximum scroll speed in steps per iteration.");
+
+
         Group clickConfig = this.config.newGroup("click");
         clickConfig.newItem(
             "rewindCursorTime",
@@ -946,6 +966,16 @@ public class HandWaveyConfig {
         macrosGroup.newItem(
             "yankScroll-exit",
             "cancelAllDelayedDos();unlockCursor();allowWheelClicks();setSlot(\"3\", \"\");rewindCursorPosition();releaseZone();unlockCursor();unlockTaps(\"primary\", \"800\");do(\"abstract-scroll-end\");",
+            "Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -exit macro puts it away.");
+
+        macrosGroup.newItem(
+            "joystickScroll-enter",
+            "cancelAllDelayedDos();lockCursor();allowWheelClicks();lockTaps(\"primary\");unlockTaps(\"primary\" , \"800\");overrideZone(\"scroll-joystick\");setSlot(\"3\", \"\");",
+            "Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -enter macro gets it set up.");
+
+        macrosGroup.newItem(
+            "yankScroll-exit",
+            "releaseZone();cancelAllDelayedDos();unlockCursor();allowWheelClicks();rewindCursorPosition();releaseZone();unlockCursor();unlockTaps(\"primary\", \"800\");do(\"abstract-scroll-end\");",
             "Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -exit macro puts it away.");
 
         macrosGroup.newItem(
