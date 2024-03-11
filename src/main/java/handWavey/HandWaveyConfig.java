@@ -750,6 +750,10 @@ public class HandWaveyConfig {
 
         Group tap = this.config.newGroup("tap");
         tap.newItem(
+            "preTapTime",
+            "50",
+            "The minimum amount of time that the hand must not be moving on the Z axis before a tap can be performed.");
+        tap.newItem(
             "tapSpeed",
             "5",
             "The speed of the Z axis (away from you), above which, the hand is considered to be performing a tap. Setting this to -1 disables the tap gesture. You'll need tapSpeed to be set to something positive for this to work. I suggest starting around 5-10.");

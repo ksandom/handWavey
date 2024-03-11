@@ -51,6 +51,7 @@ public class HandCleaner {
     private long tapUnlockTime = 0;
 
     private double tapSpeed = 0;
+    private Consistently consistentZPreTap = null;
     private Consistently consistentZTap = null;
     private Consistently consistentZPostTap = null;
     private Consistently consistentZOverflow = null;
@@ -84,11 +85,13 @@ public class HandCleaner {
         Group tap = Config.singleton().getGroup("tap");
         tapSpeed = Double.parseDouble(tap.getItem("tapSpeed").get());
 
+        long preTapTime = Integer.parseInt(tap.getItem("preTapTime").get());
         long tapMinTime = Integer.parseInt(tap.getItem("tapMinTime").get());
         long tapMaxTime = Integer.parseInt(tap.getItem("tapMaxTime").get());
         long tapOverflow = tapMaxTime - tapMinTime;
         long postTapTime = Integer.parseInt(tap.getItem("postTapTime").get());
 
+        this.consistentZPreTap = new Consistently(true, preTapTime, "z pre tap");
         this.consistentZTap = new Consistently(true, tapMinTime, "z tap");
         this.consistentZOverflow = new Consistently(true, tapOverflow, "z tap overflow");
         this.consistentZPostTap = new Consistently(true, postTapTime, "z post tap");
@@ -378,19 +381,26 @@ public class HandCleaner {
         Boolean tapAction = (!isRetracting() && !isZStationary());
         String output = "false";
         if (tapAction) output = "true";
+        this.consistentZPreTap.tick(isStationary());
         this.consistentZTap.tick(tapAction);
         this.consistentZOverflow.tick(tapAction);
         this.consistentZPostTap.tick(isStationary());
 
         switch (tapProgress) {
             case 0:
+                if (this.consistentZPreTap.isConsistent()) {
+                    this.debug.out(2, "Tap: Ready");
+                    this.consistentZTap.reset();
+                    tapProgress += 1;
+                }
+            case 1:
                 if (this.consistentZTap.isConsistent()) {
-                    tapProgress = 1;
+                    tapProgress += 1;
                     this.debug.out(2, "Tap: motion");
                     this.consistentZOverflow.reset();
                 }
                 break;
-            case 1:
+            case 2:
                 if (this.consistentZOverflow.isConsistent()) {
                     this.debug.out(2, "Tap: overflow");
                     resetTap();
@@ -416,6 +426,7 @@ public class HandCleaner {
     private void resetTap() {
         tapProgress = 0;
 
+        this.consistentZPreTap.reset();
         this.consistentZTap.reset();
         this.consistentZOverflow.reset();
         this.consistentZPostTap.reset();
