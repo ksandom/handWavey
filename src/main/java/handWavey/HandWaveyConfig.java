@@ -968,23 +968,28 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "yankScroll-enter",
-            "cancelAllDelayedDos();lockCursor();allowWheelClicks();setSlot(\"3\", \"do-scroll\");lockTaps(\"primary\");unlockTaps(\"primary\" , \"800\");delayedDo(\"do-earlyScroll\", \"900\");delayedDo(\"do-scroll\", \"1500\");",
+            "cancelAllDelayedDos();lockCursor();allowWheelClicks();setSlot(\"3\", \"do-scroll\");lockTaps(\"primary\");delayedDo(\"do-tapUnlock\", \"200\");delayedDo(\"do-earlyScroll\", \"900\");delayedDo(\"do-scroll\", \"1500\");",
             "Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -enter macro gets it set up.");
 
         macrosGroup.newItem(
             "yankScroll-exit",
-            "cancelAllDelayedDos();unlockCursor();allowWheelClicks();setSlot(\"3\", \"\");rewindCursorPosition();releaseZone();unlockCursor();unlockTaps(\"primary\", \"800\");do(\"abstract-scroll-end\");",
+            "cancelAllDelayedDos();unlockCursor();allowWheelClicks();setSlot(\"3\", \"\");rewindCursorPosition();releaseZone();unlockCursor();unlockTaps(\"primary\", \"800\");do(\"abstract-scroll-end\");do(\"special-scrolling-stop\");",
             "Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -exit macro puts it away.");
 
         macrosGroup.newItem(
             "joystickScroll-enter",
-            "cancelAllDelayedDos();lockCursor();allowWheelClicks();lockTaps(\"primary\");unlockTaps(\"primary\" , \"800\");overrideZone(\"scroll-joystick\");setSlot(\"3\", \"\");",
+            "cancelAllDelayedDos();lockCursor();allowWheelClicks();lockTaps(\"primary\");delayedDo(\"do-tapUnlock\", \"100\");overrideZone(\"scroll-joystick\");setSlot(\"3\", \"\");",
             "Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -enter macro gets it set up.");
 
         macrosGroup.newItem(
-            "yankScroll-exit",
+            "joystickScroll-exit",
             "releaseZone();cancelAllDelayedDos();unlockCursor();allowWheelClicks();rewindCursorPosition();releaseZone();unlockCursor();unlockTaps(\"primary\", \"800\");do(\"abstract-scroll-end\");",
             "Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -exit macro puts it away.");
+
+        macrosGroup.newItem(
+            "do-tapUnlock",
+            "unlockTaps(\"primary\");",
+            "A special case for unlocking the taps. Normally you should use the delay parameter in unlockTaps();.");
 
         macrosGroup.newItem(
             "do-mDoubleClickHold-left",
@@ -1008,12 +1013,12 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "undo-earlyScroll",
-            "releaseZone();",
+            "releaseZone();do(\"special-scrolling-stop\");",
             "");
 
         macrosGroup.newItem(
             "do-scroll",
-            "cancelAllDelayedDos();rewindCursorPosition();overrideZone(\"scroll\");setSlot(\"3\", \"\");delayedDo(\"disallowWheelClicks\", \"150\");lockTaps(\"primary\");do(\"abstract-scroll-begin\");",
+            "cancelAllDelayedDos();rewindCursorPosition();overrideZone(\"scroll\");setSlot(\"3\", \"\");delayedDo(\"disallowWheelClicks\", \"150\");lockTaps(\"primary\");do(\"abstract-scroll-begin\");do(\"special-scrolling-start\");",
             "");
 
         macrosGroup.newItem(
