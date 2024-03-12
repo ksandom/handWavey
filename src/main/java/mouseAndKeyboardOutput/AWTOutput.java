@@ -172,8 +172,13 @@ public class AWTOutput implements Output {
 
     public void scroll(int amount) {
         int debugLevel = (amount == 0)?2:1;
-        this.debug.out(debugLevel, "Scroll by: " + String.valueOf(amount));
-        this.robot.mouseWheel(amount);
+
+        if (Math.abs(amount) > 1) {
+            this.debug.out(0, "Disallowed scroll by: " + String.valueOf(amount));
+        } else {
+            this.debug.out(debugLevel, "Scroll by: " + String.valueOf(amount));
+            this.robot.mouseWheel(amount);
+        }
     }
 
     private Boolean isValidButton(String value) {
