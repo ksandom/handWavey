@@ -366,7 +366,7 @@ public class HandCleaner {
         }
 
         // We're not in the active zone.
-        if (!zone.equals("active")) {
+        if (zone.equals("noMove")) {
             resetTap();
             return false;
         }
@@ -389,30 +389,30 @@ public class HandCleaner {
         switch (tapProgress) {
             case 0:
                 if (this.consistentZPreTap.isConsistent()) {
-                    this.debug.out(2, "Tap: Ready");
+                    this.debug.out(1, "Tap: Ready");
                     this.consistentZTap.reset();
                     tapProgress += 1;
                 }
             case 1:
                 if (this.consistentZTap.isConsistent()) {
                     tapProgress += 1;
-                    this.debug.out(2, "Tap: motion");
+                    this.debug.out(1, "Tap: motion");
                     this.consistentZOverflow.reset();
                 }
                 break;
             case 2:
                 if (this.consistentZOverflow.isConsistent()) {
-                    this.debug.out(2, "Tap: overflow");
+                    this.debug.out(1, "Tap: overflow");
                     resetTap();
                 }
 
                 if (!isStationary()) {
-                    this.debug.out(2, "Tap: moving");
+                    this.debug.out(1, "Tap: moving");
                     this.consistentZPostTap.reset();
                 }
 
                 if (this.consistentZPostTap.isConsistent()) {
-                    this.debug.out(2, "Tap: complete");
+                    this.debug.out(1, "Tap: complete");
                     resetTap();
                     return true;
                 }
