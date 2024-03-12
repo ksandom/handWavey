@@ -779,7 +779,7 @@ public class HandWaveyConfig {
         Group tap = this.config.newGroup("tap");
         tap.newItem(
             "preTapTime",
-            "50",
+            "100",
             "The minimum amount of time that the hand must not be moving on the Z axis before a tap can be performed.");
         tap.newItem(
             "tapSpeed",
