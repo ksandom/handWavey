@@ -624,11 +624,11 @@ public class HandWaveyConfig {
             "When the secondary hand starts moving on the z axis.");
         actionEvents.newItem(
             "special-scrolling-start",
-            "lockTaps(\"primary\");",
+            "lockTaps(\"primary\");disallowWheelClicks();",
             "When the scrolling motion begins, even if it's not visibly going anywhere.");
         actionEvents.newItem(
             "special-scrolling-stop",
-            "unlockTaps(\"primary\");",
+            "unlockTaps(\"primary\");allowWheelClicks();",
             "When the scrolling motion ends.");
         this.generateCustomConfig(actionEvents);
 
