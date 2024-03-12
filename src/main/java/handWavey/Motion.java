@@ -545,6 +545,7 @@ public final class Motion {
     }
 
     public void resetJoystickScroll(double xCoord, double yCoord) {
+        this.debug.out(1, "resetJoystickScroll: x=" + String.valueOf(xCoord) + ", y=" + String.valueOf(yCoord));
         this.joystickScrollCenterX = xCoord;
         this.joystickScrollCenterY = yCoord;
         this.joystickLastTick = getTimeMillis();
@@ -626,7 +627,7 @@ public final class Motion {
 
         // Apply speed limit.
         if (effortInt > this.joystickSpeedLimit) {
-            effortInt = (int) this.joystickSpeedLimit;
+            effortInt = (int) Math.round(this.joystickSpeedLimit);
             leftOvers = 0.0;
         }
 

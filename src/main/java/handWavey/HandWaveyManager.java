@@ -389,6 +389,9 @@ public final class HandWaveyManager {
             } else {
                 this.debug.out(3, "A hand was detected, but it outside of any zones. z=" + String.valueOf(handZ));
             }
+
+            this.debug.out(3, "Zone change:" + zone + "  " + this.lastZone);
+            this.lastZone = zone;
         } else {
             // Stop the cursor from jumping around during the beginning of a mouse-down event.
             if (this.zoneMode.equals("touchPad")) {
@@ -396,7 +399,5 @@ public final class HandWaveyManager {
                 motion.touchPadNone();
             }
         }
-
-        this.lastZone = zone;
     }
 }
