@@ -578,14 +578,13 @@ public final class Motion {
         this.output.scroll(effortY);
 
         if (this.wasInJoystickDeadZone != this.isInJoystickDeadZone) {
-            String eventName = "";
             if (this.isInJoystickDeadZone) {
-                eventName = "abstract-scroll-deadZone-reEnter";
+                this.handWaveyManager.triggerEvent("abstract-scroll-deadZone-reEnter");
+                this.handWaveyManager.triggerEvent("special-scrolling-stop");
             } else {
-                eventName = "abstract-scroll-deadZone-exit";
+                this.handWaveyManager.triggerEvent("abstract-scroll-deadZone-exit");
+                this.handWaveyManager.triggerEvent("special-scrolling-start");
             }
-
-            this.handWaveyManager.triggerEvent(eventName);
         }
 
         this.wasInJoystickDeadZone = this.isInJoystickDeadZone;

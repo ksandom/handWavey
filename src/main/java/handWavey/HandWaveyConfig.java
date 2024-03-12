@@ -612,7 +612,7 @@ public class HandWaveyConfig {
             "When the primary hand starts moving on the z axis.");
         actionEvents.newItem(
             "special-primaryZStationary",
-            "setSlot(\"250\", \"custom-noop\");",
+            "showTapLocks();setSlot(\"250\", \"custom-noop\");",
             "When the primary hand starts moving on the z axis.");
         actionEvents.newItem(
             "special-secondaryZMoving",
@@ -622,6 +622,14 @@ public class HandWaveyConfig {
             "special-secondaryZStationary",
             "",
             "When the secondary hand starts moving on the z axis.");
+        actionEvents.newItem(
+            "special-scrolling-start",
+            "lockTaps(\"primary\");",
+            "When the scrolling motion begins, even if it's not visibly going anywhere.");
+        actionEvents.newItem(
+            "special-scrolling-stop",
+            "unlockTaps(\"primary\");",
+            "When the scrolling motion ends.");
         this.generateCustomConfig(actionEvents);
 
         Group audioConfig = this.config.newGroup("audioConfig");
