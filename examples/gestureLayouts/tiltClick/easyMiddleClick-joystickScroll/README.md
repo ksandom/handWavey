@@ -22,6 +22,7 @@ This variant uses joystick scroll instead of wheel scroll.
     * CTRL: Introduce secondary hard. Tilt slightly unnaturally.
     * ALT: Introduce secondary hard. Keep relatively flat.
     * Shift: Introduce secondary hard. Tilt in natural direction to almost vertical.
+* Scroll ([Joystick](https://github.com/ksandom/handWavey/blob/main/docs/user/howTo/vnc.md)): Close hand. Move hand outside the dead zone.
 
 ## Target audience
 

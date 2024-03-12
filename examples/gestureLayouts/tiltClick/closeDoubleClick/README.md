@@ -20,6 +20,7 @@ Improvements on tiltClick that make it easier to chain gestures together in usef
     * CTRL: Introduce secondary hard. Tilt slightly unnaturally.
     * ALT: Introduce secondary hard. Keep relatively flat.
     * Shift: Introduce secondary hard. Tilt in natural direction to almost vertical.
+* Scroll ([Yank](https://github.com/ksandom/handWavey/blob/main/docs/user/howTo/vnc.md)): Close hand. Jerk hand quickly, or wait for the first or second ding. Move hand up and down for relative movement.
 
 ## Target audience
 
