@@ -184,6 +184,8 @@ public class Gesture {
         this.audioEvents.getItem("abstract-scroll-early").overrideDefault("metalDing04.wav");
         this.audioEvents.getItem("abstract-scroll-begin").overrideDefault("metalDing03.wav");
         this.audioEvents.getItem("abstract-scroll-end").overrideDefault("");
+        this.audioEvents.getItem("abstract-scroll-deadZone-exit").overrideDefault("metalDing03.wav");
+        this.audioEvents.getItem("abstract-scroll-deadZone-reEnter").overrideDefault("metalDing04.wav");
     }
 
     private void overrideDefault(String eventName, String actionLine, String audioNotification) {

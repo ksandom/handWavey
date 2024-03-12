@@ -249,11 +249,16 @@ public class MacroCore {
             return true;
         }
 
-        this.increaseNesting();
-        String prefix = nestedDebugPrefix(this.nestingLevel);
-        this.debug.out(2, prefix + command + ": " + macro);
-        macroLine.runLine(macro);
-        this.decreaseNesting();
+        if (this.increaseNesting()) {
+            String prefix = nestedDebugPrefix(this.nestingLevel);
+            this.debug.out(2, prefix + command + ": " + macro);
+            macroLine.runLine(macro);
+            this.decreaseNesting();
+
+        } else {
+            this.debug.out(0, "Ran out of nesting to run: " + macro + " at level " + String.valueOf(this.nestingLevel));
+            this.handWaveyEvent.triggerSubEvent("bug", "--BUG-- ");
+        }
 
         return true;
     }
@@ -272,18 +277,22 @@ public class MacroCore {
 
         String commandToTry = command.trim();
 
-        this.increaseNesting();
-        String[] parameters = separateParameters("");
-        if (!doInternalInstruction(commandToTry, parameters)) {
-            this.debug.out(2, "Internal instruction \"" + commandToTry + "\" does not exist.");
-            if (!this.tryMacro(commandToTry)) {
-                this.debug.out(2, "Macro \"" + commandToTry + "\" does not exist.");
-                if (!this.handWaveyEvent.triggerSubEvent(commandToTry, indent)) {
-                    this.debug.out(0, commandToTry + " doesn't appear to be a macro or event.");
+        if (this.increaseNesting()) {
+            String[] parameters = separateParameters("");
+            if (!doInternalInstruction(commandToTry, parameters)) {
+                this.debug.out(2, "Internal instruction \"" + commandToTry + "\" does not exist.");
+                if (!this.tryMacro(commandToTry)) {
+                    this.debug.out(2, "Macro \"" + commandToTry + "\" does not exist.");
+                    if (!this.handWaveyEvent.triggerSubEvent(commandToTry, indent)) {
+                        this.debug.out(0, commandToTry + " doesn't appear to be a macro or event.");
+                    }
                 }
             }
+            this.decreaseNesting();
+        } else {
+            this.debug.out(0, "Ran out of nesting to run: " + commandToTry + " at level " + String.valueOf(this.nestingLevel));
+            this.handWaveyEvent.triggerSubEvent("bug", "--BUG-- ");
         }
-        this.decreaseNesting();
     }
 
 

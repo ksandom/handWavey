@@ -16,6 +16,7 @@
     * CTRL: Introduce a second second and keep it flat.
     * ALT: Introduce a second second and rotate it by 90 degrees. (Segment 1)
     * Shift: Introduce a second second and turn it upside down. (Segment 2)
+* Scroll ([Wheel](https://github.com/ksandom/handWavey/blob/main/docs/user/howTo/vnc.md)): Turn your hand up-side-down. Move hand up and down for relative movement.
 
 ## Considerations
 

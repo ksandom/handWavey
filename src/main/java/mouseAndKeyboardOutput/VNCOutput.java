@@ -133,11 +133,17 @@ public class VNCOutput implements Output {
     public void scroll(int amount) {
         int absoluteAmount = Math.abs(amount);
 
-        for (int i = 0; i < absoluteAmount; i ++) {
-            if (amount > 0) {
-                this.client.scrollDown();
-            } else {
-                this.client.scrollUp();
+        if (Math.abs(amount) > 1) {
+            this.debug.out(0, "Disallowed scroll by: " + String.valueOf(amount));
+        } else {
+            this.debug.out(1, "Scroll by: " + String.valueOf(amount));
+
+            for (int i = 0; i < absoluteAmount; i ++) {
+                if (amount > 0) {
+                    this.client.scrollDown();
+                } else {
+                    this.client.scrollUp();
+                }
             }
         }
     }

@@ -34,6 +34,7 @@ public class HandWaveyConfig {
         this.config.addGroupToSeparate("physicalBoundaries");
         this.config.addGroupToSeparate("zones");
         this.config.addGroupToSeparate("touchPad");
+        this.config.addGroupToSeparate("joystick");
         this.config.addGroupToSeparate("click");
         this.config.addGroupToSeparate("scroll");
         this.config.addGroupToSeparate("actionEvents");
@@ -511,6 +512,25 @@ public class HandWaveyConfig {
             "Maximum speed per second.");
 
 
+        Group joystickConfig = this.config.newGroup("joystick");
+        joystickConfig.newItem(
+            "deadZoneSize",
+            "20",
+            "Decimal: When the hand enters the joystick zone, the dead zone is automatically centered around the hand. This setting defines how big that dead zone is. Making it small makes the scroll start sooner. Making it large gives more room for error to be gracefully handled without creating bad actions.");
+        joystickConfig.newItem(
+            "startSpeed",
+            "0.1",
+            "Decimal: A little bit of speed to get things moving.");
+        joystickConfig.newItem(
+            "speedMultiplier",
+            "0.1",
+            "Decimal: How sensitive the speed is based on your hand movement.");
+        joystickConfig.newItem(
+            "speedLimit",
+            "1",
+            "Int: Maximum scroll speed in steps per iteration.");
+
+
         Group clickConfig = this.config.newGroup("click");
         clickConfig.newItem(
             "rewindCursorTime",
@@ -592,7 +612,7 @@ public class HandWaveyConfig {
             "When the primary hand starts moving on the z axis.");
         actionEvents.newItem(
             "special-primaryZStationary",
-            "setSlot(\"250\", \"custom-noop\");",
+            "showTapLocks();setSlot(\"250\", \"custom-noop\");",
             "When the primary hand starts moving on the z axis.");
         actionEvents.newItem(
             "special-secondaryZMoving",
@@ -602,6 +622,14 @@ public class HandWaveyConfig {
             "special-secondaryZStationary",
             "",
             "When the secondary hand starts moving on the z axis.");
+        actionEvents.newItem(
+            "special-scrolling-start",
+            "lockTaps(\"primary\");disallowWheelClicks();",
+            "When the scrolling motion begins, even if it's not visibly going anywhere.");
+        actionEvents.newItem(
+            "special-scrolling-stop",
+            "unlockTaps(\"primary\");allowWheelClicks();",
+            "When the scrolling motion ends.");
         this.generateCustomConfig(actionEvents);
 
         Group audioConfig = this.config.newGroup("audioConfig");
@@ -940,13 +968,28 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "yankScroll-enter",
-            "cancelAllDelayedDos();lockCursor();allowWheelClicks();setSlot(\"3\", \"do-scroll\");lockTaps(\"primary\");unlockTaps(\"primary\" , \"800\");delayedDo(\"do-earlyScroll\", \"900\");delayedDo(\"do-scroll\", \"1500\");",
+            "cancelAllDelayedDos();lockCursor();allowWheelClicks();setSlot(\"3\", \"do-scroll\");lockTaps(\"primary\");delayedDo(\"do-tapUnlock\", \"200\");delayedDo(\"do-earlyScroll\", \"900\");delayedDo(\"do-scroll\", \"1500\");",
             "Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -enter macro gets it set up.");
 
         macrosGroup.newItem(
             "yankScroll-exit",
-            "cancelAllDelayedDos();unlockCursor();allowWheelClicks();setSlot(\"3\", \"\");rewindCursorPosition();releaseZone();unlockCursor();unlockTaps(\"primary\", \"800\");do(\"abstract-scroll-end\");",
+            "cancelAllDelayedDos();unlockCursor();allowWheelClicks();setSlot(\"3\", \"\");rewindCursorPosition();releaseZone();unlockCursor();unlockTaps(\"primary\", \"800\");do(\"abstract-scroll-end\");do(\"special-scrolling-stop\");",
             "Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -exit macro puts it away.");
+
+        macrosGroup.newItem(
+            "joystickScroll-enter",
+            "cancelAllDelayedDos();lockCursor();allowWheelClicks();lockTaps(\"primary\");delayedDo(\"do-tapUnlock\", \"100\");overrideZone(\"scroll-joystick\");setSlot(\"3\", \"\");",
+            "Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -enter macro gets it set up.");
+
+        macrosGroup.newItem(
+            "joystickScroll-exit",
+            "releaseZone();cancelAllDelayedDos();unlockCursor();allowWheelClicks();rewindCursorPosition();releaseZone();unlockCursor();unlockTaps(\"primary\", \"800\");do(\"abstract-scroll-end\");",
+            "Yank scrolling is the grab to scroll, where you need to yank it to get it started. The -exit macro puts it away.");
+
+        macrosGroup.newItem(
+            "do-tapUnlock",
+            "unlockTaps(\"primary\");",
+            "A special case for unlocking the taps. Normally you should use the delay parameter in unlockTaps();.");
 
         macrosGroup.newItem(
             "do-mDoubleClickHold-left",
@@ -970,12 +1013,12 @@ public class HandWaveyConfig {
 
         macrosGroup.newItem(
             "undo-earlyScroll",
-            "releaseZone();",
+            "releaseZone();do(\"special-scrolling-stop\");",
             "");
 
         macrosGroup.newItem(
             "do-scroll",
-            "cancelAllDelayedDos();rewindCursorPosition();overrideZone(\"scroll\");setSlot(\"3\", \"\");delayedDo(\"disallowWheelClicks\", \"150\");lockTaps(\"primary\");do(\"abstract-scroll-begin\");",
+            "cancelAllDelayedDos();rewindCursorPosition();overrideZone(\"scroll\");setSlot(\"3\", \"\");delayedDo(\"disallowWheelClicks\", \"150\");lockTaps(\"primary\");do(\"abstract-scroll-begin\");do(\"special-scrolling-start\");",
             "");
 
         macrosGroup.newItem(
