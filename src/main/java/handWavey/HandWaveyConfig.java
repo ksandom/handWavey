@@ -523,7 +523,7 @@ public class HandWaveyConfig {
             "Decimal: A little bit of speed to get things moving.");
         joystickConfig.newItem(
             "speedMultiplier",
-            "0.1",
+            "0.16",
             "Decimal: How sensitive the speed is based on your hand movement.");
         joystickConfig.newItem(
             "speedLimit",
