@@ -584,6 +584,12 @@ public final class Motion {
             } else {
                 this.handWaveyManager.triggerEvent("abstract-scroll-deadZone-exit");
                 this.handWaveyManager.triggerEvent("special-scrolling-start");
+
+                if (totalDistanceY > 0) {
+                    this.handWaveyManager.triggerEvent("special-scrollBump-up");
+                } else {
+                    this.handWaveyManager.triggerEvent("special-scrollBump-down");
+                }
             }
         }
 

@@ -140,6 +140,9 @@ public class MacroCore {
             case "setButton":
                 this.handsState.setMouseButton(parm(parameters, 0, "left"));
                 break;
+            case "scroll":
+                scroll(parm(parameters, 0, "1"));
+                break;
 
             // Keyboard instructions.
             case "keyDown":
@@ -321,6 +324,14 @@ public class MacroCore {
         } else {
             this.debug.out(2, "Would have run slot " + String.valueOf(slot) + " == " + eventToRun + ". Previous value: " + previousValue + ". But slots are currently disabled.");
             return "";
+        }
+    }
+
+    private void scroll(String direction) {
+        if (direction.equals("-1")) {
+            this.output.scroll(-1);
+        } else {
+            this.output.scroll(1);
         }
     }
 

@@ -71,3 +71,11 @@ Consult your [gestureLayout](https://github.com/ksandom/handWavey/tree/main/exam
 
 * [tiltClick](https://github.com/ksandom/handWavey/tree/main/examples/gestureLayouts/tiltClick) based gestureLayouts typically work by grabbing the thing you want to scroll and then pulling it in the direction you want it to go. Let go when you're done.
 * [grabClick](https://github.com/ksandom/handWavey/tree/main/examples/gestureLayouts/grabClick) based gestureLayouts typically work by turning your hand up-side-down and moving your hand in the direction you want it to go. Turn your hand back up right when you're done.
+
+### Scroll bumping
+
+Within joystick scrolling, you can "bump" the scroll by one notch by quickly exiting the dead zone, and re-entering it. You perform the bump in the direction that you want to scroll.
+
+This is implemented as an extra scroll event using the `special-scrollBump-up` and `special-scrollBump-down` events.
+
+It's handy for when you want to scroll finely, which is a little more difficult in joystick scrolling.
