@@ -519,7 +519,7 @@ public class HandWaveyConfig {
             "Decimal: When the hand enters the joystick zone, the dead zone is automatically centered around the hand. This setting defines how big that dead zone is. Making it small makes the scroll start sooner. Making it large gives more room for error to be gracefully handled without creating bad actions.");
         joystickConfig.newItem(
             "startSpeed",
-            "0.1",
+            "0",
             "Decimal: A little bit of speed to get things moving.");
         joystickConfig.newItem(
             "speedMultiplier",
