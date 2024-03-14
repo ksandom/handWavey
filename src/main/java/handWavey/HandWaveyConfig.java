@@ -630,6 +630,15 @@ public class HandWaveyConfig {
             "special-scrolling-stop",
             "unlockTaps(\"primary\");allowWheelClicks();",
             "When the scrolling motion ends.");
+        actionEvents.newItem(
+            "special-scrollBump-up",
+            "scroll(\"1\");",
+            "In joystick scroll, we can \"bump\" the scroll by one step by quickly exiting the dead zone and then re-entering it. Up vs down defines the direction.");
+        actionEvents.newItem(
+            "special-scrollBump-down",
+            "scroll(\"-1\");",
+            "In joystick scroll, we can \"bump\" the scroll by one step by quickly exiting the dead zone and then re-entering it. Up vs down defines the direction.");
+
         this.generateCustomConfig(actionEvents);
 
         Group audioConfig = this.config.newGroup("audioConfig");
