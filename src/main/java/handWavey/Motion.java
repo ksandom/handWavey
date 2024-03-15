@@ -15,6 +15,7 @@ import mouseAndKeyboardOutput.*;
 import java.awt.Dimension;
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.lang.Math;
 
 public final class Motion {
 
@@ -55,6 +56,7 @@ public final class Motion {
     private double joystickDeadZoneSize = 10;
     private double joystickStartSpeed = 0.2;
     private double joystickMultiplier = 0.3;
+    private double joystickExponent = 1.2;
     private int joystickSpeedLimit = 8;
     private long joystickLastTick = 0;
 
@@ -220,6 +222,7 @@ public final class Motion {
         this.joystickDeadZoneSize = Double.parseDouble(joystickConfig.getItem("deadZoneSize").get());
         this.joystickStartSpeed = Double.parseDouble(joystickConfig.getItem("startSpeed").get());
         this.joystickMultiplier = Double.parseDouble(joystickConfig.getItem("speedMultiplier").get());
+        this.joystickExponent = Double.parseDouble(joystickConfig.getItem("exponent").get());
         this.joystickSpeedLimit = Integer.parseInt(joystickConfig.getItem("speedLimit").get());
 
     }
@@ -618,7 +621,7 @@ public final class Motion {
         }
 
         // Apply acceleration characteristics.
-        double effort = this.joystickStartSpeed + (actionDistance * this.joystickMultiplier * internalMultiplier);
+        double effort = this.joystickStartSpeed + (Math.pow(actionDistance * this.joystickMultiplier, this.joystickExponent) * internalMultiplier);
 
 
         // Make the effort per second.
