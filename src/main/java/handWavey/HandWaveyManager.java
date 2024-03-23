@@ -91,6 +91,8 @@ public final class HandWaveyManager {
         this.shouldCompleteSFO = new ShouldComplete("figureStuffOut");
 
         reloadConfig();
+
+        BackgroundSound.setup();
     }
 
     private void loadAndSaveConfigToDisk() {

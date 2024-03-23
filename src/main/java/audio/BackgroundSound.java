@@ -90,7 +90,7 @@ public class BackgroundSound extends Thread {
         }
     }
 
-    private static void setup() {
+    public static void setup() {
         // Immediately return if it's already configured.
         if (BackgroundSound.configured) {
             return ;
@@ -107,5 +107,7 @@ public class BackgroundSound extends Thread {
 
         // Make sure we don't do this again for this session.
         BackgroundSound.configured = true;
+
+        BackgroundSound.debug.out(1, "Finished sound setup.");
     }
 }
