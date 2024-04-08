@@ -19,6 +19,8 @@ import java.awt.GraphicsConfiguration;
 import java.awt.Rectangle;
 import java.awt.DisplayMode;
 import java.awt.Dimension;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -121,6 +123,11 @@ public class AWTOutput implements Output {
 
     public void setPosition(int x, int y) {
         this.robot.mouseMove(x, y);
+    }
+
+    public Point getPosition() {
+
+        return MouseInfo.getPointerInfo().getLocation();
     }
 
     public void click(String button) {

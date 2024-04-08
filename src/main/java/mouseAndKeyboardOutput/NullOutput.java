@@ -11,6 +11,7 @@ package mouseAndKeyboardOutput;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.util.*;
 
 public class NullOutput implements Output {
@@ -35,6 +36,10 @@ public class NullOutput implements Output {
     public void setPosition(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public Point getPosition() {
+        return new Point(this.x, this.y);
     }
 
     public void click(String button) {

@@ -13,6 +13,7 @@ import debug.Debug;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.util.*;
 
 public class OutputProtection {
@@ -40,6 +41,10 @@ public class OutputProtection {
 
     public void setPosition(int x, int y) {
         this.output.setPosition(x, y);
+    }
+
+    public Point getPosition() {
+        return this.output.getPosition();
     }
 
     public void click(String button) {

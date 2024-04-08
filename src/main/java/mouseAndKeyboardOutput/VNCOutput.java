@@ -9,6 +9,7 @@ package mouseAndKeyboardOutput;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Image;
 import java.util.*;
 
@@ -35,6 +36,10 @@ public class VNCOutput implements Output {
 
     private int width = 0;
     private int height = 0;
+
+    private int x = 0;
+    private int y = 0;
+
     private Boolean connected = false;
 
     public VNCOutput(String outputDevice) {
@@ -90,6 +95,12 @@ public class VNCOutput implements Output {
 
     public void setPosition(int x, int y) {
         this.client.moveMouse(x, y);
+        this.x = x;
+        this.y = y;
+    }
+
+    public Point getPosition() {
+        return new Point(this.x, this.y);
     }
 
     public void click(String button) {
