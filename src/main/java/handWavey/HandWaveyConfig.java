@@ -642,6 +642,14 @@ public class HandWaveyConfig {
             "special-scrollBump-down",
             "scroll(\"-1\");",
             "In joystick scroll, we can \"bump\" the scroll by one step by quickly exiting the dead zone and then re-entering it. Up vs down defines the direction.");
+        actionEvents.newItem(
+            "imposterHand-replace",
+            "",
+            "When we detect that a hand ID is not what we expect, but are able to replace it and continue.");
+        actionEvents.newItem(
+            "imposterHand-discard",
+            "",
+            "When we detect that a hand ID is not what we expect, but not are able to replace it and continue.");
 
         this.generateCustomConfig(actionEvents);
 
