@@ -62,6 +62,10 @@ public class HandWaveyConfig {
             "device",
             "AWT",
             "[AWT, VNC, Null]: Which method to use to control the mouse and keyboard. Default is AWTOutput, which will be the best setting in most situations. VNC gives you a method of controlling a separate computer, and needs to be configured in the config group. NullOutput is there purely for testing.");
+        output.newItem(
+            "readCursorLocation",
+            "true",
+            "Should we read the cursor location before moving it? Setting this to false (the legacy behaviour) will cause handWavey to assume that the cursor is always where it left it. Yet another pointing device such as the touch pad or mouse may have moved it. Setting it to true will cause handWavey to read the current location before applying the changes. Currently only effective with AWT.");
         Group vnc = output.newGroup("VNC");
         vnc.newItem(
             "host",

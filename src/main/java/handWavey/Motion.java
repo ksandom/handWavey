@@ -13,6 +13,7 @@ import debug.Debug;
 import mouseAndKeyboardOutput.*;
 
 import java.awt.Dimension;
+import java.awt.Point;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.lang.Math;
@@ -63,6 +64,7 @@ public final class Motion {
     private Boolean isInJoystickDeadZone = true;
     private Boolean wasInJoystickDeadZone = true;
 
+    private Boolean readCursorLocation = true;
     private int touchPadX = 0;
     private int touchPadY = 0;
     private double touchPadUnAcceleratedBaseMultiplier = 1;
@@ -182,6 +184,9 @@ public final class Motion {
         this.debug.out(1, "yMultiplier: " + String.valueOf(this.yMultiplier));
         this.debug.out(1, "zMultiplier: " + String.valueOf(this.zMultiplier));
 
+
+        // Read the current location.
+        readCursorLocation = Boolean.valueOf(Config.singleton().getGroup("output").getItem("readCursorLocation").get());
 
         // Get relative sensitivity.
         this.relativeSensitivity = Double.parseDouble(Config.singleton().getItem("relativeSensitivity").get());
@@ -445,6 +450,13 @@ public final class Motion {
         // Bring everything together to calcuate how far we should move the cursor.
         int diffX = (int) Math.round((xDistance));
         int diffY = (int) Math.round((yDistance));
+
+        // Get current cursor location.
+        if (readCursorLocation) {
+            Point currentLocation = this.output.getPosition();
+            this.touchPadX = (int) currentLocation.getX();
+            this.touchPadY = (int) currentLocation.getY();
+        }
 
         // Apply the changes.
         this.touchPadX = this.touchPadX + (diffX * (int)Math.round(this.xMultiplier));

@@ -9,12 +9,14 @@ See AWTOutput, VNCOutput, and NullOutput for real world examples.
 package mouseAndKeyboardOutput;
 
 import java.awt.Dimension;
+import java.awt.Point;
 import java.util.*;
 
 public interface Output {
     abstract void info();
     abstract Dimension getDesktopResolution(); // Return width, height
-    abstract void setPosition(int x, int y); // More the cursor to a specific point on the screen.
+    abstract void setPosition(int x, int y); // Move the cursor to a specific point on the screen.
+    abstract Point getPosition(); // Get the current location of the mouse cursor.
 
     abstract void click(String button); // Eg "left", "middle", "right"
     abstract void doubleClick(String button); // Eg "left", "middle", "right"
