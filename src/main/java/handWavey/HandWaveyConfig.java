@@ -800,6 +800,10 @@ public class HandWaveyConfig {
             "stationarySpeed",
             "22",
             "The speed, below which, the hand is considered stationary, and segment/state changes will be allowed. This is called speedLock. Setting this to -1 disables the speedLock. Change the debug level for HandsState to at least 2 to see the live speeds when the lock engages and disengages. You'll need stationarySpeed to be set to something positive for this to work. I suggest starting around 5-10.");
+        handCleaner.newItem(
+            "minHandAge",
+            "150",
+            "The number of milliseconds that a hand must be present before \"moveBefore____\" decisions can be made.");
 
         Group tap = this.config.newGroup("tap");
         tap.newItem(
@@ -822,6 +826,10 @@ public class HandWaveyConfig {
             "postTapTime",
             "100",
             "The minimum amount of time that the hand must not be moving more than tapSpeed after performing the tap.");
+        tap.newItem(
+            "moveBeforeTaps",
+            "true",
+            "Do you have to move the cursor before you can perform taps? (true or false). This prevents accidentally accidental taps when introducing a hand, but is also easy to unlock. If stationarySpeed in handCleaner is set to -1, you will never be able to tap when moveBeforeTaps is enabled.");
 
         Group macros = this.config.newGroup("macros");
         generateMacroConfig(macros);

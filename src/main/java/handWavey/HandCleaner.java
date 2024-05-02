@@ -58,6 +58,12 @@ public class HandCleaner {
 
     private int tapProgress = 0;
 
+    private Boolean moveBeforeTaps = true;
+    private Boolean hasMoved = false;
+    private Boolean firstStationary = false;
+    private long minHandAge = 150;
+    private long handIntroTime = -1;
+
     public HandCleaner(String name) {
         this.name = name;
 
@@ -96,6 +102,15 @@ public class HandCleaner {
         this.consistentZOverflow = new Consistently(true, tapOverflow, "z tap overflow");
         this.consistentZPostTap = new Consistently(true, postTapTime, "z post tap");
 
+        moveBeforeTaps = Boolean.parseBoolean(tap.getItem("moveBeforeTaps").get());
+
+        minHandAge = Long.parseLong(handCleaner.getItem("minHandAge").get());
+
+        if (stationarySpeed < 0) {
+            if (moveBeforeTaps) {
+                this.debug.out(0, "WARNING: Invalid config. moveBeforeTaps is enabled, but stationarySpeed is less than 0 meaning that the movement will never be detected to enable the taps.");
+            }
+        }
 
         lastChangeTime = timeInMilliseconds();
 
@@ -155,6 +170,29 @@ public class HandCleaner {
 
             speed = cChange / elapsed * 100F;
             zSpeed = zChange / elapsed * 100F;
+
+            if (handIntroTime < 0) {
+                handIntroTime = timeInMilliseconds();
+            }
+
+            if (handAge() > minHandAge)
+            {
+                if (!isStationary()) {
+                    if (!hasMoved) {
+                        this.debug.out(1, this.name + " has moved since the hand was introduced.");
+                    }
+
+                    hasMoved = true;
+                } else {
+                    if (hasMoved) {
+                        if (!firstStationary) {
+                            this.debug.out(1, this.name + " has moved and then stopped since the hand was introduced.");
+                            firstStationary = true;
+                        }
+                    }
+                }
+            }
+
         } else {
             // No longer absent. Let's reset everything.
 
@@ -198,6 +236,9 @@ public class HandCleaner {
 
     public void setAbsent() {
         absent = true;
+        hasMoved = false;
+        firstStationary = false;
+        handIntroTime = -1;
     }
 
     public int getState() {
@@ -235,6 +276,10 @@ public class HandCleaner {
     private long timeInMilliseconds() {
         Date date = new Date();
         return date.getTime();
+    }
+
+    private long handAge() {
+        return timeInMilliseconds() - handIntroTime;
     }
 
     public void autoTrim(double distance) {
@@ -350,9 +395,22 @@ public class HandCleaner {
         return (zSpeed > 0);
     }
 
+    private Boolean moveBeforeTapSatisfied() {
+        // If moveBeforeTaps is enabled, we should only return true if the cursor has moved.
+        // If moveBeforeTaps is disabled, we should always return true;
+
+        if (moveBeforeTaps) { // Primary flow.
+            return hasMoved;
+        }
+
+        return true;
+    }
+
     public Boolean isDoingATap(String zone) {
         // Taps are disabled. Don't spend any more time on it.
         if (tapSpeed < 0) return false;
+
+        if (!moveBeforeTapSatisfied()) return false;
 
         // Hand is absent.
         if (absent) {
