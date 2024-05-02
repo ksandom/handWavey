@@ -61,6 +61,8 @@ public class HandCleaner {
     private Boolean moveBeforeTaps = true;
     private Boolean hasMoved = false;
     private Boolean firstStationary = false;
+    private Boolean moveBeforeTimedout = false;
+    private long moveBeforeTimeout = 1500;
     private long minHandAge = 150;
     private long handIntroTime = -1;
 
@@ -104,6 +106,7 @@ public class HandCleaner {
 
         moveBeforeTaps = Boolean.parseBoolean(tap.getItem("moveBeforeTaps").get());
 
+        moveBeforeTimeout = Long.parseLong(handCleaner.getItem("moveBeforeTimeout").get());
         minHandAge = Long.parseLong(handCleaner.getItem("minHandAge").get());
 
         if (stationarySpeed < 0) {
@@ -175,7 +178,9 @@ public class HandCleaner {
                 handIntroTime = timeInMilliseconds();
             }
 
-            if (handAge() > minHandAge)
+            long handAge = handAge();
+
+            if (handAge > minHandAge)
             {
                 if (!isStationary()) {
                     if (!hasMoved) {
@@ -190,6 +195,16 @@ public class HandCleaner {
                             firstStationary = true;
                         }
                     }
+                }
+            }
+
+            if (handAge > moveBeforeTimeout) {
+                if (!moveBeforeTimedout) {
+                    if (!hasMoved) {
+                        this.debug.out(1, "moveBeforeTimeout(" + String.valueOf(moveBeforeTimeout) + ") for " + this.name + " has elapsed before movement has been detected. So actions will now be allowed anyway.");
+                    }
+
+                    moveBeforeTimedout = true;
                 }
             }
 
@@ -239,6 +254,7 @@ public class HandCleaner {
         hasMoved = false;
         firstStationary = false;
         handIntroTime = -1;
+        moveBeforeTimedout = false;
     }
 
     public int getState() {
@@ -398,6 +414,10 @@ public class HandCleaner {
     private Boolean moveBeforeTapSatisfied() {
         // If moveBeforeTaps is enabled, we should only return true if the cursor has moved.
         // If moveBeforeTaps is disabled, we should always return true;
+
+        if (moveBeforeTimedout) {
+            return true;
+        }
 
         if (moveBeforeTaps) { // Primary flow.
             return hasMoved;
