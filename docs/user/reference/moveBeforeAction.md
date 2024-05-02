@@ -13,7 +13,8 @@
 There is a small wait between the hand arriving, and actions being allowed.
 
 * Configure in: [yourConfigurationDirectory](https://github.com/ksandom/handWavey/blob/main/docs/user/configuration/whereIsMyConfigurationDirectory.md)/handCleaner.yml
-* Setting name: `minHandAge`
+* Setting name: `minHandAge` - Milliseconds that must have elapsed since the introduction of the hand before actions can be unlocked.
+* Setting name: `moreBeforeTimeout` - Milliseconds to wait since the introduction of the handbefore allowing actions to be performed normally.
 
 ## Taps
 

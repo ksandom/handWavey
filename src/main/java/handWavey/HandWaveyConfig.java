@@ -804,6 +804,10 @@ public class HandWaveyConfig {
             "minHandAge",
             "150",
             "The number of milliseconds that a hand must be present before \"moveBefore____\" decisions can be made.");
+        handCleaner.newItem(
+            "moveBeforeTimeout",
+            "1500",
+            "If the moveBefore configuration has taken too long to succeed, this is the last ditch effort to get handWavey into a usable state. It's the number of milliseconds after the hand was introduced, and is expected to be a large number, like 1500 (1.5 seconds). It can happen naturally if the user hovers, but doesn't move anywhere before trying to perform an action. It's not ideal (because the user potentially waited longer than they would expect), but at least it's likely to loosely behave the way they'd expect.");
 
         Group tap = this.config.newGroup("tap");
         tap.newItem(
