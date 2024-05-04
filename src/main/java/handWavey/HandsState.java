@@ -58,6 +58,11 @@ public class HandsState {
     private int secondaryMergeFrom = 0;
     private int secondaryMergeTo = 0;
 
+    private Boolean[][] primarySegmentMap;
+    private Boolean[][] secondarySegmentMap;
+    private final int LOWER = 0;
+    private final int UPPER = 1;
+
     private long currentFrameTime = 0;
     private long previousFrameAge = 0;
     private long sillyFrameAge = 10 * 1000; // Longer than this many milliseconds is well and truly meaningless, and could lead to interesting bugs.
@@ -126,6 +131,19 @@ public class HandsState {
         this.secondaryMergeFrom = Integer.parseInt(secondaryHand.getItem("mergeFrom").get());
         this.secondaryMergeTo = Integer.parseInt(secondaryHand.getItem("mergeTo").get());
 
+        // Derive setment maps.
+        primarySegmentMap = deriveSegmentMap(
+            this.primarySegments,
+            this.primaryMergeIntoSegment,
+            this.primaryMergeFrom,
+            this.primaryMergeTo);
+
+        secondarySegmentMap = deriveSegmentMap(
+            this.secondarySegments,
+            this.secondaryMergeIntoSegment,
+            this.secondaryMergeFrom,
+            this.secondaryMergeTo);
+
 
         // Configure new hands tracking.
         Group newHands = config.getGroup("dataCleaning").getGroup("newHands");
@@ -143,6 +161,32 @@ public class HandsState {
 
         Group changeTimeoutsSecondary = changeTimeouts.getGroup("secondaryHand");
         this.setupTimeouts(this.secondaryState, changeTimeoutsSecondary);
+    }
+
+    private Boolean[][] deriveSegmentMap(int segments, int mergeInto, int from, int to) {
+        int components = 2;
+        Boolean[][] segmentMap = new Boolean[segments][components];
+
+        int min = Math.min(mergeInto, from);
+        int max = Math.min(mergeInto, to);
+
+        // Set everything to defaults.
+        for (int segment = 0; segment < segments; segment++) {
+            segmentMap[segment][LOWER] = true;
+            segmentMap[segment][UPPER] = true;
+        }
+
+        // Turn off edges on everything involved in the merge.
+        for (int segment = min; segment <= max; segment++) {
+            segmentMap[segment][LOWER] = false;
+            segmentMap[segment][UPPER] = false;
+        }
+
+        // Turn back on only the edges of the merge.
+        segmentMap[min][LOWER] = true;
+        segmentMap[max][UPPER] = true;
+
+        return segmentMap;
     }
 
     private void setupTimeouts(HandStateEvents handStateEvents, Group configGroupToLoad) {
@@ -241,9 +285,9 @@ public class HandsState {
             primarySegment = this.primaryState.getSegment();
             this.primaryState.setState(this.cleanPrimary.getState());
 
-            double primaryDistanceFromCenter = this.getSegmentDistanceFromCenter(primarySegment, true, this.handSummaries[0], this.cleanPrimary);
+            double primaryDistanceIntoEdge = this.getDistanceIntoEdge(primarySegment, true, this.handSummaries[0], this.cleanPrimary);
 
-            this.cleanPrimary.autoTrim(primaryDistanceFromCenter);
+            this.cleanPrimary.autoTrim(primaryDistanceIntoEdge);
 
             this.primaryState.setTap(this.cleanPrimary.isDoingATap(zone));
 
@@ -266,8 +310,8 @@ public class HandsState {
             int secondarySegment = getHandSegment(false, this.handSummaries[1], this.cleanSecondary);
             this.secondaryState.setSegment(secondarySegment);
 
-            double secondaryDistanceFromCenter = this.getSegmentDistanceFromCenter(secondarySegment, true, this.handSummaries[1], this.cleanSecondary);
-            this.cleanSecondary.autoTrim(secondaryDistanceFromCenter);
+            double secondaryDistanceIntoEdge = this.getDistanceIntoEdge(secondarySegment, true, this.handSummaries[1], this.cleanSecondary);
+            this.cleanSecondary.autoTrim(secondaryDistanceIntoEdge);
 
             this.secondaryState.setTap(this.cleanSecondary.isDoingATap(zone));
 
@@ -466,11 +510,14 @@ public class HandsState {
         return segmentNumber;
     }
 
-    public double getSegmentDistanceFromCenter(int segment, Boolean isPrimary, HandSummary handSummary, HandCleaner cleanHand) {
-        return  getSegmentDistanceFromCenter(cleanHand.getHandRoll(), segment, isPrimary, handSummary.handIsLeft());
+    public double getDistanceIntoEdge(int segment, Boolean isPrimary, HandSummary handSummary, HandCleaner cleanHand) {
+        return  getDistanceIntoEdge(cleanHand.getHandRoll(), segment, isPrimary, handSummary.handIsLeft());
     }
 
-    public double getSegmentDistanceFromCenter(double handRoll, int segment, Boolean isPrimary, Boolean isLeft) {
+    public double getDistanceIntoEdge(double handRoll, int segment, Boolean isPrimary, Boolean isLeft) {
+        // Get the relevant map.
+        Boolean[][] map = (isPrimary)?this.primarySegmentMap:this.secondarySegmentMap;
+
         // Flip the direction depending on the hand.
         int directionalMultiplier = (isLeft)?1:-1;
         double handedRoll = handRoll * directionalMultiplier;
@@ -485,6 +532,12 @@ public class HandsState {
         double segmentPosition = (segmentWidth * segment);
 
         double distanceFromSegmentCenter = segmentPosition - offsetRoll;
+
+        if (distanceFromSegmentCenter < 0) {
+            if (!map[segment][LOWER]) distanceFromSegmentCenter = 0;
+        } else {
+            if (!map[segment][UPPER]) distanceFromSegmentCenter = 0;
+        }
 
         return distanceFromSegmentCenter;
     }
