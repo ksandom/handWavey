@@ -149,7 +149,7 @@ public class Gesture {
             "");
         overrideDefault(
             "general-segment-p0-enter",
-            "stabliseNeutralPosition();",
+            "",
             "");
         overrideDefault(
             "special-newHandUnfreezeEvent",
