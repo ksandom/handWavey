@@ -303,7 +303,7 @@ public class HandCleaner {
 
         long now = this.timeInMilliseconds();
         long elapsed = now - lastChangeTime;
-        lastChangeTime = timeInMilliseconds();
+        lastChangeTime = now;
         double seconds = elapsed / 1000F;
 
         double distancePerSecond = distance / seconds;
