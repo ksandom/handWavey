@@ -93,3 +93,7 @@ By using this software, you are taking responsibility for staying healthy.
 * [Pull requests](https://github.com/ksandom/handWavey/pulls) welcome.
 * [Report bugs](https://github.com/ksandom/handWavey/blob/main/docs/user/howTo/reportABug.md).
 * Support me on [Patreon](https://www.patreon.com/randomksandom). - There will be better ways of doing this soon.
+
+## Project status
+
+This project is still active. I've been through some life changes recently, so haven't had as much time to work on it recently, but I'll be back on to it very soon.
